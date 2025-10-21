@@ -1,0 +1,207 @@
+version: 1.0
+name: UFW
+vulnerabilities:
+  - cid: C-UD-UFW-01
+    operating_systems:
+      - Ubuntu
+      - Debian
+    category: UFW
+    policy: UFW is installed.
+    fix:
+      - fix_type: command
+        command: apt-get install -y ufw
+    references:
+      cis:
+        id: 3.5.1.1
+        category: L1
+      stig:
+        id: V-238354
+        category: CAT II
+    notes: ""
+  - cid: C-UD-UFW-02
+    operating_systems:
+      - Ubuntu
+      - Debian
+    category: UFW
+    policy: iptables-persistent is not installed.
+    fix:
+      - fix_type: command
+        command: apt-get purge -y iptables-persistent
+    references:
+      cis:
+        id: 3.5.1.2
+        category: L1
+    notes: ""
+  - cid: C-UD-UFW-03
+    operating_systems:
+      - Ubuntu
+      - Debian
+    category: UFW
+    policy: UFW service is enabled.
+    fix:
+      - fix_type: command
+        command: |
+          systemctl unmask ufw.service
+          systemctl --now enable ufw.service
+          ufw enable
+    references:
+      cis:
+        id: 3.5.1.3
+        category: L1
+      stig:
+        id: V-237355, V-238374
+        category: CAT II
+    notes: ""
+  - cid: C-UD-UFW-04
+    operating_systems:
+      - Ubuntu
+      - Debian
+    category: UFW
+    policy: UFW loopback traffic is configured.
+    fix:
+      - fix_type: command
+        command: ufw allow in on lo
+      - fix_type: command
+        command: ufw allow out on lo
+      - fix_type: command
+        command: ufw deny in from 127.0.0.0/8
+      - fix_type: command
+        command: ufw deny in from ::1
+    references:
+      cis:
+        id: 3.5.1.4
+        category: L1
+    notes: ""
+  - cid: C-UD-UFW-04
+    operating_systems:
+      - Ubuntu
+      - Debian
+    category: UFW
+    policy: UFW logging is enabled.
+    fix:
+      - fix_type: command
+        command: ufw logging medium
+    references:
+      cis:
+        id: 3.5.1.7
+        category: L1
+    notes: ""
+  - cid: C-UD-UFW-05
+    operating_systems:
+      - Ubuntu
+      - Debian
+    category: UFW
+    policy: UFW outbound connections are configured.
+    fix:
+      - fix_type: command
+        command: ufw status numbered
+      - fix_type: manual
+        steps: Run `ufw status numbered` to verify outbound connections.
+    references:
+      cis:
+        id: 3.5.1.5
+        category: L1
+    notes: ""
+  - cid: C-UD-UFW-06
+    operating_systems:
+      - Ubuntu
+      - Debian
+    category: UFW
+    policy: UFW firewall rules exist for all open ports.
+    fix:
+      - fix_type: manual
+        steps: |
+          Run `ss -ltnp` to see open ports. Run `ufw status numbered` to check if every port has a ufw rule.
+          Use `ufw allow in <port>/<tcp or udp>`.
+    references:
+      cis:
+        id: 3.5.1.6
+        category: L1
+    notes: ""
+  - cid: C-UD-UFW-07
+    operating_systems:
+      - Ubuntu
+      - Debian
+    category: UFW
+    policy: UFW allows necessary protocols.
+    fix:
+      - fix_type: command
+        command: ufw allow git
+      - fix_type: command
+        command: ufw allow in http
+      - fix_type: command
+        command: ufw allow out http
+      - fix_type: command
+        command: ufw allow in https
+      - fix_type: command
+        command: ufw allow out https
+      - fix_type: command
+        command: ufw allow out 53
+    references:
+      cis:
+        id: 3.5.1.7
+        category: L1
+    notes: ""
+  - cid: C-UD-UFW-07
+    operating_systems:
+      - Ubuntu
+      - Debian
+    category: UFW
+    policy: UFW denies connections by default.
+    fix:
+      - fix_type: command
+        command: ufw default deny incoming
+      - fix_type: command
+        command: ufw default deny outgoing
+      - fix_type: command
+        command: ufw default deny routed
+    references:
+      cis:
+        id: 3.5.1.7
+        category: L1
+    notes: ""
+  - cid: C-UD-UFW-08
+    operating_systems:
+      - Ubuntu
+      - Debian
+    category: UFW
+    policy: UFW denies connections by default.
+    fix:
+      - fix_type: config_file
+        file: /etc/default/ufw
+        text: IPT_SYSCTL=/etc/sysctl.conf
+    references:
+      cis:
+        id: 3.5.1.7
+        category: L1
+    notes: ""
+  - cid: C-UD-UFW-09
+    operating_systems:
+      - Ubuntu
+      - Debian
+    category: UFW
+    policy: UFW before and after rules to disable ICMP and forward logs are applied.
+    fix:
+      - fix_type: command
+        command: |
+          cp -n /etc/ufw/before.rules /etc/ufw/before.rules.bak
+          cp -n /etc/ufw/before6.rules /etc/ufw/before6.rules.bak
+          cp -n /etc/ufw/after.rules /etc/ufw/after.rules.bak
+          cp -n /etc/ufw/after6.rules /etc/ufw/after6.rules.bak
+      - fix_type: command
+        command: |
+          sed -i '/^COMMIT/i -A ufw-before-output -p icmp -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT' /etc/ufw/before.rules
+          sed -i '/^COMMIT/i -A ufw-before-output -p icmp -m state --state ESTABLISHED,RELATED -j ACCEPT' /etc/ufw/before.rules
+          sed -i '/^COMMIT/i -A ufw6-before-output -p icmpv6 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT' /etc/ufw/before6.rules
+          sed -i '/^COMMIT/i -A ufw6-before-output -p icmpv6 -m state --state ESTABLISHED,RELATED -j ACCEPT' /etc/ufw/before6.rules
+          sed -i '/^COMMIT/i -A FORWARD -j LOG --log-tcp-options --log-prefix "[UFW FORWARD]"' /etc/ufw/after.rules
+          sed -i '/^COMMIT/i -A FORWARD -j LOG --log-tcp-options --log-prefix "[UFW FORWARD]"' /etc/ufw/after6.rules
+          sed -i '/^COMMIT/i -A FORWARD -j LOG --log-tcp-options --log-prefix "[UFW FORWARD]"' /etc/ufw/before.rules
+          sed -i '/^COMMIT/i -A FORWARD -j LOG --log-tcp-options --log-prefix "[UFW FORWARD]"' /etc/ufw/before6.rules
+          sed -i '/^COMMIT/i -A INPUT -j LOG --log-tcp-options --log-prefix "[UFW INPUT]"' /etc/ufw/after.rules
+          sed -i '/^COMMIT/i -A INPUT -j LOG --log-tcp-options --log-prefix "[UFW INPUT]"' /etc/ufw/after6.rules
+          sed -i '/^COMMIT/i -A INPUT -j LOG --log-tcp-options --log-prefix "[UFW INPUT]"' /etc/ufw/before.rules
+          sed -i '/^COMMIT/i -A INPUT -j LOG --log-tcp-options --log-prefix "[UFW INPUT]"' /etc/ufw/before6.rules
+    references:
+      other: https://github.com/konstruktoid/hardening/blob/master/scripts/ufw
+    notes: ""

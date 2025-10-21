@@ -1,0 +1,77 @@
+version: 1.0
+name: Fstab File System Mounting Configuration
+vulnerabilities:
+  - cid: C-UDF-FSTAB-01
+    operating_systems:
+      - Ubuntu
+      - Debian
+      - Fedora
+    category: tmp.mount
+    policy: tmp mount is configured.
+    fix:
+      - fix_type: config_file
+        file: /etc/fstab
+        text: none /tmp tmpfs defaults,noatime,mode=1777,strictatime,noexec,nodev,nosuid 0 0
+    references:
+      other: https://github.com/konstruktoid/hardening/blob/master/systemd.adoc
+  - cid: C-UDF-FSTAB-02
+    operating_systems:
+      - Ubuntu
+      - Debian
+      - Fedora
+    category: tmp.mount
+    policy: /var/tmp is deleted and symlinked to /tmp.
+    fix:
+      - fix_type: command
+        command: |
+          rm -rf /var/tmp
+          ln -s /tmp/ /var/tmp
+  - cid: C-UDF-FSTAB-03
+    operating_systems:
+      - Ubuntu
+      - Debian
+      - Fedora
+    category: Mounting Options
+    policy: /run/shm is configured.
+    fix:
+      - fix_type: config_file
+        file: /etc/fstab
+        text: none /run/shm tmpfs rw,noexec,nosuid,nodev 0 0
+    references:
+      other: https://github.com/konstruktoid/hardening/blob/master/scripts/fstab
+  - cid: C-UDF-FSTAB-04
+    operating_systems:
+      - Ubuntu
+      - Debian
+      - Fedora
+    category: Mounting Options
+    policy: /dev/shm is configured.
+    fix:
+      - fix_type: config_file
+        file: /etc/fstab
+        text: none /dev/shm tmpfs rw,noexec,nosuid,nodev,size=1024M,mode=1777,uid=root,gid=shm 0 0
+    references:
+      other: https://github.com/konstruktoid/hardening/blob/master/scripts/fstab
+  - cid: C-UDF-FSTAB-05
+    operating_systems:
+      - Ubuntu
+      - Debian
+      - Fedora
+    category: Mounting Options
+    policy: /proc is configured.
+    fix:
+      - fix_type: config_file
+        file: /etc/fstab
+        text: none /proc proc rw,nosuid,nodev,noexec,relatime,hidepid=2 0 0
+    references:
+      other: https://github.com/konstruktoid/hardening/blob/master/scripts/fstab
+  - cid: C-UD-FSTAB-06
+    operating_systems:
+      - Ubuntu
+      - Debian
+    category: Mounting Options
+    policy: Check the fstab file for any other partitions.
+    fix:
+      - fix_type: manual
+        steps: Open /etc/fstab and check for any other mount points.
+          Remove any references to /tmp, since that is handled by systemd.

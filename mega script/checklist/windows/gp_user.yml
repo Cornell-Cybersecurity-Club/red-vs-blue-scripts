@@ -1,0 +1,405 @@
+version: 1
+name: "Group Policy: User Configuration"
+vulnerabilities:
+  - cid: C-W-GP-ADM-MISC-76
+    operating_systems:
+      - Windows
+    category: ""
+    policy: '"Enable screen saver" is set to "Enabled".'
+    fix:
+      - fix_type: group_policy
+        path: User Configuration\Administrative Templates\Control Panel\Personalization
+        name: Enable screen saver
+        value: Enabled
+        registry_hive: User
+        registry_path: Software\Policies\Microsoft\Windows\Control Panel\Desktop
+        registry_key: ScreenSaveActive
+        registry_action: SZ:1
+    references:
+      cis:
+        id: 19.1.3.1
+        category: L1
+        value: Enabled
+      stig:
+        id: ""
+        category: ""
+        value: ""
+    notes: ""
+  - cid: C-W-GP-ADM-MISC-77
+    operating_systems:
+      - Windows
+    category: ""
+    policy: '"Password protect the screen saver" is set to "Enabled".'
+    fix:
+      - fix_type: group_policy
+        path: User Configuration\Administrative Templates\Control Panel\Personalization
+        name: Password protect the screen saver
+        value: Enabled
+        registry_hive: User
+        registry_path: Software\Policies\Microsoft\Windows\Control Panel\Desktop
+        registry_key: ScreenSaverIsSecure
+        registry_action: SZ:1
+    references:
+      cis:
+        id: 19.1.3.2
+        category: L1
+        value: Enabled
+      stig:
+        id: ""
+        category: ""
+        value: ""
+    notes: ""
+  - cid: C-W-GP-ADM-MISC-78
+    operating_systems:
+      - Windows
+    category: ""
+    policy: '"Screen saver timeout" is set to "Enabled: 900 seconds".'
+    fix:
+      - fix_type: group_policy
+        path: User Configuration\Administrative Templates\Control Panel\Personalization
+        name: Screen saver timeout
+        value: "Enabled: 900 seconds or fewer, but not 0"
+        registry_hive: User
+        registry_path: Software\Policies\Microsoft\Windows\Control Panel\Desktop
+        registry_key: ScreenSaveTimeOut
+        registry_action: SZ:900
+    references:
+      cis:
+        id: 19.1.3.3
+        category: L1
+        value: "Enabled: 900 seconds or fewer, but not 0"
+      stig:
+        id: ""
+        category: ""
+        value: ""
+    notes: ""
+  - cid: C-W-GP-ADM-MISC-79
+    operating_systems:
+      - Windows
+    category: ""
+    policy: '"Turn off toast notifications on the lock screen" is set to "Enabled".'
+    fix:
+      - fix_type: group_policy
+        path: User Configuration\Administrative Templates\Start Menu and Taskbar\Notifications
+        name: Turn off toast notifications on the lock screen
+        value: Enabled
+        registry_hive: User
+        registry_path: Software\Policies\Microsoft\Windows\CurrentVersion\PushNotifications
+        registry_key: NoToastApplicationNotificationOnLockScreen
+        registry_action: DWORD:1
+    references:
+      cis:
+        id: 19.5.1.1
+        category: L1
+        value: Enabled
+      stig:
+        id: V-220954
+        category: CAT III
+        value: Enabled
+    notes: ""
+  - cid: C-W-GP-ADM-MISC-80
+    operating_systems:
+      - Windows
+    category: ""
+    policy: '"Turn off Help Experience Improvement Program" is set to "Enabled".'
+    fix:
+      - fix_type: group_policy
+        path:
+          User Configuration\Administrative Templates\System\Internet Communication
+          Management\Internet Communication settings
+        name: Turn off Help Experience Improvement Program
+        value: Enabled
+        registry_hive: User
+        registry_path: Software\Policies\Microsoft\Assistance\Client\1.0
+        registry_key: NoImplicitFeedback
+        registry_action: DWORD:1
+    references:
+      cis:
+        id: 19.6.6.1.1
+        category: L2
+        value: Enabled
+      stig:
+        id: ""
+        category: ""
+        value: ""
+    notes: ""
+  - cid: C-W-GP-ADM-MISC-81
+    operating_systems:
+      - Windows
+    category: ""
+    policy: '"Do not preserve zone information in file attachments" is set to "Disabled".'
+    fix:
+      - fix_type: group_policy
+        path:
+          User Configuration\Administrative Templates\Windows Components\Attachment
+          Manager
+        name: Do not preserve zone information in file attachments
+        value: Disabled
+        registry_hive: User
+        registry_path: Software\Microsoft\Windows\CurrentVersion\Policies\Attachments
+        registry_key: SaveZoneInformation
+        registry_action: DWORD:2
+    references:
+      cis:
+        id: 19.7.4.1
+        category: L1
+        value: Disabled
+      stig:
+        id: V-220955
+        category: CAT II
+        value: Not Configured or Disabled
+    notes: ""
+  - cid: C-W-GP-ADM-MISC-82
+    operating_systems:
+      - Windows
+    category: ""
+    policy: '"Notify antivirus programs when opening attachments" is set to "Enabled".'
+    fix:
+      - fix_type: group_policy
+        path:
+          User Configuration\Administrative Templates\Windows Components\Attachment
+          Manager
+        name: Notify antivirus programs when opening attachments
+        value: Enabled
+        registry_hive: User
+        registry_path: Software\Microsoft\Windows\CurrentVersion\Policies\Attachments
+        registry_key: ScanWithAntiVirus
+        registry_action: DWORD:3
+    references:
+      cis:
+        id: 19.7.4.2
+        category: L1
+        value: Enabled
+      stig:
+        id: ""
+        category: ""
+        value: ""
+    notes: ""
+  - cid: C-W-GP-ADM-MISC-83
+    operating_systems:
+      - Windows
+    category: ""
+    policy: '"Configure Windows spotlight on lock screen" is set to "Disabled".'
+    fix:
+      - fix_type: group_policy
+        path: User Configuration\Administrative Templates\Windows Components\Cloud Content
+        name: Configure Windows spotlight on lock screen
+        value: Disabled
+        registry_hive: User
+        registry_path: Software\Policies\Microsoft\Windows\CloudContent
+        registry_key: ConfigureWindowsSpotlight
+        registry_action: DWORD:2
+      - fix_type: group_policy
+        path: User Configuration\Administrative Templates\Windows Components\Cloud Content
+        name: Configure Windows spotlight on lock screen
+        value: Disabled
+        registry_hive: User
+        registry_path: Software\Policies\Microsoft\Windows\CloudContent
+        registry_key: IncludeEnterpriseSpotlight
+        registry_action: DWORD:0
+    references:
+      cis:
+        id: 19.7.8.1
+        category: L1
+        value: Disabled
+      stig:
+        id: ""
+        category: ""
+        value: ""
+    notes: ""
+  - cid: C-W-GP-ADM-MISC-84
+    operating_systems:
+      - Windows
+    category: ""
+    policy: '"Do not suggest third-party content in Windows spotlight" is set to "Enabled".'
+    fix:
+      - fix_type: group_policy
+        path: User Configuration\Administrative Templates\Windows Components\Cloud Content
+        name: Do not suggest third-party content in Windows spotlight
+        value: Enabled
+        registry_hive: User
+        registry_path: Software\Policies\Microsoft\Windows\CloudContent
+        registry_key: DisableThirdPartySuggestions
+        registry_action: DWORD:1
+    references:
+      cis:
+        id: 19.7.8.2
+        category: L1
+        value: Enabled
+      stig:
+        id: V-220872
+        category: CAT III
+        value: Enabled
+    notes: ""
+  - cid: C-W-GP-ADM-MISC-85
+    operating_systems:
+      - Windows
+    category: ""
+    policy: '"Do not use diagnostic data for tailored experiences" is set to "Enabled".'
+    fix:
+      - fix_type: group_policy
+        path: User Configuration\Administrative Templates\Windows Components\Cloud Content
+        name: Do not use diagnostic data for tailored experiences
+        value: Enabled
+        registry_hive: User
+        registry_path: Software\Policies\Microsoft\Windows\CloudContent
+        registry_key: DisableTailoredExperiencesWithDiagnosticData
+        registry_action: DWORD:1
+    references:
+      cis:
+        id: 19.7.8.3
+        category: L2
+        value: Enabled
+      stig:
+        id: ""
+        category: ""
+        value: ""
+    notes: ""
+  - cid: C-W-GP-ADM-MISC-86
+    operating_systems:
+      - Windows
+    category: ""
+    policy: '"Turn off all Windows spotlight features" is set to "Enabled".'
+    fix:
+      - fix_type: group_policy
+        path: User Configuration\Administrative Templates\Windows Components\Cloud Content
+        name: Turn off all Windows spotlight features
+        value: Enabled
+        registry_hive: User
+        registry_path: Software\Policies\Microsoft\Windows\CloudContent
+        registry_key: DisableWindowsSpotlightFeatures
+        registry_action: DWORD:1
+    references:
+      cis:
+        id: 19.7.8.4
+        category: L2
+        value: Enabled
+      stig:
+        id: ""
+        category: ""
+        value: ""
+    notes: ""
+  - cid: C-W-GP-ADM-MISC-87
+    operating_systems:
+      - Windows
+    category: ""
+    policy: '"Turn off Preview Pane" is set to "Enabled".'
+    fix:
+      - fix_type: group_policy
+        path:
+          User Configuration\Administrative Templates\Windows Components\File Explorer\Explorer
+          Frame Pane
+        name: Turn off Preview Pane
+        value: Enabled
+        registry_hive: User
+        registry_path: Software\Microsoft\Windows\CurrentVersion\Policies\Explorer
+        registry_key: NoReadingPane
+        registry_action: DWORD:1
+    references:
+      cis:
+        id: ""
+        category: ""
+        value: ""
+      stig:
+        id: V-220861
+        category: CAT II
+        value: Enabled
+    notes: ""
+  - cid: C-W-GP-ADM-MISC-88
+    operating_systems:
+      - Windows
+    category: ""
+    policy: '"Turn on or off details pane" is set to "Enabled: Always hide".'
+    fix:
+      - fix_type: group_policy
+        path:
+          User Configuration\Administrative Templates\Windows Components\File Explorer\Explorer
+          Frame Pane
+        name: Turn on or off details pane
+        value: "Enabled: Always hide"
+        registry_hive: User
+        registry_path: Software\Microsoft\Windows\CurrentVersion\Policies\Explorer
+        registry_key: NoPreviewPane
+        registry_action: DWORD:1
+    references:
+      cis:
+        id: ""
+        category: ""
+        value: ""
+      stig:
+        id: V-220861
+        category: CAT II
+        value: "Enabled: Always hide"
+    notes: ""
+  - cid: C-W-GP-ADM-MISC-89
+    operating_systems:
+      - Windows
+    category: ""
+    policy: '"Prevent users from sharing files within their profile." is set to "Enabled".'
+    fix:
+      - fix_type: group_policy
+        path: User Configuration\Administrative Templates\Windows Components\Network Sharing
+        name: Prevent users from sharing files within their profile.
+        value: Enabled
+        registry_hive: User
+        registry_path: Software\Microsoft\Windows\CurrentVersion\Policies\Explorer
+        registry_key: NoInplaceSharing
+        registry_action: DWORD:1
+    references:
+      cis:
+        id: 19.7.28.1
+        category: L1
+        value: Enabled
+      stig:
+        id: ""
+        category: ""
+        value: ""
+    notes: ""
+  - cid: C-W-GP-ADM-MISC-90
+    operating_systems:
+      - Windows
+    category: ""
+    policy: '"Always install with elevated privileges" is set to "Disabled".'
+    fix:
+      - fix_type: group_policy
+        path: User Configuration\Administrative Templates\Windows Components\Windows Installer
+        name: Always install with elevated privileges
+        value: Disabled
+        registry_hive: User
+        registry_path: Software\Policies\Microsoft\Windows\Installer
+        registry_key: AlwaysInstallElevated
+        registry_action: DWORD:0
+    references:
+      cis:
+        id: 19.7.43.1
+        category: L1
+        value: Disabled
+      stig:
+        id: ""
+        category: ""
+        value: ""
+    notes: ""
+  - cid: C-W-GP-ADM-MISC-91
+    operating_systems:
+      - Windows
+    category: ""
+    policy: '"Prevent Codec Download" is set to "Enabled".'
+    fix:
+      - fix_type: group_policy
+        path: User Configuration\Administrative Templates\Windows Components\Windows Media Player\Playback
+        name: Prevent Codec Download
+        value: Enabled
+        registry_hive: User
+        registry_path: Software\Policies\Microsoft\WindowsMediaPlayer
+        registry_key: PreventCodecDownload
+        registry_action: DWORD:1
+    references:
+      cis:
+        id: 19.7.47.2.1
+        category: L2
+        value: Enabled
+      stig:
+        id: ""
+        category: ""
+        value: ""
+    notes: ""

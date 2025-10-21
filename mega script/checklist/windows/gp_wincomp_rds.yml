@@ -1,0 +1,379 @@
+version: 1
+name: "Group Policy: Windows Components - RDS"
+vulnerabilities:
+  - cid: C-W-GP-ADM-RDS-01
+    operating_systems:
+      - Windows
+    category: ""
+    policy: '"Do not allow passwords to be saved" is set to "Enabled".'
+    fix:
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Administrative Templates\Windows Components\Remote
+          Desktop Services\Remote Desktop Connection Client
+        name: Do not allow passwords to be saved
+        value: Enabled
+        registry_hive: Computer
+        registry_path: SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services
+        registry_key: DisablePasswordSaving
+        registry_action: DWORD:1
+    references:
+      cis:
+        id: 18.9.63.2.2
+        category: L1
+        value: Enabled
+      stig:
+        id: V-220848
+        category: CAT II
+        value: Enabled
+    notes: ""
+  - cid: C-W-GP-ADM-RDS-02
+    operating_systems:
+      - Windows
+    applies_to:
+      - Not RDP
+    category: ""
+    policy:
+      '"Allow users to connect remotely by using Remote Desktop Services" is set
+      to "Disabled".'
+    fix:
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Administrative Templates\Windows Components\Remote
+          Desktop Services\Remote Desktop Session Host\Connections
+        name: Allow users to connect remotely by using Remote Desktop Services
+        value: Disabled
+        registry_hive: Computer
+        registry_path: SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services
+        registry_key: fDenyTSConnections
+        registry_action: DWORD:1
+    references:
+      cis:
+        id: 18.9.63.3.2.1
+        category: L2
+        value: Disabled
+      stig:
+        id: ""
+        category: ""
+        value: ""
+    notes: ""
+  - cid: C-W-GP-ADM-RDS-03
+    operating_systems:
+      - Windows
+    category: ""
+    policy: '"Do not allow COM port redirection" is set to "Enabled".'
+    fix:
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Administrative Templates\Windows Components\Remote
+          Desktop Services\Remote Desktop Session Host\Device and Resource Redirection
+        name: Do not allow COM port redirection
+        value: Enabled
+        registry_hive: Computer
+        registry_path: SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services
+        registry_key: fDisableCcm
+        registry_action: DWORD:1
+    references:
+      cis:
+        id: 18.9.63.3.3.1
+        category: L2
+        value: Enabled
+      stig:
+        id: ""
+        category: ""
+        value: ""
+    notes: ""
+  - cid: C-W-GP-ADM-RDS-04
+    operating_systems:
+      - Windows
+    category: ""
+    policy: '"Do not allow drive redirection" is set to "Enabled".'
+    fix:
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Administrative Templates\Windows Components\Remote
+          Desktop Services\Remote Desktop Session Host\Device and Resource Redirection
+        name: Do not allow drive redirection
+        value: Enabled
+        registry_hive: Computer
+        registry_path: SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services
+        registry_key: fDisableCdm
+        registry_action: DWORD:1
+    references:
+      cis:
+        id: 18.9.63.3.3.2
+        category: L1
+        value: Enabled
+      stig:
+        id: V-220849
+        category: CAT II
+        value: Enabled
+    notes: ""
+  - cid: C-W-GP-ADM-RDS-05
+    operating_systems:
+      - Windows
+    category: ""
+    policy: '"Do not allow LPT port redirection" is set to "Enabled".'
+    fix:
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Administrative Templates\Windows Components\Remote
+          Desktop Services\Remote Desktop Session Host\Device and Resource Redirection
+        name: Do not allow LPT port redirection
+        value: Enabled
+        registry_hive: Computer
+        registry_path: SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services
+        registry_key: fDisableLPT
+        registry_action: DWORD:1
+    references:
+      cis:
+        id: 18.9.63.3.3.3
+        category: L2
+        value: Enabled
+      stig:
+        id: ""
+        category: ""
+        value: ""
+    notes: ""
+  - cid: C-W-GP-ADM-RDS-06
+    operating_systems:
+      - Windows
+    category: ""
+    policy: '"Do not allow supported Plug and Play device redirection" is set to "Enabled".'
+    fix:
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Administrative Templates\Windows Components\Remote
+          Desktop Services\Remote Desktop Session Host\Device and Resource Redirection
+        name: Do not allow supported Plug and Play device redirection
+        value: Enabled
+        registry_hive: Computer
+        registry_path: SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services
+        registry_key: fDisablePNPRedir
+        registry_action: DWORD:1
+    references:
+      cis:
+        id: 18.9.63.3.3.4
+        category: L2
+        value: Enabled
+      stig:
+        id: ""
+        category: ""
+        value: ""
+    notes: ""
+  - cid: C-W-GP-ADM-RDS-07
+    operating_systems:
+      - Windows
+    category: ""
+    policy: '"Always prompt for password upon connection" is set to "Enabled".'
+    fix:
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Administrative Templates\Windows Components\Remote
+          Desktop Services\Remote Desktop Session Host\Security
+        name: Always prompt for password upon connection
+        value: Enabled
+        registry_hive: Computer
+        registry_path: SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services
+        registry_key: fPromptForPassword
+        registry_action: DWORD:1
+    references:
+      cis:
+        id: 18.9.63.3.9.1
+        category: L1
+        value: Enabled
+      stig:
+        id: V-220850
+        category: CAT II
+        value: Enabled
+    notes: ""
+  - cid: C-W-GP-ADM-RDS-08
+    operating_systems:
+      - Windows
+    category: ""
+    policy: '"Require secure RPC communication" is set to "Enabled".'
+    fix:
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Administrative Templates\Windows Components\Remote
+          Desktop Services\Remote Desktop Session Host\Security
+        name: Require secure RPC communication
+        value: Enabled
+        registry_hive: Computer
+        registry_path: SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services
+        registry_key: fEncryptRPCTraffic
+        registry_action: DWORD:1
+    references:
+      cis:
+        id: 18.9.63.3.9.2
+        category: L1
+        value: Enabled
+      stig:
+        id: V-220851
+        category: CAT II
+        value: Enabled
+    notes: ""
+  - cid: C-W-GP-ADM-RDS-09
+    operating_systems:
+      - Windows
+    category: ""
+    policy:
+      '"Require use of specific security layer for remote (RDP) connections" is
+      set to "Enabled: SSL".'
+    fix:
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Administrative Templates\Windows Components\Remote
+          Desktop Services\Remote Desktop Session Host\Security
+        name: Require use of specific security layer for remote (RDP) connections
+        value: "Enabled: SSL"
+        registry_hive: Computer
+        registry_path: SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services
+        registry_key: SecurityLayer
+        registry_action: DWORD:2
+    references:
+      cis:
+        id: 18.9.63.3.9.3
+        category: L1
+        value: "Enabled: SSL"
+      stig:
+        id: ""
+        category: ""
+        value: ""
+    notes: ""
+  - cid: C-W-GP-ADM-RDS-10
+    operating_systems:
+      - Windows
+    category: ""
+    policy:
+      '"Require user authentication for remote connections by using Network Level
+      Authentication" is set to "Enabled".'
+    fix:
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Administrative Templates\Windows Components\Remote
+          Desktop Services\Remote Desktop Session Host\Security
+        name:
+          Require user authentication for remote connections by using Network Level
+          Authentication
+        value: Enabled
+        registry_hive: Computer
+        registry_path: SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services
+        registry_key: UserAuthentication
+        registry_action: DWORD:1
+    references:
+      cis:
+        id: 18.9.63.3.9.4
+        category: L1
+        value: Enabled
+      stig:
+        id: ""
+        category: ""
+        value: ""
+    notes: ""
+  - cid: C-W-GP-ADM-RDS-11
+    operating_systems:
+      - Windows
+    category: ""
+    policy: '"Set client connection encryption level" is set to "Enabled: High Level".'
+    fix:
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Administrative Templates\Windows Components\Remote
+          Desktop Services\Remote Desktop Session Host\Security
+        name: Set client connection encryption level
+        value: "Enabled: High Level"
+        registry_hive: Computer
+        registry_path: SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services
+        registry_key: MinEncryptionLevel
+        registry_action: DWORD:3
+    references:
+      cis:
+        id: 18.9.63.3.9.5
+        category: L1
+        value: "Enabled: High Level"
+      stig:
+        id: V-220852
+        category: CAT II
+        value: "Enabled: High level"
+    notes: ""
+  - cid: C-W-GP-ADM-RDS-12
+    operating_systems:
+      - Windows
+    category: ""
+    policy:
+      '"Set time limit for active but idle Remote Desktop Services sessions" is
+      set to "Enabled: 10 minutes".'
+    fix:
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Administrative Templates\Windows Components\Remote
+          Desktop Services\Remote Desktop Session Host\Session Time Limits
+        name: Set time limit for active but idle Remote Desktop Services sessions
+        value: "Enabled: 10 minutes"
+        registry_hive: Computer
+        registry_path: SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services
+        registry_key: MaxIdleTime
+        registry_action: DWORD:600000
+    references:
+      cis:
+        id: 18.9.63.3.10.1
+        category: L2
+        value: "Enabled: 15 minutes or less, but not Never (0)"
+      stig:
+        id: ""
+        category: ""
+        value: ""
+    notes: ""
+  - cid: C-W-GP-ADM-RDS-13
+    operating_systems:
+      - Windows
+    category: ""
+    policy: '"Set time limit for disconnected sessions" is set to "Enabled: 1 minute".'
+    fix:
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Administrative Templates\Windows Components\Remote
+          Desktop Services\Remote Desktop Session Host\Session Time Limits
+        name: Set time limit for disconnected sessions
+        value: "Enabled: 1 minute"
+        registry_hive: Computer
+        registry_path: SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services
+        registry_key: MaxDisconnectionTime
+        registry_action: DWORD:60000
+    references:
+      cis:
+        id: 18.9.63.3.10.2
+        category: L2
+        value: "Enabled: 1 minute"
+      stig:
+        id: ""
+        category: ""
+        value: ""
+    notes: ""
+  - cid: C-W-GP-ADM-RDS-14
+    operating_systems:
+      - Windows
+    category: ""
+    policy: '"Do not delete temp folders upon exit" is set to "Disabled".'
+    fix:
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Administrative Templates\Windows Components\Remote
+          Desktop Services\Remote Desktop Session Host\Temporary Folders
+        name: Do not delete temp folders upon exit
+        value: Disabled
+        registry_hive: Computer
+        registry_path: SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services
+        registry_key: DeleteTempDirsOnExit
+        registry_action: DWORD:1
+    references:
+      cis:
+        id: 18.9.63.3.11.1
+        category: L1
+        value: Disabled
+      stig:
+        id: ""
+        category: ""
+        value: ""
+    notes: ""

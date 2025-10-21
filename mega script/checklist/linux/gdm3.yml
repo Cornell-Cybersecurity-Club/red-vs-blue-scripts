@@ -1,0 +1,417 @@
+version: 1
+name: GDM3 Configuration
+vulnerabilities:
+  - cid: C-UDF-GDM-01
+    operating_systems:
+      - Ubuntu
+      - Debian
+      - Fedora
+    category: Dconf Configuration
+    policy: GDM dconf profile must be created.
+    fix:
+      - fix_type: config_file_mknew_inlinetext
+        file: /etc/dconf/profile/gdm
+        text: |
+          user-db:user
+          system-db:gdm
+          file-db:/etc/gdm3/greeter.dconf-defaults
+  - cid: C-UDF-GDM-02
+    operating_systems:
+      - Ubuntu
+      - Debian
+      - Fedora
+    category: Dconf Configuration
+    policy: GDM greeter.dconf-defaults must be replaced with the default version.
+    fix:
+      - fix_type: config_file_copyover
+        file: /etc/gdm3/greeter.dconf-defaults
+        source: ./support/linux/config_files/greeter.dconf-defaults
+  - cid: C-UDF-GDM-03
+    operating_systems:
+      - Ubuntu
+      - Debian
+      - Fedora
+    category: Dconf Configuration
+    policy: GDM dconf profile lock file has been created.
+    fix:
+      - fix_type: config_file
+        file: /etc/dconf/db/gdm.d/locks/01-poochbot-gdm-locks
+        text: /org/gnome/desktop/session/idle-delay
+      - fix_type: config_file
+        file: /etc/dconf/db/gdm.d/locks/01-poochbot-gdm-locks
+        text: /org/gnome/desktop/screensaver/lock-delay
+  - cid: C-UDF-GDM-04
+    operating_systems:
+      - Ubuntu
+      - Debian
+      - Fedora
+    category: Dconf Configuration
+    policy: Session lock must be enabled.
+    fix:
+      - fix_type: config_file_mknew_toml
+        file: /etc/dconf/db/gdm.d/01-poochbot-gdm
+        key: "[org/gnome/desktop/screensaver]"
+        value: lock-enabled=true
+      - fix_type: config_file
+        file: /etc/dconf/db/gdm.d/locks/01-poochbot-gdm-locks
+        text: org/gnome/desktop/screensaver/lock-enabled
+    references:
+      stig:
+        id: V-238199
+        category: CAT II
+  - cid: C-UD-GDM-05
+    operating_systems:
+      - Ubuntu
+      - Debian
+    category: Dconf Configuration
+    policy: Users must be able to directly initiate a session lock.
+    fix:
+      - fix_type: command
+        command: apt-get install -y vlock
+    references:
+      stig:
+        id: V-238200
+        category: CAT II
+  - cid: C-F-GDM-05
+    operating_systems:
+      - Fedora
+    category: Dconf Configuration
+    policy: Users must be able to directly initiate a session lock.
+    fix:
+      - fix_type: command
+        command: dnf install -y vlock
+    references:
+      stig:
+        id: V-238200
+        category: CAT II
+  - cid: C-UDF-GDM-06
+    operating_systems:
+      - Ubuntu
+      - Debian
+      - Fedora
+    category: Dconf Configuration
+    policy: GDM3 shows a logon banner.
+    fix:
+      - fix_type: config_file_mknew_toml
+        file: /etc/dconf/db/gdm.d/01-poochbot-gdm
+        key: "[org/gnome/login-screen]"
+        value: banner-message-enable=true
+      - fix_type: config_file
+        file: /etc/dconf/db/gdm.d/locks/01-poochbot-gdm-locks
+        text: org/gnome/login-screen/banner-message-enable
+    references:
+      stig:
+        id: V-238197
+        category: CAT II
+  - cid: C-UDF-GDM-07
+    operating_systems:
+      - Ubuntu
+      - Debian
+      - Fedora
+    category: Dconf Configuration
+    policy: GDM3 shows a standard legal banner.
+    fix:
+      - fix_type: config_file_mknew_toml
+        file: /etc/dconf/db/gdm.d/01-poochbot-gdm
+        key: "[org/gnome/login-screen]"
+        value: banner-message-text="This system is for authorized use only. PoochBot will monitor all of your activities. Do not lose points"
+      - fix_type: config_file
+        file: /etc/dconf/db/gdm.d/locks/01-poochbot-gdm-locks
+        text: org/gnome/login-screen/banner-message-text
+    references:
+      stig:
+        id: V-238198
+        category: CAT II
+  - cid: C-UDF-GDM-08
+    operating_systems:
+      - Ubuntu
+      - Debian
+      - Fedora
+    category: Dconf Configuration
+    policy: Ctrl-alt-delete to logout is disabled.
+    fix:
+      - fix_type: config_file_mknew_toml
+        file: /etc/dconf/db/gdm.d/01-poochbot-gdm
+        key: "[org/gnome/settings-daemon/plugins/media-keys]"
+        value: logout=""
+      - fix_type: config_file
+        file: /etc/dconf/db/gdm.d/locks/01-poochbot-gdm-locks
+        text: org/gnome/settings-daemon/plugins/media-keys/logout
+      - fix_type: command
+        command: |
+          systemctl disable ctrl-alt-del.target
+          systemctl mask ctrl-alt-del.target
+          systemctl daemon-reload
+    references:
+      stig:
+        id: V-238379
+        category: CAT I
+      other: https://github.com/konstruktoid/hardening/blob/master/scripts/ctraltdel
+  - cid: C-UDF-GDM-09
+    operating_systems:
+      - Ubuntu
+      - Debian
+      - Fedora
+    category: Dconf Configuration
+    policy: GDM disable-user-list option is enabled.
+    fix:
+      - fix_type: config_file_mknew_toml
+        file: /etc/dconf/db/gdm.d/01-poochbot-gdm
+        key: "[org/gnome/login-screen]"
+        value: disable-user-list=true
+      - fix_type: config_file
+        file: /etc/dconf/db/gdm.d/locks/01-poochbot-gdm-locks
+        text: org/gnome/login-screen/disable-user-list
+    references:
+      cis:
+        id: 1.8.3
+        category: L1
+  - cid: C-UDF-GDM-10
+    operating_systems:
+      - Ubuntu
+      - Debian
+      - Fedora
+    category: Dconf Configuration
+    policy: GDM disable-restart-buttons option is enabled.
+    fix:
+      - fix_type: config_file_mknew_toml
+        file: /etc/dconf/db/gdm.d/01-poochbot-gdm
+        key: "[org/gnome/login-screen]"
+        value: disable-restart-buttons=true
+      - fix_type: config_file
+        file: /etc/dconf/db/gdm.d/locks/01-poochbot-gdm-locks
+        text: org/gnome/login-screen/disable-restart-buttons
+  - cid: C-UDF-GDM-11
+    operating_systems:
+      - Ubuntu
+      - Debian
+      - Fedora
+    category: Dconf Configuration
+    policy: GDM screen locks when the user is idle.
+    fix:
+      - fix_type: manual
+        steps: |
+          [org/gnome/desktop/session]
+          idle-delay=uint32 900
+
+          [org/gnome/desktop/screensaver]
+          lock-delay=uint32 5
+      - fix_type: config_file_mknew_toml
+        file: /etc/dconf/db/gdm.d/01-poochbot-gdm
+        key: "[org/gnome/desktop/session]"
+        value: idle-delay=uint32 900
+      - fix_type: config_file_mknew_toml
+        file: /etc/dconf/db/gdm.d/01-poochbot-gdm
+        key: "[org/gnome/desktop/screensaver]"
+        value: lock-delay=uint32 5
+      - fix_type: config_file
+        file: /etc/dconf/db/gdm.d/locks/01-poochbot-gdm-locks
+        text: /org/gnome/desktop/session/idle-delay
+      - fix_type: config_file
+        file: /etc/dconf/db/gdm.d/locks/01-poochbot-gdm-locks
+        text: /org/gnome/desktop/screensaver/lock-delay
+    references:
+      cis:
+        id: 1.8.4, 1.8.5
+        category: L1
+  - cid: C-UDF-GDM-12
+    operating_systems:
+      - Ubuntu
+      - Debian
+      - Fedora
+    category: Dconf Configuration
+    policy: GDM automatic mounting of removable media is disabled.
+    fix:
+      - fix_type: config_file_mknew_toml
+        file: /etc/dconf/db/gdm.d/01-poochbot-gdm
+        key: "[org/gnome/desktop/media-handling]"
+        value: automount=false
+      - fix_type: config_file_mknew_toml
+        file: /etc/dconf/db/gdm.d/01-poochbot-gdm
+        key: "[org/gnome/desktop/media-handling]"
+        value: automount-open=false
+      - fix_type: config_file
+        file: /etc/dconf/db/gdm.d/locks/01-poochbot-gdm-locks
+        text: org/gnome/desktop/media-handling/automount
+      - fix_type: config_file
+        file: /etc/dconf/db/gdm.d/locks/01-poochbot-gdm-locks
+        text: org/gnome/desktop/media-handling/automount-open
+    references:
+      cis:
+        id: 1.8.6, 1.8.7
+        category: L1
+  - cid: C-UDF-GDM-13
+    operating_systems:
+      - Ubuntu
+      - Debian
+      - Fedora
+    category: Dconf Configuration
+    policy: GDM autorun-never is enabled.
+    fix:
+      - fix_type: config_file_mknew_toml
+        file: /etc/dconf/db/gdm.d/01-poochbot-gdm
+        key: "[org/gnome/desktop/media-handling]"
+        value: autorun-never=true
+      - fix_type: config_file
+        file: /etc/dconf/db/gdm.d/locks/01-poochbot-gdm-locks
+        text: org/gnome/desktop/media-handling/autorun-never
+    references:
+      cis:
+        id: 1.8.8, 1.8.9
+        category: L1
+  - cid: C-UDF-GDM-14
+    operating_systems:
+      - Ubuntu
+      - Debian
+      - Fedora
+    category: Custom.conf Configuration
+    policy: XDCMP is not enabled.
+    fix:
+      - fix_type: config_file_mknew_toml
+        file: /etc/gdm3/custom.conf
+        key: "[xdmcp]"
+        value: Enable=false
+    references:
+      cis:
+        id: 1.8.10
+        category: L1
+  - cid: C-UDF-GDM-15
+    operating_systems:
+      - Ubuntu
+      - Debian
+      - Fedora
+    category: Custom.conf Configuration
+    policy: Multicast is not enabled.
+    fix:
+      - fix_type: config_file_mknew_toml
+        file: /etc/gdm3/custom.conf
+        key: "[chooser]"
+        value: Multicast=false
+    references:
+      other: https://help.gnome.org/admin/gdm/stable/configuration.html.en
+  - cid: C-UDF-GDM-16
+    operating_systems:
+      - Ubuntu
+      - Debian
+      - Fedora
+    category: Custom.conf Configuration
+    policy: Timed login is not enabled.
+    fix:
+      - fix_type: config_file_mknew_toml
+        file: /etc/gdm3/custom.conf
+        key: "[daemon]"
+        value: TimedLoginEnable=false
+    references:
+      other: https://help.gnome.org/admin/gdm/stable/configuration.html.en
+  - cid: C-UDF-GDM-17
+    operating_systems:
+      - Ubuntu
+      - Debian
+      - Fedora
+    category: Custom.conf Configuration
+    policy: Timed login is not enabled.
+    fix:
+      - fix_type: config_file_mknew_toml
+        file: /etc/gdm3/custom.conf
+        key: "[daemon]"
+        value: TimedLoginEnable=false
+    references:
+      other: https://help.gnome.org/admin/gdm/stable/configuration.html.en
+  - cid: C-UDF-GDM-18
+    operating_systems:
+      - Ubuntu
+      - Debian
+      - Fedora
+    category: Custom.conf Configuration
+    policy: Automatic login is not enabled.
+    fix:
+      - fix_type: config_file_mknew_toml
+        file: /etc/gdm3/custom.conf
+        key: "[daemon]"
+        value: AutomaticLoginEnable=false
+    references:
+      other: https://help.gnome.org/admin/gdm/stable/configuration.html.en
+  - cid: C-UDF-GDM-19
+    operating_systems:
+      - Ubuntu
+      - Debian
+      - Fedora
+    category: Custom.conf Configuration
+    policy: GDM runs under the GDM user and group.
+    fix:
+      - fix_type: config_file_mknew_toml
+        file: /etc/gdm3/custom.conf
+        key: "[daemon]"
+        value: User=gdm
+      - fix_type: config_file_mknew_toml
+        file: /etc/gdm3/custom.conf
+        key: "[daemon]"
+        value: Group=gdm
+    references:
+      other: https://help.gnome.org/admin/gdm/stable/configuration.html.en
+  - cid: C-UDF-GDM-20
+    operating_systems:
+      - Ubuntu
+      - Debian
+      - Fedora
+    category: Custom.conf Configuration
+    policy: Debugging is disabled.
+    fix:
+      - fix_type: config_file_mknew_toml
+        file: /etc/gdm3/custom.conf
+        key: "[debug]"
+        value: Enable=false
+    references:
+      other: https://help.gnome.org/admin/gdm/stable/configuration.html.en
+  - cid: C-UDF-GDM-21
+    operating_systems:
+      - Ubuntu
+      - Debian
+      - Fedora
+    category: Custom.conf Configuration
+    policy: The face browser does not show all users on the local system.
+    fix:
+      - fix_type: config_file_mknew_toml
+        file: /etc/gdm3/custom.conf
+        key: "[greeter]"
+        value: IncludeAll=false
+    references:
+      other: https://help.gnome.org/admin/gdm/stable/configuration.html.en
+  - cid: C-UDF-GDM-22
+    operating_systems:
+      - Ubuntu
+      - Debian
+      - Fedora
+    category: Custom.conf Configuration
+    policy: TCP is not allowed when starting Xservers.
+    fix:
+      - fix_type: config_file_mknew_toml
+        file: /etc/gdm3/custom.conf
+        key: "[security]"
+        value: DisallowTCP=true
+    references:
+      other: https://help.gnome.org/admin/gdm/stable/configuration.html.en
+  - cid: C-UDF-GDM-23
+    operating_systems:
+      - Ubuntu
+      - Debian
+      - Fedora
+    category: Custom.conf Configuration
+    policy: TCP is not allowed when starting Xservers.
+    fix:
+      - fix_type: config_file_mknew_toml
+        file: /etc/gdm3/custom.conf
+        key: "[security]"
+        value: DisallowTCP=true
+    references:
+      other: https://help.gnome.org/admin/gdm/stable/configuration.html.en
+  - cid: C-UDF-GDM-24
+    operating_systems:
+      - Ubuntu
+      - Debian
+      - Fedora
+    category: Dconf Configuration
+    policy: Dconf has been updated.
+    fix:
+      - fix_type: manual
+        steps: Run `dconf update` after this checklist finishes execution.

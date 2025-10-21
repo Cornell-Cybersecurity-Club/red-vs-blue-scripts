@@ -1,0 +1,41 @@
+# This should be the first set of things that are done on a computer, before running other checklists.
+version: 1.0
+name: Starting Items
+vulnerabilities:
+  - cid: C-UD-START-01
+    operating_systems:
+      - Ubuntu
+      - Debian
+    category: Starting Items
+    policy: Install and run debsums to create a list of configuration files that have been edited.
+    fix:
+      - fix_type: command
+        command: apt-get install -y debsums
+      - fix_type: command
+        command: debsums -ac > ./data/debsums.txt
+      - fix_type: manual
+        steps: Check data/debsums.txt to see a list `of config files that have been edited by CyberPatriot.
+  - cid: C-F-START-01
+    operating_systems:
+      - Fedora
+    category: Starting Items
+    policy: Install and run rpm -Va to create a list of configuration files that have been edited.
+    fix:
+      - fix_type: command
+        command: dnf install -y rpm
+      - fix_type: command
+        command: rpm -Va > ./data/rpm.txt
+      - fix_type: manual
+        steps: Check data/rpm.txt to see a list of config files that have been edited by CyberPatriot.
+  - cid: C-UDF-START-02
+    operating_systems:
+      - Ubuntu
+      - Debian
+      - Fedora
+    category: Starting Items
+    policy: Check systemd-delta to see the service files that have been changed.
+    fix:
+      - fix_type: command
+        command: systemd-delta --no-pager > data/systemddelta.txt
+      - fix_type: manual
+        steps: Check data/systemddelta.txt to see a list of .service that have been edited by CyberPatriot.

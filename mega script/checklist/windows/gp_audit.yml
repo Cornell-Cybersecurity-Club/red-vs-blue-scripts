@@ -1,0 +1,759 @@
+version: 1
+name: "Group Policy: Advanced Audit"
+vulnerabilities:
+  - cid: C-W-GP-SEC-AAUD-01
+    operating_systems:
+      - Windows
+    category: Advanced Audit
+    policy: '"Audit Credential Validation" is set to "Success, Failure".'
+    fix:
+      - fix_type: group_policy_aaud
+        path:
+          Computer Configuration\Windows Settings\Security Settings\Advanced Audit
+          Policy Configuration\Account Login
+        name: Audit Credential Validation
+        value: Success, Failure
+        policy_target: System
+        subcategory: Credential Validation
+        subcategory_guid: "{0CCE923F-69AE-11D9-BED3-505054503030}"
+        inclusion_setting: Success and Failure
+        exclusion_setting: ""
+        setting_value: 3
+    references:
+      cis:
+        id: 17.1.1
+        category: L1
+        value: Success and Failure
+      stig:
+        id: V-220749, V-220748
+        category: CAT II
+        value: Success, Failure
+    notes: ""
+  - cid: C-W-GP-SEC-AAUD-02
+    operating_systems:
+      - Windows
+    category: Advanced Audit
+    policy: '"Audit Application Group Management" is set to "Success, Failure".'
+    fix:
+      - fix_type: group_policy_aaud
+        path:
+          Computer Configuration\Windows Settings\Security Settings\Advanced Audit
+          Policy Configuration\Account Management
+        name: Audit Application Group Management
+        value: Success, Failure
+        policy_target: System
+        subcategory: Application Group Management
+        subcategory_guid: "{0CCE9239-69AE-11D9-BED3-505054503030}"
+        inclusion_setting: Success and Failure
+        exclusion_setting: ""
+        setting_value: 3
+    references:
+      cis:
+        id: 17.2.1
+        category: L1
+        value: Success and Failure
+      stig:
+        id: ""
+        category: Advanced Audit
+        value: ""
+    notes: ""
+  - cid: C-W-GP-SEC-AAUD-03
+    operating_systems:
+      - Windows
+    category: Advanced Audit
+    policy: '"Audit Security Group Management" is set to "Success".'
+    fix:
+      - fix_type: group_policy_aaud
+        path:
+          Computer Configuration\Windows Settings\Security Settings\Advanced Audit
+          Policy Configuration\Account Management
+        name: Audit Security Group Management
+        value: Success
+        policy_target: System
+        subcategory: Security Group Management
+        subcategory_guid: "{0CCE9237-69AE-11D9-BED3-505054503030}"
+        inclusion_setting: Success
+        exclusion_setting: ""
+        setting_value: 1
+    references:
+      cis:
+        id: 17.2.2
+        category: L1
+        value: Include "Success"
+      stig:
+        id: V-220750
+        category: CAT II
+        value: Success
+    notes: ""
+  - cid: C-W-GP-SEC-AAUD-04
+    operating_systems:
+      - Windows
+    category: Advanced Audit
+    policy: '"Audit User Account Management" is set to "Success, Failure".'
+    fix:
+      - fix_type: group_policy_aaud
+        path:
+          Computer Configuration\Windows Settings\Security Settings\Advanced Audit
+          Policy Configuration\Account Management
+        name: Audit User Account Management
+        value: Success, Failure
+        policy_target: System
+        subcategory: User Account Management
+        subcategory_guid: "{0CCE9235-69AE-11D9-BED3-505054503030}"
+        inclusion_setting: Success and Failure
+        exclusion_setting: ""
+        setting_value: 3
+    references:
+      cis:
+        id: 17.2.3
+        category: L1
+        value: Success and Failure
+      stig:
+        id: V-220752, V-220751
+        category: CAT II
+        value: Success, Failure
+    notes: ""
+  - cid: C-W-GP-SEC-AAUD-05
+    operating_systems:
+      - Windows
+    category: Advanced Audit
+    policy: '"Audit PNP Activity" is set to "Success".'
+    fix:
+      - fix_type: group_policy_aaud
+        path:
+          Computer Configuration\Windows Settings\Security Settings\Advanced Audit
+          Policy Configuration\Detailed Tracking
+        name: Audit PNP Activity
+        value: Success
+        policy_target: System
+        subcategory: Plug and Play Events
+        subcategory_guid: "{0CCE9248-69AE-11D9-BED3-505054503030}"
+        inclusion_setting: Success
+        exclusion_setting: ""
+        setting_value: 1
+    references:
+      cis:
+        id: 17.3.1
+        category: L1
+        value: Include "Success"
+      stig:
+        id: V-220753
+        category: CAT II
+        value: Success
+    notes: ""
+  - cid: C-W-GP-SEC-AAUD-06
+    operating_systems:
+      - Windows
+    category: Advanced Audit
+    policy: '"Audit Process Creation" is set to "Success".'
+    fix:
+      - fix_type: group_policy_aaud
+        path:
+          Computer Configuration\Windows Settings\Security Settings\Advanced Audit
+          Policy Configuration\Detailed Tracking
+        name: Audit Process Creation
+        value: Success
+        policy_target: System
+        subcategory: Process Creation
+        subcategory_guid: "{0CCE922B-69AE-11D9-BED3-505054503030}"
+        inclusion_setting: Success
+        exclusion_setting: ""
+        setting_value: 1
+    references:
+      cis:
+        id: 17.3.2
+        category: L1
+        value: Include "Success"
+      stig:
+        id: V-220754
+        category: CAT II
+        value: Success
+    notes: ""
+  - cid: C-W-GP-SEC-AAUD-07
+    operating_systems:
+      - Windows
+    category: Advanced Audit
+    policy: '"Audit Account Lockout" is set to "Failure".'
+    fix:
+      - fix_type: group_policy_aaud
+        path:
+          Computer Configuration\Windows Settings\Security Settings\Advanced Audit
+          Policy Configuration\Logon/Logoff
+        name: Audit Account Lockout
+        value: Failure
+        policy_target: System
+        subcategory: Account Lockout
+        subcategory_guid: "{0CCE9217-69AE-11D9-BED3-505054503030}"
+        inclusion_setting: Failure
+        exclusion_setting: ""
+        setting_value: 2
+    references:
+      cis:
+        id: 17.5.1
+        category: L1
+        value: Include "Failure"
+      stig:
+        id: V-220755
+        category: CAT II
+        value: Failure
+    notes: ""
+  - cid: C-W-GP-SEC-AAUD-08
+    operating_systems:
+      - Windows
+    category: Advanced Audit
+    policy: '"Audit Group Membership" is set to "Success".'
+    fix:
+      - fix_type: group_policy_aaud
+        path:
+          Computer Configuration\Windows Settings\Security Settings\Advanced Audit
+          Policy Configuration\Logon/Logoff
+        name: Audit Group Membership
+        value: Success
+        policy_target: System
+        subcategory: Group Membership
+        subcategory_guid: "{0CCE9249-69AE-11D9-BED3-505054503030}"
+        inclusion_setting: Success
+        exclusion_setting: ""
+        setting_value: 1
+    references:
+      cis:
+        id: 17.5.2
+        category: L1
+        value: Include "Success"
+      stig:
+        id: V-220756
+        category: CAT II
+        value: Success
+    notes: ""
+  - cid: C-W-GP-SEC-AAUD-09
+    operating_systems:
+      - Windows
+    category: Advanced Audit
+    policy: '"Audit Logoff" is set to "Success".'
+    fix:
+      - fix_type: group_policy_aaud
+        path:
+          Computer Configuration\Windows Settings\Security Settings\Advanced Audit
+          Policy Configuration\Logon/Logoff
+        name: Audit Logoff
+        value: Success
+        policy_target: System
+        subcategory: Logoff
+        subcategory_guid: "{0CCE9216-69AE-11D9-BED3-505054503030}"
+        inclusion_setting: Success
+        exclusion_setting: ""
+        setting_value: 1
+    references:
+      cis:
+        id: 17.5.3
+        category: L1
+        value: Include "Success"
+      stig:
+        id: V-220757
+        category: CAT II
+        value: Success
+    notes: ""
+  - cid: C-W-GP-SEC-AAUD-10
+    operating_systems:
+      - Windows
+    category: Advanced Audit
+    policy: '"Audit Logon" is set to "Success, Failure".'
+    fix:
+      - fix_type: group_policy_aaud
+        path:
+          Computer Configuration\Windows Settings\Security Settings\Advanced Audit
+          Policy Configuration\Logon/Logoff
+        name: Audit Logon
+        value: Success, Failure
+        policy_target: System
+        subcategory: Logon
+        subcategory_guid: "{0CCE9215-69AE-11D9-BED3-505054503030}"
+        inclusion_setting: Success and Failure
+        exclusion_setting: ""
+        setting_value: 3
+    references:
+      cis:
+        id: 17.5.4
+        category: L1
+        value: Success and Failure
+      stig:
+        id: V-220759, V-220758
+        category: CAT II
+        value: Success, Failure
+    notes: ""
+  - cid: C-W-GP-SEC-AAUD-11
+    operating_systems:
+      - Windows
+    category: Advanced Audit
+    policy: '"Audit Other Logon/Logoff Events" is set to "Success, Failure".'
+    fix:
+      - fix_type: group_policy_aaud
+        path:
+          Computer Configuration\Windows Settings\Security Settings\Advanced Audit
+          Policy Configuration\Logon/Logoff
+        name: Audit Other Logon/Logoff Events
+        value: Success, Failure
+        policy_target: System
+        subcategory: Other Logon/Logoff Events
+        subcategory_guid: "{0CCE921C-69AE-11D9-BED3-505054503030}"
+        inclusion_setting: Success and Failure
+        exclusion_setting: ""
+        setting_value: 3
+    references:
+      cis:
+        id: 17.5.5
+        category: L1
+        value: Success and Failure
+      stig:
+        id: V-220787, V-220788
+        category: CAT II
+        value: Success, Failure
+    notes: ""
+  - cid: C-W-GP-SEC-AAUD-12
+    operating_systems:
+      - Windows
+    category: Advanced Audit
+    policy: '"Audit Special Login" is set to "Success".'
+    fix:
+      - fix_type: group_policy_aaud
+        path:
+          Computer Configuration\Windows Settings\Security Settings\Advanced Audit
+          Policy Configuration\Logon/Logoff
+        name: Audit Special Login
+        value: Success
+        policy_target: System
+        subcategory: Special Login
+        subcategory_guid: "{0CCE921B-69AE-11D9-BED3-505054503030}"
+        inclusion_setting: Success
+        exclusion_setting: ""
+        setting_value: 1
+    references:
+      cis:
+        id: 17.5.6
+        category: L1
+        value: Include "Success"
+      stig:
+        id: V-220760
+        category: CAT II
+        value: Success
+    notes: ""
+  - cid: C-W-GP-SEC-AAUD-13
+    operating_systems:
+      - Windows
+    category: Advanced Audit
+    policy: '"Audit Detailed File Share" is set to "Failure".'
+    fix:
+      - fix_type: group_policy_aaud
+        path:
+          Computer Configuration\Windows Settings\Security Settings\Advanced Audit
+          Policy Configuration\Object Access
+        name: Audit Detailed File Share
+        value: Failure
+        policy_target: System
+        subcategory: Detailed File Share
+        subcategory_guid: "{0CCE9244-69AE-11D9-BED3-505054503030}"
+        inclusion_setting: Failure
+        exclusion_setting: ""
+        setting_value: 2
+    references:
+      cis:
+        id: 17.6.1
+        category: L1
+        value: Include "Failure"
+      stig:
+        id: V-220789
+        category: CAT II
+        value: Failure
+    notes: ""
+  - cid: C-W-GP-SEC-AAUD-14
+    operating_systems:
+      - Windows
+    category: Advanced Audit
+    policy: '"Audit File Share" is set to "Success, Failure".'
+    fix:
+      - fix_type: group_policy_aaud
+        path:
+          Computer Configuration\Windows Settings\Security Settings\Advanced Audit
+          Policy Configuration\Object Access
+        name: Audit File Share
+        value: Success, Failure
+        policy_target: System
+        subcategory: File Share
+        subcategory_guid: "{0CCE9224-69AE-11D9-BED3-505054503030}"
+        inclusion_setting: Success and Failure
+        exclusion_setting: ""
+        setting_value: 3
+    references:
+      cis:
+        id: 17.6.2
+        category: L1
+        value: Success and Failure
+      stig:
+        id: V-220762, V-220761
+        category: CAT II
+        value: Success, Failure
+    notes: ""
+  - cid: C-W-GP-SEC-AAUD-15
+    operating_systems:
+      - Windows
+    category: Advanced Audit
+    policy: '"Audit Other Object Access Events" is set to "Success, Failure".'
+    fix:
+      - fix_type: group_policy_aaud
+        path:
+          Computer Configuration\Windows Settings\Security Settings\Advanced Audit
+          Policy Configuration\Object Access
+        name: Audit Other Object Access Events
+        value: Success, Failure
+        policy_target: System
+        subcategory: Other Object Access Events
+        subcategory_guid: "{0CCE9227-69AE-11D9-BED3-505054503030}"
+        inclusion_setting: Success and Failure
+        exclusion_setting: ""
+        setting_value: 3
+    references:
+      cis:
+        id: 17.6.3
+        category: L1
+        value: Success and Failure
+      stig:
+        id: V-220763, V-220764
+        category: CAT II
+        value: Success, Failure
+    notes: ""
+  - cid: C-W-GP-SEC-AAUD-16
+    operating_systems:
+      - Windows
+    category: Advanced Audit
+    policy: '"Audit Removable Storage" is set to "Success, Failure".'
+    fix:
+      - fix_type: group_policy_aaud
+        path:
+          Computer Configuration\Windows Settings\Security Settings\Advanced Audit
+          Policy Configuration\Object Access
+        name: Audit Removable Storage
+        value: Success, Failure
+        policy_target: System
+        subcategory: Removable Storage
+        subcategory_guid: "{0CCE9245-69AE-11D9-BED3-505054503030}"
+        inclusion_setting: Success and Failure
+        exclusion_setting: ""
+        setting_value: 3
+    references:
+      cis:
+        id: 17.6.4
+        category: L1
+        value: Success and Failure
+      stig:
+        id: V-220766, V-220765
+        category: CAT II
+        value: Success, Failure
+    notes: ""
+  - cid: C-W-GP-SEC-AAUD-17
+    operating_systems:
+      - Windows
+    category: Advanced Audit
+    policy: '"Audit Audit Policy Change" is set to "Success".'
+    fix:
+      - fix_type: group_policy_aaud
+        path:
+          Computer Configuration\Windows Settings\Security Settings\Advanced Audit
+          Policy Configuration\Policy Change
+        name: Audit Audit Policy Change
+        value: Success
+        policy_target: System
+        subcategory: Audit Policy Change
+        subcategory_guid: "{0CCE922F-69AE-11D9-BED3-505054503030}"
+        inclusion_setting: Success
+        exclusion_setting: ""
+        setting_value: 1
+    references:
+      cis:
+        id: 17.7.1
+        category: L1
+        value: Include "Success"
+      stig:
+        id: V-220767
+        category: CAT II
+        value: Success
+    notes: ""
+  - cid: C-W-GP-SEC-AAUD-18
+    operating_systems:
+      - Windows
+    category: Advanced Audit
+    policy: '"Audit Authentication Policy Change" is set to "Success".'
+    fix:
+      - fix_type: group_policy_aaud
+        path:
+          Computer Configuration\Windows Settings\Security Settings\Advanced Audit
+          Policy Configuration\Policy Change
+        name: Audit Authentication Policy Change
+        value: Success
+        policy_target: System
+        subcategory: Authentication Policy Change
+        subcategory_guid: "{0CCE9230-69AE-11D9-BED3-505054503030}"
+        inclusion_setting: Success
+        exclusion_setting: ""
+        setting_value: 1
+    references:
+      cis:
+        id: 17.7.2
+        category: L1
+        value: Include "Success"
+      stig:
+        id: V-220768
+        category: CAT II
+        value: Success
+    notes: ""
+  - cid: C-W-GP-SEC-AAUD-19
+    operating_systems:
+      - Windows
+    category: Advanced Audit
+    policy: '"Audit Authorization Policy Change" is set to "Success".'
+    fix:
+      - fix_type: group_policy_aaud
+        path:
+          Computer Configuration\Windows Settings\Security Settings\Advanced Audit
+          Policy Configuration\Policy Change
+        name: Audit Authorization Policy Change
+        value: Success
+        policy_target: System
+        subcategory: Authorization Policy Change
+        subcategory_guid: "{0CCE9231-69AE-11D9-BED3-505054503030}"
+        inclusion_setting: Success
+        exclusion_setting: ""
+        setting_value: 1
+    references:
+      cis:
+        id: 17.7.3
+        category: L1
+        value: Include "Success"
+      stig:
+        id: V-220769
+        category: CAT II
+        value: Success
+    notes: ""
+  - cid: C-W-GP-SEC-AAUD-20
+    operating_systems:
+      - Windows
+    category: Advanced Audit
+    policy: '"Audit MPSSVC Rule-Level Policy Change" is set to "Success, Failure".'
+    fix:
+      - fix_type: group_policy_aaud
+        path:
+          Computer Configuration\Windows Settings\Security Settings\Advanced Audit
+          Policy Configuration\Policy Change
+        name: Audit MPSSVC Rule-Level Policy Change
+        value: Success, Failure
+        policy_target: System
+        subcategory: MPSSVC Rule-Level Policy Change
+        subcategory_guid: "{0CCE9232-69AE-11D9-BED3-505054503030}"
+        inclusion_setting: Success and Failure
+        exclusion_setting: ""
+        setting_value: 3
+    references:
+      cis:
+        id: 17.7.4
+        category: L1
+        value: Success and Failure
+      stig:
+        id: V-220790, V-220791
+        category: CAT II
+        value: Success, Failure
+    notes: ""
+  - cid: C-W-GP-SEC-AAUD-21
+    operating_systems:
+      - Windows
+    category: Advanced Audit
+    policy: '"Audit Other Policy Change Events" is set to "Success, Failure".'
+    fix:
+      - fix_type: group_policy_aaud
+        path:
+          Computer Configuration\Windows Settings\Security Settings\Advanced Audit
+          Policy Configuration\Policy Change
+        name: Audit Other Policy Change Events
+        value: Success, Failure
+        policy_target: System
+        subcategory: Other Policy Change Events
+        subcategory_guid: "{0CCE9234-69AE-11D9-BED3-505054503030}"
+        inclusion_setting: Success and Failure
+        exclusion_setting: ""
+        setting_value: 3
+    references:
+      cis:
+        id: 17.7.5
+        category: L1
+        value: Include "Failure"
+      stig:
+        id: V-220785, V-220786
+        category: CAT II
+        value: Success, Failure
+    notes: ""
+  - cid: C-W-GP-SEC-AAUD-22
+    operating_systems:
+      - Windows
+    category: Advanced Audit
+    policy: '"Audit Sensitive Privilege Use" is set to "Success, Failure".'
+    fix:
+      - fix_type: group_policy_aaud
+        path:
+          Computer Configuration\Windows Settings\Security Settings\Advanced Audit
+          Policy Configuration\Privilege Use
+        name: Audit Sensitive Privilege Use
+        value: Success, Failure
+        policy_target: System
+        subcategory: Sensitive Privilege Use
+        subcategory_guid: "{0CCE9228-69AE-11D9-BED3-505054503030}"
+        inclusion_setting: Success and Failure
+        exclusion_setting: ""
+        setting_value: 3
+    references:
+      cis:
+        id: 17.8.1
+        category: L1
+        value: Success and Failure
+      stig:
+        id: V-220771, V-220770
+        category: CAT II
+        value: Success, Failure
+    notes: ""
+  - cid: C-W-GP-SEC-AAUD-23
+    operating_systems:
+      - Windows
+    category: Advanced Audit
+    policy: '"Audit IPsec Driver" is set to "Success, Failure".'
+    fix:
+      - fix_type: group_policy_aaud
+        path:
+          Computer Configuration\Windows Settings\Security Settings\Advanced Audit
+          Policy Configuration\System
+        name: Audit IPsec Driver
+        value: Success, Failure
+        policy_target: System
+        subcategory: IPsec Driver
+        subcategory_guid: "{0CCE9213-69AE-11D9-BED3-505054503030}"
+        inclusion_setting: Success and Failure
+        exclusion_setting: ""
+        setting_value: 3
+    references:
+      cis:
+        id: 17.9.1
+        category: L1
+        value: Success and Failure
+      stig:
+        id: V-220772
+        category: CAT II
+        value: Failure
+    notes: ""
+  - cid: C-W-GP-SEC-AAUD-24
+    operating_systems:
+      - Windows
+    category: Advanced Audit
+    policy: '"Audit Other System Events" is set to "Success, Failure".'
+    fix:
+      - fix_type: group_policy_aaud
+        path:
+          Computer Configuration\Windows Settings\Security Settings\Advanced Audit
+          Policy Configuration\System
+        name: Audit Other System Events
+        value: Success, Failure
+        policy_target: System
+        subcategory: Other System Events
+        subcategory_guid: "{0CCE9214-69AE-11D9-BED3-505054503030}"
+        inclusion_setting: Success and Failure
+        exclusion_setting: ""
+        setting_value: 3
+    references:
+      cis:
+        id: 17.9.2
+        category: L1
+        value: Success and Failure
+      stig:
+        id: V-220773, V-220774
+        category: CAT II
+        value: Success, Failure
+    notes: ""
+  - cid: C-W-GP-SEC-AAUD-25
+    operating_systems:
+      - Windows
+    category: Advanced Audit
+    policy: '"Audit Security State Change" is set to "Success".'
+    fix:
+      - fix_type: group_policy_aaud
+        path:
+          Computer Configuration\Windows Settings\Security Settings\Advanced Audit
+          Policy Configuration\System
+        name: Audit Security State Change
+        value: Success
+        policy_target: System
+        subcategory: Security State Change
+        subcategory_guid: "{0CCE9210-69AE-11D9-BED3-505054503030}"
+        inclusion_setting: Success
+        exclusion_setting: ""
+        setting_value: 1
+    references:
+      cis:
+        id: 17.9.3
+        category: L1
+        value: Include "Success"
+      stig:
+        id: V-220775
+        category: CAT II
+        value: Success
+    notes: ""
+  - cid: C-W-GP-SEC-AAUD-26
+    operating_systems:
+      - Windows
+    category: Advanced Audit
+    policy: '"Audit Security System Extension" is set to "Success".'
+    fix:
+      - fix_type: group_policy_aaud
+        path:
+          Computer Configuration\Windows Settings\Security Settings\Advanced Audit
+          Policy Configuration\System
+        name: Audit Security System Extension
+        value: Success
+        policy_target: System
+        subcategory: System Security Extension
+        subcategory_guid: "{0CCE9211-69AE-11D9-BED3-505054503030}"
+        inclusion_setting: Success
+        exclusion_setting: ""
+        setting_value: 1
+    references:
+      cis:
+        id: 17.9.4
+        category: L1
+        value: Include "Success"
+      stig:
+        id: V-220776
+        category: CAT II
+        value: Success
+    notes: ""
+  - cid: C-W-GP-SEC-AAUD-27
+    operating_systems:
+      - Windows
+    category: Advanced Audit
+    policy: '"Audit System Integrity" is set to "Success, Failure".'
+    fix:
+      - fix_type: group_policy_aaud
+        path:
+          Computer Configuration\Windows Settings\Security Settings\Advanced Audit
+          Policy Configuration\System
+        name: Audit System Integrity
+        value: Success, Failure
+        policy_target: System
+        subcategory: System Integrity
+        subcategory_guid: "{0CCE9212-69AE-11D9-BED3-505054503030}"
+        inclusion_setting: Success and Failure
+        exclusion_setting: ""
+        setting_value: 3
+    references:
+      cis:
+        id: 17.9.5
+        category: L1
+        value: Success and Failure
+      stig:
+        id: V-220777, V-220778
+        category: CAT II
+        value: Failure
+    notes: ""

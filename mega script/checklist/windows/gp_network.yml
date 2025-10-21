@@ -1,0 +1,614 @@
+version: 1
+name: "Group Policy: Network"
+vulnerabilities:
+  - cid: C-W-GP-ADM-NET-01
+    operating_systems:
+      - Windows
+    category: ""
+    policy: '"Turn off multicast name resolution" is set to "Enabled".'
+    fix:
+      - fix_type: group_policy
+        path: Computer Configuration\Administrative Templates\Network\DNS Client
+        name: Turn off multicast name resolution
+        value: Enabled
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\Windows NT\DNSClient
+        registry_key: EnableMulticast
+        registry_action: DWORD:0
+    references:
+      cis:
+        id: 18.5.4.1
+        category: L1
+        value: Enabled
+      stig:
+        id: ""
+        category: ""
+        value: ""
+    notes: ""
+  - cid: C-W-GP-ADM-NET-02
+    operating_systems:
+      - Windows
+    category: ""
+    policy: '"Enable Font Providers" is set to "Disabled".'
+    fix:
+      - fix_type: group_policy
+        path: Computer Configuration\Administrative Templates\Network\Fonts
+        name: Enable Font Providers
+        value: Disabled
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\Windows\System
+        registry_key: EnableFontProviders
+        registry_action: DWORD:0
+    references:
+      cis:
+        id: 18.5.5.1
+        category: L2
+        value: Disabled
+      stig:
+        id: ""
+        category: ""
+        value: ""
+    notes: ""
+  - cid: C-W-GP-ADM-NET-03
+    operating_systems:
+      - Windows
+    category: ""
+    policy: '"Enable insecure guest logons" is set to "Disabled".'
+    fix:
+      - fix_type: group_policy
+        path: Computer Configuration\Administrative Templates\Network\Lanman Workstation
+        name: Enable insecure guest logons
+        value: Disabled
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\Windows\LanmanWorkstation
+        registry_key: AllowInsecureGuestAuth
+        registry_action: DWORD:0
+    references:
+      cis:
+        id: 18.5.8.1
+        category: L1
+        value: Disabled
+      stig:
+        id: V-220802
+        category: CAT II
+        value: Disabled
+    notes: ""
+  - cid: C-W-GP-ADM-NET-04
+    operating_systems:
+      - Windows
+    category: ""
+    policy: '"Turn on Mapper I/O (LLTDIO) driver" is set to "Disabled".'
+    fix:
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Administrative Templates\Network\Link-Layer Topology
+          Discovery
+        name: Turn on Mapper I/O (LLTDIO) driver
+        value: Disabled
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\Windows\LLTD
+        registry_key: EnableLLTDIO
+        registry_action: DWORD:0
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Administrative Templates\Network\Link-Layer Topology
+          Discovery
+        name: Turn on Mapper I/O (LLTDIO) driver
+        value: Disabled
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\Windows\LLTD
+        registry_key: AllowLLTDIOOnDomain
+        registry_action: DWORD:0
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Administrative Templates\Network\Link-Layer Topology
+          Discovery
+        name: Turn on Mapper I/O (LLTDIO) driver
+        value: Disabled
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\Windows\LLTD
+        registry_key: AllowLLTDIOOnPublicNet
+        registry_action: DWORD:0
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Administrative Templates\Network\Link-Layer Topology
+          Discovery
+        name: Turn on Mapper I/O (LLTDIO) driver
+        value: Disabled
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\Windows\LLTD
+        registry_key: ProhibitLLTDIOOnPrivateNet
+        registry_action: DWORD:0
+    references:
+      cis:
+        id: 18.5.9.1
+        category: L2
+        value: Disabled
+      stig:
+        id: ""
+        category: ""
+        value: ""
+    notes: ""
+  - cid: C-W-GP-ADM-NET-05
+    operating_systems:
+      - Windows
+    category: ""
+    policy: '"Turn on Responder (RSPNDR) driver" is set to "Disabled".'
+    fix:
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Administrative Templates\Network\Link-Layer Topology
+          Discovery
+        name: Turn on Responder (RSPNDR) driver
+        value: Disabled
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\Windows\LLTD
+        registry_key: EnableRspndr
+        registry_action: DWORD:0
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Administrative Templates\Network\Link-Layer Topology
+          Discovery
+        name: Turn on Responder (RSPNDR) driver
+        value: Disabled
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\Windows\LLTD
+        registry_key: AllowRspndrOnDomain
+        registry_action: DWORD:0
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Administrative Templates\Network\Link-Layer Topology
+          Discovery
+        name: Turn on Responder (RSPNDR) driver
+        value: Disabled
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\Windows\LLTD
+        registry_key: AllowRspndrOnPublicNet
+        registry_action: DWORD:0
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Administrative Templates\Network\Link-Layer Topology
+          Discovery
+        name: Turn on Responder (RSPNDR) driver
+        value: Disabled
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\Windows\LLTD
+        registry_key: ProhibitRspndrOnPrivateNet
+        registry_action: DWORD:0
+    references:
+      cis:
+        id: 18.5.9.2
+        category: L2
+        value: Disabled
+      stig:
+        id: ""
+        category: ""
+        value: ""
+    notes: ""
+  - cid: C-W-GP-ADM-NET-06
+    operating_systems:
+      - Windows
+    category: ""
+    policy: '"Turn off Microsoft Peer-to-Peer Networking Services" is set to "Enabled".'
+    fix:
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Administrative Templates\Network\Microsoft Peer-to-Peer
+          Networking Services
+        name: Turn off Microsoft Peer-to-Peer Networking Services
+        value: Enabled
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\Peernet
+        registry_key: Disabled
+        registry_action: DWORD:1
+    references:
+      cis:
+        id: 18.5.10.2
+        category: L2
+        value: Enabled
+      stig:
+        id: ""
+        category: ""
+        value: ""
+    notes: yes the fix is correct
+  - cid: C-W-GP-ADM-NET-07
+    operating_systems:
+      - Windows
+    category: ""
+    policy:
+      '"Prohibit installation and configuration of Network Bridge on your DNS
+      domain network" is set to "Enabled".'
+    fix:
+      - fix_type: group_policy
+        path: Computer Configuration\Administrative Templates\Network\Network Connections
+        name:
+          Prohibit installation and configuration of Network Bridge on your DNS domain
+          network
+        value: Enabled
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\Windows\Network Connections
+        registry_key: NC_AllowNetBridge_NLA
+        registry_action: DWORD:0
+    references:
+      cis:
+        id: 18.5.11.2
+        category: L1
+        value: Enabled
+      stig:
+        id: ""
+        category: ""
+        value: ""
+    notes: ""
+  - cid: C-W-GP-ADM-NET-08
+    operating_systems:
+      - Windows
+    category: ""
+    policy:
+      '"Prohibit use of Internet Connection Sharing on your DNS domain network"
+      is set to "Enabled".'
+    fix:
+      - fix_type: group_policy
+        path: Computer Configuration\Administrative Templates\Network\Network Connections
+        name: Prohibit use of Internet Connection Sharing on your DNS domain network
+        value: Enabled
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\Windows\Network Connections
+        registry_key: NC_ShowSharedAccessUI
+        registry_action: DWORD:0
+    references:
+      cis:
+        id: 18.5.11.3
+        category: L1
+        value: Enabled
+      stig:
+        id: V-220803
+        category: CAT II
+        value: Enabled
+    notes: ""
+  - cid: C-W-GP-ADM-NET-09
+    operating_systems:
+      - Windows
+    category: ""
+    policy:
+      '"Require domain users to elevate when setting a network''s location" is
+      set to "Enabled".'
+    fix:
+      - fix_type: group_policy
+        path: Computer Configuration\Administrative Templates\Network\Network Connections
+        name: Require domain users to elevate when setting a network's location
+        value: Enabled
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\Windows\Network Connections
+        registry_key: NC_StdDomainUserSetLocation
+        registry_action: DWORD:1
+    references:
+      cis:
+        id: 18.5.11.4
+        category: L1
+        value: Enabled
+      stig:
+        id: ""
+        category: ""
+        value: ""
+    notes: ""
+  - cid: C-W-GP-ADM-NET-10
+    operating_systems:
+      - Windows
+    category: ""
+    policy:
+      '"Hardened UNC Paths" is set to "Enabled, \\*\NETLOGON: RequireMutualAuthentication=1,
+      RequireIntegrity=1, \\*\SYSVOL: RequireMutualAuthentication=1, RequireIntegrity=1".'
+    fix:
+      - fix_type: group_policy
+        path: Computer Configuration\Administrative Templates\Network\Network Provider
+        name: Hardened UNC Paths
+        value:
+          'Enabled, \\*\NETLOGON: RequireMutualAuthentication=1, RequireIntegrity=1,
+          \\*\SYSVOL: RequireMutualAuthentication=1, RequireIntegrity=1'
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\Windows\NetworkProvider\HardenedPaths
+        registry_key: \\*\NETLOGON
+        registry_action: SZ:RequireMutualAuthentication=1, RequireIntegrity=1
+      - fix_type: group_policy
+        path: Computer Configuration\Administrative Templates\Network\Network Provider
+        name: Hardened UNC Paths
+        value:
+          'Enabled, \\*\NETLOGON: RequireMutualAuthentication=1, RequireIntegrity=1,
+          \\*\SYSVOL: RequireMutualAuthentication=1, RequireIntegrity=1'
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\Windows\NetworkProvider\HardenedPaths
+        registry_key: \\*\SYSVOL
+        registry_action: SZ:RequireMutualAuthentication=1, RequireIntegrity=1
+    references:
+      cis:
+        id: 18.5.14.1
+        category: L1
+        value:
+          'Enabled, \\*\NETLOGON: RequireMutualAuthentication=1, RequireIntegrity=1,
+          \\*\SYSVOL: RequireMutualAuthentication=1, RequireIntegrity=1'
+      stig:
+        id: V-220804
+        category: CAT II
+        value:
+          '\\*\SYSVOL: RequireMutualAuthentication=1, RequireIntegrity=1, \\*\NETLOGON:
+          RequireMutualAuthentication=1, RequireIntegrity=1'
+    notes: ""
+  - cid: C-W-GP-ADM-NET-11
+    operating_systems:
+      - Windows
+    category: ""
+    policy: '"ECC Curve Order: ECC Curve Order" is set to "NistP384, NistP256".'
+    fix:
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Administrative Templates\Network\SSL Configuration
+          Settings
+        name: "ECC Curve Order: ECC Curve Order"
+        value: NistP384, NistP256
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\Cryptography\Configuration\SSL\00010002
+        registry_key: EccCurves
+        registry_action: MULTISZ:NistP384\0NistP256
+    references:
+      cis:
+        id: ""
+        category: ""
+        value: ""
+      stig:
+        id: V-220805
+        category: CAT II
+        value: NistP384, NistP256
+    notes: ""
+  - cid: C-W-GP-ADM-NET-12
+    operating_systems:
+      - Windows
+    category: ""
+    policy: '"Disable IPv6" is set to "0xff".'
+    fix:
+      - fix_type: group_policy
+        path: ""
+        name: "Disable IPv6"
+        value: "0xff"
+        registry_hive: Computer
+        registry_path: SYSTEM\CurrentControlSet\Services\TCPIP6\Parameters
+        registry_key: DisabledComponents
+        registry_action: DWORD:255
+    references:
+      cis:
+        id: 19.5.19.2.1
+        category: L2
+        value: "0xff"
+      stig:
+        id: ""
+        category: ""
+        value: ""
+    notes: ""
+  - cid: C-W-GP-ADM-NET-13
+    operating_systems:
+      - Windows
+    category: ""
+    policy:
+      '"Configuration of wireless settings using Windows Connect Now" is set to
+      "Disabled".'
+    fix:
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Administrative Templates\Network\Windows Connect
+          Now
+        name: Configuration of wireless settings using Windows Connect Now
+        value: Disabled
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\Windows\WCN\Registrars
+        registry_key: EnableRegistrars
+        registry_action: DWORD:0
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Administrative Templates\Network\Windows Connect
+          Now
+        name: Configuration of wireless settings using Windows Connect Now
+        value: Disabled
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\Windows\WCN\Registrars
+        registry_key: DisableUPnPRegistrar
+        registry_action: DWORD:0
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Administrative Templates\Network\Windows Connect
+          Now
+        name: Configuration of wireless settings using Windows Connect Now
+        value: Disabled
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\Windows\WCN\Registrars
+        registry_key: DisableInBand802DOT11Registrar
+        registry_action: DWORD:0
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Administrative Templates\Network\Windows Connect
+          Now
+        name: Configuration of wireless settings using Windows Connect Now
+        value: Disabled
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\Windows\WCN\Registrars
+        registry_key: DisableFlashConfigRegistrar
+        registry_action: DWORD:0
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Administrative Templates\Network\Windows Connect
+          Now
+        name: Configuration of wireless settings using Windows Connect Now
+        value: Disabled
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\Windows\WCN\Registrars
+        registry_key: DisableWPDRegistrar
+        registry_action: DWORD:0
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Administrative Templates\Network\Windows Connect
+          Now
+        name: Configuration of wireless settings using Windows Connect Now
+        value: Disabled
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\Windows\WCN\Registrars
+        registry_key: MaxWCNDeviceNumber
+        registry_action: DELETE
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Administrative Templates\Network\Windows Connect
+          Now
+        name: Configuration of wireless settings using Windows Connect Now
+        value: Disabled
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\Windows\WCN\Registrars
+        registry_key: HigherPrecedenceRegistrar
+        registry_action: DELETE
+    references:
+      cis:
+        id: 18.5.20.1
+        category: L2
+        value: Disabled
+      stig:
+        id: ""
+        category: ""
+        value: ""
+    notes: ""
+  - cid: C-W-GP-ADM-NET-14
+    operating_systems:
+      - Windows
+    category: ""
+    policy: '"Prohibit access of the Windows Connect Now wizards" is set to "Enabled".'
+    fix:
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Administrative Templates\Network\Windows Connect
+          Now
+        name: Prohibit access of the Windows Connect Now wizards
+        value: Enabled
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\Windows\WCN\UI
+        registry_key: DisableWcnUi
+        registry_action: DWORD:1
+    references:
+      cis:
+        id: 18.5.20.2
+        category: L2
+        value: Enabled
+      stig:
+        id: ""
+        category: ""
+        value: ""
+    notes: ""
+  - cid: C-W-GP-ADM-NET-15
+    operating_systems:
+      - Windows
+    category: ""
+    policy:
+      '"Minimize the number of simultaneous connections to the Internet or a Windows
+      Domain" is set to "Enabled: 3 = Prevent Wi-Fi when on Ethernet".'
+    fix:
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Administrative Templates\Network\Windows Connection
+          Manager
+        name:
+          Minimize the number of simultaneous connections to the Internet or a Windows
+          Domain
+        value: "Enabled: 3 = Prevent Wi-Fi when on Ethernet"
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\Windows\WcmSvc\GroupPolicy
+        registry_key: fMinimizeConnections
+        registry_action: DWORD:3
+    references:
+      cis:
+        id: 18.5.21.1
+        category: L1
+        value: "Enabled: 3 = Prevent Wi-Fi when on Ethernet"
+      stig:
+        id: V-220806
+        category: CAT II
+        value: Enabled
+    notes: ""
+  - cid: C-W-GP-ADM-NET-16
+    operating_systems:
+      - Windows
+    category: ""
+    policy:
+      '"Prohibit connection to non-domain networks when connected to domain authenticated
+      network" is set to "Enabled".'
+    fix:
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Administrative Templates\Network\Windows Connection
+          Manager
+        name:
+          Prohibit connection to non-domain networks when connected to domain authenticated
+          network
+        value: Enabled
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\Windows\WcmSvc\GroupPolicy
+        registry_key: fBlockNonDomain
+        registry_action: DWORD:1
+    references:
+      cis:
+        id: 18.5.21.2
+        category: L1
+        value: Enabled
+      stig:
+        id: V-220807
+        category: CAT II
+        value: Enabled
+    notes: ""
+  - cid: C-W-GP-ADM-NET-17
+    operating_systems:
+      - Windows
+    category: ""
+    policy:
+      '"Allow Windows to automatically connect to suggested open hotspots, to
+      networks shared by contacts, and to hotspots offering paid services" is set to
+      "Disabled".'
+    fix:
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Administrative Templates\Network\WLAN Service\WLAN
+          Settings
+        name:
+          Allow Windows to automatically connect to suggested open hotspots, to networks
+          shared by contacts, and to hotspots offering paid services
+        value: Disabled
+        registry_hive: Computer
+        registry_path: Software\Microsoft\wcmsvc\wifinetworkmanager\config
+        registry_key: AutoConnectAllowedOEM
+        registry_action: DWORD:0
+    references:
+      cis:
+        id: 18.5.23.2.1
+        category: L1
+        value: Disabled
+      stig:
+        id: V-220808
+        category: CAT II
+        value: Disabled
+    notes: ""
+  - cid: C-W-GP-ADM-NET-18
+    operating_systems:
+      - Windows
+    category: ""
+    policy: '"Turn off notifications network usage" is set to "Enabled".'
+    fix:
+      - fix_type: group_policy
+        path: Computer Configuration\Administrative Templates\Network\Start Menu and Taskbar\Notifications
+        name: Turn off notifications network usage
+        value: Enabled
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\Windows\CurrentVersion\PushNotifications
+        registry_key: NoCloudApplicationNotification
+        registry_action: DWORD:1
+    references:
+      cis:
+        id: 18.7.1.1
+        category: L2
+        value: Enabled
+      stig:
+        id: ""
+        category: ""
+        value: ""
+    notes: ""

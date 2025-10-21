@@ -1,0 +1,1929 @@
+version: 1
+name: "Group Policy: Windows Components - Miscellaneous"
+vulnerabilities:
+  - cid: C-W-GP-ADM-MISC-01
+    operating_systems:
+      - Windows
+    category: ""
+    policy: '"Allow Online Tips" is set to "Disabled".'
+    fix:
+      - fix_type: group_policy
+        path: Computer Configuration\Administrative Templates\Control Panel
+        name: Allow Online Tips
+        value: Disabled
+        registry_hive: Computer
+        registry_path: Software\Microsoft\Windows\CurrentVersion\Policies\Explorer
+        registry_key: AllowOnlineTips
+        registry_action: DWORD:0
+    references:
+      cis:
+        id: 18.1.3
+        category: L2
+        value: Disabled
+      stig:
+        id: ""
+        category: ""
+        value: ""
+    notes: ""
+  - cid: C-W-GP-ADM-MISC-02
+    operating_systems:
+      - Windows
+    category: ""
+    policy: '"Prevent enabling lock screen camera" is set to "Enabled".'
+    fix:
+      - fix_type: group_policy
+        path: Computer Configuration\Administrative Templates\Control Panel\Personalization
+        name: Prevent enabling lock screen camera
+        value: Enabled
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\Windows\Personalization
+        registry_key: NoLockScreenCamera
+        registry_action: DWORD:1
+    references:
+      cis:
+        id: 18.1.1.1
+        category: L1
+        value: Enabled
+      stig:
+        id: V-220792
+        category: CAT II
+        value: Enabled
+    notes: ""
+  - cid: C-W-GP-ADM-MISC-03
+    operating_systems:
+      - Windows
+    category: ""
+    policy: '"Prevent enabling lock screen slide show" is set to "Enabled".'
+    fix:
+      - fix_type: group_policy
+        path: Computer Configuration\Administrative Templates\Control Panel\Personalization
+        name: Prevent enabling lock screen slide show
+        value: Enabled
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\Windows\Personalization
+        registry_key: NoLockScreenSlideshow
+        registry_action: DWORD:1
+    references:
+      cis:
+        id: 18.1.1.2
+        category: L1
+        value: Enabled
+      stig:
+        id: V-220794
+        category: CAT II
+        value: Enabled
+    notes: ""
+  - cid: C-W-GP-ADM-MISC-04
+    operating_systems:
+      - Windows
+    category: ""
+    policy: '"Allow users to enable online speech recognition" is set to "Disabled".'
+    fix:
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Administrative Templates\Control Panel\Regional and
+          Language Options
+        name: Allow users to enable online speech recognition
+        value: Disabled
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\InputPersonalization
+        registry_key: AllowInputPersonalization
+        registry_action: DWORD:0
+    references:
+      cis:
+        id: 18.1.2.2
+        category: L1
+        value: Disabled
+      stig:
+        id: ""
+        category: ""
+        value: ""
+    notes: "Yes the registry key is right windows is weird."
+  - cid: C-W-GP-ADM-MISC-05
+    operating_systems:
+      - Windows
+    category: ""
+    policy:
+      '"Allow a Windows app to share application data between users" is set to
+      "Disabled".'
+    fix:
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Administrative Templates\Windows Components\App Package
+          Deployment
+        name: Allow a Windows app to share application data between users
+        value: Disabled
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\Windows\CurrentVersion\AppModel\StateManager
+        registry_key: AllowSharedLocalAppData
+        registry_action: DWORD:0
+    references:
+      cis:
+        id: 18.9.4.1
+        category: L2
+        value: Disabled
+      stig:
+        id: ""
+        category: ""
+        value: ""
+    notes: ""
+  - cid: C-W-GP-ADM-MISC-06
+    operating_systems:
+      - Windows
+    category: ""
+    policy:
+      '"Prevent non-admin users from installing packaged Windows apps" is set
+      to "Enabled".'
+    fix:
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Administrative Templates\Windows Components\App Package
+          Deployment
+        name: Prevent non-admin users from installing packaged Windows apps
+        value: Enabled
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\Windows\Appx
+        registry_key: BlockNonAdminUserInstall
+        registry_action: DWORD:1
+    references:
+      cis:
+        id: 18.9.4.2
+        category: L1
+        value: Enabled
+      stig:
+        id: ""
+        category: ""
+        value: ""
+    notes: ""
+  - cid: C-W-GP-ADM-MISC-07
+    operating_systems:
+      - Windows
+    category: ""
+    policy:
+      '"Let Windows apps activate with voice while the system is locked" is set
+      to "Enabled: Force Deny".'
+    fix:
+      - fix_type: group_policy
+        path: Computer Configuration\Administrative Templates\Windows Components\App Privacy
+        name: Let Windows apps activate with voice while the system is locked
+        value: "Enabled: Force Deny"
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\Windows\AppPrivacy
+        registry_key: LetAppsActivateWithVoiceAboveLock
+        registry_action: DWORD:2
+    references:
+      cis:
+        id: 18.9.5.1
+        category: L1
+        value: "Enabled: Force Deny"
+      stig:
+        id: V-220869
+        category: CAT II
+        value: "Enabled: Force Deny"
+    notes: ""
+  - cid: C-W-GP-ADM-MISC-08
+    operating_systems:
+      - Windows
+    category: ""
+    policy: '"Allow Microsoft accounts to be optional" is set to "Enabled".'
+    fix:
+      - fix_type: group_policy
+        path: Computer Configuration\Administrative Templates\Windows Components\App runtime
+        name: Allow Microsoft accounts to be optional
+        value: Enabled
+        registry_hive: Computer
+        registry_path: Software\Microsoft\Windows\CurrentVersion\Policies\System
+        registry_key: MSAOptional
+        registry_action: DWORD:1
+    references:
+      cis:
+        id: 18.9.6.1
+        category: L1
+        value: Enabled
+      stig:
+        id: V-220825
+        category: CAT III
+        value: Enabled
+    notes: ""
+  - cid: C-W-GP-ADM-MISC-09
+    operating_systems:
+      - Windows
+    category: ""
+    policy:
+      '"Block launching Universal Windows apps with Windows Runtime API access
+      from hosted content." is set to "Enabled".'
+    fix:
+      - fix_type: group_policy
+        path: Computer Configuration\Administrative Templates\Windows Components\App runtime
+        name:
+          Block launching Universal Windows apps with Windows Runtime API access from
+          hosted content.
+        value: Enabled
+        registry_hive: Computer
+        registry_path: Software\Microsoft\Windows\CurrentVersion\Policies\System
+        registry_key: BlockHostedAppAccessWinRT
+        registry_action: DWORD:1
+    references:
+      cis:
+        id: 18.9.6.2
+        category: L2
+        value: Enabled
+      stig:
+        id: ""
+        category: ""
+        value: ""
+    notes: ""
+  - cid: C-W-GP-ADM-MISC-10
+    operating_systems:
+      - Windows
+    category: ""
+    policy: '"Turn off Inventory Collector" is set to "Enabled".'
+    fix:
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Administrative Templates\Windows Components\Application
+          Compatibility
+        name: Turn off Inventory Collector
+        value: Enabled
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\Windows\AppCompat
+        registry_key: DisableInventory
+        registry_action: DWORD:1
+    references:
+      cis:
+        id: ""
+        category: ""
+        value: ""
+      stig:
+        id: V-220826
+        category: CAT III
+        value: Enabled
+    notes: ""
+  - cid: C-W-GP-ADM-MISC-11
+    operating_systems:
+      - Windows
+    category: ""
+    policy: '"Disallow Autoplay for non-volume devices" is set to "Enabled".'
+    fix:
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Administrative Templates\Windows Components\AutoPlay
+          Policies
+        name: Disallow Autoplay for non-volume devices
+        value: Enabled
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\Windows\Explorer
+        registry_key: NoAutoplayfornonVolume
+        registry_action: DWORD:1
+    references:
+      cis:
+        id: 18.9.8.1
+        category: L1
+        value: Enabled
+      stig:
+        id: V-220827
+        category: CAT I
+        value: Enabled
+    notes: ""
+  - cid: C-W-GP-ADM-MISC-12
+    operating_systems:
+      - Windows
+    category: ""
+    policy:
+      '"Set the default behavior for AutoRun" is set to "Enabled: Do not execute
+      any autorun commands".'
+    fix:
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Administrative Templates\Windows Components\AutoPlay
+          Policies
+        name: Set the default behavior for AutoRun
+        value: "Enabled: Do not execute any autorun commands"
+        registry_hive: Computer
+        registry_path: Software\Microsoft\Windows\CurrentVersion\Policies\Explorer
+        registry_key: NoAutorun
+        registry_action: DWORD:1
+    references:
+      cis:
+        id: 18.9.8.2
+        category: L1
+        value: "Enabled: Do not execute any autorun commands"
+      stig:
+        id: V-220828
+        category: CAT I
+        value: "Enabled: Do not execute any autorun commands"
+    notes: ""
+  - cid: C-W-GP-ADM-MISC-13
+    operating_systems:
+      - Windows
+    category: ""
+    policy: '"Turn off Autoplay" is set to "Enabled: All drives".'
+    fix:
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Administrative Templates\Windows Components\AutoPlay
+          Policies
+        name: Turn off Autoplay
+        value: "Enabled: All drives"
+        registry_hive: Computer
+        registry_path: Software\Microsoft\Windows\CurrentVersion\Policies\Explorer
+        registry_key: NoDriveTypeAutoRun
+        registry_action: DWORD:255
+    references:
+      cis:
+        id: 18.9.8.3
+        category: L1
+        value: "Enabled: All drives"
+      stig:
+        id: V-220829
+        category: CAT I
+        value: "Enabled: All Drives"
+    notes: ""
+  - cid: C-W-GP-ADM-MISC-14
+    operating_systems:
+      - Windows
+    category: ""
+    policy: '"Configure enhanced anti-spoofing" is set to "Enabled".'
+    fix:
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Administrative Templates\Windows Components\Biometrics\Facial
+          Features
+        name: Configure enhanced anti-spoofing
+        value: Enabled
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\Biometrics\FacialFeatures
+        registry_key: EnhancedAntiSpoofing
+        registry_action: DWORD:1
+    references:
+      cis:
+        id: 18.9.10.1.1
+        category: L1
+        value: Enabled
+      stig:
+        id: V-220830
+        category: CAT II
+        value: Enabled
+    notes: ""
+  - cid: C-W-GP-ADM-MISC-15
+    operating_systems:
+      - Windows
+    category: ""
+    policy: '"Allow Use of Camera" is set to "Disabled".'
+    fix:
+      - fix_type: group_policy
+        path: Computer Configuration\Administrative Templates\Windows Components\Camera
+        name: Allow Use of Camera
+        value: Disabled
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\Camera
+        registry_key: AllowCamera
+        registry_action: DWORD:0
+    references:
+      cis:
+        id: 18.9.12.1
+        category: L2
+        value: Disabled
+      stig:
+        id: ""
+        category: ""
+        value: ""
+    notes: ""
+  - cid: C-W-GP-ADM-MISC-16
+    operating_systems:
+      - Windows
+    category: ""
+    policy: '"Turn off cloud optimized content" is set to "Enabled".'
+    fix:
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Administrative Templates\Windows Components\Cloud
+          Content
+        name: Turn off cloud optimized content
+        value: Enabled
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\Windows\CloudContent
+        registry_key: DisableCloudOptimizedContent
+        registry_action: DWORD:1
+    references:
+      cis:
+        id: 18.9.13.1
+        category: L2
+        value: Enabled
+      stig:
+        id: ""
+        category: ""
+        value: ""
+    notes: ""
+  - cid: C-W-GP-ADM-MISC-17
+    operating_systems:
+      - Windows
+    category: ""
+    policy: '"Turn off Microsoft consumer experiences" is set to "Enabled".'
+    fix:
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Administrative Templates\Windows Components\Cloud
+          Content
+        name: Turn off Microsoft consumer experiences
+        value: Enabled
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\Windows\CloudContent
+        registry_key: DisableWindowsConsumerFeatures
+        registry_action: DWORD:1
+    references:
+      cis:
+        id: 18.9.13.2
+        category: L1
+        value: Enabled
+      stig:
+        id: V-220831
+        category: CAT III
+        value: Enabled
+    notes: ""
+  - cid: C-W-GP-ADM-MISC-18
+    operating_systems:
+      - Windows
+    category: ""
+    policy: '"Require pin for pairing" is set to "Enabled: Always".'
+    fix:
+      - fix_type: group_policy
+        path: Computer Configuration\Administrative Templates\Windows Components\Connect
+        name: Require pin for pairing
+        value: "Enabled: First Time <OR> Enabled: Always"
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\Windows\Connect
+        registry_key: RequirePinForPairing
+        registry_action: DWORD:2
+    references:
+      cis:
+        id: 18.9.14.1
+        category: L1
+        value: "Enabled: First Time <OR> Enabled: Always"
+      stig:
+        id: ""
+        category: ""
+        value: ""
+    notes: ""
+  - cid: C-W-GP-ADM-MISC-19
+    operating_systems:
+      - Windows
+    category: ""
+    policy: '"Do not display the password reveal button" is set to "Enabled".'
+    fix:
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Administrative Templates\Windows Components\Credential
+          User Interface
+        name: Do not display the password reveal button
+        value: Enabled
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\Windows\CredUI
+        registry_key: DisablePasswordReveal
+        registry_action: DWORD:1
+    references:
+      cis:
+        id: 18.9.15.1
+        category: L1
+        value: Enabled
+      stig:
+        id: ""
+        category: ""
+        value: ""
+    notes: ""
+  - cid: C-W-GP-ADM-MISC-20
+    operating_systems:
+      - Windows
+    category: ""
+    policy: '"Enumerate administrator accounts on elevation" is set to "Disabled".'
+    fix:
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Administrative Templates\Windows Components\Credential
+          User Interface
+        name: Enumerate administrator accounts on elevation
+        value: Disabled
+        registry_hive: Computer
+        registry_path: Software\Microsoft\Windows\CurrentVersion\Policies\CredUI
+        registry_key: EnumerateAdministrators
+        registry_action: DWORD:0
+    references:
+      cis:
+        id: 18.9.15.2
+        category: L1
+        value: Disabled
+      stig:
+        id: V-220832
+        category: CAT II
+        value: Disabled
+    notes: ""
+  - cid: C-W-GP-ADM-MISC-21
+    operating_systems:
+      - Windows
+    category: ""
+    policy: '"Prevent the use of security questions for local accounts" is set to "Enabled".'
+    fix:
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Administrative Templates\Windows Components\Credential
+          User Interface
+        name: Prevent the use of security questions for local accounts
+        value: Enabled
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\Windows\System
+        registry_key: NoLocalPasswordResetQuestions
+        registry_action: DWORD:1
+    references:
+      cis:
+        id: 18.9.15.3
+        category: L1
+        value: Enabled
+      stig:
+        id: ""
+        category: ""
+        value: ""
+    notes: ""
+  - cid: C-W-GP-ADM-MISC-22
+    operating_systems:
+      - Windows
+    category: ""
+    policy: '"Allow Telemetry" is set to "Enabled: 0 - Security [Enterprise Only]".'
+    fix:
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Administrative Templates\Windows Components\Data
+          Collection and Preview Builds
+        name: Allow Telemetry
+        value: "Enabled: 0 - Security [Enterprise Only] <OR> Enabled: 1 - Basic"
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\Windows\DataCollection
+        registry_key: AllowTelemetry
+        registry_action: DWORD:0
+    references:
+      cis:
+        id: 18.9.16.1
+        category: L1
+        value: "Enabled: 0 - Security [Enterprise Only] <OR> Enabled: 1 - Basic"
+      stig:
+        id: V-220834
+        category: CAT II
+        value: "Enabled: 0 - Security [Enterprise Only]"
+    notes: ""
+  - cid: C-W-GP-ADM-MISC-23
+    operating_systems:
+      - Windows
+    category: ""
+    policy:
+      '"Configure Authenticated Proxy usage for the Connected User Experience
+      and Telemetry service" is set to "Enabled: Disable Authenticated Proxy usage".'
+    fix:
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Administrative Templates\Windows Components\Data
+          Collection and Preview Builds
+        name:
+          Configure Authenticated Proxy usage for the Connected User Experience and
+          Telemetry service
+        value: "Enabled: Disable Authenticated Proxy usage"
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\Windows\DataCollection
+        registry_key: DisableEnterpriseAuthProxy
+        registry_action: DWORD:1
+    references:
+      cis:
+        id: 18.9.16.2
+        category: L2
+        value: "Enabled: Disable Authenticated Proxy usage"
+      stig:
+        id: ""
+        category: ""
+        value: ""
+    notes: ""
+  - cid: C-W-GP-ADM-MISC-24
+    operating_systems:
+      - Windows
+    category: ""
+    policy: '"Do not show feedback notifications" is set to "Enabled".'
+    fix:
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Administrative Templates\Windows Components\Data
+          Collection and Preview Builds
+        name: Do not show feedback notifications
+        value: Enabled
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\Windows\DataCollection
+        registry_key: DoNotShowFeedbackNotifications
+        registry_action: DWORD:1
+    references:
+      cis:
+        id: 18.9.16.3
+        category: L1
+        value: Enabled
+      stig:
+        id: ""
+        category: ""
+        value: ""
+    notes: ""
+  - cid: C-W-GP-ADM-MISC-25
+    operating_systems:
+      - Windows
+    category: ""
+    policy:
+      '"Limit Enhanced diagnostic data to the minimum required by Windows Analytics"
+      is set to "Enabled".'
+    fix:
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Administrative Templates\Windows Components\Data
+          Collection and Preview Builds
+        name: Limit Enhanced diagnostic data to the minimum required by Windows Analytics
+        value: Enabled
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\Windows\DataCollection
+        registry_key: LimitEnhancedDiagnosticDataWindowsAnalytics
+        registry_action: DWORD:1
+    references:
+      cis:
+        id: ""
+        category: ""
+        value: ""
+      stig:
+        id: V-220833
+        category: CAT II
+        value: Enabled
+    notes: ""
+  - cid: C-W-GP-ADM-MISC-27
+    operating_systems:
+      - Windows
+    category: ""
+    policy: '"Toggle user control over Insider builds" is set to "Disabled".'
+    fix:
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Administrative Templates\Windows Components\Data
+          Collection and Preview Builds
+        name: Toggle user control over Insider builds
+        value: Disabled
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\Windows\PreviewBuilds
+        registry_key: AllowBuildPreview
+        registry_action: DWORD:0
+    references:
+      cis:
+        id: 18.9.16.4
+        category: L1
+        value: Disabled
+      stig:
+        id: ""
+        category: ""
+        value: ""
+    notes: ""
+  - cid: C-W-GP-ADM-MISC-28
+    operating_systems:
+      - Windows
+    category: ""
+    policy: '"Download Mode" is set to "Enabled: HTTP Only".'
+    fix:
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Administrative Templates\Windows Components\Delivery
+          Optimization
+        name: Download Mode
+        value: "Enabled: HTTP Only"
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\Windows\DeliveryOptimization
+        registry_key: DODownloadMode
+        registry_action: DWORD:100
+    references:
+      cis:
+        id: 18.9.17.1
+        category: L1
+        value: "<NOT SET TO> Enabled: Internet"
+      stig:
+        id: V-220835
+        category: CAT III
+        value: "Enabled: <Anything but> Internet"
+    notes: ""
+  - cid: C-W-GP-ADM-MISC-29
+    operating_systems:
+      - Windows
+    category: ""
+    policy:
+      '"Configure Windows Defender SmartScreen" is set to "Enabled: Warn and prevent
+      bypass".'
+    fix:
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Administrative Templates\Windows Components\File
+          Explorer
+        name: Configure Windows Defender SmartScreen
+        value: "Enabled: Warn and prevent bypass"
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\Windows\System
+        registry_key: EnableSmartScreen
+        registry_action: DWORD:1
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Administrative Templates\Windows Components\File
+          Explorer
+        name: Configure Windows Defender SmartScreen
+        value: "Enabled: Warn and prevent bypass"
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\Windows\System
+        registry_key: ShellSmartScreenLevel
+        registry_action: SZ:Block
+    references:
+      cis:
+        id: ""
+        category: ""
+        value: ""
+      stig:
+        id: V-220836
+        category: CAT II
+        value: "Enabled: Warn and prevent bypass"
+    notes: ""
+  - cid: C-W-GP-ADM-MISC-30
+    operating_systems:
+      - Windows
+    category: ""
+    policy: '"Turn off Data Execution Prevention for Explorer" is set to "Disabled".'
+    fix:
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Administrative Templates\Windows Components\File
+          Explorer
+        name: Turn off Data Execution Prevention for Explorer
+        value: Disabled
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\Windows\Explorer
+        registry_key: NoDataExecutionPrevention
+        registry_action: DWORD:0
+    references:
+      cis:
+        id: 18.9.30.2
+        category: L1
+        value: Disabled
+      stig:
+        id: V-220837
+        category: CAT II
+        value: Not Configured or Disabled
+    notes: ""
+  - cid: C-W-GP-ADM-MISC-31
+    operating_systems:
+      - Windows
+    category: ""
+    policy: '"Turn off heap termination on corruption" is set to "Disabled".'
+    fix:
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Administrative Templates\Windows Components\File
+          Explorer
+        name: Turn off heap termination on corruption
+        value: Disabled
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\Windows\Explorer
+        registry_key: NoHeapTerminationOnCorruption
+        registry_action: DWORD:0
+    references:
+      cis:
+        id: 18.9.30.3
+        category: L1
+        value: Disabled
+      stig:
+        id: V-220838
+        category: CAT III
+        value: Not Configured or Disabled
+    notes: ""
+  - cid: C-W-GP-ADM-MISC-32
+    operating_systems:
+      - Windows
+    category: ""
+    policy: '"Turn off shell protocol protected mode" is set to "Disabled".'
+    fix:
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Administrative Templates\Windows Components\File
+          Explorer
+        name: Turn off shell protocol protected mode
+        value: Disabled
+        registry_hive: Computer
+        registry_path: Software\Microsoft\Windows\CurrentVersion\Policies\Explorer
+        registry_key: PreXPSP2ShellProtocolBehavior
+        registry_action: DWORD:0
+    references:
+      cis:
+        id: 18.9.30.4
+        category: L1
+        value: Disabled
+      stig:
+        id: V-220839
+        category: CAT II
+        value: Not Configured or Disabled
+    notes: ""
+  - cid: C-W-GP-ADM-MISC-33
+    operating_systems:
+      - Windows
+    category: ""
+    policy: '"Prevent the computer from joining a homegroup" is set to "Enabled".'
+    fix:
+      - fix_type: group_policy
+        path: Computer Configuration\Administrative Templates\Windows Components\HomeGroup
+        name: Prevent the computer from joining a homegroup
+        value: Enabled
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\Windows\HomeGroup
+        registry_key: DisableHomeGroup
+        registry_action: DWORD:1
+    references:
+      cis:
+        id: 18.9.35.1
+        category: L1
+        value: Enabled
+      stig:
+        id: ""
+        category: ""
+        value: ""
+    notes: ""
+  - cid: C-W-GP-ADM-MISC-34
+    operating_systems:
+      - Windows
+    category: ""
+    policy: '"Turn off location" is set to "Enabled".'
+    fix:
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Administrative Templates\Windows Components\Location
+          and Sensors
+        name: Turn off location
+        value: Enabled
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\Windows\LocationAndSensors
+        registry_key: DisableLocation
+        registry_action: DWORD:1
+    references:
+      cis:
+        id: 18.9.39.1
+        category: L2
+        value: Enabled
+      stig:
+        id: ""
+        category: ""
+        value: ""
+    notes: ""
+  - cid: C-W-GP-ADM-MISC-35
+    operating_systems:
+      - Windows
+    category: ""
+    policy: '"Allow Message Service Cloud Sync" is set to "Disabled".'
+    fix:
+      - fix_type: group_policy
+        path: Computer Configuration\Administrative Templates\Windows Components\Messaging
+        name: Allow Message Service Cloud Sync
+        value: Disabled
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\Windows\Messaging
+        registry_key: AllowMessageSync
+        registry_action: DWORD:0
+    references:
+      cis:
+        id: 18.9.43.1
+        category: L2
+        value: Disabled
+      stig:
+        id: ""
+        category: ""
+        value: ""
+    notes: ""
+  - cid: C-W-GP-ADM-MISC-36
+    operating_systems:
+      - Windows
+    category: ""
+    policy: '"Block all consumer Microsoft account user authentication" is set to "Enabled".'
+    fix:
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Administrative Templates\Windows Components\Microsoft
+          account
+        name: Block all consumer Microsoft account user authentication
+        value: Enabled
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\MicrosoftAccount
+        registry_key: DisableUserAuth
+        registry_action: DWORD:1
+    references:
+      cis:
+        id: 18.9.44.1
+        category: L1
+        value: Enabled
+      stig:
+        id: ""
+        category: ""
+        value: ""
+    notes: ""
+  - cid: C-W-GP-ADM-MISC-37
+    operating_systems:
+      - Windows
+    category: ""
+    policy:
+      '"Prevent bypassing Windows Defender SmartScreen prompts for sites" is set
+      to "Enabled".'
+    fix:
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Administrative Templates\Windows Components\Microsoft
+          Edge
+        name: Prevent bypassing Windows Defender SmartScreen prompts for sites
+        value: Enabled
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\MicrosoftEdge\PhishingFilter
+        registry_key: PreventOverride
+        registry_action: DWORD:1
+    references:
+      cis:
+        id: ""
+        category: ""
+        value: ""
+      stig:
+        id: V-220840
+        category: CAT II
+        value: Enabled
+    notes: ""
+  - cid: C-W-GP-ADM-MISC-38
+    operating_systems:
+      - Windows
+    category: ""
+    policy:
+      '"Prevent bypassing Windows Defender SmartScreen prompts for files" is set
+      to "Enabled".'
+    fix:
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Administrative Templates\Windows Components\Microsoft
+          Edge
+        name: Prevent bypassing Windows Defender SmartScreen prompts for files
+        value: Enabled
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\MicrosoftEdge\PhishingFilter
+        registry_key: PreventOverride
+        registry_action: DWORD:1
+    references:
+      cis:
+        id: ""
+        category: ""
+        value: ""
+      stig:
+        id: V-220841
+        category: CAT II
+        value: Enabled
+    notes: ""
+  - cid: C-W-GP-ADM-MISC-39
+    operating_systems:
+      - Windows
+    category: ""
+    policy: '"Prevent certificate error overrides" is set to "Enabled".'
+    fix:
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Administrative Templates\Windows Components\Microsoft
+          Edge
+        name: Prevent certificate error overrides
+        value: Enabled
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\MicrosoftEdge\Internet Settings
+        registry_key: PreventCertErrorOverrides
+        registry_action: DWORD:1
+    references:
+      cis:
+        id: ""
+        category: ""
+        value: ""
+      stig:
+        id: V-220842
+        category: CAT II
+        value: Enabled
+    notes: ""
+  - cid: C-W-GP-ADM-MISC-40
+    operating_systems:
+      - Windows
+    category: ""
+    policy: '"Configure Password Manager" is set to "Disabled".'
+    fix:
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Administrative Templates\Windows Components\Microsoft
+          Edge
+        name: Configure Password Manager
+        value: Disabled
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\MicrosoftEdge\Main
+        registry_key: FormSuggest Passwords
+        registry_action: SZ:no
+    references:
+      cis:
+        id: ""
+        category: ""
+        value: ""
+      stig:
+        id: V-220843
+        category: CAT II
+        value: Disabled
+    notes: ""
+  - cid: C-W-GP-ADM-MISC-41
+    operating_systems:
+      - Windows
+    category: ""
+    policy: '"Configure Windows Defender SmartScreen" is set to "Enabled".'
+    fix:
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Administrative Templates\Windows Components\Microsoft
+          Edge
+        name: Configure Windows Defender SmartScreen
+        value: Enabled
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\MicrosoftEdge\PhishingFilter
+        registry_key: EnabledV9
+        registry_action: DWORD:1
+    references:
+      cis:
+        id: ""
+        category: ""
+        value: ""
+      stig:
+        id: V-220844
+        category: CAT II
+        value: Enabled
+    notes: ""
+  - cid: C-W-GP-ADM-MISC-42
+    operating_systems:
+      - Windows
+    category: ""
+    policy: '"Enable news and interests on the taskbar" is set to "Disabled".'
+    fix:
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Administrative Templates\Windows Components\News
+          and interests
+        name: Enable news and interests on the taskbar
+        value: Disabled
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\Windows\Windows Feeds
+        registry_key: EnableFeeds
+        registry_action: DWORD:0
+    references:
+      cis:
+        id: 18.9.55.1
+        category: L2
+        value: Disabled
+      stig:
+        id: ""
+        category: ""
+        value: ""
+    notes: ""
+  - cid: C-W-GP-ADM-MISC-43
+    operating_systems:
+      - Windows
+    category: ""
+    policy: '"Prevent the usage of OneDrive for file storage" is set to "Enabled".'
+    fix:
+      - fix_type: group_policy
+        path: Computer Configuration\Administrative Templates\Windows Components\OneDrive
+        name: Prevent the usage of OneDrive for file storage
+        value: Enabled
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\Windows\OneDrive
+        registry_key: DisableFileSyncNGSC
+        registry_action: DWORD:1
+    references:
+      cis:
+        id: 18.9.56.1
+        category: L1
+        value: Enabled
+      stig:
+        id: ""
+        category: ""
+        value: ""
+    notes: ""
+  - cid: C-W-GP-ADM-MISC-44
+    operating_systems:
+      - Windows
+    category: ""
+    policy: '"Turn off Push To Install service" is set to "Enabled".'
+    fix:
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Administrative Templates\Windows Components\Push
+          to Install
+        name: Turn off Push To Install service
+        value: Enabled
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\PushToInstall
+        registry_key: DisablePushToInstall
+        registry_action: DWORD:1
+    references:
+      cis:
+        id: 18.9.62.1
+        category: L2
+        value: Enabled
+      stig:
+        id: ""
+        category: ""
+        value: ""
+    notes: ""
+  - cid: C-W-GP-ADM-MISC-45
+    operating_systems:
+      - Windows
+    category: ""
+    policy: '"Prevent downloading of enclosures" is set to "Enabled".'
+    fix:
+      - fix_type: group_policy
+        path: Computer Configuration\Administrative Templates\Windows Components\RSS Feeds
+        name: Prevent downloading of enclosures
+        value: Enabled
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\Internet Explorer\Feeds
+        registry_key: DisableEnclosureDownload
+        registry_action: DWORD:1
+    references:
+      cis:
+        id: 18.9.64.1
+        category: L1
+        value: Enabled
+      stig:
+        id: V-220853
+        category: CAT II
+        value: Enabled
+    notes: ""
+  - cid: C-W-GP-ADM-MISC-46
+    operating_systems:
+      - Windows
+    category: ""
+    policy: '"Turn on Basic feed authentication over HTTP" is set to "Disabled".'
+    fix:
+      - fix_type: group_policy
+        path: Computer Configuration\Administrative Templates\Windows Components\RSS Feeds
+        name: Turn on Basic feed authentication over HTTP
+        value: Disabled
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\Internet Explorer\Feeds
+        registry_key: AllowBasicAuthInClear
+        registry_action: DWORD:0
+    references:
+      cis:
+        id: ""
+        category: ""
+        value: ""
+      stig:
+        id: V-220854
+        category: CAT II
+        value: Not Configured or Disabled
+    notes: ""
+  - cid: C-W-GP-ADM-MISC-47
+    operating_systems:
+      - Windows
+    category: ""
+    policy: '"Allow Cloud Search" is set to "Enabled: Disable Cloud Search".'
+    fix:
+      - fix_type: group_policy
+        path: Computer Configuration\Administrative Templates\Windows Components\Search
+        name: Allow Cloud Search
+        value: "Enabled: Disable Cloud Search"
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\Windows\Windows Search
+        registry_key: AllowCloudSearch
+        registry_action: DWORD:0
+    references:
+      cis:
+        id: 18.9.65.2
+        category: L2
+        value: "Enabled: Disable Cloud Search"
+      stig:
+        id: ""
+        category: ""
+        value: ""
+    notes: ""
+  - cid: C-W-GP-ADM-MISC-48
+    operating_systems:
+      - Windows
+    category: ""
+    policy: '"Allow Cortana" is set to "Disabled".'
+    fix:
+      - fix_type: group_policy
+        path: Computer Configuration\Administrative Templates\Windows Components\Search
+        name: Allow Cortana
+        value: Disabled
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\Windows\Windows Search
+        registry_key: AllowCortana
+        registry_action: DWORD:0
+    references:
+      cis:
+        id: 18.9.65.3
+        category: L1
+        value: Disabled
+      stig:
+        id: ""
+        category: ""
+        value: ""
+    notes: ""
+  - cid: C-W-GP-ADM-MISC-49
+    operating_systems:
+      - Windows
+    category: ""
+    policy: '"Allow Cortana above lock screen" is set to "Disabled".'
+    fix:
+      - fix_type: group_policy
+        path: Computer Configuration\Administrative Templates\Windows Components\Search
+        name: Allow Cortana above lock screen
+        value: Disabled
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\Windows\Windows Search
+        registry_key: AllowCortanaAboveLock
+        registry_action: DWORD:0
+    references:
+      cis:
+        id: 18.9.65.4
+        category: L1
+        value: Disabled
+      stig:
+        id: ""
+        category: ""
+        value: ""
+    notes: ""
+  - cid: C-W-GP-ADM-MISC-50
+    operating_systems:
+      - Windows
+    category: ""
+    policy: '"Allow indexing of encrypted files" is set to "Disabled".'
+    fix:
+      - fix_type: group_policy
+        path: Computer Configuration\Administrative Templates\Windows Components\Search
+        name: Allow indexing of encrypted files
+        value: Disabled
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\Windows\Windows Search
+        registry_key: AllowIndexingEncryptedStoresOrItems
+        registry_action: DWORD:0
+    references:
+      cis:
+        id: 18.9.65.5
+        category: L1
+        value: Disabled
+      stig:
+        id: V-220855
+        category: CAT II
+        value: Disabled
+    notes: ""
+  - cid: C-W-GP-ADM-MISC-51
+    operating_systems:
+      - Windows
+    category: ""
+    policy: '"Allow search and Cortana to use location" is set to "Disabled".'
+    fix:
+      - fix_type: group_policy
+        path: Computer Configuration\Administrative Templates\Windows Components\Search
+        name: Allow search and Cortana to use location
+        value: Disabled
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\Windows\Windows Search
+        registry_key: AllowSearchToUseLocation
+        registry_action: DWORD:0
+    references:
+      cis:
+        id: 18.9.65.6
+        category: L1
+        value: Disabled
+      stig:
+        id: ""
+        category: ""
+        value: ""
+    notes: ""
+  - cid: C-W-GP-ADM-MISC-52
+    operating_systems:
+      - Windows
+    category: ""
+    policy: '"Turn off KMS Client Online AVS Validation" is set to "Enabled".'
+    fix:
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Administrative Templates\Windows Components\Software
+          Protection Platform
+        name: Turn off KMS Client Online AVS Validation
+        value: Enabled
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\Windows NT\CurrentVersion\Software Protection Platform
+        registry_key: NoGenTicket
+        registry_action: DWORD:1
+    references:
+      cis:
+        id: 18.9.70.1
+        category: L2
+        value: Enabled
+      stig:
+        id: ""
+        category: ""
+        value: ""
+    notes: ""
+  - cid: C-W-GP-ADM-MISC-53
+    operating_systems:
+      - Windows
+    category: ""
+    policy: '"Disable all apps from Microsoft Store" is set to "Disabled".'
+    fix:
+      - fix_type: group_policy
+        path: Computer Configuration\Administrative Templates\Windows Components\Store
+        name: Disable all apps from Microsoft Store
+        value: Disabled
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\WindowsStore
+        registry_key: DisableStoreApps
+        registry_action: DWORD:1
+    references:
+      cis:
+        id: 18.9.73.1
+        category: L2
+        value: Disabled
+      stig:
+        id: ""
+        category: ""
+        value: ""
+    notes: ""
+  - cid: C-W-GP-ADM-MISC-54
+    operating_systems:
+      - Windows
+    category: ""
+    policy: '"Only display the private store within the Microsoft Store" is set to "Enabled".'
+    fix:
+      - fix_type: group_policy
+        path: Computer Configuration\Administrative Templates\Windows Components\Store
+        name: Only display the private store within the Microsoft Store
+        value: Enabled
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\WindowsStore
+        registry_key: RequirePrivateStoreOnly
+        registry_action: DWORD:1
+    references:
+      cis:
+        id: 18.9.73.2
+        category: L1
+        value: Enabled
+      stig:
+        id: ""
+        category: ""
+        value: ""
+    notes: ""
+  - cid: C-W-GP-ADM-MISC-55
+    operating_systems:
+      - Windows
+    category: ""
+    policy: '"Turn off Automatic Download and Install of updates" is set to "Disabled".'
+    fix:
+      - fix_type: group_policy
+        path: Computer Configuration\Administrative Templates\Windows Components\Store
+        name: Turn off Automatic Download and Install of updates
+        value: Disabled
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\WindowsStore
+        registry_key: AutoDownload
+        registry_action: DWORD:4
+    references:
+      cis:
+        id: 18.9.73.3
+        category: L1
+        value: Disabled
+      stig:
+        id: ""
+        category: ""
+        value: ""
+    notes: ""
+  - cid: C-W-GP-ADM-MISC-56
+    operating_systems:
+      - Windows
+    category: ""
+    policy:
+      '"Turn off the offer to update to the latest version of Windows" is set
+      to "Enabled".'
+    fix:
+      - fix_type: group_policy
+        path: Computer Configuration\Administrative Templates\Windows Components\Store
+        name: Turn off the offer to update to the latest version of Windows
+        value: Enabled
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\WindowsStore
+        registry_key: DisableOSUpgrade
+        registry_action: DWORD:1
+    references:
+      cis:
+        id: 18.9.73.4
+        category: L1
+        value: Enabled
+      stig:
+        id: ""
+        category: ""
+        value: ""
+    notes: ""
+  - cid: C-W-GP-ADM-MISC-57
+    operating_systems:
+      - Windows
+    category: ""
+    policy: '"Turn off the Store application" is set to "Enabled".'
+    fix:
+      - fix_type: group_policy
+        path: Computer Configuration\Administrative Templates\Windows Components\Store
+        name: Turn off the Store application
+        value: Enabled
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\WindowsStore
+        registry_key: RemoveWindowsStore
+        registry_action: DWORD:1
+    references:
+      cis:
+        id: 18.9.73.5
+        category: L2
+        value: Enabled
+      stig:
+        id: ""
+        category: ""
+        value: ""
+    notes: ""
+  - cid: C-W-GP-ADM-MISC-58
+    operating_systems:
+      - Windows
+    category: ""
+    policy:
+      '"Enables or disables Windows Game Recording and Broadcasting" is set to
+      "Disabled".'
+    fix:
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Administrative Templates\Windows Components\Windows
+          Game Recording and Broadcasting
+        name: Enables or disables Windows Game Recording and Broadcasting
+        value: Disabled
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\Windows\GameDVR
+        registry_key: AllowGameDVR
+        registry_action: DWORD:0
+    references:
+      cis:
+        id: 18.9.83.1
+        category: L1
+        value: Disabled
+      stig:
+        id: V-220845
+        category: CAT II
+        value: Disabled
+    notes: ""
+  - cid: C-W-GP-ADM-MISC-60
+    operating_systems:
+      - Windows
+    category: ""
+    policy: '"Allow suggested apps in Windows Ink Workspace" is set to "Disabled".'
+    fix:
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Administrative Templates\Windows Components\Windows
+          Ink Workspace
+        name: Allow suggested apps in Windows Ink Workspace
+        value: Disabled
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\WindowsInkWorkspace
+        registry_key: AllowSuggestedAppsInWindowsInkWorkspace
+        registry_action: DWORD:0
+    references:
+      cis:
+        id: 18.9.85.1
+        category: L2
+        value: Disabled
+      stig:
+        id: ""
+        category: ""
+        value: ""
+    notes: ""
+  - cid: C-W-GP-ADM-MISC-61
+    operating_systems:
+      - Windows
+    category: ""
+    policy: '"Allow Windows Ink Workspace" is set to "Disabled".'
+    fix:
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Administrative Templates\Windows Components\Windows
+          Ink Workspace
+        name: Allow Windows Ink Workspace
+        value: "Enabled: On, but disallow access above lock"
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\WindowsInkWorkspace
+        registry_key: AllowWindowsInkWorkspace
+        registry_action: DWORD:0
+    references:
+      cis:
+        id: 18.9.85.2
+        category: ""
+        value:
+          "Enabled: On, but disallow access above lock <OR> Disabled <BUT NOT>
+          Enabled: On"
+      stig:
+        id: V-220871
+        category: CAT II
+        value: "Enabled: On, but disallow access above lock"
+    notes: ""
+  - cid: C-W-GP-ADM-MISC-62
+    operating_systems:
+      - Windows
+    category: ""
+    policy: '"Allow user control over installs" is set to "Disabled".'
+    fix:
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Administrative Templates\Windows Components\Windows
+          Installer
+        name: Allow user control over installs
+        value: Disabled
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\Windows\Installer
+        registry_key: EnableUserControl
+        registry_action: DWORD:0
+    references:
+      cis:
+        id: 18.9.86.1
+        category: L1
+        value: Disabled
+      stig:
+        id: V-220856
+        category: CAT II
+        value: Disabled
+    notes: ""
+  - cid: C-W-GP-ADM-MISC-63
+    operating_systems:
+      - Windows
+    category: ""
+    policy: '"Always install with elevated privileges" is set to "Disabled".'
+    fix:
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Administrative Templates\Windows Components\Windows
+          Installer
+        name: Always install with elevated privileges
+        value: Disabled
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\Windows\Installer
+        registry_key: AlwaysInstallElevated
+        registry_action: DWORD:0
+    references:
+      cis:
+        id: 18.9.86.2
+        category: L1
+        value: Disabled
+      stig:
+        id: V-220857
+        category: CAT I
+        value: Disabled
+    notes: ""
+  - cid: C-W-GP-ADM-MISC-64
+    operating_systems:
+      - Windows
+    category: ""
+    policy:
+      '"Prevent Internet Explorer security prompt for Windows Installer scripts"
+      is set to "Disabled".'
+    fix:
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Administrative Templates\Windows Components\Windows
+          Installer
+        name: Prevent Internet Explorer security prompt for Windows Installer scripts
+        value: Disabled
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\Windows\Installer
+        registry_key: SafeForScripting
+        registry_action: DWORD:0
+    references:
+      cis:
+        id: 18.9.86.3
+        category: L2
+        value: Disabled
+      stig:
+        id: V-220858
+        category: CAT II
+        value: Not Configured or Disabled
+    notes: ""
+  - cid: C-W-GP-ADM-MISC-65
+    operating_systems:
+      - Windows
+    category: ""
+    policy:
+      '"Sign-in and lock last interactive user automatically after a restart"
+      is set to "Disabled".'
+    fix:
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Administrative Templates\Windows Components\Windows
+          Logon Options
+        name: Sign-in and lock last interactive user automatically after a restart
+        value: Disabled
+        registry_hive: Computer
+        registry_path: Software\Microsoft\Windows\CurrentVersion\Policies\System
+        registry_key: DisableAutomaticRestartSignOn
+        registry_action: DWORD:1
+    references:
+      cis:
+        id: 18.9.87.1
+        category: L1
+        value: Disabled
+      stig:
+        id: V-220859
+        category: CAT II
+        value: Disabled
+    notes: ""
+  - cid: C-W-GP-ADM-MISC-66
+    operating_systems:
+      - Windows
+    category: ""
+    policy: '"Turn on PowerShell Script Block Logging" is set to "Enabled".'
+    fix:
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Administrative Templates\Windows Components\Windows
+          PowerShell
+        name: Turn on PowerShell Script Block Logging
+        value: Enabled
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\Windows\PowerShell\ScriptBlockLogging
+        registry_key: EnableScriptBlockLogging
+        registry_action: DWORD:0
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Administrative Templates\Windows Components\Windows
+          PowerShell
+        name: Turn on PowerShell Script Block Logging
+        value: Enabled
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\Windows\PowerShell\ScriptBlockLogging
+        registry_key: EnableScriptBlockInvocationLogging
+        registry_action: DELETE
+    references:
+      cis:
+        id: 18.9.96.1
+        category: L1
+        value: Disabled
+      stig:
+        id: V-220860
+        category: CAT II
+        value: Enabled
+    notes: ""
+  - cid: C-W-GP-ADM-MISC-67
+    operating_systems:
+      - Windows
+    category: ""
+    policy: '"Turn on PowerShell Transcription" is set to "Disabled".'
+    fix:
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Administrative Templates\Windows Components\Windows
+          PowerShell
+        name: Turn on PowerShell Transcription
+        value: Disabled
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\Windows\PowerShell\Transcription
+        registry_key: EnableTranscripting
+        registry_action: DWORD:0
+    references:
+      cis:
+        id: 18.9.96.2
+        category: L1
+        value: Disabled
+      stig:
+        id: V-230220
+        category: CAT II
+        value: Enabled (Logs to secure location)
+    notes: ""
+  - cid: C-W-GP-ADM-MISC-68
+    operating_systems:
+      - Windows
+    category: ""
+    policy: '"Allow Basic authentication" is set to "Disabled".'
+    fix:
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Administrative Templates\Windows Components\Windows
+          Remote Management (WinRM)\WinRM Client
+        name: Allow Basic authentication
+        value: Disabled
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\Windows\WinRM\Client
+        registry_key: AllowBasic
+        registry_action: DWORD:0
+    references:
+      cis:
+        id: 18.9.98.1.1
+        category: L1
+        value: Disabled
+      stig:
+        id: V-220862
+        category: CAT I
+        value: Disabled
+    notes: ""
+  - cid: C-W-GP-ADM-MISC-69
+    operating_systems:
+      - Windows
+    category: ""
+    policy: '"Allow unencrypted traffic" is set to "Disabled".'
+    fix:
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Administrative Templates\Windows Components\Windows
+          Remote Management (WinRM)\WinRM Client
+        name: Allow unencrypted traffic
+        value: Disabled
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\Windows\WinRM\Client
+        registry_key: AllowUnencryptedTraffic
+        registry_action: DWORD:0
+    references:
+      cis:
+        id: 18.9.98.1.2
+        category: L1
+        value: Disabled
+      stig:
+        id: V-220863
+        category: CAT II
+        value: Disabled
+    notes: ""
+  - cid: C-W-GP-ADM-MISC-70
+    operating_systems:
+      - Windows
+    category: ""
+    policy: '"Disallow Digest authentication" is set to "Enabled".'
+    fix:
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Administrative Templates\Windows Components\Windows
+          Remote Management (WinRM)\WinRM Client
+        name: Disallow Digest authentication
+        value: Enabled
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\Windows\WinRM\Client
+        registry_key: AllowDigest
+        registry_action: DWORD:0
+    references:
+      cis:
+        id: 18.9.98.1.3
+        category: L1
+        value: Enabled
+      stig:
+        id: V-220868
+        category: CAT II
+        value: Enabled
+    notes: ""
+  - cid: C-W-GP-ADM-MISC-71
+    operating_systems:
+      - Windows
+    category: ""
+    policy: '"Allow Basic authentication" is set to "Disabled".'
+    fix:
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Administrative Templates\Windows Components\Windows
+          Remote Management (WinRM)\WinRM Service
+        name: Allow Basic authentication
+        value: Disabled
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\Windows\WinRM\Service
+        registry_key: AllowBasic
+        registry_action: DWORD:0
+    references:
+      cis:
+        id: 18.9.98.2.1
+        category: L1
+        value: Disabled
+      stig:
+        id: V-220865
+        category: CAT I
+        value: Disabled
+    notes: ""
+  - cid: C-W-GP-ADM-MISC-72
+    operating_systems:
+      - Windows
+    category: ""
+    policy: '"Allow remote server management through WinRM" is set to "Disabled".'
+    fix:
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Administrative Templates\Windows Components\Windows
+          Remote Management (WinRM)\WinRM Service
+        name: Allow remote server management through WinRM
+        value: Disabled
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\Windows\WinRM\Service
+        registry_key: AllowAutoConfig
+        registry_action: DWORD:0
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Administrative Templates\Windows Components\Windows
+          Remote Management (WinRM)\WinRM Service
+        name: Allow remote server management through WinRM
+        value: Disabled
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\Windows\WinRM\Service
+        registry_key: IPv4Filter
+        registry_action: DELETE
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Administrative Templates\Windows Components\Windows
+          Remote Management (WinRM)\WinRM Service
+        name: Allow remote server management through WinRM
+        value: Disabled
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\Windows\WinRM\Service
+        registry_key: IPv6Filter
+        registry_action: DELETE
+    references:
+      cis:
+        id: 18.9.98.2.2
+        category: L2
+        value: Disabled
+      stig:
+        id: ""
+        category: ""
+        value: ""
+    notes: ""
+  - cid: C-W-GP-ADM-MISC-73
+    operating_systems:
+      - Windows
+    category: ""
+    policy: '"Allow unencrypted traffic" is set to "Disabled".'
+    fix:
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Administrative Templates\Windows Components\Windows
+          Remote Management (WinRM)\WinRM Service
+        name: Allow unencrypted traffic
+        value: Disabled
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\Windows\WinRM\Service
+        registry_key: AllowUnencryptedTraffic
+        registry_action: DWORD:0
+    references:
+      cis:
+        id: 18.9.98.2.3
+        category: L1
+        value: Disabled
+      stig:
+        id: V-220866
+        category: CAT II
+        value: Disabled
+    notes: ""
+  - cid: C-W-GP-ADM-MISC-74
+    operating_systems:
+      - Windows
+    category: ""
+    policy: '"Disallow WinRM from storing RunAs credentials" is set to "Enabled".'
+    fix:
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Administrative Templates\Windows Components\Windows
+          Remote Management (WinRM)\WinRM Service
+        name: Disallow WinRM from storing RunAs credentials
+        value: Enabled
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\Windows\WinRM\Service
+        registry_key: DisableRunAs
+        registry_action: DWORD:1
+    references:
+      cis:
+        id: 18.9.98.2.4
+        category: L1
+        value: Enabled
+      stig:
+        id: V-220867
+        category: CAT II
+        value: Enabled
+    notes: ""
+  - cid: C-W-GP-ADM-MISC-75
+    operating_systems:
+      - Windows
+    category: ""
+    policy: '"Allow Remote Shell Access" is set to "Disabled".'
+    fix:
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Administrative Templates\Windows Components\Windows
+          Remote Shell
+        name: Allow Remote Shell Access
+        value: Disabled
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\Windows\WinRM\Service\WinRS
+        registry_key: AllowRemoteShellAccess
+        registry_action: DWORD:0
+    references:
+      cis:
+        id: 18.9.99.1
+        category: L2
+        value: Disabled
+      stig:
+        id: ""
+        category: ""
+        value: ""
+    notes: ""

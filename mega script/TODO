@@ -1,0 +1,31 @@
+
+TO DO
+---------------------------------
+
+- Simplify checklist process
+- Start porting old modules (and redo module system lmao)
+- Get local copy of windows default file system and cyber patriot defaults (try during round 2)
+- Go through windows + windows server checklists adding and updating
+
+POSSIBLE TO DO
+---------------------------------
+
+- Simplify checklists schema and redo checklists accordingly
+- Research best programs to add to ninite setup and launch command
+- Try to make as many manual fixes not manual in current checklists
+
+OLD TO DO (I think its mostly linux idk -Nolan)
+---------------------------------
+
+- sleep-inactive-ac-timeout=1200 from greeter dconf
+- Weird user account stuff 6.2 Ubuntu 22.04 LTS CIS
+- clamav
+- dpkg
+- unattended-upgr
+- systemd services
+- set user homes to 0750
+- aptget noexec
+- check other network interfaces for sysctl
+- SUID bits: https://github.com/konstruktoid/hardening/blob/master/scripts/suid
+- compilers: https://github.com/konstruktoid/hardening/blob/master/scripts/compilers
+- IE STIG (not doing it rn its a waste of time)

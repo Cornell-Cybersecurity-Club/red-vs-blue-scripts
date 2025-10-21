@@ -1,0 +1,34 @@
+version: 1.0
+name: manual
+vulnerabilities:
+  - cid: C-WS-MAN-01
+    operating_systems:
+      - Windows
+      - Windows Server
+    category: Malware
+    policy: Use Process Explorer to look for running backdoors.
+    fix:
+      - fix_type: manual
+        steps: Open Process Explorer by running `launch proc`.
+          Look for any suspicious processes that are running.
+          If you find any, kill them and then delete the files they are running from.
+  - cid: C-WS-MAN-02
+    operating_systems:
+      - Windows
+      - Windows Server
+    category: Malware
+    policy: Use netstat to look for running backdoors.
+    fix:
+      - fix_type: manual
+        steps: Run netstat with `netstat -ano`.
+          Look for any suspicious connections.
+  - cid: C-WS-MAN-03
+    operating_systems:
+      - Windows
+      - Windows Server
+    category: Updates
+    policy: Run Windows Update.
+    fix:
+      - fix_type: manual
+        steps: Press Win+I to open Windows Update.
+          Press Check for Updates and restart when necessary.

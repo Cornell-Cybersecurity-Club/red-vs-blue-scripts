@@ -1,0 +1,318 @@
+version: 1
+name: Systemd Configuration
+vulnerabilities:
+  - cid: C-UD-SYSD-LOG-01
+    operating_systems:
+      - Ubuntu
+      - Debian
+    category: "Logging: /etc/systemd/journald.conf"
+    policy: journald is configured to compress large log files.
+    fix:
+      - fix_type: config_file
+        file: /etc/systemd/journald.conf
+        text: Compress=yes
+    references:
+      cis:
+        id: 4.2.1.3
+        category: L1
+  - cid: C-UD-SYSD-LOG-02
+    operating_systems:
+      - Ubuntu
+      - Debian
+    category: "Logging: /etc/systemd/journald.conf"
+    policy: journald is configured to write log files to persistent disk.
+    fix:
+      - fix_type: config_file
+        file: /etc/systemd/journald.conf
+        text: Storage=persistent
+    references:
+      cis:
+        id: 4.2.1.4
+        category: L1
+  - cid: C-UD-SYSD-LOG-03
+    operating_systems:
+      - Ubuntu
+      - Debian
+    category: "Logging: /etc/systemd/journald.conf"
+    policy: journald is not configured to send logs to rsyslog.
+    fix:
+      - fix_type: config_file
+        file: /etc/systemd/journald.conf
+        text: ForwardToSyslog=no
+    references:
+      cis:
+        id: 4.2.1.5
+        category: L1
+  - cid: C-UD-SYSD-LOG-04
+    operating_systems:
+      - Ubuntu
+      - Debian
+    category: "Logging: /etc/systemd/coredump.conf"
+    policy: Coredumps are logged but not stored permanently.
+    fix:
+      - fix_type: config_file
+        file: /etc/systemd/coredump.conf
+        text: "Storage=none"
+    references:
+      other: https://github.com/konstruktoid/hardening/blob/master/systemd.adoc
+  - cid: C-UD-SYSD-LOG-05
+    operating_systems:
+      - Ubuntu
+      - Debian
+    category: "Logging: /etc/systemd/coredump.conf"
+    policy: Disable all coredump handling except for a log entry.
+    fix:
+      - fix_type: config_file
+        file: /etc/systemd/coredump.conf
+        text: "ProcessSizeMax=0"
+    references:
+      other: https://github.com/konstruktoid/hardening/blob/master/systemd.adoc
+  - cid: C-UD-SYSD-SYS-01
+    operating_systems:
+      - Ubuntu
+      - Debian
+    category: "System: /etc/systemd/resolved.conf"
+    policy: Localhost (127.0.0.1) is used as the primary DNS server.
+    fix:
+      - fix_type: config_file
+        file: /etc/systemd/resolved.conf
+        text: DNS=127.0.0.1
+    references:
+      other: https://github.com/konstruktoid/hardening/blob/master/scripts/resolvedconf
+    notes: TODO revisit for DNS crit svc
+  - cid: C-UD-SYSD-SYS-02
+    operating_systems:
+      - Ubuntu
+      - Debian
+    category: "System: /etc/systemd/resolved.conf"
+    policy: 1.1.1.1 and 1.0.0.1 are used as fallback DNS servers.
+    fix:
+      - fix_type: config_file
+        file: /etc/systemd/resolved.conf
+        text: FallbackDNS=1.1.1.1 1.0.0.1
+    references:
+      other: https://github.com/konstruktoid/hardening/blob/master/scripts/resolvedconf
+  - cid: C-UD-SYSD-SYS-03
+    operating_systems:
+      - Ubuntu
+      - Debian
+    category: "System: /etc/systemd/resolved.conf"
+    policy: DNSSEC is set to allow-downgrade (DNSSEC validation is attempted, but not required)
+    fix:
+      - fix_type: config_file
+        file: /etc/systemd/resolved.conf
+        text: DNSSEC=allow-downgrade
+    references:
+      other: https://github.com/konstruktoid/hardening/blob/master/scripts/resolvedconf
+  - cid: C-UD-SYSD-SYS-04
+    operating_systems:
+      - Ubuntu
+      - Debian
+    category: "System: /etc/systemd/resolved.conf"
+    policy: DNSOverTLS is set to opportunistic (DNS requests are attempted to be sent encrypted over TLS).
+    fix:
+      - fix_type: config_file
+        file: /etc/systemd/resolved.conf
+        text: DNSOverTLS=opportunistic
+    references:
+      other: https://github.com/konstruktoid/hardening/blob/master/scripts/resolvedconf
+
+  - cid: C-UD-SYSD-SYS-05
+    operating_systems:
+      - Ubuntu
+      - Debian
+    category: "System: /etc/systemd/system.conf"
+    policy: Systemd is configured to disable core dumps.
+    fix:
+      - fix_type: config_file
+        file: /etc/systemd/system.conf
+        text: DumpCore=no
+    references:
+      other: https://github.com/konstruktoid/hardening/blob/master/scripts/systemdconf
+  - cid: C-UD-SYSD-SYS-06
+    operating_systems:
+      - Ubuntu
+      - Debian
+    category: "System: /etc/systemd/system.conf"
+    policy: Systemd is configured to not spawn a shell if it (PID 1) crashes.
+    fix:
+      - fix_type: config_file
+        file: /etc/systemd/system.conf
+        text: CrashShell=no
+    references:
+      other: https://github.com/konstruktoid/hardening/blob/master/scripts/systemdconf
+  - cid: C-UD-SYSD-SYS-07
+    operating_systems:
+      - Ubuntu
+      - Debian
+    category: "System: /etc/systemd/system.conf"
+    policy: The maximum number of bytes a core file can be is 0 (disables core dumps).
+    fix:
+      - fix_type: config_file
+        file: /etc/systemd/system.conf
+        text: DefaultLimitCORE=0
+    references:
+      other: https://github.com/konstruktoid/hardening/blob/master/scripts/systemdconf
+  - cid: C-UD-SYSD-SYS-08
+    operating_systems:
+      - Ubuntu
+      - Debian
+    category: "System: /etc/systemd/system.conf"
+    policy: The maximum number of files that systemd can open is 1024.
+    fix:
+      - fix_type: config_file
+        file: /etc/systemd/system.conf
+        text: DefaultLimitNOFILE=1024
+    references:
+      other: https://github.com/konstruktoid/hardening/blob/master/scripts/systemdconf
+  - cid: C-UD-SYSD-SYS-09
+    operating_systems:
+      - Ubuntu
+      - Debian
+    category: "System: /etc/systemd/system.conf"
+    policy: The maximum number of processes that can spawn from PID 1 is 1024.
+    fix:
+      - fix_type: config_file
+        file: /etc/systemd/system.conf
+        text: DefaultLimitNPROC=1024
+    references:
+      other: https://github.com/konstruktoid/hardening/blob/master/scripts/systemdconf
+  - cid: C-UD-SYSD-SYS-10
+    operating_systems:
+      - Ubuntu
+      - Debian
+    category: "System: /etc/systemd/system.conf"
+    policy: No action will occur if a user presses Ctrl-Alt-Delete more than 7 times in 2s (default is to shut down system).
+    fix:
+      - fix_type: config_file
+        file: /etc/systemd/system.conf
+        text: CtrlAltDelBurstAction=none
+    references:
+      other: https://github.com/konstruktoid/hardening/blob/master/scripts/systemdconf
+  - cid: C-UD-SYSD-SYS-11
+    operating_systems:
+      - Ubuntu
+      - Debian
+    category: "System: /etc/systemd/timesyncd.conf"
+    policy: 0.ubuntu.pool.ntp.org and 1.ubuntu.pool.ntp.org are used as NTP servers.
+    fix:
+      - fix_type: config_file
+        file: /etc/systemd/timesyncd.conf
+        text: NTP=0.ubuntu.pool.ntp.org 1.ubuntu.pool.ntp.org
+    references:
+      other: https://github.com/konstruktoid/hardening/blob/master/scripts/timesyncd
+  - cid: C-UD-SYSD-SYS-12
+    operating_systems:
+      - Ubuntu
+      - Debian
+    category: "System: /etc/systemd/timesyncd.conf"
+    policy: 2.ubuntu.pool.ntp.org and 3.ubuntu.pool.ntp.org are used as fallback NTP servers.
+    fix:
+      - fix_type: config_file
+        file: /etc/systemd/timesyncd.conf
+        text: FallbackNTP=2.ubuntu.pool.ntp.org 3.ubuntu.pool.ntp.org
+    references:
+      other: https://github.com/konstruktoid/hardening/blob/master/scripts/timesyncd
+  - cid: C-UD-SYSD-SYS-13
+    operating_systems:
+      - Ubuntu
+      - Debian
+    category: "System: /etc/systemd/timesyncd.conf"
+    policy: The maximum acceptable root distance is 1 second.
+    fix:
+      - fix_type: config_file
+        file: /etc/systemd/timesyncd.conf
+        text: RootDistanceMaxSec=1
+    references:
+      other: https://github.com/konstruktoid/hardening/blob/master/scripts/timesyncd
+
+  - cid: C-UD-SYSD-USR-01
+    operating_systems:
+      - Ubuntu
+      - Debian
+    category: "Users: /etc/systemd/logind.conf"
+    policy: User processes are killed when users log out.
+    fix:
+      - fix_type: config_file
+        file: /etc/systemd/logind.conf
+        text: KillUserProcesses=yes
+      - fix_type: config_file
+        file: /etc/systemd/logind.conf
+        text: KillExcludeUsers=root
+    references:
+      other: https://github.com/konstruktoid/hardening/blob/master/scripts/logindconf
+  - cid: C-UD-SYSD-USR-02
+    operating_systems:
+      - Ubuntu
+      - Debian
+    category: "Users: /etc/systemd/logind.conf"
+    policy: The system is locked when a user is idle for 15 min.
+    fix:
+      - fix_type: config_file
+        file: /etc/systemd/logind.conf
+        text: IdleAction=lock
+      - fix_type: config_file
+        file: /etc/systemd/logind.conf
+        text: IdleActionSec=15min
+    references:
+      other: https://github.com/konstruktoid/hardening/blob/master/scripts/logindconf
+  - cid: C-UD-SYSD-USR-03
+    operating_systems:
+      - Ubuntu
+      - Debian
+    category: "Users: /etc/systemd/logind.conf"
+    policy: IPC objects are removed when a user logs out.
+    fix:
+      - fix_type: config_file
+        file: /etc/systemd/logind.conf
+        text: RemoveIPC=yes
+    references:
+      other: https://github.com/konstruktoid/hardening/blob/master/scripts/logindconf
+  - cid: C-UD-SYSD-USR-04
+    operating_systems:
+      - Ubuntu
+      - Debian
+    category: "Users: /etc/systemd/user.conf"
+    policy: The maximum number of bytes a core file can be is 0 (disables core dumps).
+    fix:
+      - fix_type: config_file
+        file: /etc/systemd/user.conf
+        text: DefaultLimitCORE=0
+    references:
+      other: https://github.com/konstruktoid/hardening/blob/master/scripts/systemdconf
+  - cid: C-UD-SYSD-USR-05
+    operating_systems:
+      - Ubuntu
+      - Debian
+    category: "Users: /etc/systemd/user.conf"
+    policy: The maximum number of files that systemd can open is 1024.
+    fix:
+      - fix_type: config_file
+        file: /etc/systemd/user.conf
+        text: DefaultLimitNOFILE=1024
+    references:
+      other: https://github.com/konstruktoid/hardening/blob/master/scripts/systemdconf
+  - cid: C-UD-SYSD-USR-06
+    operating_systems:
+      - Ubuntu
+      - Debian
+    category: "Users: /etc/systemd/user.conf"
+    policy: The maximum number of processes that can spawn from PID 1 is 1024.
+    fix:
+      - fix_type: config_file
+        file: /etc/systemd/user.conf
+        text: DefaultLimitNPROC=1024
+    references:
+      other: https://github.com/konstruktoid/hardening/blob/master/scripts/systemdconf
+  - cid: C-UD-SYSD-USR-07
+    operating_systems:
+      - Ubuntu
+      - Debian
+    category: "Users: /etc/systemd/user.conf"
+    policy: CAP_SYS_PTRACE is included in the capability bounding set.
+    fix:
+      - fix_type: config_file
+        file: /etc/systemd/user.conf
+        text: CapabilityBoundingSet=~CAP_SYS_PTRACE
+    references:
+      other: https://github.com/konstruktoid/hardening/blob/master/systemd.adoc

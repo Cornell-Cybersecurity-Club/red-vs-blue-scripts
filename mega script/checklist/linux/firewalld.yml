@@ -1,0 +1,102 @@
+version: 1.0
+name: firewalld
+vulnerabilities:
+  - cid: C-F-FWAL-01
+    operating_systems:
+      - Fedora
+    category: Firewalld
+    policy: Firewalld is installed.
+    fix:
+      - fix_type: command
+        command: dnf install -y firewalld
+    references:
+      cis:
+        id: 3.4.1.1
+        category: L1
+    notes: ""
+  - cid: C-F-FWAL-02
+    operating_systems:
+      - Fedora
+    category: Firewalld
+    policy: Firewalld is enabled
+    fix:
+      - fix_type: command
+        command: systemctl --now enable firewalld
+    references:
+      cis:
+        id: 3.4.2.1
+        category: L1
+    notes: ""
+  - cid: C-F-FWAL-03
+    operating_systems:
+      - Fedora
+    category: Firewalld
+    policy: Ensure iptables service is not enabled with firewalld
+    fix:
+      - fix_type: command
+        command: systemctl --now mask iptables
+    references:
+      cis:
+        id: 3.4.2.2
+        category: L1
+    notes: ""
+  - cid: C-F-FWAL-04
+    operating_systems:
+      - Fedora
+    category: Firewalld
+    policy: Ensure nftables is not enabled with firewalld
+    fix:
+      - fix_type: command
+        command: systemctl --now mask nftables
+    references:
+      cis:
+        id: 3.4.2.3
+        category: L1
+    notes: ""
+  - cid: C-F-FWAL-05
+    operating_systems:
+      - Fedora
+    category: Firewalld
+    policy: Ensure firewalld default zone is set
+    fix:
+      - fix_type: command
+        command: firewall-cmd --set-default-zone=drop
+    references:
+      cis:
+        id: 3.4.2.4
+        category: L1
+      other: https://firewalld.org/documentation/man-pages/firewalld.zone
+    notes: "Drop blocks all incoming traffic"
+  - cid: C-F-FWAL-06
+    operating_systems:
+      - Fedora
+    category: Firewalld
+    policy: Ensure network interfaces are assigned to appropriate zone
+    fix:
+      - fix_type: manual
+        steps: |
+          1. `nmcli -t connection show | awk -F: '{if($4){print $4}}' | while read INT; do firewall-cmd --get-active-zones | grep -B1 $INT; done`
+          2. Run the following command to assign the interface to the appropriate zone:
+             `firewall-cmd --zone=<zone> --change-interface=<interface>`
+    references:
+      cis:
+        id: 3.4.2.5
+        category: L1
+      other: https://firewalld.org/documentation/zone/connections-interfaces-and-sources.html
+  - cid: C-F-FWAL-07
+    operating_systems:
+      - Fedora
+    category: Firewalld
+    policy: Ensure firewalld drops unnecessary services and ports
+    fix:
+      - fix_type: manual
+        steps: |
+          1. `firewall-cmd --list-all`
+          2. Run the following command to remove the service or port:
+             `firewall-cmd --zone=<zone> --remove-service=<service>`
+             `firewall-cmd --zone=<zone> --remove-port=<port>`
+    references:
+      cis:
+        id: 3.4.2.6
+        category: L1
+  # config settings might be useful (vulnerable)

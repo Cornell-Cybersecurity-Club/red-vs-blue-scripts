@@ -1,0 +1,352 @@
+version: 1.0
+name: Modprobe Configuration
+vulnerabilities:
+  - cid: C-UD-MP-FS-01
+    operating_systems:
+      - Ubuntu
+      - Debian
+    category: File Systems
+    policy: Mounting of cramfs filesystems is disabled.
+    fix:
+      - fix_type: config_file
+        file: /etc/modprobe.d/modprobe.conf
+        text: install cramfs /bin/true
+      - fix_type: command
+        command: rmmod cramfs
+    references:
+      cis:
+        id: 1.1.1.1
+        category: L1
+  - cid: C-UD-MP-FS-02
+    operating_systems:
+      - Ubuntu
+      - Debian
+    category: File Systems
+    policy: Mounting of freevxfs filesystems is disabled.
+    fix:
+      - fix_type: config_file
+        file: /etc/modprobe.d/modprobe.conf
+        text: install freevxfs /bin/true
+      - fix_type: command
+        command: rmmod freevxfs
+    references:
+      cis:
+        id: 1.1.1.2
+        category: L1
+
+  - cid: C-UD-MP-FS-03
+    operating_systems:
+      - Ubuntu
+      - Debian
+    category: File Systems
+    policy: Mounting of jffs2 filesystems is disabled.
+    fix:
+      - fix_type: config_file
+        file: /etc/modprobe.d/modprobe.conf
+        text: install jffs2 /bin/true
+      - fix_type: command
+        command: rmmod jffs2
+    references:
+      cis:
+        id: 1.1.1.3
+        category: L1
+
+  - cid: C-UD-MP-FS-04
+    operating_systems:
+      - Ubuntu
+      - Debian
+    category: File Systems
+    policy: Mounting of hfs filesystems is disabled.
+    fix:
+      - fix_type: config_file
+        file: /etc/modprobe.d/modprobe.conf
+        text: install hfs /bin/true
+      - fix_type: command
+        command: rmmod hfs
+    references:
+      cis:
+        id: 1.1.1.4
+        category: L1
+
+  - cid: C-UD-MP-FS-05
+    operating_systems:
+      - Ubuntu
+      - Debian
+    category: File Systems
+    policy: Mounting of hfsplus filesystems is disabled.
+    fix:
+      - fix_type: config_file
+        file: /etc/modprobe.d/modprobe.conf
+        text: install hfsplus /bin/true
+      - fix_type: command
+        command: rmmod hfsplus
+    references:
+      cis:
+        id: 1.1.1.4
+        category: L1
+  - cid: C-UD-MP-FS-06
+    operating_systems:
+      - Ubuntu
+      - Debian
+    category: File Systems
+    policy: Mounting of squashfs filesystems is disabled.
+    fix:
+      - fix_type: config_file
+        file: /etc/modprobe.d/modprobe.conf
+        text: install squashfs /bin/true
+      - fix_type: command
+        command: rmmod squashfs
+    references:
+      cis:
+        id: 1.1.1.5
+        category: L1
+
+  - cid: C-UD-MP-FS-07
+    operating_systems:
+      - Ubuntu
+      - Debian
+    category: File Systems
+    policy: Mounting of udf filesystems is disabled.
+    fix:
+      - fix_type: config_file
+        file: /etc/modprobe.d/modprobe.conf
+        text: install udf /bin/true
+      - fix_type: command
+        command: rmmod udf
+    references:
+      cis:
+        id: 1.1.1.6
+        category: L1
+  - cid: C-UD-MP-FS-08
+    operating_systems:
+      - Ubuntu
+      - Debian
+    category: File Systems
+    policy: USB storage is disabled.
+    fix:
+      - fix_type: config_file
+        file: /etc/modprobe.d/modprobe.conf
+        text: install usb-storage /bin/true
+      - fix_type: config_file
+        file: /etc/modprobe.d/modprobe.conf
+        text: blacklist usb-storage
+  - cid: C-UD-MP-KERN-01
+    operating_systems:
+      - Ubuntu
+      - Debian
+    category: Kernel Modules
+    policy: bluetooth is disabled.
+    fix:
+      - fix_type: config_file
+        file: /etc/modprobe.d/modprobe.conf
+        text: install bluetooth /bin/true
+      - fix_type: config_file
+        file: /etc/modprobe.d/modprobe.conf
+        text: blacklist bluetooth
+    references:
+      cis:
+        id: 1.1.10
+        category: L2
+      stig:
+        id: V-251505
+        category: CAT II
+  - cid: C-UD-MP-KERN-02
+    operating_systems:
+      - Ubuntu
+      - Debian
+    category: Kernel Modules
+    policy: bnep is disabled.
+    fix:
+      - fix_type: config_file
+        file: /etc/modprobe.d/modprobe.conf
+        text: install bnep /bin/true
+      - fix_type: config_file
+        file: /etc/modprobe.d/modprobe.conf
+        text: blacklist bnep
+
+  - cid: C-UD-MP-KERN-03
+    operating_systems:
+      - Ubuntu
+      - Debian
+    category: Kernel Modules
+    policy: btusb is disabled.
+    fix:
+      - fix_type: config_file
+        file: /etc/modprobe.d/modprobe.conf
+        text: install btusb /bin/true
+      - fix_type: config_file
+        file: /etc/modprobe.d/modprobe.conf
+        text: blacklist btusb
+
+  - cid: C-UD-MP-KERN-04
+    operating_systems:
+      - Ubuntu
+      - Debian
+    category: Kernel Modules
+    policy: cpia2 is disabled.
+    fix:
+      - fix_type: config_file
+        file: /etc/modprobe.d/modprobe.conf
+        text: install cpia2 /bin/true
+      - fix_type: config_file
+        file: /etc/modprobe.d/modprobe.conf
+        text: blacklist cpia2
+
+  - cid: C-UD-MP-KERN-05
+    operating_systems:
+      - Ubuntu
+      - Debian
+    category: Kernel Modules
+    policy: firewire-core is disabled.
+    fix:
+      - fix_type: config_file
+        file: /etc/modprobe.d/modprobe.conf
+        text: install firewire-core /bin/true
+      - fix_type: config_file
+        file: /etc/modprobe.d/modprobe.conf
+        text: blacklist firewire-core
+
+  - cid: C-UD-MP-KERN-06
+    operating_systems:
+      - Ubuntu
+      - Debian
+    category: Kernel Modules
+    policy: floppy is disabled.
+    fix:
+      - fix_type: config_file
+        file: /etc/modprobe.d/modprobe.conf
+        text: install floppy /bin/true
+      - fix_type: config_file
+        file: /etc/modprobe.d/modprobe.conf
+        text: blacklist floppy
+
+  - cid: C-UD-MP-KERN-07
+    operating_systems:
+      - Ubuntu
+      - Debian
+    category: Kernel Modules
+    policy: n_hdlc is disabled.
+    fix:
+      - fix_type: config_file
+        file: /etc/modprobe.d/modprobe.conf
+        text: install n_hdlc /bin/true
+      - fix_type: config_file
+        file: /etc/modprobe.d/modprobe.conf
+        text: blacklist n_hdlc
+
+  - cid: C-UD-MP-KERN-08
+    operating_systems:
+      - Ubuntu
+      - Debian
+    category: Kernel Modules
+    policy: net-pf-31 is disabled.
+    fix:
+      - fix_type: config_file
+        file: /etc/modprobe.d/modprobe.conf
+        text: install net-pf-31 /bin/true
+      - fix_type: config_file
+        file: /etc/modprobe.d/modprobe.conf
+        text: blacklist net-pf-31
+
+  - cid: C-UD-MP-KERN-09
+    operating_systems:
+      - Ubuntu
+      - Debian
+    category: Kernel Modules
+    policy: pcspkr is disabled.
+    fix:
+      - fix_type: config_file
+        file: /etc/modprobe.d/modprobe.conf
+        text: install pcspkr /bin/true
+      - fix_type: config_file
+        file: /etc/modprobe.d/modprobe.conf
+        text: blacklist pcspkr
+
+  - cid: C-UD-MP-KERN-10
+    operating_systems:
+      - Ubuntu
+      - Debian
+    category: Kernel Modules
+    policy: soundcore is disabled.
+    fix:
+      - fix_type: config_file
+        file: /etc/modprobe.d/modprobe.conf
+        text: install soundcore /bin/true
+      - fix_type: config_file
+        file: /etc/modprobe.d/modprobe.conf
+        text: blacklist soundcore
+
+  - cid: C-UD-MP-KERN-11
+    operating_systems:
+      - Ubuntu
+      - Debian
+    category: Kernel Modules
+    policy: thunderbolt is disabled.
+    fix:
+      - fix_type: config_file
+        file: /etc/modprobe.d/modprobe.conf
+        text: install thunderbolt /bin/true
+      - fix_type: config_file
+        file: /etc/modprobe.d/modprobe.conf
+        text: blacklist thunderbolt
+
+  - cid: C-UD-MP-KERN-12
+    operating_systems:
+      - Ubuntu
+      - Debian
+    category: Kernel Modules
+    policy: usb-midi is disabled.
+    fix:
+      - fix_type: config_file
+        file: /etc/modprobe.d/modprobe.conf
+        text: install usb-midi /bin/true
+      - fix_type: config_file
+        file: /etc/modprobe.d/modprobe.conf
+        text: blacklist usb-midi
+
+  - cid: C-UD-MP-KERN-13
+    operating_systems:
+      - Ubuntu
+      - Debian
+    category: Kernel Modules
+    policy: usb-storage is disabled.
+    fix:
+      - fix_type: config_file
+        file: /etc/modprobe.d/modprobe.conf
+        text: install usb-storage /bin/true
+      - fix_type: config_file
+        file: /etc/modprobe.d/modprobe.conf
+        text: blacklist usb-storage
+    references:
+      cis:
+        id: 1.1.10
+        category: L2
+      stig:
+        id: V-251505
+        category: CAT II
+  - cid: C-UD-MP-KERN-14
+    operating_systems:
+      - Ubuntu
+      - Debian
+    category: Kernel Modules
+    policy: uvcvideo is disabled.
+    fix:
+      - fix_type: config_file
+        file: /etc/modprobe.d/modprobe.conf
+        text: install uvcvideo /bin/true
+      - fix_type: config_file
+        file: /etc/modprobe.d/modprobe.conf
+        text: blacklist uvcvideo
+  - cid: C-UD-MP-KERN-15
+    operating_systems:
+      - Ubuntu
+      - Debian
+    category: Kernel Modules
+    policy: v4l2_common is disabled.
+    fix:
+      - fix_type: config_file
+        file: /etc/modprobe.d/modprobe.conf
+        text: install v4l2_common /bin/true
+      - fix_type: config_file
+        file: /etc/modprobe.d/modprobe.conf
+        text: blacklist v4l2_common

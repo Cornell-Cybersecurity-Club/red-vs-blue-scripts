@@ -1,0 +1,717 @@
+version: 1
+name: "Group Policy: Firewall"
+vulnerabilities:
+  - cid: C-W-GP-SEC-FW-X1
+    operating_systems:
+      - Windows
+    category: ""
+    policy: Toggle a Windows Defender Firewall with Advanced Security on and back off to set PolicyVersion.
+    fix:
+      - fix_type: manual
+        steps: Go to Computer Configuration\Windows Settings\Security Settings\Windows Defender Firewall with Advanced Security, toggle any setting off and back on.
+    references:
+      cis:
+        id: 9.1.1
+        category: L1
+        value: "On"
+      stig:
+        id: V-17415
+        category: CAT II
+        value: "On"
+    notes: ""
+  - cid: C-W-GP-SEC-FW-01
+    operating_systems:
+      - Windows
+    category: ""
+    policy: '"Windows Firewall: Domain: Firewall state" is set to "On".'
+    fix:
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Windows Settings\Security Settings\Windows Defender
+          Firewall with Advanced Security\Domain Profile
+        name: "Windows Firewall: Domain: Firewall state"
+        value: "On"
+        registry_hive: Computer
+        registry_path: SOFTWARE\Policies\Microsoft\WindowsFirewall\DomainProfile
+        registry_key: EnableFirewall
+        registry_action: DWORD:1
+    references:
+      cis:
+        id: 9.1.1
+        category: L1
+        value: "On"
+      stig:
+        id: V-17415
+        category: CAT II
+        value: "On"
+    notes: ""
+  - cid: C-W-GP-SEC-FW-02
+    operating_systems:
+      - Windows
+    category: ""
+    policy: '"Windows Firewall: Domain: Inbound connections" is set to "Block (default)".'
+    fix:
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Windows Settings\Security Settings\Windows Defender
+          Firewall with Advanced Security\Domain Profile
+        name: "Windows Firewall: Domain: Inbound connections"
+        value: Block (default)
+        registry_hive: Computer
+        registry_path: SOFTWARE\Policies\Microsoft\WindowsFirewall\DomainProfile
+        registry_key: DefaultInboundAction
+        registry_action: DWORD:1
+    references:
+      cis:
+        id: 9.1.2
+        category: L1
+        value: Block (default)
+      stig:
+        id: V-17418
+        category: CAT I
+        value: Block (default)
+    notes: ""
+  - cid: C-W-GP-SEC-FW-03
+    operating_systems:
+      - Windows
+    category: ""
+    policy: '"Windows Firewall: Domain: Outbound connections" is set to "Allow (default)".'
+    fix:
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Windows Settings\Security Settings\Windows Defender
+          Firewall with Advanced Security\Domain Profile
+        name: "Windows Firewall: Domain: Outbound connections"
+        value: Allow (default)
+        registry_hive: Computer
+        registry_path: SOFTWARE\Policies\Microsoft\WindowsFirewall\DomainProfile
+        registry_key: DefaultOutboundAction
+        registry_action: DWORD:0
+    references:
+      cis:
+        id: 9.1.4
+        category: L1
+        value: Allow (default)
+      stig:
+        id: V-17419
+        category: CAT II
+        value: Allow
+    notes: ""
+  - cid: C-W-GP-SEC-FW-04
+    operating_systems:
+      - Windows
+    category: ""
+    policy:
+      '"Windows Firewall: Domain: Settings: Display a notification" is set to
+      "No".'
+    fix:
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Windows Settings\Security Settings\Windows Defender
+          Firewall with Advanced Security\Domain Profile
+        name: "Windows Firewall: Domain: Settings: Display a notification"
+        value: "No"
+        registry_hive: Computer
+        registry_path: SOFTWARE\Policies\Microsoft\WindowsFirewall\DomainProfile
+        registry_key: DisableNotifications
+        registry_action: DWORD:1
+    references:
+      cis:
+        id: 9.1.5
+        category: L1
+        value: "No"
+      stig:
+        id: ""
+        category: ""
+        value: ""
+    notes: ""
+  - cid: C-W-GP-SEC-FW-05
+    operating_systems:
+      - Windows
+    category: ""
+    policy: '"Windows Firewall: Domain: Logging: Name" is set to "%SystemRoot%\System32\logfiles\firewall\domainfw.log".'
+    fix:
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Windows Settings\Security Settings\Windows Defender
+          Firewall with Advanced Security\Domain Profile
+        name: "Windows Firewall: Domain: Logging: Name"
+        value: '%SystemRoot%\System32\logfiles\firewall\domainfw.log'
+        registry_hive: Computer
+        registry_path: SOFTWARE\Policies\Microsoft\WindowsFirewall\DomainProfile\Logging
+        registry_key: LogFilePath
+        registry_action: SZ:%systemroot%\\system32\\logfiles\\firewall\\domainfw.log
+    references:
+      cis:
+        id: 9.1.6
+        category: L1
+        value: '%SystemRoot%\System32\logfiles\firewall\domainfw.log'
+      stig:
+        id: ""
+        category: ""
+        value: ""
+    notes: ""
+  - cid: C-W-GP-SEC-FW-06
+    operating_systems:
+      - Windows
+    category: ""
+    policy: '"Windows Firewall: Domain: Logging: Size limit" is set to "16,384 KB".'
+    fix:
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Windows Settings\Security Settings\Windows Defender
+          Firewall with Advanced Security\Domain Profile
+        name: "Windows Firewall: Domain: Logging: Size limit"
+        value: 16,384 KB
+        registry_hive: Computer
+        registry_path: SOFTWARE\Policies\Microsoft\WindowsFirewall\DomainProfile\Logging
+        registry_key: LogFileSize
+        registry_action: DWORD:16384
+    references:
+      cis:
+        id: 9.1.7
+        category: L1
+        value: 16,384 KB or greater
+      stig:
+        id: V-17425
+        category: CAT III
+        value: 16,384 KB or greater
+    notes: ""
+  - cid: C-W-GP-SEC-FW-07
+    operating_systems:
+      - Windows
+    category: ""
+    policy: '"Windows Firewall: Domain: Logging: Log dropped packets" is set to "Yes".'
+    fix:
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Windows Settings\Security Settings\Windows Defender
+          Firewall with Advanced Security\Domain Profile
+        name: "Windows Firewall: Domain: Logging: Log dropped packets"
+        value: "Yes"
+        registry_hive: Computer
+        registry_path: SOFTWARE\Policies\Microsoft\WindowsFirewall\DomainProfile\Logging
+        registry_key: LogDroppedPackets
+        registry_action: DWORD:1
+    references:
+      cis:
+        id: 9.1.8
+        category: L1
+        value: "Yes"
+      stig:
+        id: V-17426
+        category: CAT III
+        value: "Yes"
+    notes: ""
+  - cid: C-W-GP-SEC-FW-08
+    operating_systems:
+      - Windows
+    category: ""
+    policy: '"Windows Firewall: Domain: Log Successful Connections" is set to "Yes".'
+    fix:
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Windows Settings\Security Settings\Windows Defender
+          Firewall with Advanced Security\Domain Profile
+        name: "Windows Firewall: Domain: Log Successful Connections"
+        value: "Yes"
+        registry_hive: Computer
+        registry_path: SOFTWARE\Policies\Microsoft\WindowsFirewall\DomainProfile\Logging
+        registry_key: LogSuccessfulConnections
+        registry_action: DWORD:1
+    references:
+      cis:
+        id: 9.1.9
+        category: L1
+        value: "Yes"
+      stig:
+        id: V-17427
+        category: CAT III
+        value: "Yes"
+    notes: ""
+  - cid: C-W-GP-SEC-FW-09 ####
+    operating_systems:
+      - Windows
+    category: ""
+    policy: '"Windows Firewall: Private: Firewall state" is set to "On".'
+    fix:
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Windows Settings\Security Settings\Windows Defender
+          Firewall with Advanced Security\Private Profile
+        name: "Windows Firewall: Private: Firewall state"
+        value: "On"
+        registry_hive: Computer
+        registry_path: SOFTWARE\Policies\Microsoft\WindowsFirewall\PrivateProfile
+        registry_key: EnableFirewall
+        registry_action: DWORD:1
+    references:
+      cis:
+        id: 9.2.1
+        category: L1
+        value: "On"
+      stig:
+        id: V-17416
+        category: CAT II
+        value: "On"
+    notes: ""
+  - cid: C-W-GP-SEC-FW-10
+    operating_systems:
+      - Windows
+    category: ""
+    policy: '"Windows Firewall: Private: Inbound connections" is set to "Block (default)".'
+    fix:
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Windows Settings\Security Settings\Windows Defender
+          Firewall with Advanced Security\Private Profile
+        name: "Windows Firewall: Private: Inbound connections"
+        value: Block (default)
+        registry_hive: Computer
+        registry_path: SOFTWARE\Policies\Microsoft\WindowsFirewall\PrivateProfile
+        registry_key: DefaultInboundAction
+        registry_action: DWORD:1
+    references:
+      cis:
+        id: 9.2.2
+        category: L1
+        value: Block (default)
+      stig:
+        id: V-17428
+        category: CAT I
+        value: Block (default)
+    notes: ""
+  - cid: C-W-GP-SEC-FW-11
+    operating_systems:
+      - Windows
+    category: ""
+    policy: '"Windows Firewall: Private: Outbound connections" is set to "Allow (default)".'
+    fix:
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Windows Settings\Security Settings\Windows Defender
+          Firewall with Advanced Security\Private Profile
+        name: "Windows Firewall: Private: Outbound connections"
+        value: Allow (default)
+        registry_hive: Computer
+        registry_path: SOFTWARE\Policies\Microsoft\WindowsFirewall\PrivateProfile
+        registry_key: DefaultOutboundAction
+        registry_action: DWORD:0
+    references:
+      cis:
+        id: 9.2.3
+        category: L1
+        value: Allow (default)
+      stig:
+        id: V-17429
+        category: CAT II
+        value: Allow (default)
+    notes: ""
+  - cid: C-W-GP-SEC-FW-12
+    operating_systems:
+      - Windows
+    category: ""
+    policy:
+      '"Windows Firewall: Private: Settings: Display a notification" is set to
+      "No".'
+    fix:
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Windows Settings\Security Settings\Windows Defender
+          Firewall with Advanced Security\Private Profile
+        name: "Windows Firewall: Private: Settings: Display a notification"
+        value: "No"
+        registry_hive: Computer
+        registry_path: SOFTWARE\Policies\Microsoft\WindowsFirewall\PrivateProfile
+        registry_key: DisableNotifications
+        registry_action: DWORD:1
+    references:
+      cis:
+        id: 9.2.4
+        category: L1
+        value: "No"
+      stig:
+        id: ""
+        category: ""
+        value: ""
+    notes: ""
+  - cid: C-W-GP-SEC-FW-13
+    operating_systems:
+      - Windows
+    category: ""
+    policy: '"Windows Firewall: Private: Logging: Name" is set to "%SystemRoot%\System32\logfiles\firewall\privatefw.log".'
+    fix:
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Windows Settings\Security Settings\Windows Defender
+          Firewall with Advanced Security\Private Profile
+        name: "Windows Firewall: Private: Logging: Name"
+        value: '%SystemRoot%\System32\logfiles\firewall\privatefw.log'
+        registry_hive: Computer
+        registry_path: SOFTWARE\Policies\Microsoft\WindowsFirewall\PrivateProfile\Logging
+        registry_key: LogFilePath
+        registry_action: SZ:%systemroot%\\system32\\logfiles\\firewall\\privatefw.log
+    references:
+      cis:
+        id: 9.2.5
+        category: L1
+        value: '%SystemRoot%\System32\logfiles\firewall\privatefw.log'
+      stig:
+        id: ""
+        category: ""
+        value: ""
+    notes: ""
+  - cid: C-W-GP-SEC-FW-14
+    operating_systems:
+      - Windows
+    category: ""
+    policy: '"Windows Firewall: Private: Logging: Size limit" is set to "16,384 KB".'
+    fix:
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Windows Settings\Security Settings\Windows Defender
+          Firewall with Advanced Security\Private Profile
+        name: "Windows Firewall: Private: Logging: Size limit"
+        value: 16,384 KB
+        registry_hive: Computer
+        registry_path: SOFTWARE\Policies\Microsoft\WindowsFirewall\PrivateProfile\Logging
+        registry_key: LogFileSize
+        registry_action: DWORD:16384
+    references:
+      cis:
+        id: 9.2.6
+        category: L1
+        value: 16,384 KB or greater
+      stig:
+        id: V-17435
+        category: CAT III
+        value: 16,384 KB or greater
+    notes: ""
+  - cid: C-W-GP-SEC-FW-15
+    operating_systems:
+      - Windows
+    category: ""
+    policy: '"Windows Firewall: Private: Logging: Log dropped packets" is set to "Yes".'
+    fix:
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Windows Settings\Security Settings\Windows Defender
+          Firewall with Advanced Security\Private Profile
+        name: "Windows Firewall: Private: Logging: Log dropped packets"
+        value: "Yes"
+        registry_hive: Computer
+        registry_path: SOFTWARE\Policies\Microsoft\WindowsFirewall\PrivateProfile\Logging
+        registry_key: LogDroppedPackets
+        registry_action: DWORD:1
+    references:
+      cis:
+        id: 9.2.7
+        category: L1
+        value: "Yes"
+      stig:
+        id: V-17436
+        category: CAT III
+        value: "Yes"
+    notes: ""
+  - cid: C-W-GP-SEC-FW-16
+    operating_systems:
+      - Windows
+    category: ""
+    policy: '"Windows Firewall: Private: Log Successful Connections" is set to "Yes".'
+    fix:
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Windows Settings\Security Settings\Windows Defender
+          Firewall with Advanced Security\Private Profile
+        name: "Windows Firewall: Private: Log Successful Connections"
+        value: "Yes"
+        registry_hive: Computer
+        registry_path: SOFTWARE\Policies\Microsoft\WindowsFirewall\PrivateProfile\Logging
+        registry_key: LogSuccessfulConnections
+        registry_action: DWORD:1
+    references:
+      cis:
+        id: 9.2.8
+        category: L1
+        value: "Yes"
+      stig:
+        id: V-17437
+        category: CAT III
+        value: "Yes"
+    notes: ""
+  - cid: C-W-GP-SEC-FW-17
+    operating_systems:
+      - Windows
+    category: ""
+    policy: '"Windows Firewall: Public: Firewall state" is set to "On".'
+    fix:
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Windows Settings\Security Settings\Windows Defender
+          Firewall with Advanced Security\Public Profile
+        name: "Windows Firewall: Public: Firewall state"
+        value: "On"
+        registry_hive: Computer
+        registry_path: SOFTWARE\Policies\Microsoft\WindowsFirewall\PublicProfile
+        registry_key: EnableFirewall
+        registry_action: DWORD:1
+    references:
+      cis:
+        id: 9.3.1
+        category: L1
+        value: "On"
+      stig:
+        id: V-17417
+        category: CAT II
+        value: "On"
+    notes: ""
+  - cid: C-W-GP-SEC-FW-18
+    operating_systems:
+      - Windows
+    category: ""
+    policy: '"Windows Firewall: Public: Inbound connections" is set to "Block (default)".'
+    fix:
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Windows Settings\Security Settings\Windows Defender
+          Firewall with Advanced Security\Public Profile
+        name: "Windows Firewall: Public: Inbound connections"
+        value: Block (default)
+        registry_hive: Computer
+        registry_path: SOFTWARE\Policies\Microsoft\WindowsFirewall\PublicProfile
+        registry_key: DefaultInboundAction
+        registry_action: DWORD:1
+    references:
+      cis:
+        id: 9.3.2
+        category: L1
+        value: Block (default)
+      stig:
+        id: V-17438
+        category: CAT I
+        value: Block (default)
+    notes: ""
+  - cid: C-W-GP-SEC-FW-19
+    operating_systems:
+      - Windows
+    category: ""
+    policy: '"Windows Firewall: Public: Outbound connections" is set to "Allow (default)".'
+    fix:
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Windows Settings\Security Settings\Windows Defender
+          Firewall with Advanced Security\Public Profile
+        name: "Windows Firewall: Public: Outbound connections"
+        value: Allow (default)
+        registry_hive: Computer
+        registry_path: SOFTWARE\Policies\Microsoft\WindowsFirewall\PublicProfile
+        registry_key: DefaultOutboundAction
+        registry_action: DWORD:0
+    references:
+      cis:
+        id: 9.3.3
+        category: L1
+        value: Allow (default)
+      stig:
+        id: V-17439
+        category: CAT II
+        value: Allow (default)
+    notes: ""
+  - cid: C-W-GP-SEC-FW-20
+    operating_systems:
+      - Windows
+    category: ""
+    policy:
+      '"Windows Firewall: Public: Settings: Display a notification" is set to
+      "No".'
+    fix:
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Windows Settings\Security Settings\Windows Defender
+          Firewall with Advanced Security\Public Profile
+        name: "Windows Firewall: Public: Settings: Display a notification"
+        value: "No"
+        registry_hive: Computer
+        registry_path: SOFTWARE\Policies\Microsoft\WindowsFirewall\PublicProfile
+        registry_key: DisableNotifications
+        registry_action: DWORD:1
+    references:
+      cis:
+        id: 9.3.4
+        category: L1
+        value: "No"
+      stig:
+        id: ""
+        category: ""
+        value: ""
+    notes: ""
+  - cid: C-W-GP-SEC-FW-21
+    operating_systems:
+      - Windows
+    category: ""
+    policy:
+      '"Windows Firewall: Public: Settings: Apply local firewall rules" is set
+      to "No".'
+    fix:
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Windows Settings\Security Settings\Windows Defender
+          Firewall with Advanced Security\Public Profile
+        name: "Windows Firewall: Public: Settings: Apply local firewall rules"
+        value: "No"
+        registry_hive: Computer
+        registry_path: SOFTWARE\Policies\Microsoft\WindowsFirewall\PublicProfile
+        registry_key: AllowLocalPolicyRules
+        registry_action: DWORD:0
+    references:
+      cis:
+        id: 9.3.5
+        category: L1
+        value: "No"
+      stig:
+        id: V-17442
+        category: CAT II
+        value: "No"
+    notes: ""
+  - cid: C-W-GP-SEC-FW-22
+    operating_systems:
+      - Windows
+    category: ""
+    policy:
+      '"Windows Firewall: Public: Settings: Apply local connection security rules"
+      is set to "No".'
+    fix:
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Windows Settings\Security Settings\Windows Defender
+          Firewall with Advanced Security\Public Profile
+        name: "Windows Firewall: Public: Settings: Apply local connection security rules"
+        value: "No"
+        registry_hive: Computer
+        registry_path: SOFTWARE\Policies\Microsoft\WindowsFirewall\PublicProfile
+        registry_key: AllowLocalIPsecPolicyMerge
+        registry_action: DWORD:0
+    references:
+      cis:
+        id: 9.3.6
+        category: L1
+        value: "No"
+      stig:
+        id: V-17443
+        category: CAT II
+        value: "No"
+    notes: ""
+  - cid: C-W-GP-SEC-FW-23
+    operating_systems:
+      - Windows
+    category: ""
+    policy: '"Windows Firewall: Public: Logging: Name" is set to "%SystemRoot%\System32\logfiles\firewall\publicfw.log".'
+    fix:
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Windows Settings\Security Settings\Windows Defender
+          Firewall with Advanced Security\Public Profile
+        name: "Windows Firewall: Public: Logging: Name"
+        value: '%SystemRoot%\System32\logfiles\firewall\publicfw.log'
+        registry_hive: Computer
+        registry_path: SOFTWARE\Policies\Microsoft\WindowsFirewall\PublicProfile\Logging
+        registry_key: LogFilePath
+        registry_action: SZ:%systemroot%\\system32\\logfiles\\firewall\\publicfw.log
+    references:
+      cis:
+        id: 9.3.7
+        category: L1
+        value: '%SystemRoot%\System32\logfiles\firewall\publicfw.log'
+      stig:
+        id: ""
+        category: ""
+        value: ""
+    notes: ""
+  - cid: C-W-GP-SEC-FW-24
+    operating_systems:
+      - Windows
+    category: ""
+    policy: '"Windows Firewall: Public: Logging: Size limit" is set to "16,384 KB".'
+    fix:
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Windows Settings\Security Settings\Windows Defender
+          Firewall with Advanced Security\Public Profile
+        name: "Windows Firewall: Public: Logging: Size limit"
+        value: 16,384
+        registry_hive: Computer
+        registry_path: SOFTWARE\Policies\Microsoft\WindowsFirewall\PublicProfile\Logging
+        registry_key: LogFileSize
+        registry_action: DWORD:16384
+    references:
+      cis:
+        id: 9.3.8
+        category: L1
+        value: 16,384 KB or greater
+      stig:
+        id: V-17445
+        category: CAT III
+        value: 16,384 KB or greater
+    notes: ""
+  - cid: C-W-GP-SEC-FW-25
+    operating_systems:
+      - Windows
+    category: ""
+    policy: '"Windows Firewall: Public: Logging: Log dropped packets" is set to "Yes".'
+    fix:
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Windows Settings\Security Settings\Windows Defender
+          Firewall with Advanced Security\Public Profile
+        name: "Windows Firewall: Public: Logging: Log dropped packets"
+        value: "Yes"
+        registry_hive: Computer
+        registry_path: SOFTWARE\Policies\Microsoft\WindowsFirewall\PublicProfile\Logging
+        registry_key: LogDroppedPackets
+        registry_action: DWORD:1
+    references:
+      cis:
+        id: 9.3.9
+        category: L1
+        value: "Yes"
+      stig:
+        id: V-17446
+        category: CAT III
+        value: "Yes"
+    notes: ""
+  - cid: C-W-GP-SEC-FW-26
+    operating_systems:
+      - Windows
+    category: ""
+    policy: '"Windows Firewall: Public: Log Successful Connections" is set to "Yes".'
+    fix:
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Windows Settings\Security Settings\Windows Defender
+          Firewall with Advanced Security\Public Profile
+        name: "Windows Firewall: Public: Log Successful Connections"
+        value: "Yes"
+        registry_hive: Computer
+        registry_path: SOFTWARE\Policies\Microsoft\WindowsFirewall\PublicProfile\Logging
+        registry_key: LogSuccessfulConnections
+        registry_action: DWORD:1
+    references:
+      cis:
+        id: 9.3.10
+        category: L1
+        value: "Yes"
+      stig:
+        id: V-17447
+        category: CAT III
+        value: "Yes"
+    notes: ""
+  - cid: C-W-GP-SEC-FW-27
+    operating_systems:
+      - Windows
+    category: ""
+    policy: Check individual settings in Windows Firewall with Advanced Security.
+    fix:
+      - fix_type: manual
+        steps:
+          Check individual settings in Windows Firewall with Advanced Security to see if anything has been changed from the default setting
+          (ie not applied via Group Policy). Additionally, check for any Inbound/Outbound FW rules.

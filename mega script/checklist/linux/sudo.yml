@@ -1,0 +1,203 @@
+version: 1
+name: Sudo Configuration
+vulnerabilities:
+  - cid: C-UD-SUDO-01
+    operating_systems:
+      - Ubuntu
+      - Debian
+    category: Sudo Config
+    policy: Sudo is installed.
+    fix:
+      - fix_type: command
+        command: apt-get install -y sudo
+    references:
+      cis:
+        id: 5.3.1
+        category: L1
+  - cid: C-F-SUDO-01
+    operating_systems:
+      - Fedora
+    category: Sudo Config
+    policy: Sudo is installed.
+    fix:
+      - fix_type: command
+        command: dnf install -y sudo
+    references:
+      cis:
+        id: 5.3.1
+        category: L1
+  - cid: C-UDF-SUDO-02
+    operating_systems:
+      - Ubuntu
+      - Debian
+      - Fedora
+    category: Sudo Config
+    policy: Sudo commands use pty.
+    fix:
+      - fix_type: config_file
+        file: /etc/sudoers.d/01_poochbot
+        text: Defaults use_pty
+    references:
+      cis:
+        id: 5.3.2
+        category: L1
+  - cid: C-UDF-SUDO-03
+    operating_systems:
+      - Ubuntu
+      - Debian
+      - Fedora
+    category: Sudo Config
+    policy: Sudo log file exists.
+    fix:
+      - fix_type: config_file
+        file: /etc/sudoers.d/01_poochbot
+        text: Defaults logfile="/var/log/sudo.log"
+    references:
+      cis:
+        id: 5.3.3
+        category: L1
+  - cid: C-UDF-SUDO-03
+    operating_systems:
+      - Ubuntu
+      - Debian
+      - Fedora
+    category: Sudo Config
+    policy: Password feedback is disabled.
+    fix:
+      - fix_type: config_file
+        file: /etc/sudoers.d/01_poochbot
+        text: Defaults !pwfeedback
+    references:
+      other: https://github.com/konstruktoid/hardening/blob/master/scripts/sudo
+  - cid: C-UDF-SUDO-03
+    operating_systems:
+      - Ubuntu
+      - Debian
+      - Fedora
+    category: Sudo Config
+    policy: Visible password is disabled.
+    fix:
+      - fix_type: config_file
+        file: /etc/sudoers.d/01_poochbot
+        text: Defaults !visiblepw
+    references:
+      other: https://github.com/konstruktoid/hardening/blob/master/scripts/sudo
+  - cid: C-UDF-SUDO-03
+    operating_systems:
+      - Ubuntu
+      - Debian
+      - Fedora
+    category: Sudo Config
+    policy: Sudo prompt times out after 1 minute.
+    fix:
+      - fix_type: config_file
+        file: /etc/sudoers.d/01_poochbot
+        text: Defaults passwd_timeout=1
+    references:
+      other: https://github.com/konstruktoid/hardening/blob/master/scripts/sudo
+  - cid: C-UDF-SUDO-03
+    operating_systems:
+      - Ubuntu
+      - Debian
+      - Fedora
+    category: Sudo Config
+    policy: Sudo prompt will always request a password.
+    fix:
+      - fix_type: config_file
+        file: /etc/sudoers.d/01_poochbot
+        text: Defaults timestamp_timeout=0
+    references:
+      other: https://github.com/konstruktoid/hardening/blob/master/scripts/sudo
+  - cid: C-UDF-SUDO-04
+    operating_systems:
+      - Ubuntu
+      - Debian
+      - Fedora
+    category: Sudo Config
+    policy: Users must provide password for privilege escalation.
+    fix:
+      - fix_type: manual
+        steps: |
+          1. Run `visudo`.
+          2. Verify that no line has `NOPASSWD` in it. Remove all occurences.
+    references:
+      cis:
+        id: 5.3.4
+        category: L1
+      stig:
+        id: V-238208
+        category: CAT II
+  - cid: C-UDF-SUDO-05
+    operating_systems:
+      - Ubuntu
+      - Debian
+      - Fedora
+    category: Sudo Config
+    policy: Re-authentication for privilege escalation is not disabled globally.
+    fix:
+      - fix_type: manual
+        steps: |
+          1. Run `visudo`.
+          2. Verify that no line has `!authenticate` in it. Remove all occurences.
+    references:
+      cis:
+        id: 5.3.5
+        category: L1
+      stig:
+        id: V-238208
+        category: CAT II
+  - cid: C-UDF-SUDO-06
+    operating_systems:
+      - Ubuntu
+      - Debian
+      - Fedora
+    category: Sudo Config
+    policy: Sudo authentication timeout is configured to 15 minutes.
+    fix:
+      - fix_type: manual
+        steps: |
+          1. Run `visudo`.
+          2. If `timestamp_timeout` is above 15, set it to 15.
+    references:
+      cis:
+        id: 5.3.6
+        category: L1
+  - cid: C-UDF-SUDO-07
+    operating_systems:
+      - Ubuntu
+      - Debian
+      - Fedora
+    category: Sudo Config
+    policy: Access to the su command is restricted.
+    fix:
+      - fix_type: manual
+        steps: |
+          1. Run `vim /etc/pam.d/su`.
+          2. Add `auth required pam_wheel.so use_uid` to the end of the file.
+    references:
+      cis:
+        id: 5.3.7
+        category: L1
+  - cid: C-UDF-SUDO-08
+    operating_systems:
+      - Ubuntu
+      - Debian
+      - Fedora
+    category: Sudo Config
+    policy: Sudoers file is 0440.
+    fix:
+      - fix_type: linux_permissions
+        target: /etc/sudoers
+        owner: root
+        group: root
+        mode: "0440"
+  - cid: C-UDF-SUDO-08
+    operating_systems:
+      - Ubuntu
+      - Debian
+      - Fedora
+    category: Sudo Config
+    policy: Sudoers file are 0440.
+    fix:
+      - fix_type: manual
+        steps: Ensure no files exist in /etc/sudoers.d/ that shouldn't be there.

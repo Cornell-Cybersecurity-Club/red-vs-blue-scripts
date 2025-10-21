@@ -1,0 +1,32 @@
+version: 1
+name: Sysctl Configuration
+vulnerabilities:
+  - cid: C-UDF-SCTL-01
+    operating_systems:
+      - Ubuntu
+      - Debian
+      - Fedora
+    category: Sysctl Config
+    policy: Hardened kernel configuration is imported.
+    fix:
+      - fix_type: config_file_copyover
+        file: /etc/sysctl.conf
+        source: ./support/linux/config_files/sysctl.conf
+    references:
+      cis:
+        id: "3.1.X"
+        category: L1
+      stig:
+        id: Multiple
+        category: Multiple
+      other: https://github.com/konstruktoid/hardening/blob/master/misc/sysctl.conf
+  - cid: C-UDF-SCTL-02
+    operating_systems:
+      - Ubuntu
+      - Debian
+      - Fedora
+    category: Sysctl Config
+    policy: Ensure active kernel parameters are set correctly.
+    fix:
+      - fix_type: command
+        command: sysctl -p

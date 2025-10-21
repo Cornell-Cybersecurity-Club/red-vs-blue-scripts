@@ -1,0 +1,403 @@
+version: 1.1
+name: Apache2 Server Configuration
+groups:
+  - category: Packages
+    vulnerabilities:
+      - cid: C-UD-APA-00
+        operating_systems:
+          - Ubuntu
+          - Debian
+        applies_to:
+          - Not apache2
+        category: Apache2 Server
+        policy: Apache2 is not installed if it is not listed as a critical service.
+        fix:
+          - fix_type: command
+            command: apt-get purge -y apache2
+  - category: Permissions
+    vulnerabilities:
+      - cid: C-UD-APA-01
+        operating_systems:
+          - Ubuntu
+          - Debian
+        applies_to:
+          - apache2
+        category: Permissions
+        policy: Permissions are set on /etc/apache2/apache2.conf as root:root 600.
+        fix:
+          - fix_type: linux_permissions
+            target: /etc/apache2/apache2.conf
+            owner: root
+            group: root
+            mode: "600"
+      - cid: C-UD-APA-01
+        operating_systems:
+          - Ubuntu
+          - Debian
+        applies_to:
+          - apache2
+        category: Permissions
+        policy: Apache2 must run as a non-privileged user.
+        fix:
+          - fix_type: command
+            command: |
+              groupadd -r apache
+              useradd apache -r -g apache -d /var/www -s /sbin/nologin
+          - fix_type: config_file
+            file: /etc/apache2/apache2.conf
+            text: User apache
+          - fix_type: config_file
+            file: /etc/apache2/apache2.conf
+            text: Group apache
+        references:
+          cis:
+            id: "3.1"
+            category: L1
+      - cid: C-UD-APA-01
+        operating_systems:
+          - Ubuntu
+          - Debian
+        applies_to:
+          - apache2
+        category: Permissions
+        policy: The apache user account must have an invalid shell.
+        fix:
+          - fix_type: command
+            command: chsh -s /sbin/nologin apache
+        references:
+          cis:
+            id: "3.2"
+            category: L1
+      - cid: C-UD-APA-01
+        operating_systems:
+          - Ubuntu
+          - Debian
+        applies_to:
+          - apache2
+        category: Permissions
+        policy: The apache user account must be locked.
+        fix:
+          - fix_type: command
+            command: passwd -dl apache
+        references:
+          cis:
+            id: "3.3"
+            category: L1
+      - cid: C-UD-APA-01
+        operating_systems:
+          - Ubuntu
+          - Debian
+        applies_to:
+          - apache2
+        category: Permissions
+        policy: Apache directories and files are owned and group-owned by root.
+        fix:
+          - fix_type: linux_permissions
+            target: /etc/apache2/apache2.conf
+            owner: root
+            group: root
+            mode: o-w
+        references:
+          cis:
+            id: "3.4, 3.5, 3.6"
+            category: L1
+      - cid: C-UD-APA-01
+        operating_systems:
+          - Ubuntu
+          - Debian
+        applies_to:
+          - apache2
+        category: Permissions
+        policy: Apache directories and files are owned and group-owned by root.
+        fix:
+          - fix_type: linux_permissions
+            target: /etc/apache2/apache2.conf
+            owner: root
+            group: root
+            mode: o-w
+        references:
+          cis:
+            id: "3.4, 3.5, 3.6"
+            category: L1
+  - category: Modules
+    vulnerabilities:
+      - cid: C-UD-APA-MOD-01
+        policy: Check installed modules manually. Ensure only necessary modules are enabled.
+        fix:
+          - fix_type: manual
+            steps: |
+              Run `a2query -m` to see all modules.
+              Grep by "auth" and "ldap" to sort through authentication modules.
+              The following modules are loaded by a default build:
+                • authn_file_module (shared)
+                • authn_core_module (shared)
+                • authz_host_module (shared)
+                • authz_groupfile_module (shared)
+                • authz_user_module (shared)
+                • authz_core_module (shared)
+              Run `ls -al /etc/apache2/mods-enabled` to see what modules are enabled.
+        references:
+          cis:
+            id: "2.1"
+            category: L1
+      - cid: C-UD-APA-MOD-01
+        policy: WebDAV modules are disabled.
+        fix:
+          - fix_type: command
+            command: |
+              a2dismod dav
+              a2dismod dav_fs
+              a2dismod dav_lock
+        references:
+          cis:
+            id: "2.3"
+            category: L1
+      - cid: C-UD-APA-MOD-01
+        policy: The `status` module is disabled.
+        fix:
+          - fix_type: command
+            command: a2dismod status
+        references:
+          cis:
+            id: "2.4"
+            category: L1
+      - cid: C-UD-APA-MOD-01
+        policy: The `autoindex` module is disabled.
+        fix:
+          - fix_type: command
+            command: a2dismod autoindex
+        references:
+          cis:
+            id: "2.5"
+            category: L1
+  - category: security.conf
+    vulnerabilities:
+      - cid: C-UD-APA-SECCONF-01
+        policy: ServerTokens is set to only provide minimal information.
+        fix:
+          - fix_type: config_file
+            file: /etc/apache2/conf-available/security.conf
+            text: ServerTokens Prod
+        references:
+          cis:
+            id: "8.1"
+            category: L1
+      - cid: C-UD-APA-SECCONF-01
+        policy: ServerSignature is not enabled.
+        fix:
+          - fix_type: config_file
+            file: /etc/apache2/conf-available/security.conf
+            text: ServerSignature Off
+        references:
+          cis:
+            id: "8.2"
+            category: L1
+      - cid: C-UD-APA-SECCONF-01
+        policy: Access to the file system is disabled.
+        fix:
+          - fix_type: manual
+            steps: |
+              Edit /etc/apache2/conf-available/security.conf and uncomment the following lines:
+                <Directory />
+                  AllowOverride None
+                  Require all denied
+                </Directory>
+      - cid: C-UD-APA-SECCONF-01
+        policy: The HTTP TRACE method is disabled.
+        fix:
+          - fix_type: config_file
+            file: /etc/apache2/conf-available/security.conf
+            text: TraceEnable On
+      - cid: C-UD-APA-SECCONF-01
+        policy: MSIE is prevented from interpreting files as something else than declared by the content type in the HTTP headers.
+        fix:
+          - fix_type: config_file
+            file: /etc/apache2/conf-available/security.conf
+            text: 'Header set X-Content-Type-Options: "nosniff"'
+      - cid: C-UD-APA-SECCONF-01
+        policy: Other sites embedding pages from this site as frames is prevented.
+        fix:
+          - fix_type: config_file
+            file: /etc/apache2/conf-available/security.conf
+            text: 'Header set X-Frame-Options: "sameorigin"'
+  - category: modsecurity2
+    vulnerabilities:
+      - cid: C-UD-APA-MODSEC-01
+        policy: Modsecurity is reinstalled or installed to reset its configuration file.
+        fix:
+          - fix_type: command
+            command: |
+              apt-get purge -y libapache2-mod-security2
+              apt-get install -y libapache2-mod-security2
+      - cid: C-UD-APA-MODSEC-01
+        policy: Modsecurity is enabled.
+        fix:
+          - fix_type: command
+            command: a2enmod security2
+      - cid: C-UD-APA-MODSEC-01
+        policy: The modsecurity engine should be enabled.
+        fix:
+          - fix_type: config_file
+            file: /etc/modsecurity/modsecurity.conf
+            text: SecRuleEngine On
+      - cid: C-UD-APA-MODSEC-01
+        policy: SecServerSignature is set to something other than "Apache".
+        fix:
+          - fix_type: config_file
+            file: /etc/modsecurity/modsecurity.conf
+            text: SecServerSignature "Microsoft IIS Server"
+  - category: SSL
+    vulnerabilities:
+      - cid: C-UD-APA-SSL-01
+        policy: SSL is enabled and a self-signed certificate has been generated.
+        fix:
+          - fix_type: command
+            command: |
+              a2ensite default-ssl
+              a2enmod ssl
+              make-ssl-cert generate-default-snakeoil --force-overwrite
+
+  - category: "apache2.conf: Directories"
+    vulnerabilities:
+      - cid: C-UD-APA-DIR-01
+        policy: Initial vulnerability
+        fix:
+          - fix_type: manual
+            steps: |
+              Open `/etc/apache2/apache2.conf`, and scroll to the Directory section.
+      - cid: C-UD-APA-DIR-01
+        policy: Access to the root directory is denied by default.
+        fix:
+          - fix_type: manual
+            steps: |
+              Open `/etc/apache2/apache2.conf`, and scroll to the Directory section.
+              Ensure that `Require all denied` is set on the root directory. This replaces any other `Require` directive.
+        references:
+          cis:
+            id: "4.1"
+            category: L1
+      - cid: C-UD-APA-DIR-01
+        policy: Access to directories is configured.
+        fix:
+          - fix_type: manual
+            steps: |
+              Open `/etc/apache2/apache2.conf`, and scroll to the Directory section.
+              Ensure that `Require all granted` is set on only the directory containing web content.
+              Remove the entire Directory section for `/usr/share` if it exists.
+        references:
+          cis:
+            id: "4.2"
+            category: L1
+      - cid: C-UD-APA-DIR-01
+        policy: Access to directories is configured.
+        fix:
+          - fix_type: manual
+            steps: |
+              Open `/etc/apache2/apache2.conf`, and scroll to the Directory section.
+              Ensure that `AllowOverride none` is set on all directories.
+              Ensure that the `AllowOverrideList` directive does not exist on any directories.
+        references:
+          cis:
+            id: "4.3"
+            category: L1
+      - cid: C-UD-APA-DIR-01
+        policy: No options are set on the root directory.
+        fix:
+          - fix_type: manual
+            steps: |
+              Open `/etc/apache2/apache2.conf`, and scroll to the Directory section.
+              For the / directory, set `Options -FollowSymLinks -Includes -ExecCGI` instead of `Options Indexes FollowSymlinks`.
+      - cid: C-UD-APA-DIR-01
+        policy: Options are restricted for the web root directory.
+        fix:
+          - fix_type: manual
+            steps: |
+              Open `/etc/apache2/apache2.conf`, and scroll to the Directory section.
+              For the `/var/www` directory, set `Options  -FollowSymlinks -Indexes -ExecCGI`.
+      - cid: C-UD-APA-DIR-01
+        policy: Entity tags are disabled.
+        fix:
+          - fix_type: manual
+            steps: |
+              Open `/etc/apache2/apache2.conf`, and scroll to the Directory section.
+              For the `/var/www` directory, set `FileETag None`.
+      - cid: C-UD-APA-DIR-01
+        policy: Options are restricted for all other directories.
+        fix:
+          - fix_type: manual
+            steps: |
+              Open `/etc/apache2/apache2.conf`, and scroll to the Directory section.
+              If any other directories are required, audit their `Options` directive to make sure no unnecessary options are section.
+  - category: "apache2.conf: Other"
+    vulnerabilities:
+      - cid: C-UD-APA-CONF-01
+        policy: Access to .ht* files is restricted.
+        fix:
+          - fix_type: manual
+            steps: |
+              Open `/etc/apache2/apache2.conf`.
+              Ensure that the following lines exist in the configuration file:
+                <FilesMatch "^\.ht">
+                  Require all denied
+                </FilesMatch>
+      - cid: C-UD-APA-CONF-01
+        policy: HTTP 1.0 is disallowed.
+        fix:
+          - fix_type: command
+            command: a2enmod rewrite
+          - fix_type: config_file
+            file: /etc/apache2/apache2.conf
+            text: |
+              RewriteEngine On
+              RewriteCond %{THE_REQUEST} !HTTP/1\.1$
+              RewriteRule .* - [F]
+      - cid: C-UD-APA-DIR-01
+        policy: Entity tags are disabled.
+        fix:
+          - fix_type: config_file
+            file: /etc/apache2/apache2.conf
+            text: FileETag None
+      - cid: C-UD-APA-01
+        operating_systems:
+          - Ubuntu
+          - Debian
+        applies_to:
+          - apache2
+        category: Permissions
+        policy: The CoreDumpDirectory directive is not set anywhere within the apache2 config files.
+        fix:
+          - fix_type: manual
+            steps: Ensure that the CoreDumpDirectory directive is not set anywhere within the apache2 config files.
+        references:
+          cis:
+            id: "3.7"
+            category: L1
+      - cid: C-UD-APA-01
+        operating_systems:
+          - Ubuntu
+          - Debian
+        applies_to:
+          - apache2
+        category: Permissions
+        policy: The Mutex directive is not set anywhere within the apache2 config files.
+        fix:
+          - fix_type: manual
+            steps: Ensure that the Mutex directive is not set anywhere within the apache2 config files.
+        references:
+          cis:
+            id: "3.8"
+            category: L1
+# sudo apt install libapache2-mod-evasive -y
+
+# IncludeOptional /etc/modsecurity/*.conf
+# IncludeOptional "/usr/share/modsecurity-crs/*.conf"
+# IncludeOptional "/usr/share/modsecurity-crs/base_rules/*.conf
+# LimitRequestBody 204800
+
+# <LimitExcept GET POST HEAD>
+# deny from all
+# </LimitExcept>
+
+# a2ensite default-ssl
+# a2enmod ssl
+# make-ssl-cert generate-default-snakeoil --force-overwrite

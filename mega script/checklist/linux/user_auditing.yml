@@ -1,0 +1,202 @@
+version: 1.0
+name: User Auditing
+vulnerabilities:
+  - cid: C-UDF-UA-01
+    operating_systems:
+      - Ubuntu
+      - Debian
+      - Fedora
+    category: Passwords
+    policy: All user passwords are reset.
+    fix:
+      - fix_type: automated_module
+        module_id: ubuntu.user_auditing
+    references:
+      stig:
+        id: V-251503
+        category: CAT I
+  - cid: C-UDF-UA-02
+    operating_systems:
+      - Ubuntu
+      - Debian
+      - Fedora
+    category: Authorized/Unauthorized Users
+    policy: Each requested user account is present on the system.
+    fix:
+      - fix_type: automated_module
+        module_id: ubuntu.user_auditing
+  - cid: C-UDF-UA-03
+    operating_systems:
+      - Ubuntu
+      - Debian
+      - Fedora
+    category: Authorized/Unauthorized Users
+    policy: No user accounts are present on the system that are not requested to be.
+    fix:
+      - fix_type: automated_module
+        module_id: ubuntu.user_auditing
+  - cid: C-UDF-UA-04
+    operating_systems:
+      - Ubuntu
+      - Debian
+      - Fedora
+    category: User Permissions
+    policy: No user accounts are part of the sudo group that are not supposed to be.
+    fix:
+      - fix_type: automated_module
+        module_id: ubuntu.user_auditing
+    references:
+      stig:
+        id: V-238206
+        category: CAT I
+  - cid: C-UDF-UA-05
+    operating_systems:
+      - Ubuntu
+      - Debian
+      - Fedora
+    category: User Permissions
+    policy: No user accounts that are supposed to be part of the sudo group are not.
+    fix:
+      - fix_type: automated_module
+        module_id: ubuntu.user_auditing
+
+  - cid: C-UDF-UA-06
+    operating_systems:
+      - Ubuntu
+      - Debian
+      - Fedora
+    category: User Auditing
+    policy: Minimum days between password changes is 1 for every user.
+    fix:
+      - fix_type: automated_module
+        module_id: ubuntu.user_auditing
+    references:
+      cis:
+        id: 5.5.1.1
+        value: 1
+        category: L1
+    notes: chage --mindays 1 <user>
+  - cid: C-UDF-UA-07
+    operating_systems:
+      - Ubuntu
+      - Debian
+      - Fedora
+    category: User Auditing
+    policy: Password expiry days is set to 42 for each user.
+    fix:
+      - fix_type: automated_module
+        module_id: ubuntu.user_auditing
+    references:
+      cis:
+        id: 5.5.1.2
+        value: 365
+        category: L1
+    notes: chage --maxdays 42 <user>
+  - cid: C-UDF-UA-08
+    operating_systems:
+      - Ubuntu
+      - Debian
+      - Fedora
+    category: User Auditing
+    policy: Password expiry warning days is set to 6 for each user.
+    fix:
+      - fix_type: automated_module
+        module_id: ubuntu.user_auditing
+    references:
+      cis:
+        id: 5.5.1.3
+        value: 7
+        category: L1
+    notes: chage --warndays 7 <user>
+  - cid: C-UDF-UA-09
+    operating_systems:
+      - Ubuntu
+      - Debian
+      - Fedora
+    category: User Auditing
+    policy: Inactive password lock is 30 days for all accounts.
+    fix:
+      - fix_type: automated_module
+        module_id: ubuntu.user_auditing
+    references:
+      cis:
+        id: 5.5.1.4
+        value: 30
+        category: L1
+    notes: chage --inactive 30
+  - cid: C-UDF-UA-10
+    operating_systems:
+      - Ubuntu
+      - Debian
+      - Fedora
+    category: User Auditing
+    policy: System account login shells are set to nologin and passwords are locked.
+    fix:
+      - fix_type: automated_module
+        module_id: ubuntu.user_auditing
+    references:
+      cis:
+        id: 5.5.2
+        category: L1
+      stig:
+        id: V-238329
+        category: CAT II
+    notes: usermod -s $(which nologin) <user>, usermod -L <user>
+  - cid: C-UDF-UA-11
+    operating_systems:
+      - Ubuntu
+      - Debian
+      - Fedora
+    category: User Auditing
+    policy: UID for the root account is 0.
+    fix:
+      - fix_type: automated_module
+        module_id: ubuntu.user_auditing
+    references:
+      cis:
+        id: 5.5.3
+        category: L1
+    notes: usermod -u 0 root
+  - cid: C-UDF-UA-12
+    operating_systems:
+      - Ubuntu
+      - Debian
+      - Fedora
+    category: User Auditing
+    policy: Default group for the root account is GID 0.
+    fix:
+      - fix_type: automated_module
+        module_id: ubuntu.user_auditing
+    references:
+      cis:
+        id: 5.5.3
+        category: L1
+    notes: usermod -g 0 root
+  - cid: C-UDF-UA-13
+    operating_systems:
+      - Ubuntu
+      - Debian
+      - Fedora
+    category: User Auditing
+    policy: No users have the same UID.
+    fix:
+      - fix_type: automated_module
+        module_id: ubuntu.user_auditing
+    references:
+      stig:
+        id: V-238205
+        category: CAT II
+    notes: TODO
+  - cid: C-UDF-UA-14
+    operating_systems:
+      - Ubuntu
+      - Debian
+      - Fedora
+    category: User Auditing
+    policy: Users [games, gnats, irc, list, news, sync, uucp] are removed.
+    fix:
+      - fix_type: automated_module
+        module_id: ubuntu.user_auditing
+    references:
+      other: https://github.com/konstruktoid/hardening/blob/master/scripts/users
+    notes: TODO

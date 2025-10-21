@@ -1,0 +1,150 @@
+version: 1.0
+name: APT Configuration
+vulnerabilities:
+  - cid: C-UD-APT-01a
+    operating_systems:
+      - Ubuntu 22
+    category: APT
+    policy: Sources.list has been replaced with a known-working version.
+    fix:
+      - fix_type: config_file_copyover
+        file: /etc/apt/sources.list
+        source: ./support/linux/config_files/ubu22/sources.list
+  - cid: C-UD-APT-01b
+    operating_systems:
+      - Ubuntu 20
+    category: APT
+    policy: Sources.list has been replaced with a known-working version.
+    fix:
+      - fix_type: config_file_copyover
+        file: /etc/apt/sources.list
+        source: ./support/linux/config_files/ubu20/sources.list
+      - fix_type: command
+        command: apt-get update
+  - cid: C-UD-APT-02
+    operating_systems:
+      - Ubuntu
+    category: APT Configuration
+    policy: APT does not allow unauthenticated packages.
+    fix:
+      - fix_type: config_file
+        file: /etc/apt/apt.conf.d/98-poochbot.conf
+        text: APT::Get::AllowUnauthenticated "false";
+    references:
+      stig:
+        id: V-238539
+        category: CAT II
+  - cid: C-UD-APT-03
+    operating_systems:
+      - Ubuntu
+    category: APT Configuration
+    policy: Unattended-upgrade automatically removes old packages.
+    fix:
+      - fix_type: config_file
+        file: /etc/apt/apt.conf.d/50unattended-upgrades
+        text: Unattended-Upgrade::Remove-Unused-Dependencies "true";
+      - fix_type: config_file
+        file: /etc/apt/apt.conf.d/50unattended-upgrades
+        text: Unattended-Upgrade::Remove-Unused-Kernel-Packages "true";
+    references:
+      stig:
+        id: V-238370
+        category: CAT II
+  - cid: C-UD-APT-04
+    operating_systems:
+      - Ubuntu
+    category: APT Configuration
+    policy: Disable HTTP redirects.
+    fix:
+      - fix_type: config_file
+        file: /etc/apt/apt.conf.d/98-poochbot.conf
+        text: Acquire::http::AllowRedirect "false";
+  - cid: C-UD-APT-05
+    operating_systems:
+      - Ubuntu
+    category: APT Configuration
+    policy: Automatic cleaning is enabled.
+    fix:
+      - fix_type: config_file
+        file: /etc/apt/apt.conf.d/98-poochbot.conf
+        text: APT::Periodic::AutocleanInterval "7";
+    references:
+      other: https://github.com/konstruktoid/hardening/blob/master/scripts/aptget
+  - cid: C-UD-APT-06
+    operating_systems:
+      - Ubuntu
+    category: APT Configuration
+    policy: APT does not install recommended packages.
+    fix:
+      - fix_type: config_file
+        file: /etc/apt/apt.conf.d/98-poochbot.conf
+        text: APT::Install-Recommends "false";
+    references:
+      other: https://github.com/konstruktoid/hardening/blob/master/scripts/aptget
+  - cid: C-UD-APT-07
+    operating_systems:
+      - Ubuntu
+    category: APT Configuration
+    policy: APT automatically removes unneeded packages.
+    fix:
+      - fix_type: config_file
+        file: /etc/apt/apt.conf.d/98-poochbot.conf
+        text: APT::Get::AutomaticRemove "true";
+    references:
+      other: https://github.com/konstruktoid/hardening/blob/master/scripts/aptget
+  - cid: C-UD-APT-08
+    operating_systems:
+      - Ubuntu
+    category: APT Configuration
+    policy: APT does not install suggested packages.
+    fix:
+      - fix_type: config_file
+        file: /etc/apt/apt.conf.d/98-poochbot.conf
+        text: APT::Install-Suggests "false";
+    references:
+      other: https://github.com/konstruktoid/hardening/blob/master/scripts/aptget
+  - cid: C-UD-APT-09
+    operating_systems:
+      - Ubuntu
+    category: APT Configuration
+    policy: APT does not allow downgrade to insecure repositories.
+    fix:
+      - fix_type: config_file
+        file: /etc/apt/apt.conf.d/98-poochbot.conf
+        text: Acquire::AllowDowngradeToInsecureRepositories "false";
+    references:
+      other: https://github.com/konstruktoid/hardening/blob/master/scripts/aptget
+  - cid: C-UD-APT-10
+    operating_systems:
+      - Ubuntu
+    category: APT Configuration
+    policy: APT does not allow insecure repositories.
+    fix:
+      - fix_type: config_file
+        file: /etc/apt/apt.conf.d/98-poochbot.conf
+        text: Acquire::AllowInsecureRepositories "false";
+    references:
+      other: https://github.com/konstruktoid/hardening/blob/master/scripts/aptget
+  - cid: C-UD-APT-11
+    operating_systems:
+      - Ubuntu
+    category: APT Configuration
+    policy: APT secure computing mode (seccomp) is enabled.
+    fix:
+      - fix_type: config_file
+        file: /etc/apt/apt.conf.d/98-poochbot.conf
+        text: APT::Sandbox::Seccomp "1";
+    references:
+      other: https://github.com/konstruktoid/hardening/blob/master/scripts/aptget
+  - cid: C-UD-APT-12
+    operating_systems:
+      - Ubuntu
+    category: APT Configuration
+    policy: DPKG noexec of /tmp is enabled.
+    fix:
+      - fix_type: config_file
+        file: /etc/apt/apt.conf.d/99-dpkg-noexec.conf
+        text: DPkg::Pre-Invoke {"mount -o remount,exec,nodev,nosuid /tmp";};
+      - fix_type: config_file
+        file: /etc/apt/apt.conf.d/99-dpkg-noexec.conf
+        text: DPkg::Post-Invoke {"mount -o remount,mode=1777,strictatime,noexec,nodev,nosuid /tmp";};

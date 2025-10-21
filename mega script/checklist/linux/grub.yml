@@ -1,0 +1,73 @@
+version: 1
+name: Grub Configuration
+vulnerabilities:
+  - cid: C-UDF-GRUB-01
+    operating_systems:
+      - Ubuntu
+      - Debian
+      - Fedora
+    category: GRUB
+    policy: GRUB must be configured with a password.
+    fix:
+      - fix_type: config_file
+        file: /etc/grub.d/40_custom
+        text: |
+          set superusers="cyberhounds"
+          password_pbkdf2 cyberhounds grub.pbkdf2.sha512.10000.ED750D58DBF194A15E5968E0BEB3C1CA1EE14F47DBB5103A94FF2FBCC355E05F889E87A0CF680F2381B527EF84DFB842C1B72224904AE214410424DAC10DB59D.B668691FE9AC1D27AC35E2A96AAD2BCB844D4B99045FC372308F1309747CB9132A67FAA1C0192DBA7041F29FEDFD67D4C407CF0E300B8DE55A0222333CAAF35F
+    references:
+      stig:
+        id: V-238204
+        category: CAT II
+    notes: |
+      Username: cyberhounds
+      Password: CyberP@triot22"
+  - cid: C-UD-GRUB-XXX
+    operating_systems:
+      - Ubuntu
+      - Debian
+    category: AppArmor, Auditd
+    policy: |
+      AppArmor is enabled in bootloader configuration.
+      Auditing for processes that start prior to auditd is enabled.
+      Audit backlog limit is sufficient.
+    fix:
+      - fix_type: config_file
+        file: /etc/default/grub
+        text: GRUB_CMDLINE_LINUX="apparmor=1 security=apparmor audit=1 audit_backlog_limit=8192 lockdown=confidentiality ipv6.disable=1"
+      - fix_type: command
+        command: update-grub
+    references:
+      cis:
+        id: 1.6.1.2, 4.1.1.3, 4.1.1.4, 3.1.1
+        category: L1
+      stig:
+        id: V-238299
+        category: CAT II
+      other: |
+        https://github.com/konstruktoid/hardening/blob/master/scripts/apparmor
+        https://github.com/konstruktoid/hardening/blob/master/scripts/kernel
+    notes: This vulnerability combines several other vulnerabilities, since they all require the GRUB_CMDLINE_LINUX option.
+  - cid: C-F-GRUB-XXX
+    operating_systems:
+      - Fedora
+    category: Auditd
+    policy: |
+      Auditing for processes that start prior to auditd is enabled.
+      Audit backlog limit is sufficient.
+    fix:
+      - fix_type: config_file
+        file: /etc/default/grub
+        text: GRUB_CMDLINE_LINUX="audit=1 audit_backlog_limit=8192 lockdown=confidentiality"
+      - fix_type: command
+        command: update-grub
+    references:
+      cis:
+        id: 1.6.1.2, 4.1.1.3, 4.1.1.4
+        category: L1
+      stig:
+        id: V-238299
+        category: CAT II
+      other: |
+        https://github.com/konstruktoid/hardening/blob/master/scripts/apparmor
+        https://github.com/konstruktoid/hardening/blob/master/scripts/kernel
+    notes: This vulnerability combines several other vulnerabilities, since they all require the GRUB_CMDLINE_LINUX option.

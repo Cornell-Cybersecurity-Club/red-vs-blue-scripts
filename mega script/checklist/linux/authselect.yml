@@ -1,0 +1,76 @@
+version: 1.0
+name: authselect
+vulnerabilities:
+  - cid: C-F-AUTH-01
+    operating_systems:
+      - Fedora
+    category: authselect
+    policy: Ensure authselect is installed
+    fix:
+      - fix_type: command
+        command: dnf install -y authselect
+  - cid: C-F-AUTH-02
+    operating_systems:
+      - Fedora
+    category: authselect
+    policy: Create custom authselect profile
+    fix:
+      - fix_type: command
+        command: authselect create-profile cyberhounds -b sssd --symlink-meta
+    references:
+      cid:
+        id: 5.3.1
+        category: L1
+  - cid: C-F-AUTH-03
+    operating_systems:
+      - Fedora
+    category: authselect
+    policy: Enable custom authselect profile
+    fix:
+      - fix_type: command
+        command: authselect select custom/cyberhounds
+    references:
+      cid:
+        id: 5.3.2
+        category: L1
+  - cid: C-F-AUTH-04
+    operating_systems:
+      - Fedora
+    category: authselect
+    policy: Ensure authselect includes with-faillock
+    fix:
+      - fix_type: command
+        command: authselect select custom/cyberhounds with-sudo with-faillock without-nullok
+    references:
+      cid:
+        id: 5.3.3
+        category: L1
+  - cid: C-F-AUTH-05
+    operating_systems:
+      - Fedora
+    category: authselect
+    policy: Add pam files to custom authselect profile
+    fix:
+      - fix_type: config_file_copyover
+        file: /etc/authselect/custom/cyberhounds/password-auth
+        source: ./support/linux/config_files/fed36/password-auth
+      - fix_type: config_file_copyover
+        file: /etc/authselect/custom/cyberhounds/system-auth
+        source: ./support/linux/config_files/fed36/system-auth
+      - fix_type: config_file_copyover
+        file: /etc/authselect/custom/cyberhounds/login
+        source: ./support/linux/config_files/fed36/login
+      - fix_type: config_file_copyover
+        file: /etc/authselect/custom/cyberhounds/postlogin
+        source: ./support/linux/config_files/fed36/postlogin
+  - cid: C-F-AUTH-06
+    operating_systems:
+      - Fedora
+    category: authselect
+    policy: Apply custom authselect profile and restart sssd
+    fix:
+      - fix_type: command
+        command: authselect apply-changes
+      - fix_type: command
+        command: systemctl restart sssd.service
+# permissions are automtically set to 044 by auths6elect

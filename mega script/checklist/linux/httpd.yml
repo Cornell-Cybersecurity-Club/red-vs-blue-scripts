@@ -1,0 +1,579 @@
+version: 1
+name: Apache HTTP Server Configuration
+vulnerabilities:
+  - cid: C-F-APA-00
+    operating_systems:
+      - Fedora
+    applies_to:
+      - Not apache2
+    category: Apache2 Server
+    policy: Apache2 is not installed if it is not listed as a critical service.
+    fix:
+      - fix_type: command
+        command: dnf remove -y httpd
+  - cid: C-F-APA-00
+    operating_systems:
+      - Fedora
+    applies_to:
+      - apache2
+    category: Apache2 Server
+    policy: Apache2 is installed if it is listed as a critical service.
+    fix:
+      - fix_type: command
+        command: dnf install -y httpd
+  - cid: C-F-APA-01
+    operating_systems:
+      - Fedora
+    applies_to:
+      - apache2
+    category: Permissions
+    policy: "Permissions are set on /etc/httpd as root:root 600"
+    fix:
+      - fix_type: command
+        command: "chmod -R 600 /etc/httpd"
+      - fix_type: command
+        command: "chown -R root:root /etc/httpd"
+  - cid: C-F-APA-02
+    operating_systems:
+      - Fedora
+    applies_to:
+      - apache2
+    category: Permissions
+    policy: Ensure the Apache Web Server Runs As a Non-Root User (2 of these command will fail if the apache user is created)
+    fix:
+      - fix_type: command
+        command: |
+          groupadd -r apache
+          useradd apache -r -g apache -d /var/www -s /sbin/nologin
+      - fix_type: config_file
+        file: /etc/httpd/httpd.conf
+        text: User apache
+      - fix_type: config_file
+        file: /etc/httpd/httpd.conf
+        text: Group apache
+    references:
+      cis:
+        id: "3.1"
+        category: L1
+  - cid: C-F-APA-03
+    operating_systems:
+      - Fedora
+    applies_to:
+      - apache2
+    category: Permissions
+    policy: Ensure the Apache User Account Has an Invalid Shell
+    fix:
+      - fix_type: command
+        command: chsh -s /sbin/nologin apache
+  - cid: C-F-APA-04
+    operating_systems:
+      - Fedora
+    applies_to:
+      - apache2
+    category: Permissions
+    policy: Ensure the Apache User Account Is Locked
+    fix:
+      - fix_type: command
+        command: passwd -dl apache
+  - cid: C-F-APA-05
+    operating_systems:
+      - Fedora
+    applies_to:
+      - apache2
+    category: HTTPD Config
+    policy: Ensure the Log Config Module Is Enabled
+    fix:
+      - fix_type: manual
+        steps: |
+          Make sure the following line is in a config with `grep -R 'log_config_module' /etc/httpd/`
+          `LoadModule log_config_module modules/mod_log_config.so`
+          The default location is /etc/httpd/conf.modules.d/00-base.conf
+    references:
+      cis:
+        id: "2.2"
+        category: L1
+      other: https://httpd.apache.org/docs/2.2/mod/mod_log_config.html
+  - cid: C-F-APA-06
+    operating_systems:
+      - Fedora
+    applies_to:
+      - apache2
+    category: HTTPD Config
+    policy: Ensure the WebDAV Modules Are Disabled
+    fix:
+      - fix_type: manual
+        steps: |
+          Make sure the following line is not in a config or commented out with `grep -R 'mod_dav' /etc/httpd/`
+          `#LoadModule dav_module modules/mod_dav.so`
+          `#LoadModule dav_fs_module modules/mod_dav_fs.so`
+          `#LoadModule dav_lock_module modules/mod_dav_lock.so`
+          The default location is /etc/httpd/conf.modules.d/00-dav.conf
+    references:
+      cis:
+        id: "2.3"
+        category: L1
+      other: https://httpd.apache.org/docs/2.2/mod/mod_dav.html
+  - cid: C-F-APA-07
+    operating_systems:
+      - Fedora
+    applies_to:
+      - apache2
+    category: HTTPD Config
+    policy: Ensure the Status Module Is Disabled
+    fix:
+      - fix_type: manual
+        steps: |
+          Make sure the following line is not in a config or commented out with `grep -R 'mod_status' /etc/httpd/`
+          `#LoadModule status_module modules/mod_status.so`
+          The default location is /etc/httpd/conf.modules.d/00-base.conf
+    references:
+      cis:
+        id: "2.4"
+        category: L1
+      other: https://httpd.apache.org/docs/2.2/mod/mod_status.html
+  - cid: C-F-APA-08
+    operating_systems:
+      - Fedora
+    applies_to:
+      - apache2
+    category: HTTPD Config
+    policy: Ensure the AutoIndex Module Is Disabled
+    fix:
+      - fix_type: manual
+        steps: |
+          Make sure the following line is not in a config or commented out with `grep -R 'mod_autoindex' /etc/httpd/`
+          `#LoadModule autoindex_module modules/mod_autoindex.so`
+          The default location is /etc/httpd/conf.modules.d/00-base.conf
+    references:
+      cis:
+        id: "2.5"
+        category: L1
+      other: https://httpd.apache.org/docs/2.2/mod/mod_autoindex.html
+  - cid: C-F-APA-09
+    operating_systems:
+      - Fedora
+    applies_to:
+      - apache2
+    category: HTTPD Config
+    policy: Ensure the Proxy Modules Are Disabled
+    fix:
+      - fix_type: manual
+        steps: |
+          Make sure the following line is not in a config or commented out with `grep -R 'mod_proxy' /etc/httpd/`
+          `#LoadModule proxy_module modules/mod_proxy.so`
+          `#LoadModule proxy_connect_module modules/mod_proxy_connect.so`
+          `#LoadModule proxy_ftp_module modules/mod_proxy_ftp.so`
+          `#LoadModule proxy_http_module modules/mod_proxy_http.so`
+          `#LoadModule proxy_ajp_module modules/mod_proxy_ajp.so`
+          `#LoadModule proxy_balancer_module modules/mod_proxy_balancer.so`
+          `#LoadModule proxy_express_module modules/mod_proxy_express.so`
+          The default location is /etc/httpd/conf.modules.d/00-proxy.conf
+    references:
+      cis:
+        id: "2.6"
+        category: L1
+      other: https://httpd.apache.org/docs/2.2/mod/mod_proxy.html
+  - cid: C-F-APA-10
+    operating_systems:
+      - Fedora
+    applies_to:
+      - apache2
+    category: HTTPD Config
+    policy: Ensure the User Directory Module Is Disabled
+    fix:
+      - fix_type: manual
+        steps: |
+          Make sure the following line is not in a config or commented out with `grep -R 'mod_userdir' /etc/httpd/`
+          `#LoadModule userdir_module modules/mod_userdir.so`
+          The default location is /etc/httpd/conf.modules.d/00-base.conf
+    references:
+      cis:
+        id: "2.7"
+        category: L1
+      other: https://httpd.apache.org/docs/2.2/mod/mod_userdir.html
+  - cid: C-F-APA-11
+    operating_systems:
+      - Fedora
+    applies_to:
+      - apache2
+    category: HTTPD Config
+    policy: Ensure the Info Module Is Disabled
+    fix:
+      - fix_type: manual
+        steps: |
+          Make sure the following line is not in a config or commented out with `grep -R 'mod_info' /etc/httpd/`
+          `#LoadModule info_module modules/mod_info.so`
+          The default location is /etc/httpd/conf.modules.d/00-base.conf
+    references:
+      cis:
+        id: "2.8"
+        category: L1
+      other: https://httpd.apache.org/docs/2.2/mod/mod_info.html
+  - cid: C-F-APA-12
+    operating_systems:
+      - Fedora
+    applies_to:
+      - apache2
+    category: HTTPD Config
+    policy: Ensure the Basic and Digest Authentication Modules are Disabled
+    fix:
+      - fix_type: manual
+        steps: |
+          Make sure the following line is not in a config or commented out with `grep -R 'mod_auth_[basic|digest]' /etc/httpd/`
+          `#LoadModule mod_auth_basic modules/mod_auth_basic.so`
+          `#LoadModule mod_auth_digest modules/mod_auth_digest.so`
+          The default location is /etc/httpd/conf.modules.d/00-.conf
+    references:
+      cis:
+        id: "2.9"
+        category: L1
+      other: https://httpd.apache.org/docs/2.2/mod/mod_auth_basic.html
+        https://httpd.apache.org/docs/2.2/mod/mod_auth_digest.html
+  - cid: C-F-APA-13
+    operating_systems:
+      - Fedora
+    applies_to:
+      - apache2
+    category: HTTPD Config
+    policy: Ensure Access to OS Root Directory Is Denied By Default
+    fix:
+      - fix_type: manual
+        steps: |
+          1. Search the Apache configuration files (httpd.conf and any included configuration files) to find a root <Directory> element.
+          2. Ensure that the root <Directory> element has the following directives:
+            1. Order deny,allow
+            2. Deny from all
+          3. It should look like this:
+            <Directory />
+              ...
+              Order deny,allow
+              Deny from all
+              ...
+            </Directory>
+    references:
+      cis:
+        id: "4.1"
+        category: L1
+      other: https://httpd.apache.org/docs/2.2/mod/core.html#directory
+  - cid: C-F-APA-14
+    operating_systems:
+      - Fedora
+    applies_to:
+      - apache2
+    category: HTTPD Config
+    policy: Ensure OverRide Is Disabled for the OS Root Directory
+    fix:
+      - fix_type: manual
+        steps: |
+          1. Search the Apache configuration files (httpd.conf and any included configuration files) to find a root <Directory> element.
+          2. Ensure that the root <Directory> element has the following directive:
+            1. AllowOverride None
+          3. It should look like this:
+            <Directory />
+              ...
+              AllowOverride None
+              ...
+            </Directory>
+    references:
+      cis:
+        id: "4.2"
+        category: L1
+      other: https://httpd.apache.org/docs/2.2/mod/core.html#allowoverride
+  - cid: C-F-APA-15
+    operating_systems:
+      - Fedora
+    applies_to:
+      - apache2
+    category: HTTPD Config
+    policy: Ensure OverRide Is Disabled for All Directories
+    fix:
+      - fix_type: manual
+        steps: |
+          1. grep -i AllowOverride /etc/httpd/conf/httpd.conf
+          2. Ensure that the `AllowOverride` directive is set to `None` for all.
+    references:
+      cis:
+        id: "4.3"
+        category: L1
+      other: https://httpd.apache.org/docs/2.2/mod/core.html#allowoverride
+  - cid: C-F-APA-16
+    operating_systems:
+      - Fedora
+    applies_to:
+      - apache2
+    category: HTTPD Config
+    policy: Ensure Options for the OS Root Directory Are Restricted
+    fix:
+      - fix_type: manual
+        steps: |
+          1. Search the Apache configuration files (httpd.conf and any included configuration files) to find a root <Directory> element.
+          2. Add a single `Options` directive if there is `none`.
+          3. Set the value for `Options` to `None`.
+          4. It should look like this:
+            <Directory />
+              ...
+              Options None
+              ...
+            </Directory>
+    references:
+      cis:
+        id: "5.1"
+        category: L1
+      other: https://httpd.apache.org/docs/2.2/mod/core.html#options
+  - cid: C-F-APA-17
+    operating_systems:
+      - Fedora
+    applies_to:
+      - apache2
+    category: HTTPD Config
+    policy: Ensure Options for Other Directories Are Minimized
+    fix:
+      - fix_type: manual
+        steps: |
+          1. grep -i -A 12 '<Directory[[:space:]]' /etc/httpd/conf/httpd.conf
+          2. Add or modify any existing Options directive to NOT have a value of Includes.
+          3. Other options may be set if necessary and appropriate as described above.
+          4. For example:
+            <Directory "/usr/local/apache2/cgi-bin">
+              ...
+              Options None
+              ...
+            </Directory>
+    references:
+      cis:
+        id: "5.3"
+        category: L1
+      other: https://httpd.apache.org/docs/2.2/mod/core.html#options
+  - cid: C-F-APA-18
+    operating_systems:
+      - Fedora
+    applies_to:
+      - apache2
+    category: HTTPD Config
+    policy: Ensure Default HTML Content Is Removed
+    fix:
+      - fix_type: manual
+        steps: |
+          1. Remove the default index.html or welcome page if it is a separate package. If the default welcome page is part of the main Apache httpd package, such as it is on Red Hat Linux, then comment out the configuration as shown below. Removing a file such as the welcome.conf is not recommended as it may get replaced if the package is updated.
+          2. It should look something like this:
+            #
+            # This configuration file enables the default "Welcome"
+            # page if there is no default index page present for
+            # the root URL. To disable the Welcome page, comment # out all the lines below.
+            #
+            ##<LocationMatch "^/+$">
+            ## Options -Indexes
+            ## ErrorDocument 403 /error/noindex.html
+            ##</LocationMatch>
+    references:
+      cis:
+        id: "5.4"
+        category: L1
+  - cid: C-F-APA-19
+    operating_systems:
+      - Fedora
+    applies_to:
+      - apache2
+    category: HTTPD Config
+    policy: Ensure the Default CGI Content printenv Script Is Removed
+    fix:
+      - fix_type: manual
+        steps: |
+          1. Locate cgi-bin files and directories enabled in the Apache configuration via the Script, ScriptAlias, ScriptAliasMatch, or ScriptInterpreterSource directives.
+          2. Remove the printenv default CGI in the cgi-bin directory if it is installed. `rm -f $APACHE_PREFIX/cgi-bin/printenv`
+    references:
+      cis:
+        id: "5.5"
+        category: L1
+  - cid: C-F-APA-20
+    operating_systems:
+      - Fedora
+    applies_to:
+      - apache2
+    category: HTTPD Config
+    policy: Ensure the Default CGI Content test-cgi Script Is Removed
+    fix:
+      - fix_type: manual
+        steps: |
+          1. Locate cgi-bin files and directories enabled in the Apache configuration via the Script, ScriptAlias, ScriptAliasMatch, or ScriptInterpreterSource directives.
+          2. Remove the test-cgi default CGI in the cgi-bin directory if it is installed. `rm -f $APACHE_PREFIX/cgi-bin/test-cgi`
+    references:
+      cis:
+        id: "5.6"
+        category: L1
+  - cid: C-F-APA-21
+    operating_systems:
+      - Fedora
+    applies_to:
+      - apache2
+    category: HTTPD Server
+    policy: Ensure mod_ssl and/or mod_nss Is Installed
+    fix:
+      - fix_type: command
+        command: dnf install -y mod_ssl
+    references:
+      cis:
+        id: "7.1"
+        category: L1
+  # add TLS/SSL config
+  - cid: C-F-APA-22
+    operating_systems:
+      - Fedora
+    applies_to:
+      - apache2
+    category: HTTPD Config
+    policy: Ensure ServerTokens is Set to 'Prod' or 'ProductOnly'
+    fix:
+      - fix_type: config_file
+        file: /etc/httpd/conf/httpd.conf
+        text: ServerTokens Prod
+    references:
+      cis:
+        id: "8.1"
+        category: L1
+      other: https://httpd.apache.org/docs/2.2/mod/core.html#servertokens
+  - cid: C-F-APA-23
+    operating_systems:
+      - Fedora
+    applies_to:
+      - apache2
+    category: HTTPD Config
+    policy: Ensure ServerSignature Is Not Enabled
+    fix:
+      - fix_type: config_file
+        file: /etc/httpd/conf/httpd.conf
+        text: ServerSignature Off
+    references:
+      cis:
+        id: "8.2"
+        category: L1
+      other: https://httpd.apache.org/docs/2.2/mod/core.html#serversignature
+  - cid: C-F-APA-24
+    operating_systems:
+      - Fedora
+    applies_to:
+      - apache2
+    category: HTTPD Config
+    policy: Ensure the TimeOut Is Set Properly
+    fix:
+      - fix_type: config_file
+        file: /etc/httpd/conf/httpd.conf
+        text: Timeout 10
+    references:
+      cis:
+        id: "9.1"
+        category: L1
+      other: https://httpd.apache.org/docs/2.2/mod/core.html#timeout
+  - cid: C-F-APA-25
+    operating_systems:
+      - Fedora
+    applies_to:
+      - apache2
+    category: HTTPD Config
+    policy: Ensure KeepAlive Is Enabled
+    fix:
+      - fix_type: config_file
+        file: /etc/httpd/conf/httpd.conf
+        text: KeepAlive On
+    references:
+      cis:
+        id: "9.2"
+        category: L1
+      other: https://httpd.apache.org/docs/2.2/mod/core.html#keepalive
+  - cid: C-F-APA-26
+    operating_systems:
+      - Fedora
+    applies_to:
+      - apache2
+    category: HTTPD Config
+    policy: Ensure MaxKeepAliveRequests Is Set to 100 or Less
+    fix:
+      - fix_type: config_file
+        file: /etc/httpd/conf/httpd.conf
+        text: MaxKeepAliveRequests 100
+    references:
+      cis:
+        id: "9.3"
+        category: L1
+      other: https://httpd.apache.org/docs/2.2/mod/core.html#maxkeepaliverequests[]
+  - cid: C-F-APA-27
+    operating_systems:
+      - Fedora
+    applies_to:
+      - apache2
+    category: HTTPD Config
+    policy: Ensure KeepAliveTimeout Is Set to 15 Seconds or Less
+    fix:
+      - fix_type: config_file
+        file: /etc/httpd/conf/httpd.conf
+        text: KeepAliveTimeout 15
+    references:
+      cis:
+        id: "9.4"
+        category: L1
+      other: https://httpd.apache.org/docs/2.2/mod/core.html#keepalivetimeout
+  - cid: C-F-APA-28
+    operating_systems:
+      - Fedora
+    applies_to:
+      - apache2
+    category: HTTPD Config
+    policy: Ensure the LimitRequestLine directive is Set to 512 or less
+    fix:
+      - fix_type: config_file
+        file: /etc/httpd/conf/httpd.conf
+        text: LimitRequestLine 512
+    references:
+      cis:
+        id: "10.1"
+        category: L2
+      other: https://httpd.apache.org/docs/2.2/mod/core.html#limitrequestline
+  - cid: C-F-APA-29
+    operating_systems:
+      - Fedora
+    applies_to:
+      - apache2
+    category: HTTPD Config
+    policy: Ensure the LimitRequestFields Directive is Set to 100 or Less
+    fix:
+      - fix_type: config_file
+        file: /etc/httpd/conf/httpd.conf
+        text: LimitRequestFields 100
+    references:
+      cis:
+        id: "10.2"
+        category: L2
+      other: https://httpd.apache.org/docs/2.2/mod/core.html#limitrequestfields
+  - cid: C-F-APA-30
+    operating_systems:
+      - Fedora
+    applies_to:
+      - apache2
+    category: HTTPD Config
+    policy: Ensure the LimitRequestFieldsize Directive is Set to 1024 or Less
+    fix:
+      - fix_type: config_file
+        file: /etc/httpd/conf/httpd.conf
+        text: LimitRequestFieldsize 1024
+    references:
+      cis:
+        id: "10.3"
+        category: L
+      other: https://httpd.apache.org/docs/2.2/mod/core.html#limitrequestfieldsize
+  - cid: C-F-APA-31
+    operating_systems:
+      - Fedora
+    applies_to:
+      - apache2
+    category: HTTPD Config
+    policy: Ensure the LimitRequestBody Directive is Set to 102400 or Less
+    fix:
+      - fix_type: config_file
+        file: /etc/httpd/conf/httpd.conf
+        text: LimitRequestBody 102400
+    references:
+      cis:
+        id: "10.4"
+        category: L2
+      other: https://httpd.apache.org/docs/2.2/mod/core.html#limitrequestbody
+  # add SELinux configs

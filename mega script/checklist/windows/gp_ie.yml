@@ -1,0 +1,3436 @@
+version: 1.1
+name: Internet Explorer
+groups:
+  - category: Anti-Malware
+    vulnerabilities:
+      - cid: C-WS-IE-001
+        operating_systems:
+          - Windows
+          - Windows Server
+        category: Anti-Malware
+        policy: '"Turn on Enhanced Protection Mode" is set to "Enabled".'
+        fix:
+          - fix_type: group_policy
+            path:
+              Computer Configuration\Administrative Templates\Windows Components\Internet Explorer\
+              Internet Control Panel\Advanced Page
+            name: Turn on Enhanced Protected Mode
+            value: Enabled
+            registry_hive: Computer
+            registry_path: Software\Policies\Microsoft\Internet Explorer\Main
+            registry_key: Isolation
+            registry_action: SZ:PMEM
+        references:
+          cis:
+            id: "1.1"
+            category: L1
+      - cid: C-WS-IE-002
+        operating_systems:
+          - Windows
+          - Windows Server
+        category: Anti-Malware
+        policy: '"Allow software to run or install even if the signature is invalid" is set to "Disabled".'
+        fix:
+          - fix_type: group_policy
+            path:
+              Computer Configuration\Administrative Templates\Windows Components\Internet Explorer\
+              Internet Control Panel\Advanced Page
+            name: Allow software to run or install even if the signature is invalid
+            value: Disabled
+            registry_hive: Computer
+            registry_path: Software\Policies\Microsoft\Internet Explorer\Download
+            registry_key: RunInvalidSignatures
+            registry_action: DWORD:0
+        references:
+          cis:
+            id: "1.2"
+            category: L1
+      - cid: C-WS-IE-003
+        operating_systems:
+          - Windows
+          - Windows Server
+        category: Anti-Malware
+        policy: '"Prevent bypassing SmartScreen Filter Warnings" is set to "Enabled".'
+        fix:
+          - fix_type: group_policy
+            path: Computer Configuration\Administrative Templates\Windows Components\Internet Explorer
+            name: Prevent bypassing SmartScreen Filter Warnings
+            value: Enabled
+            registry_hive: Computer
+            registry_path: Software\Policies\Microsoft\Internet Explorer\PhishingFilter
+            registry_key: PreventOverride
+            registry_action: DWORD:1
+        references:
+          cis:
+            id: "1.3"
+            category: L1
+      - cid: C-WS-IE-004
+        operating_systems:
+          - Windows
+          - Windows Server
+        category: Anti-Malware
+        policy: '"Prevent bypassing SmartScreen Filter warnings about files that are not commonly downloaded from the Internet" is set to "Enabled".'
+        fix:
+          - fix_type: group_policy
+            path: Computer Configuration\Administrative Templates\Windows Components\Internet Explorer
+            name: Prevent bypassing SmartScreen Filter warnings about files that are not commonly downloaded from the Internet
+            value: Enabled
+            registry_hive: Computer
+            registry_path: Software\Policies\Microsoft\Internet Explorer\PhishingFilter
+            registry_key: PreventOverrideAppRepUnknown
+            registry_action: DWORD:1
+        references:
+          cis:
+            id: "1.4"
+            category: L1
+      - cid: C-WS-IE-005
+        operating_systems:
+          - Windows
+          - Windows Server
+        category: Anti-Malware
+        policy: '"Do not allow users to enable or disable add-ons" is set to "Enabled".'
+        fix:
+          - fix_type: group_policy
+            path: Computer Configuration\Administrative Templates\Windows Components\Internet Explorer
+            name: Do not allow users to enable or disable add-ons
+            value: Enabled
+            registry_hive: Computer
+            registry_path: Software\Policies\Microsoft\Internet Explorer\Restrictions
+            registry_key: NoExtensionManagement
+            registry_action: DWORD:1
+        references:
+          cis:
+            id: "1.5"
+            category: L1
+      - cid: C-WS-IE-006 #check: found in User Configuration\Administrative Templates\Windows Components\Internet Explorer\Browser Menus instead
+        operating_systems:
+          - Windows
+          - Windows Server
+        category: Anti-Malware
+        policy: '"Disable Save this program to disk option" is set to "Enabled".'
+        fix:
+          - fix_type: group_policy
+            path:
+              User Configuration\Administrative Templates\Windows Components\Internet Explorer\
+              Browser Menus
+            name: Disable Save this program to disk option
+            value: Enabled
+            registry_hive: Computer
+            registry_path: Software\Policies\Microsoft\Internet Explorer\Restrictions
+            registry_key: NoSelectDownloadDir
+            registry_action: DWORD:1
+        references:
+          cis:
+            id: "1.6"
+            category: L1
+  - category: ActiveX Settings
+    vulnerabilities:
+      - cid: C-WS-IE-007
+        operating_systems:
+          - Windows
+          - Windows Server
+        category: ActiveX Settings
+        policy: '"Prevent per-user installation of ActiveX controls" is set to "Enabled".'
+        fix:
+          - fix_type: group_policy
+            path: Computer Configuration\Administrative Templates\Windows Components\Internet Explorer
+            name: Prevent per-user installation of ActiveX controls
+            value: Enabled
+            registry_hive: Computer
+            registry_path: Software\Policies\Microsoft\Internet Explorer\Security\ActiveX
+            registry_key: BlockNonAdminActiveXInstall
+            registry_action: DWORD:1
+        references:
+          cis:
+            id: "2.1"
+            category: L1
+      - cid: C-WS-IE-008
+        operating_systems:
+          - Windows
+          - Windows Server
+        category: ActiveX Settings
+        policy: '"Specify use of ActiveX Installer Service for installation of ActiveX controls" is set to "Enabled".'
+        fix:
+          - fix_type: group_policy
+            path: Computer Configuration\Administrative Templates\Windows Components\Internet Explorer
+            name: Specify use of ActiveX Installer Service for installation of ActiveX controls
+            value: Enabled
+            registry_hive: Computer
+            registry_path: Software\Policies\Microsoft\Windows\AxInstaller
+            registry_key: OnlyUseAXISForActiveXInstall
+            registry_action: DWORD:1
+        references:
+          cis:
+            id: "2.2"
+            category: L1
+      - cid: C-WS-IE-009
+        operating_systems:
+          - Windows
+          - Windows Server
+        category: ActiveX Settings
+        policy: '"Turn on ActiveX Filtering" is set to "Enabled".'
+        fix:
+          - fix_type: group_policy
+            path: Computer Configuration\Administrative Templates\Windows Components\Internet Explorer
+            name: Turn on ActiveX Filtering
+            value: Enabled
+            registry_hive: Computer
+            registry_path: Software\Policies\Microsoft\Internet Explorer\Safety\ActiveXFiltering
+            registry_key: IsEnabled
+            registry_action: DWORD:1
+        references:
+          cis:
+            id: "2.3"
+            category: L1
+      - cid: C-WS-IE-010
+        operating_systems:
+          - Windows
+          - Windows Server
+        category: ActiveX Settings
+        policy: '"Turn off ActiveX opt-in prompt" is set to "Disabled".'
+        fix:
+          - fix_type: group_policy
+            path: Computer Configuration\Administrative Templates\Windows Components\Internet Explorer
+            name: Turn off ActiveX opt-in prompt
+            value: Disabled
+            registry_hive: Computer
+            registry_path: Software\Microsoft\Windows\CurrentVersion\Policies\Ext
+            registry_key: NoFirsttimeprompt
+            registry_action: DELETE
+        references:
+          cis:
+            id: "2.4"
+            category: L1
+      - cid: C-WS-IE-011
+        operating_systems:
+          - Windows
+          - Windows Server
+        category: ActiveX Settings
+        policy: '"Do not allow ActiveX controls to run in Protected Mode when Enhanced Protected Mode is enabled" is set to "Enabled".'
+        fix:
+          - fix_type: group_policy
+            path:
+              Computer Configuration\Administrative Templates\Windows Components\Internet Explorer\
+              Internet Control Panel\Advanced Page
+            name: Do not allow ActiveX controls to run in Protected Mode when Enhanced Protected Mode is enabled
+            value: Enabled
+            registry_hive: Computer
+            registry_path: Software\Policies\Microsoft\Internet Explorer\Main
+            registry_key: DisableEPMCompat
+            registry_action: DWORD:1
+        references:
+          cis:
+            id: "2.5"
+            category: L1
+  - category: Browsing History
+    vulnerabilities:
+      - cid: C-WS-IE-012
+        operating_systems:
+          - Windows
+          - Windows Server
+        category: Browsing History
+        policy: '"Prevent deleting websites that the user has visited" is set to "Enabled".'
+        fix:
+          - fix_type: group_policy
+            path:
+              Computer Configuration\Administrative Templates\Windows Components\Internet Explorer\
+              Delete Browsing History
+            name: Prevent deleting websites that the user has visited
+            value: Enabled
+            registry_hive: Computer
+            registry_path: Software\Policies\Microsoft\Internet Explorer\Privacy
+            registry_key: CleanHistory
+            registry_action: DWORD:0
+        references:
+          cis:
+            id: "3.1"
+            category: L1
+      - cid: C-WS-IE-013
+        operating_systems:
+          - Windows
+          - Windows Server
+        category: Browsing History
+        policy: '"Prevent Deleting Cookies" is set to "Enabled".'
+        fix:
+          - fix_type: group_policy
+            path:
+              Computer Configuration\Administrative Templates\Windows Components\Internet Explorer\
+              Delete Browsing History
+            name: Prevent Deleting Cookies
+            value: Enabled
+            registry_hive: Computer
+            registry_path: Software\Policies\Microsoft\Internet Explorer\Privacy
+            registry_key: CleanCookies
+            registry_action: DWORD:0
+        references:
+          cis:
+            id: "3.2"
+            category: L1
+      - cid: C-WS-IE-014
+        operating_systems:
+          - Windows
+          - Windows Server
+        category: Browsing History
+        policy: '"Disable "Configuring History"" is set to "Enabled".'
+        fix:
+          - fix_type: group_policy
+            path:
+              Computer Configuration\Administrative Templates\Windows Components\Internet Explorer\
+              Delete Browsing History
+            name: 'Disable "Configuring History"'
+            value: Enabled
+            registry_hive: Computer
+            registry_path: Software\Policies\Microsoft\Internet Explorer\Control Panel
+            registry_key: History
+            registry_action: DWORD:1
+        references:
+          cis:
+            id: "3.3"
+            category: L1
+      - cid: C-WS-IE-015
+        operating_systems:
+          - Windows
+          - Windows Server
+        category: Browsing History
+        policy: '"Disable "Configuring History": Days to keep pages in History" is set to 40.'
+        fix:
+          - fix_type: group_policy
+            path:
+              Computer Configuration\Administrative Templates\Windows Components\Internet Explorer\
+              Delete Browsing History
+            name: 'Disable "Configuring History": Days to keep pages in History'
+            value: "40"
+            registry_hive: Computer
+            registry_path: Software\Policies\Microsoft\Windows\CurrentVersion\Internet Settings\Url History
+            registry_key: DaysToKeep
+            registry_action: DWORD:40
+        references:
+          cis:
+            id: "3.4"
+            category: L1
+      - cid: C-WS-IE-016
+        operating_systems:
+          - Windows
+          - Windows Server
+        category: Browsing History
+        policy: '"Prevent Deleting Temporary Internet Files" is set to "Enabled".'
+        fix:
+          - fix_type: group_policy
+            path:
+              Computer Configuration\Administrative Templates\Windows Components\Internet Explorer\
+              Delete Browsing History
+            name: Prevent Deleting Temporary Internet Files
+            value: Enabled
+            registry_hive: Computer
+            registry_path: Software\Policies\Microsoft\Internet Explorer\Privacy
+            registry_key: CleanTIF
+            registry_action: DWORD:0
+        references:
+          cis:
+            id: "3.5"
+            category: L1
+      - cid: C-WS-IE-017
+        operating_systems:
+          - Windows
+          - Windows Server
+        category: Browsing History
+        policy: '"Allow deleting browsing history on exit" is set to "Disabled".'
+        fix:
+          - fix_type: group_policy
+            path:
+              Computer Configuration\Administrative Templates\Windows Components\Internet Explorer\
+              Delete Browsing History
+            name: Allow deleting browsing history on exit
+            value: Disabled
+            registry_hive: Computer
+            registry_path: Software\Policies\Microsoft\Internet Explorer\Privacy
+            registry_key: ClearBrowsingHistoryOnExit
+            registry_action: DWORD:0
+        references:
+          cis:
+            id: "3.6"
+            category: L1
+      - cid: C-WS-IE-018
+        operating_systems:
+          - Windows
+          - Windows Server
+        category: Browsing History
+        policy: '"Prevent access to Delete Browsing History" is set to "Enabled".'
+        fix:
+          - fix_type: group_policy
+            path:
+              Computer Configuration\Administrative Templates\Windows Components\Internet Explorer\
+              Delete Browsing History
+            name: Prevent access to Delete Browsing History
+            value: Enabled
+            registry_hive: Computer
+            registry_path: Software\Policies\Microsoft\Internet Explorer\Control Panel
+            registry_key: DisableDeleteBrowsingHistory
+            registry_action: DWORD:1
+        references:
+          cis:
+            id: "3.7"
+            category: L1
+      - cid: C-WS-IE-019
+        operating_systems:
+          - Windows
+          - Windows Server
+        category: Browsing History
+        policy: '"Turn off InPrivate Browsing" is set to "Enabled".'
+        fix:
+          - fix_type: group_policy
+            path:
+              Computer Configuration\Administrative Templates\Windows Components\Internet Explorer\
+              Privacy
+            name: Turn off InPrivate Browsing
+            value: Enabled
+            registry_hive: Computer
+            registry_path: Software\Policies\Microsoft\Internet Explorer\Privacy
+            registry_key: EnableInPrivateBrowsing
+            registry_action: DWORD:0
+        references:
+          cis:
+            id: "3.8"
+            category: L1
+  - category: Component Updates
+    vulnerabilities:
+      - cid: C-WS-IE-020
+        operating_systems:
+          - Windows
+          - Windows Server
+        category: Component Updates
+        policy: '"Prevent changing the URL for checking updates to Internet Explorer and Internet Tools" is set to "Enabled".'
+        fix:
+          - fix_type: group_policy
+            path:
+              Computer Configuration\Administrative Templates\Windows Components\Internet Explorer\
+              Internet Settings\Component Updates\Periodic check for updates to Internet Explorer and Internet Tools
+            name: Prevent changing the URL for checking updates to Internet Explorer and Internet Tools
+            value: Enabled
+            registry_hive: Computer
+            registry_path: Software\Policies\Microsoft\Internet Explorer\Main
+            registry_key: Update_Check_Page
+            registry_action: SZ:http://www.microsoft.com/isapi/redir.dll?Prd=ie&Pver=5.0&Ar=ie5update
+        references:
+          cis:
+            id: "4.1"
+            category: L1
+        notes: The URL to be displayed for updates should be set to default.
+      - cid: C-WS-IE-021
+        operating_systems:
+          - Windows
+          - Windows Server
+        category: Component Updates
+        policy: '"Update check interval (in days)" is set to "Enabled: 30".'
+        fix:
+          - fix_type: group_policy
+            path:
+              Computer Configuration\Administrative Templates\Windows Components\Internet Explorer\
+              Internet Settings\Component Updates\Periodic check for updates to Internet Explorer and Internet Tools
+            name: Update check interval (in days)
+            value: "Enabled: 30"
+            registry_hive: Computer
+            registry_path: Software\Policies\Microsoft\Internet Explorer\Main
+            registry_key: Update_Check_Interval
+            registry_action: DWORD:30
+        references:
+          cis:
+            id: "4.2"
+            category: L1
+      - cid: C-WS-IE-022
+        operating_systems:
+          - Windows
+          - Windows Server
+        category: Component Updates
+        policy: '"Automatically check for Internet Explorer updates" is set to "Enabled".'
+        fix:
+          - fix_type: group_policy
+            path:
+              Computer Configuration\Administrative Templates\Windows Components\Internet Explorer\
+              Internet Control Panel\Advanced Page
+            name: Automatically check for Internet Explorer updates
+            value: Enabled
+            registry_hive: Computer
+            registry_path: Software\Policies\Microsoft\Internet Explorer\Main
+            registry_key: NoUpdateCheck
+            registry_action: DWORD:0
+        references:
+          cis:
+            id: "4.3"
+            category: L1
+      - cid: C-WS-IE-023
+        operating_systems:
+          - Windows
+          - Windows Server
+        category: Component Updates
+        policy: '"Install new versions of Internet Explorer automatically" is set to "Enabled".'
+        fix:
+          - fix_type: group_policy
+            path: Computer Configuration\Administrative Templates\Windows Components\Internet Explorer
+            name: Install new versions of Internet Explorer automatically
+            value: Enabled
+            registry_hive: Computer
+            registry_path: Software\Policies\Microsoft\Internet Explorer\Main
+            registry_key: EnableAutoUpgrade
+            registry_action: DWORD:1
+        references:
+          cis:
+            id: "4.4"
+            category: L1
+  - category: Certficates and Protocols
+    vulnerabilities:
+      - cid: C-WS-IE-024
+        operating_systems:
+          - Windows
+          - Windows Server
+        category: Certificates and Protocols
+        policy: '"Turn off Encryption Support: Secure Protocol Combinations" is set to "Only use TLS 1.2".'
+        fix:
+          - fix_type: group_policy
+            path:
+              Computer Configuration\Administrative Templates\Windows Components\Internet Explorer\
+              Internet Control Panel\Advanced Page
+            name: "Turn off Encryption Support: Secure Protocol Combinations"
+            value: Only use TLS 1.2
+            registry_hive: Computer
+            registry_path: Software\Policies\Microsoft\Windows\CurrentVersion\Internet Settings
+            registry_key: SecureProtocols
+            registry_action: DWORD:2048
+        references:
+          cis:
+            id: "5.1"
+            category: L1
+      - cid: C-WS-IE-025
+        operating_systems:
+          - Windows
+          - Windows Server
+        category: Certificates and Protocols
+        policy: '"Check for server certificate revocation" is set to "Enabled".'
+        fix:
+          - fix_type: group_policy
+            path:
+              Computer Configuration\Administrative Templates\Windows Components\Internet Explorer\
+              Internet Control Panel\Advanced Page
+            name: Check for server certificate revocation
+            value: Enabled
+            registry_hive: Computer
+            registry_path: Software\Policies\Microsoft\Windows\CurrentVersion\Internet Settings
+            registry_key: CertificateRevocation
+            registry_action: DWORD:1
+        references:
+          cis:
+            id: "5.2"
+            category: L1
+      - cid: C-WS-IE-026
+        operating_systems:
+          - Windows
+          - Windows Server
+        category: Certificates and Protocols
+        policy: '"Check for signatures on downloaded programs" is set to "Enabled".'
+        fix:
+          - fix_type: group_policy
+            path:
+              Computer Configuration\Administrative Templates\Windows Components\Internet Explorer\
+              Internet Control Panel\Advanced Page
+            name: Check for signatures on downloaded programs
+            value: Enabled
+            registry_hive: Computer
+            registry_path: Software\Policies\Microsoft\Internet Explorer\Download
+            registry_key: CheckExeSignatures
+            registry_action: SZ:yes
+        references:
+          cis:
+            id: "5.3"
+            category: L1
+      - cid: C-WS-IE-027
+        operating_systems:
+          - Windows
+          - Windows Server
+        category: Certificates and Protocols
+        policy: '"Turn on certificate address mismatch warning" is set to "Enabled".'
+        fix:
+          - fix_type: group_policy
+            path:
+              Computer Configuration\Administrative Templates\Windows Components\Internet Explorer\
+              Internet Control Panel\Security Page
+            name: Turn on certificate address mismatch warning
+            value: Enabled
+            registry_hive: Computer
+            registry_path: Software\Policies\Microsoft\Windows\CurrentVersion\Internet Settings
+            registry_key: WarnOnBadCertRecving
+            registry_action: DWORD:1
+        references:
+          cis:
+            id: "5.4"
+            category: L1
+      - cid: C-WS-IE-028 
+        operating_systems:
+          - Windows
+          - Windows Server
+        category: Certificates and Protocols
+        policy: '"Prevent ignoring certificate errors" is set to "Enabled".'
+        fix:
+          - fix_type: group_policy
+            path:
+              Computer Configuration\Administrative Templates\Windows Components\Internet Explorer\
+              Internet Control Panel\Security Page
+            name: Prevent ignoring certificate errors
+            value: Enabled
+            registry_hive: Computer
+            registry_path: Software\Policies\Microsoft\Windows\CurrentVersion\Internet Settings
+            registry_key: PreventIgnoreCertErrors
+            registry_action: DWORD:1
+        references:
+          cis:
+            id: "5.5"
+            category: L1
+      - cid: C-WS-IE-029
+        operating_systems:
+          - Windows
+          - Windows Server
+        category: Certificates and Protocols
+        policy: '"Disable changing certificate settings" is set to "Enabled".'
+        fix:
+          - fix_type: group_policy
+            path: User Configuration\Administrative Templates\Windows Components\Internet Explorer
+            name: Prevent ignoring certificate errors
+            value: Enabled
+            registry_hive: User
+            registry_path: Software\Policies\Microsoft\Internet Explorer\Control Panel
+            registry_key: Certificates
+            registry_action: DWORD:1
+        references:
+          cis:
+            id: "5.6"
+            category: L1
+  - category: Internet Communication Management
+    vulnerabilities:
+      - cid: C-WS-IE-030
+        operating_systems:
+          - Windows
+          - Windows Server
+        category: Internet Communication Management
+        policy: '"Turn off browser geolocation" is set to "Enabled".'
+        fix:
+          - fix_type: group_policy
+            path: Computer Configuration\Administrative Templates\Windows Components\Internet Explorer
+            name: Turn off browser geolocation
+            value: Enabled
+            registry_hive: Computer
+            registry_path: Software\Policies\Microsoft\Internet Explorer\Geolocation
+            registry_key: PolicyDisableGeolocation
+            registry_action: DWORD:1
+        references:
+          cis:
+            id: "6.1"
+            category: L1
+      - cid: C-WS-IE-031
+        operating_systems:
+          - Windows
+          - Windows Server
+        category: Internet Communication Management
+        policy: '"Turn off URL Suggestions" is set to "Enabled".'
+        fix:
+          - fix_type: group_policy
+            path: Computer Configuration\Administrative Templates\Windows Components\Internet Explorer
+            name: Turn off URL Suggestions
+            value: Enabled
+            registry_hive: Computer
+            registry_path: ""
+            registry_key: ""
+            registry_action: ""
+        references:
+          cis:
+            id: "6.2"
+            category: L1
+      - cid: C-WS-IE-032
+        operating_systems:
+          - Windows
+          - Windows Server
+        category: Internet Communication Management
+        policy: '"Prevent participation in the Customer Experience Improvement Program" is set to "Enabled".'
+        fix:
+          - fix_type: group_policy
+            path: Computer Configuration\Administrative Templates\Windows Components\Internet Explorer
+            name: Prevent participation in the Customer Experience Improvement Program
+            value: Enabled
+            registry_hive: Computer
+            registry_path: Software\Policies\Microsoft\Internet Explorer\SQM
+            registry_key: DisableCustomerImprovementProgram
+            registry_action: DWORD:0
+        references:
+          cis:
+            id: "6.3"
+            category: L1
+      - cid: C-WS-IE-033
+        operating_systems:
+          - Windows
+          - Windows Server
+        category: Internet Communication Management
+        policy: '"Turn on Suggested Sites" is set to "Disabled".'
+        fix:
+          - fix_type: group_policy
+            path: Computer Configuration\Administrative Templates\Windows Components\Internet Explorer
+            name: Turn on Suggested Sites
+            value: Disabled
+            registry_hive: Computer
+            registry_path: Software\Policies\Microsoft\Internet Explorer\Suggested Sites
+            registry_key: Enabled
+            registry_action: DWORD:0
+        references:
+          cis:
+            id: "6.4"
+            category: L1
+  - category: Internet Explorer Process Security Features
+    vulnerabilities:
+      - cid: C-WS-IE-034
+        operating_systems:
+          - Windows
+          - Windows Server
+        category: Internet Explorer Process Security Features
+        policy: '"Restrict ActiveX Install: Internet Explorer Processes" is set to "Enabled".'
+        fix:
+          - fix_type: group_policy
+            path:
+              Computer Configuration\Administrative Templates\Windows Components\Internet Explorer\
+              Security Features\Restrict ActiveX Install
+            name: Internet Explorer Processes
+            value: Enabled
+            registry_hive: Computer
+            registry_path: Software\Policies\Microsoft\Internet Explorer\Main\FeatureControl\FEATURE_RESTRICT_ACTIVEXINSTALL
+            registry_key: (Reserved)
+            registry_action: SZ:1
+          - fix_type: group_policy
+            path:
+              Computer Configuration\Administrative Templates\Windows Components\Internet Explorer\
+              Security Features\Restrict ActiveX Install
+            name: Internet Explorer Processes
+            value: Enabled
+            registry_hive: Computer
+            registry_path: Software\Policies\Microsoft\Internet Explorer\Main\FeatureControl\FEATURE_RESTRICT_ACTIVEXINSTALL
+            registry_key: explorer.exe
+            registry_action: SZ:1
+          - fix_type: group_policy
+            path:
+              Computer Configuration\Administrative Templates\Windows Components\Internet Explorer\
+              Security Features\Restrict ActiveX Install
+            name: Internet Explorer Processes
+            value: Enabled
+            registry_hive: Computer
+            registry_path: Software\Policies\Microsoft\Internet Explorer\Main\FeatureControl\FEATURE_RESTRICT_ACTIVEXINSTALL
+            registry_key: iexplore.exe
+            registry_action: SZ:1
+        references:
+          cis:
+            id: "7.1"
+            category: L1
+      - cid: C-WS-IE-035
+        operating_systems:
+          - Windows
+          - Windows Server
+        category: Internet Explorer Process Security Features
+        policy: '"Scripted Window Security Restrictions: Internet Explorer Processes" is set to "Enabled".'
+        fix:
+          - fix_type: group_policy
+            path:
+              Computer Configuration\Administrative Templates\Windows Components\Internet Explorer\
+              Security Features\Mime Sniffing Safety Feature
+            name: Internet Explorer Processes
+            value: Enabled
+            registry_hive: Computer
+            registry_path: Software\Policies\Microsoft\Internet Explorer\Main\FeatureControl\FEATURE_WINDOW_RESTRICTIONS
+            registry_key: (Reserved)
+            registry_action: SZ:1
+          - fix_type: group_policy
+            path:
+              Computer Configuration\Administrative Templates\Windows Components\Internet Explorer\
+              Security Features\Mime Sniffing Safety Feature
+            name: Internet Explorer Processes
+            value: Enabled
+            registry_hive: Computer
+            registry_path: Software\Policies\Microsoft\Internet Explorer\Main\FeatureControl\FEATURE_WINDOW_RESTRICTIONS
+            registry_key: explorer.exe
+            registry_action: SZ:1
+          - fix_type: group_policy
+            path:
+              Computer Configuration\Administrative Templates\Windows Components\Internet Explorer\
+              Security Features\Mime Sniffing Safety Feature
+            name: Internet Explorer Processes
+            value: Enabled
+            registry_hive: Computer
+            registry_path: Software\Policies\Microsoft\Internet Explorer\Main\FeatureControl\FEATURE_WINDOW_RESTRICTIONS
+            registry_key: iexplore.exe
+            registry_action: SZ:1
+        references:
+          cis:
+            id: "7.2"
+            category: L1
+      - cid: C-WS-IE-036
+        operating_systems:
+          - Windows
+          - Windows Server
+        category: Internet Explorer Process Security Features
+        policy: '"Mime Sniffing Safety Feature: Internet Explorer Processes" is set to "Enabled".'
+        fix:
+          - fix_type: group_policy
+            path:
+              Computer Configuration\Administrative Templates\Windows Components\Internet Explorer\
+              Security Features\Mime Sniffing Safety Feature
+            name: Internet Explorer Processes
+            value: Enabled
+            registry_hive: Computer
+            registry_path: Software\Policies\Microsoft\Internet Explorer\Main\FeatureControl\FEATURE_MIME_SNIFFING
+            registry_key: (Reserved)
+            registry_action: SZ:1
+          - fix_type: group_policy
+            path:
+              Computer Configuration\Administrative Templates\Windows Components\Internet Explorer\
+              Security Features\Mime Sniffing Safety Feature
+            name: Internet Explorer Processes
+            value: Enabled
+            registry_hive: Computer
+            registry_path: Software\Policies\Microsoft\Internet Explorer\Main\FeatureControl\FEATURE_MIME_SNIFFING
+            registry_key: explorer.exe
+            registry_action: SZ:1
+          - fix_type: group_policy
+            path:
+              Computer Configuration\Administrative Templates\Windows Components\Internet Explorer\
+              Security Features\Mime Sniffing Safety Feature
+            name: Internet Explorer Processes
+            value: Enabled
+            registry_hive: Computer
+            registry_path: Software\Policies\Microsoft\Internet Explorer\Main\FeatureControl\FEATURE_MIME_SNIFFING
+            registry_key: iexplore.exe
+            registry_action: SZ:1
+        references:
+          cis:
+            id: "7.3"
+            category: L1
+      - cid: C-WS-IE-037
+        operating_systems:
+          - Windows
+          - Windows Server
+        category: Internet Explorer Process Security Features
+        policy: '"Notification bar: Internet Explorer Processes" is set to "Enabled".'
+        fix:
+          - fix_type: group_policy
+            path:
+              Computer Configuration\Administrative Templates\Windows Components\Internet Explorer\
+              Security Features\Notification bar
+            name: Internet Explorer Processes
+            value: Enabled
+            registry_hive: Computer
+            registry_path: Software\Policies\Microsoft\Internet Explorer\Main\FeatureControl\FEATURE_SECURITYBAND
+            registry_key: (Reserved)
+            registry_action: SZ:1
+          - fix_type: group_policy
+            path:
+              Computer Configuration\Administrative Templates\Windows Components\Internet Explorer\
+              Security Features\Notification bar
+            name: Internet Explorer Processes
+            value: Enabled
+            registry_hive: Computer
+            registry_path: Software\Policies\Microsoft\Internet Explorer\Main\FeatureControl\FEATURE_SECURITYBAND
+            registry_key: explorer.exe
+            registry_action: SZ:1
+          - fix_type: group_policy
+            path:
+              Computer Configuration\Administrative Templates\Windows Components\Internet Explorer\
+              Security Features\Notification bar
+            name: Internet Explorer Processes
+            value: Enabled
+            registry_hive: Computer
+            registry_path: Software\Policies\Microsoft\Internet Explorer\Main\FeatureControl\FEATURE_SECURITYBAND
+            registry_key: iexplore.exe
+            registry_action: SZ:1
+        references:
+          cis:
+            id: "7.4"
+            category: L1
+      - cid: C-WS-IE-038
+        operating_systems:
+          - Windows
+          - Windows Server
+        category: Internet Explorer Process Security Features
+        policy: '"MK Protocol Security Restriction: Internet Explorer Processes" is set to "Enabled".'
+        fix:
+          - fix_type: group_policy
+            path:
+              Computer Configuration\Administrative Templates\Windows Components\Internet Explorer\
+              Security Features\MK Protocol Security Restriction
+            name: Internet Explorer Processes
+            value: Enabled
+            registry_hive: Computer
+            registry_path: Software\Policies\Microsoft\Internet Explorer\Main\FeatureControl\FEATURE_DISABLE_MK_PROTOCOL
+            registry_key: (Reserved)
+            registry_action: SZ:1
+          - fix_type: group_policy
+            path:
+              Computer Configuration\Administrative Templates\Windows Components\Internet Explorer\
+              Security Features\MK Protocol Security Restriction
+            name: Internet Explorer Processes
+            value: Enabled
+            registry_hive: Computer
+            registry_path: Software\Policies\Microsoft\Internet Explorer\Main\FeatureControl\FEATURE_DISABLE_MK_PROTOCOL
+            registry_key: explorer.exe
+            registry_action: SZ:1
+          - fix_type: group_policy
+            path:
+              Computer Configuration\Administrative Templates\Windows Components\Internet Explorer\
+              Security Features\MK Protocol Security Restriction
+            name: Internet Explorer Processes
+            value: Enabled
+            registry_hive: Computer
+            registry_path: Software\Policies\Microsoft\Internet Explorer\Main\FeatureControl\FEATURE_DISABLE_MK_PROTOCOL
+            registry_key: iexplore.exe
+            registry_action: SZ:1
+        references:
+          cis:
+            id: "7.5"
+            category: L1
+      - cid: C-WS-IE-039
+        operating_systems:
+          - Windows
+          - Windows Server
+        category: Internet Explorer Process Security Features
+        policy: '"Consistent Mime Handling: Internet Explorer Processes" is set to "Enabled".'
+        fix:
+          - fix_type: group_policy
+            path:
+              Computer Configuration\Administrative Templates\Windows Components\Internet Explorer\
+              Security Features\Consistent Mime Handling
+            name: Internet Explorer Processes
+            value: Enabled
+            registry_hive: Computer
+            registry_path: Software\Policies\Microsoft\Internet Explorer\Main\FeatureControl\FEATURE_MIME_HANDLING
+            registry_key: (Reserved)
+            registry_action: SZ:1
+          - fix_type: group_policy
+            path:
+              Computer Configuration\Administrative Templates\Windows Components\Internet Explorer\
+              Security Features\Consistent Mime Handling
+            name: Internet Explorer Processes
+            value: Enabled
+            registry_hive: Computer
+            registry_path: Software\Policies\Microsoft\Internet Explorer\Main\FeatureControl\FEATURE_MIME_HANDLING
+            registry_key: explorer.exe
+            registry_action: SZ:1
+          - fix_type: group_policy
+            path:
+              Computer Configuration\Administrative Templates\Windows Components\Internet Explorer\
+              Security Features\Consistent Mime Handling
+            name: Internet Explorer Processes
+            value: Enabled
+            registry_hive: Computer
+            registry_path: Software\Policies\Microsoft\Internet Explorer\Main\FeatureControl\FEATURE_MIME_HANDLING
+            registry_key: iexplore.exe
+            registry_action: SZ:1
+        references:
+          cis:
+            id: "7.6"
+            category: L1
+      - cid: C-WS-IE-040
+        operating_systems:
+          - Windows
+          - Windows Server
+        category: Internet Explorer Process Security Features
+        policy: '"Restrict File Download: Internet Explorer Processes" is set to "Enabled".'
+        fix:
+          - fix_type: group_policy
+            path:
+              Computer Configuration\Administrative Templates\Windows Components\Internet Explorer\
+              Security Features\Restrict File Download
+            name: Internet Explorer Processes
+            value: Enabled
+            registry_hive: Computer
+            registry_path: Software\Policies\Microsoft\Internet Explorer\Main\FeatureControl\FEATURE_RESTRICT_FILEDOWNLOAD
+            registry_key: (Reserved)
+            registry_action: SZ:1
+          - fix_type: group_policy
+            path:
+              Computer Configuration\Administrative Templates\Windows Components\Internet Explorer\
+              Security Features\Restrict File Download
+            name: Internet Explorer Processes
+            value: Enabled
+            registry_hive: Computer
+            registry_path: Software\Policies\Microsoft\Internet Explorer\Main\FeatureControl\FEATURE_RESTRICT_FILEDOWNLOAD
+            registry_key: explorer.exe
+            registry_action: SZ:1
+          - fix_type: group_policy
+            path:
+              Computer Configuration\Administrative Templates\Windows Components\Internet Explorer\
+              Security Features\Restrict File Download
+            name: Internet Explorer Processes
+            value: Enabled
+            registry_hive: Computer
+            registry_path: Software\Policies\Microsoft\Internet Explorer\Main\FeatureControl\FEATURE_RESTRICT_FILEDOWNLOAD
+            registry_key: iexplore.exe
+            registry_action: SZ:1
+        references:
+          cis:
+            id: "7.7"
+            category: L1
+      - cid: C-WS-IE-041
+        operating_systems:
+          - Windows
+          - Windows Server
+        category: Internet Explorer Process Security Features
+        policy: '"Protection From Zone Elevation: Internet Explorer Processes" is set to "Enabled".'
+        fix:
+          - fix_type: group_policy
+            path:
+              Computer Configuration\Administrative Templates\Windows Components\Internet Explorer\
+              Security Features\Protection From Zone Elevation
+            name: Internet Explorer Processes
+            value: Enabled
+            registry_hive: Computer
+            registry_path: Software\Policies\Microsoft\Internet Explorer\Main\FeatureControl\FEATURE_ZONE_ELEVATION
+            registry_key: (Reserved)
+            registry_action: SZ:1
+          - fix_type: group_policy
+            path:
+              Computer Configuration\Administrative Templates\Windows Components\Internet Explorer\
+              Security Features\Protection From Zone Elevation
+            name: Internet Explorer Processes
+            value: Enabled
+            registry_hive: Computer
+            registry_path: Software\Policies\Microsoft\Internet Explorer\Main\FeatureControl\FEATURE_ZONE_ELEVATION
+            registry_key: explorer.exe
+            registry_action: SZ:1
+          - fix_type: group_policy
+            path:
+              Computer Configuration\Administrative Templates\Windows Components\Internet Explorer\
+              Security Features\Protection From Zone Elevation
+            name: Internet Explorer Processes
+            value: Enabled
+            registry_hive: Computer
+            registry_path: Software\Policies\Microsoft\Internet Explorer\Main\FeatureControl\FEATURE_ZONE_ELEVATION
+            registry_key: iexplore.exe
+            registry_action: SZ:1
+        references:
+          cis:
+            id: "7.8"
+            category: L1
+  - category: "Security Zones: Internet Zone"
+    vulnerabilities:
+      - cid: C-WS-IE-042
+        operating_systems:
+          - Windows
+          - Windows Server
+        category: "Security Zones: Internet Zone"
+        policy: '"Java Permissions" is set to "Enabled: Disable Java".'
+        fix:
+          - fix_type: group_policy
+            path:
+              Computer Configuration\Administrative Templates\Windows Components\Internet Explorer\
+              Internet Control Panel\Security Page\Internet Zone
+            name: Java Permissions
+            value: "Enabled: Disable Java"
+            registry_hive: Computer
+            registry_path: Software\Policies\Microsoft\Windows\CurrentVersion\Internet Settings\Zones\3
+            registry_key: 1C00
+            registry_action: DWORD:0
+        references:
+          cis:
+            id: "8.1.1"
+            category: L1
+      - cid: C-WS-IE-043
+        operating_systems:
+          - Windows
+          - Windows Server
+        category: "Security Zones: Internet Zone"
+        policy: '"Allow cut, copy or paste operations from the clipboard via script: Allow paste operations via script" is set to "Enabled: Disable".'
+        fix:
+          - fix_type: group_policy
+            path:
+              Computer Configuration\Administrative Templates\Windows Components\Internet Explorer\
+              Internet Control Panel\Security Page\Internet Zone
+            name: "Allow cut, copy or paste operations from the clipboard via script: Allow paste operations via script"
+            value: "Enabled: Disable"
+            registry_hive: Computer
+            registry_path: Software\Policies\Microsoft\Windows\CurrentVersion\Internet Settings\Zones\3
+            registry_key: "1407"
+            registry_action: DWORD:3
+        references:
+          cis:
+            id: "8.1.2"
+            category: L1
+      - cid: C-WS-IE-044
+        operating_systems:
+          - Windows
+          - Windows Server
+        category: "Security Zones: Internet Zone"
+        policy: '"Turn on Protected Mode" is set to "Enabled: Enable".'
+        fix:
+          - fix_type: group_policy
+            path:
+              Computer Configuration\Administrative Templates\Windows Components\Internet Explorer\
+              Internet Control Panel\Security Page\Internet Zone
+            name: Turn on Protected Mode
+            value: "Enabled: Disable"
+            registry_hive: Computer
+            registry_path: Software\Policies\Microsoft\Windows\CurrentVersion\Internet Settings\Zones\3
+            registry_key: "2500"
+            registry_action: DWORD:3
+        references:
+          cis:
+            id: "8.1.3"
+            category: L1
+      - cid: C-WS-IE-045
+        operating_systems:
+          - Windows
+          - Windows Server
+        category: "Security Zones: Internet Zone"
+        policy: '"Turn on Cross-Site Scripting Filter" is set to "Enabled: Enable".'
+        fix:
+          - fix_type: group_policy
+            path:
+              Computer Configuration\Administrative Templates\Windows Components\Internet Explorer\
+              Internet Control Panel\Security Page\Internet Zone
+            name: "Turn on Cross-Site Scripting Filter"
+            value: "Enabled: Disable"
+            registry_hive: Computer
+            registry_path: Software\Policies\Microsoft\Windows\CurrentVersion\Internet Settings\Zones\3
+            registry_key: "1409"
+            registry_action: DWORD:3
+        references:
+          cis:
+            id: "8.1.4"
+            category: L1
+      - cid: C-WS-IE-046
+        operating_systems:
+          - Windows
+          - Windows Server
+        category: "Security Zones: Internet Zone"
+        policy: '"Run .NET Framework-reliant components signed with Authenticode" is set to "Enabled: Disable".'
+        fix:
+          - fix_type: group_policy
+            path:
+              Computer Configuration\Administrative Templates\Windows Components\Internet Explorer\
+              Internet Control Panel\Security Page\Internet Zone
+            name: Run .NET Framework-reliant components signed with Authenticode
+            value: "Enabled: Disable"
+            registry_hive: Computer
+            registry_path: Software\Policies\Microsoft\Windows\CurrentVersion\Internet Settings\Zones\3
+            registry_key: "2001"
+            registry_action: DWORD:3
+        references:
+          cis:
+            id: "8.1.5"
+            category: L1
+      - cid: C-WS-IE-047
+        operating_systems:
+          - Windows
+          - Windows Server
+        category: "Security Zones: Internet Zone"
+        policy: '"Use Pop-up Blocker" is set to "Enabled: Enable".'
+        fix:
+          - fix_type: group_policy
+            path:
+              Computer Configuration\Administrative Templates\Windows Components\Internet Explorer\
+              Internet Control Panel\Security Page\Internet Zone
+            name: Use Pop-up Blocker
+            value: "Enabled: Enable"
+            registry_hive: Computer
+            registry_path: Software\Policies\Microsoft\Windows\CurrentVersion\Internet Settings\Zones\3
+            registry_key: "1809"
+            registry_action: DWORD:0
+        references:
+          cis:
+            id: "8.1.6"
+            category: L1
+      - cid: C-WS-IE-048 #check: found "Allow Scriptlets" instead
+        operating_systems:
+          - Windows
+          - Windows Server
+        category: "Security Zones: Internet Zone"
+        policy: '"Scriptlets" is set to "Enabled: Disable".'
+        fix:
+          - fix_type: group_policy
+            path:
+              Computer Configuration\Administrative Templates\Windows Components\Internet Explorer\
+              Internet Control Panel\Security Page\Internet Zone
+            name: Scriptlets
+            value: "Enabled: Disable"
+            registry_hive: Computer
+            registry_path: Software\Policies\Microsoft\Windows\CurrentVersion\Internet Settings\Zones\3
+            registry_key: "1209"
+            registry_action: DWORD:3
+        references:
+          cis:
+            id: "8.1.7"
+            category: L1
+      - cid: C-WS-IE-049
+        operating_systems:
+          - Windows
+          - Windows Server
+        category: "Security Zones: Internet Zone"
+        policy: '"Allow only approved domains to use ActiveX controls without prompt" is set to "Enabled: Enable".'
+        fix:
+          - fix_type: group_policy
+            path:
+              Computer Configuration\Administrative Templates\Windows Components\Internet Explorer\
+              Internet Control Panel\Security Page\Internet Zone
+            name: Allow only approved domains to use ActiveX controls without prompt
+            value: "Enabled: Enable"
+            registry_hive: Computer
+            registry_path: Software\Policies\Microsoft\Windows\CurrentVersion\Internet Settings\Zones\3
+            registry_key: 120b
+            registry_action: DWORD:3
+        references:
+          cis:
+            id: "8.1.8"
+            category: L1
+      - cid: C-WS-IE-050
+        operating_systems:
+          - Windows
+          - Windows Server
+        category: "Security Zones: Internet Zone"
+        policy: '"Allow drag and drop or copy and paste files" is set to "Enabled: Disable".'
+        fix:
+          - fix_type: group_policy
+            path:
+              Computer Configuration\Administrative Templates\Windows Components\Internet Explorer\
+              Internet Control Panel\Security Page\Internet Zone
+            name: Allow drag and drop or copy and paste files
+            value: "Enabled: Disable"
+            registry_hive: Computer
+            registry_path: Software\Policies\Microsoft\Windows\CurrentVersion\Internet Settings\Zones\3
+            registry_key: "1802"
+            registry_action: DWORD:3
+        references:
+          cis:
+            id: "8.1.9"
+            category: L1
+      - cid: C-WS-IE-051
+        operating_systems:
+          - Windows
+          - Windows Server
+        category: "Security Zones: Internet Zone"
+        policy: '"Run .NET Framework-reliant components not signed with Authenticode" is set to "Enabled: Disable".'
+        fix:
+          - fix_type: group_policy
+            path:
+              Computer Configuration\Administrative Templates\Windows Components\Internet Explorer\
+              Internet Control Panel\Security Page\Internet Zone
+            name: Run .NET Framework-reliant components not signed with Authenticode
+            value: "Enabled: Disable"
+            registry_hive: Computer
+            registry_path: Software\Policies\Microsoft\Windows\CurrentVersion\Internet Settings\Zones\3
+            registry_key: "2004"
+            registry_action: DWORD:3
+        references:
+          cis:
+            id: "8.1.10"
+            category: L1
+      - cid: C-WS-IE-052
+        operating_systems:
+          - Windows
+          - Windows Server
+        category: "Security Zones: Internet Zone"
+        policy: '"Allow scripting of Internet Explorer WebBrowser controls" is set to "Enabled: Disable".'
+        fix:
+          - fix_type: group_policy
+            path:
+              Computer Configuration\Administrative Templates\Windows Components\Internet Explorer\
+              Internet Control Panel\Security Page\Internet Zone
+            name: Allow scripting of Internet Explorer WebBrowser controls
+            value: "Enabled: Disable"
+            registry_hive: Computer
+            registry_path: Software\Policies\Microsoft\Windows\CurrentVersion\Internet Settings\Zones\3
+            registry_key: "1206"
+            registry_action: DWORD:3
+        references:
+          cis:
+            id: "8.1.11"
+            category: L1
+      - cid: C-WS-IE-053
+        operating_systems:
+          - Windows
+          - Windows Server
+        category: "Security Zones: Internet Zone"
+        policy: '"Download unsigned ActiveX controls" is set to "Enabled: Disable".'
+        fix:
+          - fix_type: group_policy
+            path:
+              Computer Configuration\Administrative Templates\Windows Components\Internet Explorer\
+              Internet Control Panel\Security Page\Internet Zone
+            name: Download unsigned ActiveX controls
+            value: "Enabled: Disable"
+            registry_hive: Computer
+            registry_path: Software\Policies\Microsoft\Windows\CurrentVersion\Internet Settings\Zones\3
+            registry_key: "1004"
+            registry_action: DWORD:3
+        references:
+          cis:
+            id: "8.1.12"
+            category: L1
+      - cid: C-WS-IE-054
+        operating_systems:
+          - Windows
+          - Windows Server
+        category: "Security Zones: Internet Zone"
+        policy: '"Download signed ActiveX controls" is set to "Enabled: Disable".'
+        fix:
+          - fix_type: group_policy
+            path:
+              Computer Configuration\Administrative Templates\Windows Components\Internet Explorer\
+              Internet Control Panel\Security Page\Internet Zone
+            name: Download signed ActiveX controls
+            value: "Enabled: Disable"
+            registry_hive: Computer
+            registry_path: Software\Policies\Microsoft\Windows\CurrentVersion\Internet Settings\Zones\3
+            registry_key: "1001"
+            registry_action: DWORD:3
+        references:
+          cis:
+            id: "8.1.13"
+            category: L1
+      - cid: C-WS-IE-055
+        operating_systems:
+          - Windows
+          - Windows Server
+        category: "Security Zones: Internet Zone"
+        policy: '"Allow font downloads" is set to "Enabled: Disable".'
+        fix:
+          - fix_type: group_policy
+            path:
+              Computer Configuration\Administrative Templates\Windows Components\Internet Explorer\
+              Internet Control Panel\Security Page\Internet Zone
+            name: Allow font downloads
+            value: "Enabled: Disable"
+            registry_hive: Computer
+            registry_path: Software\Policies\Microsoft\Windows\CurrentVersion\Internet Settings\Zones\3
+            registry_key: "1604"
+            registry_action: DWORD:3
+        references:
+          cis:
+            id: "8.1.14"
+            category: L1
+      - cid: C-WS-IE-056
+        operating_systems:
+          - Windows
+          - Windows Server
+        category: "Security Zones: Internet Zone"
+        policy: '"Show security warning for potentially unsafe files" is set to "Enabled: Disable".'
+        fix:
+          - fix_type: group_policy
+            path:
+              Computer Configuration\Administrative Templates\Windows Components\Internet Explorer\
+              Internet Control Panel\Security Page\Internet Zone
+            name: Show security warning for potentially unsafe files
+            value: "Enabled: Disable"
+            registry_hive: Computer
+            registry_path: Software\Policies\Microsoft\Windows\CurrentVersion\Internet Settings\Zones\3
+            registry_key: "1806"
+            registry_action: DWORD:3
+        references:
+          cis:
+            id: "8.1.15"
+            category: L1
+      - cid: C-WS-IE-057
+        operating_systems:
+          - Windows
+          - Windows Server
+        category: "Security Zones: Internet Zone"
+        policy: '"Automatic prompting for file downloads" is set to "Enabled: Disable".'
+        fix:
+          - fix_type: group_policy
+            path:
+              Computer Configuration\Administrative Templates\Windows Components\Internet Explorer\
+              Internet Control Panel\Security Page\Internet Zone
+            name: Automatic prompting for file downloads
+            value: "Enabled: Disable"
+            registry_hive: Computer
+            registry_path: Software\Policies\Microsoft\Windows\CurrentVersion\Internet Settings\Zones\3
+            registry_key: "2200"
+            registry_action: DWORD:3
+        references:
+          cis:
+            id: "8.1.16"
+            category: L1
+      - cid: C-WS-IE-058
+        operating_systems:
+          - Windows
+          - Windows Server
+        category: "Security Zones: Internet Zone"
+        policy: '"Allow installation of desktop items" is set to "Enabled: Disable".'
+        fix:
+          - fix_type: group_policy
+            path:
+              Computer Configuration\Administrative Templates\Windows Components\Internet Explorer\
+              Internet Control Panel\Security Page\Internet Zone
+            name: Allow installation of desktop items
+            value: "Enabled: Disable"
+            registry_hive: Computer
+            registry_path: Software\Policies\Microsoft\Windows\CurrentVersion\Internet Settings\Zones\3
+            registry_key: "1800"
+            registry_action: DWORD:3
+        references:
+          cis:
+            id: "8.1.17"
+            category: L1
+      - cid: C-WS-IE-059
+        operating_systems:
+          - Windows
+          - Windows Server
+        category: "Security Zones: Internet Zone"
+        policy: '"Allow loading of XAML Files" is set to "Enabled: Disable".'
+        fix:
+          - fix_type: group_policy
+            path:
+              Computer Configuration\Administrative Templates\Windows Components\Internet Explorer\
+              Internet Control Panel\Security Page\Internet Zone
+            name: Allow loading of XAML Files
+            value: "Enabled: Disable"
+            registry_hive: Computer
+            registry_path: Software\Policies\Microsoft\Windows\CurrentVersion\Internet Settings\Zones\3
+            registry_key: "2402"
+            registry_action: DWORD:3
+        references:
+          cis:
+            id: "8.1.18"
+            category: L1
+      - cid: C-WS-IE-060
+        operating_systems:
+          - Windows
+          - Windows Server
+        category: "Security Zones: Internet Zone"
+        policy: '"Initialize and script ActiveX controls not marked as safe" is set to "Enabled: Disable".'
+        fix:
+          - fix_type: group_policy
+            path:
+              Computer Configuration\Administrative Templates\Windows Components\Internet Explorer\
+              Internet Control Panel\Security Page\Internet Zone
+            name: Initialize and script ActiveX controls not marked as safe
+            value: "Enabled: Disable"
+            registry_hive: Computer
+            registry_path: Software\Policies\Microsoft\Windows\CurrentVersion\Internet Settings\Zones\3
+            registry_key: "1201"
+            registry_action: DWORD:3
+        references:
+          cis:
+            id: "8.1.19"
+            category: L1
+      - cid: C-WS-IE-061
+        operating_systems:
+          - Windows
+          - Windows Server
+        category: "Security Zones: Internet Zone"
+        policy: '"Enable MIME Sniffing" is set to "Enabled: Enable".'
+        fix:
+          - fix_type: group_policy
+            path:
+              Computer Configuration\Administrative Templates\Windows Components\Internet Explorer\
+              Internet Control Panel\Security Page\Internet Zone
+            name: Enable MIME Sniffing
+            value: "Enabled: Enable"
+            registry_hive: Computer
+            registry_path: Software\Policies\Microsoft\Windows\CurrentVersion\Internet Settings\Zones\3
+            registry_key: "2100"
+            registry_action: DWORD:0
+        references:
+          cis:
+            id: "8.1.20"
+            category: L1
+      - cid: C-WS-IE-062
+        operating_systems:
+          - Windows
+          - Windows Server
+        category: "Security Zones: Internet Zone"
+        policy: '"Login Options: Login Options" is set to "Enabled: Prompt for user name and password".'
+        fix:
+          - fix_type: group_policy
+            path:
+              Computer Configuration\Administrative Templates\Windows Components\Internet Explorer\
+              Internet Control Panel\Security Page\Internet Zone
+            name: "Login Options: Login Options"
+            value: "Enabled: Prompt for user name and password"
+            registry_hive: Computer
+            registry_path: Software\Policies\Microsoft\Windows\CurrentVersion\Internet Settings\Zones\3
+            registry_key: 1A00
+            registry_action: DWORD:65536
+        references:
+          cis:
+            id: "8.1.21"
+            category: L1
+      - cid: C-WS-IE-063
+        operating_systems:
+          - Windows
+          - Windows Server
+        category: "Security Zones: Internet Zone"
+        policy: '"Access data sources across domains" is set to "Enabled: Disable".'
+        fix:
+          - fix_type: group_policy
+            path:
+              Computer Configuration\Administrative Templates\Windows Components\Internet Explorer\
+              Internet Control Panel\Security Page\Internet Zone
+            name: Access data sources across domains
+            value: "Enabled: Disable"
+            registry_hive: Computer
+            registry_path: Software\Policies\Microsoft\Windows\CurrentVersion\Internet Settings\Zones\3
+            registry_key: "1406"
+            registry_action: DWORD:3
+        references:
+          cis:
+            id: "8.1.22"
+            category: L1
+      - cid: C-WS-IE-064
+        operating_systems:
+          - Windows
+          - Windows Server
+        category: "Security Zones: Internet Zone"
+        policy: '"Allow updates to status bar via script" is set to "Enabled: Enable".'
+        fix:
+          - fix_type: group_policy
+            path:
+              Computer Configuration\Administrative Templates\Windows Components\Internet Explorer\
+              Internet Control Panel\Security Page\Internet Zone
+            name: Allow updates to status bar via script
+            value: "Enabled: Enable"
+            registry_hive: Computer
+            registry_path: Software\Policies\Microsoft\Windows\CurrentVersion\Internet Settings\Zones\3
+            registry_key: "2103"
+            registry_action: DWORD:0
+        references:
+          cis:
+            id: "8.1.23"
+            category: L1
+      - cid: C-WS-IE-065
+        operating_systems:
+          - Windows
+          - Windows Server
+        category: "Security Zones: Internet Zone"
+        policy: '"Include local path when user is uploading files to a server" is set to "Enabled: Disable".'
+        fix:
+          - fix_type: group_policy
+            path:
+              Computer Configuration\Administrative Templates\Windows Components\Internet Explorer\
+              Internet Control Panel\Security Page\Internet Zone
+            name: Include local path when user is uploading files to a server
+            value: "Enabled: Disable"
+            registry_hive: Computer
+            registry_path: Software\Policies\Microsoft\Windows\CurrentVersion\Internet Settings\Zones\3
+            registry_key: 160A
+            registry_action: DWORD:3
+        references:
+          cis:
+            id: "8.1.24"
+            category: L1
+      - cid: C-WS-IE-066
+        operating_systems:
+          - Windows
+          - Windows Server
+        category: "Security Zones: Internet Zone"
+        policy: '"Userdata persistence" is set to "Enabled: Disable".'
+        fix:
+          - fix_type: group_policy
+            path:
+              Computer Configuration\Administrative Templates\Windows Components\Internet Explorer\
+              Internet Control Panel\Security Page\Internet Zone
+            name: Userdata persistence
+            value: "Enabled: Disable"
+            registry_hive: Computer
+            registry_path: Software\Policies\Microsoft\Windows\CurrentVersion\Internet Settings\Zones\3
+            registry_key: "1606"
+            registry_action: DWORD:3
+        references:
+          cis:
+            id: "8.1.25"
+            category: L1
+      - cid: C-WS-IE-067
+        operating_systems:
+          - Windows
+          - Windows Server
+        category: "Security Zones: Internet Zone"
+        policy: '"Enable dragging of content from different domains within a window" is set to "Enabled: Disable".'
+        fix:
+          - fix_type: group_policy
+            path:
+              Computer Configuration\Administrative Templates\Windows Components\Internet Explorer\
+              Internet Control Panel\Security Page\Internet Zone
+            name: Enable dragging of content from different domains within a window
+            value: "Enabled: Disable"
+            registry_hive: Computer
+            registry_path: Software\Policies\Microsoft\Windows\CurrentVersion\Internet Settings\Zones\3
+            registry_key: "2708"
+            registry_action: DWORD:3
+        references:
+          cis:
+            id: "8.1.26"
+            category: L1
+      - cid: C-WS-IE-068
+        operating_systems:
+          - Windows
+          - Windows Server
+        category: "Security Zones: Internet Zone"
+        policy: '"Navigate windows and frames across different domains" is set to "Enabled: Disable".'
+        fix:
+          - fix_type: group_policy
+            path:
+              Computer Configuration\Administrative Templates\Windows Components\Internet Explorer\
+              Internet Control Panel\Security Page\Internet Zone
+            name: Navigate windows and frames across different domains
+            value: "Enabled: Disable"
+            registry_hive: Computer
+            registry_path: Software\Policies\Microsoft\Windows\CurrentVersion\Internet Settings\Zones\3
+            registry_key: "1607"
+            registry_action: DWORD:3
+        references:
+          cis:
+            id: "8.1.27"
+            category: L1
+      - cid: C-WS-IE-069
+        operating_systems:
+          - Windows
+          - Windows Server
+        category: "Security Zones: Internet Zone"
+        policy: '"Enable dragging of content from different domains across windows" is set to "Enabled: Disable".'
+        fix:
+          - fix_type: group_policy
+            path:
+              Computer Configuration\Administrative Templates\Windows Components\Internet Explorer\
+              Internet Control Panel\Security Page\Internet Zone
+            name: Enable dragging of content from different domains across windows
+            value: "Enabled: Disable"
+            registry_hive: Computer
+            registry_path: Software\Policies\Microsoft\Windows\CurrentVersion\Internet Settings\Zones\3
+            registry_key: "2709"
+            registry_action: DWORD:3
+        references:
+          cis:
+            id: "8.1.28"
+            category: L1
+      - cid: C-WS-IE-070
+        operating_systems:
+          - Windows
+          - Windows Server
+        category: "Security Zones: Internet Zone"
+        policy: '"Allow script-initiated windows without size or position constraints" is set to "Enabled: Disable".'
+        fix:
+          - fix_type: group_policy
+            path:
+              Computer Configuration\Administrative Templates\Windows Components\Internet Explorer\
+              Internet Control Panel\Security Page\Internet Zone
+            name: Allow script-initiated windows without size or position constraints
+            value: "Enabled: Disable"
+            registry_hive: Computer
+            registry_path: Software\Policies\Microsoft\Windows\CurrentVersion\Internet Settings\Zones\3
+            registry_key: "2102"
+            registry_action: DWORD:3
+        references:
+          cis:
+            id: "8.1.29"
+            category: L1
+      - cid: C-WS-IE-071
+        operating_systems:
+          - Windows
+          - Windows Server
+        category: "Security Zones: Internet Zone"
+        policy: '"Launching applications and files in an IFRAME" is set to "Enabled: Disable".'
+        fix:
+          - fix_type: group_policy
+            path:
+              Computer Configuration\Administrative Templates\Windows Components\Internet Explorer\
+              Internet Control Panel\Security Page\Internet Zone
+            name: Launching applications and files in an IFRAME
+            value: "Enabled: Disable"
+            registry_hive: Computer
+            registry_path: Software\Policies\Microsoft\Windows\CurrentVersion\Internet Settings\Zones\3
+            registry_key: "1804"
+            registry_action: DWORD:3
+        references:
+          cis:
+            id: "8.1.30"
+            category: L1
+      - cid: C-WS-IE-072
+        operating_systems:
+          - Windows
+          - Windows Server
+        category: "Security Zones: Internet Zone"
+        policy: '"Software channel permissions" is set to "Enabled: High safety".'
+        fix:
+          - fix_type: group_policy
+            path:
+              Computer Configuration\Administrative Templates\Windows Components\Internet Explorer\
+              Internet Control Panel\Security Page\Internet Zone
+            name: Software channel permissions
+            value: "Enabled: High safety"
+            registry_hive: Computer
+            registry_path: Software\Policies\Microsoft\Windows\CurrentVersion\Internet Settings\Zones\3
+            registry_key: 1E05
+            registry_action: DWORD:65536
+        references:
+          cis:
+            id: "8.1.31"
+            category: L1
+      - cid: C-WS-IE-073
+        operating_systems:
+          - Windows
+          - Windows Server
+        category: "Security Zones: Internet Zone"
+        policy: '"Turn off first-run prompt: First-Run Opt-In" is set to "Enabled: Disable".'
+        fix:
+          - fix_type: group_policy
+            path:
+              Computer Configuration\Administrative Templates\Windows Components\Internet Explorer\
+              Internet Control Panel\Security Page\Internet Zone
+            name: "Turn off first-run prompt: First-Run Opt-In"
+            value: "Enabled: Disable"
+            registry_hive: Computer
+            registry_path: Software\Policies\Microsoft\Windows\CurrentVersion\Internet Settings\Zones\3
+            registry_key: "1208"
+            registry_action: DWORD:3
+        references:
+          cis:
+            id: "8.1.32"
+            category: L1
+      - cid: C-WS-IE-074
+        operating_systems:
+          - Windows
+          - Windows Server
+        category: "Security Zones: Internet Zone"
+        policy: '"Web sites in less privileged Web content zones can navigate into this zone" is set to "Enabled: Disable".'
+        fix:
+          - fix_type: group_policy
+            path:
+              Computer Configuration\Administrative Templates\Windows Components\Internet Explorer\
+              Internet Control Panel\Security Page\Internet Zone
+            name: "Web sites in less privileged Web content zones can navigate into this zone"
+            value: "Enabled: Disable"
+            registry_hive: Computer
+            registry_path: Software\Policies\Microsoft\Windows\CurrentVersion\Internet Settings\Zones\3
+            registry_key: "2101"
+            registry_action: DWORD:3
+        references:
+          cis:
+            id: "8.1.33"
+            category: L1
+      - cid: C-WS-IE-075
+        operating_systems:
+          - Windows
+          - Windows Server
+        category: "Security Zones: Internet Zone"
+        policy: '"Don''t run antimalware programs against ActiveX controls" is set to "Enabled: Disable".'
+        fix:
+          - fix_type: group_policy
+            path:
+              Computer Configuration\Administrative Templates\Windows Components\Internet Explorer\
+              Internet Control Panel\Security Page\Internet Zone
+            name: "Don''t run antimalware programs against ActiveX controls"
+            value: "Enabled: Disable"
+            registry_hive: Computer
+            registry_path: Software\Policies\Microsoft\Windows\CurrentVersion\Internet Settings\Zones\3
+            registry_key: 270C
+            registry_action: DWORD:0
+        references:
+          cis:
+            id: "8.1.34"
+            category: L1
+  - category: "Security Zones: Intranet Zone"
+    vulnerabilities:
+      - cid: C-WS-IE-076
+        operating_systems:
+          - Windows
+          - Windows Server
+        category: "Security Zones: Intranet Zone"
+        policy: '"Java Permissions" is set to "Enabled: Disable Java".'
+        fix:
+          - fix_type: group_policy
+            path:
+              Computer Configuration\Administrative Templates\Windows Components\Internet Explorer\
+              Internet Control Panel\Security Page\Intranet Zone
+            name: Java Permissions
+            value: "Enabled: Disable Java"
+            registry_hive: Computer
+            registry_path: Software\Policies\Microsoft\Windows\CurrentVersion\Internet Settings\Zones\1
+            registry_key: 1C00
+            registry_action: DWORD:0
+        references:
+          cis:
+            id: "8.2.1"
+            category: L1
+            value: "Enabled: High Safety"
+      - cid: C-WS-IE-077
+        operating_systems:
+          - Windows
+          - Windows Server
+        category: "Security Zones: Intranet Zone"
+        policy: '"Initialize and script ActiveX controls not marked as safe" is set to "Enabled: Disable".'
+        fix:
+          - fix_type: group_policy
+            path:
+              Computer Configuration\Administrative Templates\Windows Components\Internet Explorer\
+              Internet Control Panel\Security Page\Intranet Zone
+            name: Initialize and script ActiveX controls not marked as safe
+            value: "Enabled: Disable"
+            registry_hive: Computer
+            registry_path: Software\Policies\Microsoft\Windows\CurrentVersion\Internet Settings\Zones\1
+            registry_key: "1201"
+            registry_action: DWORD:3
+        references:
+          cis:
+            id: "8.2.2"
+            category: L1
+      - cid: C-WS-IE-078
+        operating_systems:
+          - Windows
+          - Windows Server
+        category: "Security Zones: Intranet Zone"
+        policy: '"Intranet Sites: Include all network paths (UNCs)" is set to "Disabled".'
+        fix:
+          - fix_type: group_policy
+            path:
+              Computer Configuration\Administrative Templates\Windows Components\Internet Explorer\
+              Internet Control Panel\Security Page
+            name: "Intranet Sites: Include all network paths (UNCs)"
+            value: Disabled
+            registry_hive: Computer
+            registry_path: Software\Policies\Microsoft\Windows\CurrentVersion\Internet Settings\ZoneMap
+            registry_key: UNCAsIntranet
+            registry_action: DWORD:0
+        references:
+          cis:
+            id: "8.2.3"
+            category: L1
+      - cid: C-WS-IE-079
+        operating_systems:
+          - Windows
+          - Windows Server
+        category: "Security Zones: Intranet Zone"
+        policy: '"Don''t run antimalware programs against ActiveX controls" is set to "Disabled".'
+        fix:
+          - fix_type: group_policy
+            path:
+              Computer Configuration\Administrative Templates\Windows Components\Internet Explorer\
+              Internet Control Panel\Security Page\Intranet Zone
+            name: "Don't run antimalware programs against ActiveX controls"
+            value: "Enabled: Disabled"
+            registry_hive: Computer
+            registry_path: Software\Policies\Microsoft\Windows\CurrentVersion\Internet Settings\Zones\1
+            registry_key: 270C
+            registry_action: DWORD:0
+        references:
+          cis:
+            id: "8.2.4"
+            category: L1
+  - category: "Security Zones: Restricted Sites Zone"
+    vulnerabilities:
+      - cid: C-WS-IE-080
+        operating_systems:
+          - Windows
+          - Windows Server
+        category: "Security Zones: Restricted Sites Zone"
+        policy: '"Java Permissions" is set to "Enabled: Disable Java".'
+        fix:
+          - fix_type: group_policy
+            path:
+              Computer Configuration\Administrative Templates\Windows Components\Internet Explorer\
+              Internet Control Panel\Security Page\Restricted Sites Zone
+            name: Java Permissions
+            value: "Enabled: Disable Java"
+            registry_hive: Computer
+            registry_path: Software\Policies\Microsoft\Windows\CurrentVersion\Internet Settings\Zones\4
+            registry_key: 1C00
+            registry_action: DWORD:0
+        references:
+          cis:
+            id: "8.3.1"
+            category: L1
+      - cid: C-WS-IE-081
+        operating_systems:
+          - Windows
+          - Windows Server
+        category: "Security Zones: Restricted Sites Zone"
+        policy: '"Allow cut, copy or paste operations from the clipboard via script: Allow paste operations via script" is set to "Enabled: Disable".'
+        fix:
+          - fix_type: group_policy
+            path:
+              Computer Configuration\Administrative Templates\Windows Components\Internet Explorer\
+              Internet Control Panel\Security Page\Restricted Sites Zone
+            name: "Allow cut, copy or paste operations from the clipboard via script: Allow paste operations via script"
+            value: "Enabled: Disable"
+            registry_hive: Computer
+            registry_path: Software\Policies\Microsoft\Windows\CurrentVersion\Internet Settings\Zones\4
+            registry_key: "1407"
+            registry_action: DWORD:3
+        references:
+          cis:
+            id: "8.3.9"
+            category: L1
+      - cid: C-WS-IE-082
+        operating_systems:
+          - Windows
+          - Windows Server
+        category: "Security Zones: Restricted Sites Zone"
+        policy: '"Turn on Protected Mode" is set to "Enabled: Enable".'
+        fix:
+          - fix_type: group_policy
+            path:
+              Computer Configuration\Administrative Templates\Windows Components\Internet Explorer\
+              Internet Control Panel\Security Page\Restricted Sites Zone
+            name: Turn on Protected Mode
+            value: "Enabled: Disable"
+            registry_hive: Computer
+            registry_path: Software\Policies\Microsoft\Windows\CurrentVersion\Internet Settings\Zones\4
+            registry_key: "2500"
+            registry_action: DWORD:3
+        references:
+          cis:
+            id: "8.3.10"
+            category: L1
+      - cid: C-WS-IE-083
+        operating_systems:
+          - Windows
+          - Windows Server
+        category: "Security Zones: Restricted Sites Zone"
+        policy: '"Turn on Cross-Site Scripting Filter" is set to "Enabled: Enable".'
+        fix:
+          - fix_type: group_policy
+            path:
+              Computer Configuration\Administrative Templates\Windows Components\Internet Explorer\
+              Internet Control Panel\Security Page\Restricted Sites Zone
+            name: "Turn on Cross-Site Scripting Filter"
+            value: "Enabled: Disable"
+            registry_hive: Computer
+            registry_path: Software\Policies\Microsoft\Windows\CurrentVersion\Internet Settings\Zones\4
+            registry_key: "1409"
+            registry_action: DWORD:3
+        references:
+          cis:
+            id: "8.3.6"
+            category: L1
+      - cid: C-WS-IE-084
+        operating_systems:
+          - Windows
+          - Windows Server
+        category: "Security Zones: Restricted Sites Zone"
+        policy: '"Run .NET Framework-reliant components signed with Authenticode" is set to "Enabled: Disable".'
+        fix:
+          - fix_type: group_policy
+            path:
+              Computer Configuration\Administrative Templates\Windows Components\Internet Explorer\
+              Internet Control Panel\Security Page\Restricted Sites Zone
+            name: Run .NET Framework-reliant components signed with Authenticode
+            value: "Enabled: Disable"
+            registry_hive: Computer
+            registry_path: Software\Policies\Microsoft\Windows\CurrentVersion\Internet Settings\Zones\4
+            registry_key: "2001"
+            registry_action: DWORD:3
+        references:
+          cis:
+            id: "8.3.8"
+            category: L1
+      - cid: C-WS-IE-085
+        operating_systems:
+          - Windows
+          - Windows Server
+        category: "Security Zones: Restricted Sites Zone"
+        policy: '"Use Pop-up Blocker" is set to "Enabled: Enable".'
+        fix:
+          - fix_type: group_policy
+            path:
+              Computer Configuration\Administrative Templates\Windows Components\Internet Explorer\
+              Internet Control Panel\Security Page\Restricted Sites Zone
+            name: Use Pop-up Blocker
+            value: "Enabled: Enable"
+            registry_hive: Computer
+            registry_path: Software\Policies\Microsoft\Windows\CurrentVersion\Internet Settings\Zones\4
+            registry_key: "1809"
+            registry_action: DWORD:0
+        references:
+          cis:
+            id: "8.3.20"
+            category: L1
+      - cid: C-WS-IE-086 #check: found "Allow Scriptlets" instead
+        operating_systems:
+          - Windows
+          - Windows Server
+        category: "Security Zones: Restricted Sites Zone"
+        policy: '"Allow Scriptlets" is set to "Enabled: Disable".'
+        fix:
+          - fix_type: group_policy
+            path:
+              Computer Configuration\Administrative Templates\Windows Components\Internet Explorer\
+              Internet Control Panel\Security Page\Restricted Sites Zone
+            name: Allow Scriptlets
+            value: "Enabled: Disable"
+            registry_hive: Computer
+            registry_path: Software\Policies\Microsoft\Windows\CurrentVersion\Internet Settings\Zones\4
+            registry_key: "1209"
+            registry_action: DWORD:3
+        references:
+          cis:
+            id: "8.3.22"
+            category: L1
+      - cid: C-WS-IE-087
+        operating_systems:
+          - Windows
+          - Windows Server
+        category: "Security Zones: Restricted Sites Zone"
+        policy: '"Allow only approved domains to use ActiveX controls without prompt" is set to "Enabled: Enable".'
+        fix:
+          - fix_type: group_policy
+            path:
+              Computer Configuration\Administrative Templates\Windows Components\Internet Explorer\
+              Internet Control Panel\Security Page\Restricted Sites Zone
+            name: Allow only approved domains to use ActiveX controls without prompt
+            value: "Enabled: Enable"
+            registry_hive: Computer
+            registry_path: Software\Policies\Microsoft\Windows\CurrentVersion\Internet Settings\Zones\4
+            registry_key: 120b
+            registry_action: DWORD:3
+        references:
+          cis:
+            id: "8.3.24"
+            category: L1
+      - cid: C-WS-IE-088
+        operating_systems:
+          - Windows
+          - Windows Server
+        category: "Security Zones: Restricted Sites Zone"
+        policy: '"Allow drag and drop or copy and paste files" is set to "Enabled: Disable".'
+        fix:
+          - fix_type: group_policy
+            path:
+              Computer Configuration\Administrative Templates\Windows Components\Internet Explorer\
+              Internet Control Panel\Security Page\Restricted Sites Zone
+            name: Allow drag and drop or copy and paste files
+            value: "Enabled: Disable"
+            registry_hive: Computer
+            registry_path: Software\Policies\Microsoft\Windows\CurrentVersion\Internet Settings\Zones\4
+            registry_key: "1802"
+            registry_action: DWORD:3
+        references:
+          cis:
+            id: "8.3.2"
+            category: L1
+      - cid: C-WS-IE-089
+        operating_systems:
+          - Windows
+          - Windows Server
+        category: "Security Zones: Restricted Sites Zone"
+        policy: '"Run .NET Framework-reliant components not signed with Authenticode" is set to "Enabled: Disable".'
+        fix:
+          - fix_type: group_policy
+            path:
+              Computer Configuration\Administrative Templates\Windows Components\Internet Explorer\
+              Internet Control Panel\Security Page\Restricted Sites Zone
+            name: Run .NET Framework-reliant components not signed with Authenticode
+            value: "Enabled: Disable"
+            registry_hive: Computer
+            registry_path: Software\Policies\Microsoft\Windows\CurrentVersion\Internet Settings\Zones\4
+            registry_key: "2004"
+            registry_action: DWORD:3
+        references:
+          cis:
+            id: "8.3.27"
+            category: L1
+      - cid: C-WS-IE-090
+        operating_systems:
+          - Windows
+          - Windows Server
+        category: "Security Zones: Restricted Sites Zone"
+        policy: '"Allow scripting of Internet Explorer WebBrowser controls" is set to "Enabled: Disable".'
+        fix:
+          - fix_type: group_policy
+            path:
+              Computer Configuration\Administrative Templates\Windows Components\Internet Explorer\
+              Internet Control Panel\Security Page\Restricted Sites Zone
+            name: Allow scripting of Internet Explorer WebBrowser controls
+            value: "Enabled: Disable"
+            registry_hive: Computer
+            registry_path: Software\Policies\Microsoft\Windows\CurrentVersion\Internet Settings\Zones\4
+            registry_key: "1206"
+            registry_action: DWORD:3
+        references:
+          cis:
+            id: "8.3.17"
+            category: L1
+      - cid: C-WS-IE-091
+        operating_systems:
+          - Windows
+          - Windows Server
+        category: "Security Zones: Restricted Sites Zone"
+        policy: '"Download unsigned ActiveX controls" is set to "Enabled: Disable".'
+        fix:
+          - fix_type: group_policy
+            path:
+              Computer Configuration\Administrative Templates\Windows Components\Internet Explorer\
+              Internet Control Panel\Security Page\Restricted Sites Zone
+            name: Download unsigned ActiveX controls
+            value: "Enabled: Disable"
+            registry_hive: Computer
+            registry_path: Software\Policies\Microsoft\Windows\CurrentVersion\Internet Settings\Zones\4
+            registry_key: "1004"
+            registry_action: DWORD:3
+        references:
+          cis:
+            id: "8.3.21"
+            category: L1
+      - cid: C-WS-IE-092
+        operating_systems:
+          - Windows
+          - Windows Server
+        category: "Security Zones: Restricted Sites Zone"
+        policy: '"Download signed ActiveX controls" is set to "Enabled: Disable".'
+        fix:
+          - fix_type: group_policy
+            path:
+              Computer Configuration\Administrative Templates\Windows Components\Internet Explorer\
+              Internet Control Panel\Security Page\Restricted Sites Zone
+            name: Download signed ActiveX controls
+            value: "Enabled: Disable"
+            registry_hive: Computer
+            registry_path: Software\Policies\Microsoft\Windows\CurrentVersion\Internet Settings\Zones\4
+            registry_key: "1001"
+            registry_action: DWORD:3
+        references:
+          cis:
+            id: "8.3.3"
+            category: L1
+      - cid: C-WS-IE-093
+        operating_systems:
+          - Windows
+          - Windows Server
+        category: "Security Zones: Restricted Sites Zone"
+        policy: '"Allow font downloads" is set to "Enabled: Disable".'
+        fix:
+          - fix_type: group_policy
+            path:
+              Computer Configuration\Administrative Templates\Windows Components\Internet Explorer\
+              Internet Control Panel\Security Page\Restricted Sites Zone
+            name: Allow font downloads
+            value: "Enabled: Disable"
+            registry_hive: Computer
+            registry_path: Software\Policies\Microsoft\Windows\CurrentVersion\Internet Settings\Zones\4
+            registry_key: "1604"
+            registry_action: DWORD:3
+        references:
+          cis:
+            id: "8.3.15"
+            category: L1
+      - cid: C-WS-IE-094
+        operating_systems:
+          - Windows
+          - Windows Server
+        category: "Security Zones: Restricted Sites Zone"
+        policy: '"Show security warning for potentially unsafe files" is set to "Enabled: Disable".'
+        fix:
+          - fix_type: group_policy
+            path:
+              Computer Configuration\Administrative Templates\Windows Components\Internet Explorer\
+              Internet Control Panel\Security Page\Restricted Sites Zone
+            name: Show security warning for potentially unsafe files
+            value: "Enabled: Disable"
+            registry_hive: Computer
+            registry_path: Software\Policies\Microsoft\Windows\CurrentVersion\Internet Settings\Zones\4
+            registry_key: "1806"
+            registry_action: DWORD:3
+        references:
+          cis:
+            id: "8.3.12"
+            category: L1
+      - cid: C-WS-IE-095
+        operating_systems:
+          - Windows
+          - Windows Server
+        category: "Security Zones: Restricted Sites Zone"
+        policy: '"Automatic prompting for file downloads" is set to "Enabled: Disable".'
+        fix:
+          - fix_type: group_policy
+            path:
+              Computer Configuration\Administrative Templates\Windows Components\Internet Explorer\
+              Internet Control Panel\Security Page\Restricted Sites Zone
+            name: Automatic prompting for file downloads
+            value: "Enabled: Disable"
+            registry_hive: Computer
+            registry_path: Software\Policies\Microsoft\Windows\CurrentVersion\Internet Settings\Zones\4
+            registry_key: "2200"
+            registry_action: DWORD:3
+        references:
+          cis:
+            id: "8.3.13"
+            category: L1
+      - cid: C-WS-IE-096
+        operating_systems:
+          - Windows
+          - Windows Server
+        category: "Security Zones: Restricted Sites Zone"
+        policy: '"Allow installation of desktop items" is set to "Enabled: Disable".'
+        fix:
+          - fix_type: group_policy
+            path:
+              Computer Configuration\Administrative Templates\Windows Components\Internet Explorer\
+              Internet Control Panel\Security Page\Restricted Sites Zone
+            name: Allow installation of desktop items
+            value: "Enabled: Disable"
+            registry_hive: Computer
+            registry_path: Software\Policies\Microsoft\Windows\CurrentVersion\Internet Settings\Zones\4
+            registry_key: "1800"
+            registry_action: DWORD:3
+        references:
+          cis:
+            id: "8.3.11"
+            category: L1
+      - cid: C-WS-IE-097
+        operating_systems:
+          - Windows
+          - Windows Server
+        category: "Security Zones: Restricted Sites Zone"
+        policy: '"Allow loading of XAML Files" is set to "Enabled: Disable".'
+        fix:
+          - fix_type: group_policy
+            path:
+              Computer Configuration\Administrative Templates\Windows Components\Internet Explorer\
+              Internet Control Panel\Security Page\Restricted Sites Zone
+            name: Allow loading of XAML Files
+            value: "Enabled: Disable"
+            registry_hive: Computer
+            registry_path: Software\Policies\Microsoft\Windows\CurrentVersion\Internet Settings\Zones\4
+            registry_key: "2402"
+            registry_action: DWORD:3
+        references:
+          cis:
+            id: "8.3.14"
+            category: L1
+      - cid: C-WS-IE-098
+        operating_systems:
+          - Windows
+          - Windows Server
+        category: "Security Zones: Restricted Sites Zone"
+        policy: '"Initialize and script ActiveX controls not marked as safe" is set to "Enabled: Disable".'
+        fix:
+          - fix_type: group_policy
+            path:
+              Computer Configuration\Administrative Templates\Windows Components\Internet Explorer\
+              Internet Control Panel\Security Page\Restricted Sites Zone
+            name: Initialize and script ActiveX controls not marked as safe
+            value: "Enabled: Disable"
+            registry_hive: Computer
+            registry_path: Software\Policies\Microsoft\Windows\CurrentVersion\Internet Settings\Zones\4
+            registry_key: "1201"
+            registry_action: DWORD:3
+        references:
+          cis:
+            id: "8.3.7"
+            category: L1
+      - cid: C-WS-IE-099
+        operating_systems:
+          - Windows
+          - Windows Server
+        category: "Security Zones: Restricted Sites Zone"
+        policy: '"Enable MIME Sniffing" is set to "Enabled: Enable".'
+        fix:
+          - fix_type: group_policy
+            path:
+              Computer Configuration\Administrative Templates\Windows Components\Internet Explorer\
+              Internet Control Panel\Security Page\Restricted Sites Zone
+            name: Enable MIME Sniffing
+            value: "Enabled: Enable"
+            registry_hive: Computer
+            registry_path: Software\Policies\Microsoft\Windows\CurrentVersion\Internet Settings\Zones\4
+            registry_key: "2100"
+            registry_action: DWORD:0
+        references:
+          cis:
+            id: "8.3.16"
+            category: L1
+      - cid: C-WS-IE-100
+        operating_systems:
+          - Windows
+          - Windows Server
+        category: "Security Zones: Restricted Sites Zone"
+        policy: '"Login Options: Login Options" is set to "Enabled: Anonymous Logon".'
+        fix:
+          - fix_type: group_policy
+            path:
+              Computer Configuration\Administrative Templates\Windows Components\Internet Explorer\
+              Internet Control Panel\Security Page\Restricted Sites Zone
+            name: "Login Options: Login Options"
+            value: "Enabled: Anonymous Logon"
+            registry_hive: Computer
+            registry_path: Software\Policies\Microsoft\Windows\CurrentVersion\Internet Settings\Zones\4
+            registry_key: 1A00
+            registry_action: DWORD:196608
+        references:
+          cis:
+            id: "8.3.28"
+            category: L1
+      - cid: C-WS-IE-101
+        operating_systems:
+          - Windows
+          - Windows Server
+        category: "Security Zones: Restricted Sites Zone"
+        policy: '"Access data sources across domains" is set to "Enabled: Disable".'
+        fix:
+          - fix_type: group_policy
+            path:
+              Computer Configuration\Administrative Templates\Windows Components\Internet Explorer\
+              Internet Control Panel\Security Page\Restricted Sites Zone
+            name: Access data sources across domains
+            value: "Enabled: Disable"
+            registry_hive: Computer
+            registry_path: Software\Policies\Microsoft\Windows\CurrentVersion\Internet Settings\Zones\4
+            registry_key: "1406"
+            registry_action: DWORD:3
+        references:
+          cis:
+            id: "8.3.37"
+            category: L1
+      - cid: C-WS-IE-102
+        operating_systems:
+          - Windows
+          - Windows Server
+        category: "Security Zones: Restricted Sites Zone"
+        policy: '"Allow updates to status bar via script" is set to "Enabled: Enable".'
+        fix:
+          - fix_type: group_policy
+            path:
+              Computer Configuration\Administrative Templates\Windows Components\Internet Explorer\
+              Internet Control Panel\Security Page\Restricted Sites Zone
+            name: Allow updates to status bar via script
+            value: "Enabled: Enable"
+            registry_hive: Computer
+            registry_path: Software\Policies\Microsoft\Windows\CurrentVersion\Internet Settings\Zones\4
+            registry_key: "2103"
+            registry_action: DWORD:0
+        references:
+          cis:
+            id: "8.3.36"
+            category: L1
+      - cid: C-WS-IE-103
+        operating_systems:
+          - Windows
+          - Windows Server
+        category: "Security Zones: Restricted Sites Zone"
+        policy: '"Include local path when user is uploading files to a server" is set to "Enabled: Disable".'
+        fix:
+          - fix_type: group_policy
+            path:
+              Computer Configuration\Administrative Templates\Windows Components\Internet Explorer\
+              Internet Control Panel\Security Page\Restricted Sites Zone
+            name: Include local path when user is uploading files to a server
+            value: "Enabled: Disable"
+            registry_hive: Computer
+            registry_path: Software\Policies\Microsoft\Windows\CurrentVersion\Internet Settings\Zones\4
+            registry_key: 160A
+            registry_action: DWORD:3
+        references:
+          cis:
+            id: "8.3.34"
+            category: L1
+      - cid: C-WS-IE-104
+        operating_systems:
+          - Windows
+          - Windows Server
+        category: "Security Zones: Restricted Sites Zone"
+        policy: '"Userdata persistence" is set to "Enabled: Disable".'
+        fix:
+          - fix_type: group_policy
+            path:
+              Computer Configuration\Administrative Templates\Windows Components\Internet Explorer\
+              Internet Control Panel\Security Page\Restricted Sites Zone
+            name: Userdata persistence
+            value: "Enabled: Disable"
+            registry_hive: Computer
+            registry_path: Software\Policies\Microsoft\Windows\CurrentVersion\Internet Settings\Zones\4
+            registry_key: "1606"
+            registry_action: DWORD:3
+        references:
+          cis:
+            id: "8.3.31"
+            category: L1
+      - cid: C-WS-IE-105
+        operating_systems:
+          - Windows
+          - Windows Server
+        category: "Security Zones: Restricted Sites Zone"
+        policy: '"Enable dragging of content from different domains within a window" is set to "Enabled: Disable".'
+        fix:
+          - fix_type: group_policy
+            path:
+              Computer Configuration\Administrative Templates\Windows Components\Internet Explorer\
+              Internet Control Panel\Security Page\Restricted Sites Zone
+            name: Enable dragging of content from different domains within a window
+            value: "Enabled: Disable"
+            registry_hive: Computer
+            registry_path: Software\Policies\Microsoft\Windows\CurrentVersion\Internet Settings\Zones\4
+            registry_key: "2708"
+            registry_action: DWORD:3
+        references:
+          cis:
+            id: "8.3.35"
+            category: L1
+      - cid: C-WS-IE-106
+        operating_systems:
+          - Windows
+          - Windows Server
+        category: "Security Zones: Restricted Sites Zone"
+        policy: '"Navigate windows and frames across different domains" is set to "Enabled: Disable".'
+        fix:
+          - fix_type: group_policy
+            path:
+              Computer Configuration\Administrative Templates\Windows Components\Internet Explorer\
+              Internet Control Panel\Security Page\Restricted Sites Zone
+            name: Navigate windows and frames across different domains
+            value: "Enabled: Disable"
+            registry_hive: Computer
+            registry_path: Software\Policies\Microsoft\Windows\CurrentVersion\Internet Settings\Zones\4
+            registry_key: "1607"
+            registry_action: DWORD:3
+        references:
+          cis:
+            id: "8.3.32"
+            category: L1
+      - cid: C-WS-IE-107
+        operating_systems:
+          - Windows
+          - Windows Server
+        category: "Security Zones: Restricted Sites Zone"
+        policy: '"Enable dragging of content from different domains across windows" is set to "Enabled: Disable".'
+        fix:
+          - fix_type: group_policy
+            path:
+              Computer Configuration\Administrative Templates\Windows Components\Internet Explorer\
+              Internet Control Panel\Security Page\Restricted Sites Zone
+            name: Enable dragging of content from different domains across windows
+            value: "Enabled: Disable"
+            registry_hive: Computer
+            registry_path: Software\Policies\Microsoft\Windows\CurrentVersion\Internet Settings\Zones\4
+            registry_key: "2709"
+            registry_action: DWORD:3
+        references:
+          cis:
+            id: "8.3.40"
+            category: L1
+      - cid: C-WS-IE-108
+        operating_systems:
+          - Windows
+          - Windows Server
+        category: "Security Zones: Restricted Sites Zone"
+        policy: '"Allow script-initiated windows without size or position constraints" is set to "Enabled: Disable".'
+        fix:
+          - fix_type: group_policy
+            path:
+              Computer Configuration\Administrative Templates\Windows Components\Internet Explorer\
+              Internet Control Panel\Security Page\Restricted Sites Zone
+            name: Allow script-initiated windows without size or position constraints
+            value: "Enabled: Disable"
+            registry_hive: Computer
+            registry_path: Software\Policies\Microsoft\Windows\CurrentVersion\Internet Settings\Zones\4
+            registry_key: "2102"
+            registry_action: DWORD:3
+        references:
+          cis:
+            id: "8.3.29"
+            category: L1
+      - cid: C-WS-IE-109
+        operating_systems:
+          - Windows
+          - Windows Server
+        category: "Security Zones: Restricted Sites Zone"
+        policy: '"Launching applications and files in an IFRAME" is set to "Enabled: Disable".'
+        fix:
+          - fix_type: group_policy
+            path:
+              Computer Configuration\Administrative Templates\Windows Components\Internet Explorer\
+              Internet Control Panel\Security Page\Restricted Sites Zone
+            name: Launching applications and files in an IFRAME
+            value: "Enabled: Disable"
+            registry_hive: Computer
+            registry_path: Software\Policies\Microsoft\Windows\CurrentVersion\Internet Settings\Zones\4
+            registry_key: "1804"
+            registry_action: DWORD:3
+        references:
+          cis:
+            id: "8.3.41"
+            category: L1
+      - cid: C-WS-IE-110
+        operating_systems:
+          - Windows
+          - Windows Server
+        category: "Security Zones: Restricted Sites Zone"
+        policy: '"Software channel permissions" is set to "Enabled: High safety".'
+        fix:
+          - fix_type: group_policy
+            path:
+              Computer Configuration\Administrative Templates\Windows Components\Internet Explorer\
+              Internet Control Panel\Security Page\Restricted Sites Zone
+            name: Software channel permissions
+            value: "Enabled: High safety"
+            registry_hive: Computer
+            registry_path: Software\Policies\Microsoft\Windows\CurrentVersion\Internet Settings\Zones\4
+            registry_key: 1E05
+            registry_action: DWORD:65536
+        references:
+          cis:
+            id: "8.3.33"
+            category: L1
+      - cid: C-WS-IE-111
+        operating_systems:
+          - Windows
+          - Windows Server
+        category: "Security Zones: Restricted Sites Zone"
+        policy: '"Turn off first-run prompt: First-Run Opt-In" is set to "Enabled: Disable".'
+        fix:
+          - fix_type: group_policy
+            path:
+              Computer Configuration\Administrative Templates\Windows Components\Internet Explorer\
+              Internet Control Panel\Security Page\Restricted Sites Zone
+            name: "Turn off first-run prompt: First-Run Opt-In"
+            value: "Enabled: Disable"
+            registry_hive: Computer
+            registry_path: Software\Policies\Microsoft\Windows\CurrentVersion\Internet Settings\Zones\4
+            registry_key: "1208"
+            registry_action: DWORD:3
+        references:
+          cis:
+            id: "8.3.39"
+            category: L1
+      - cid: C-WS-IE-112
+        operating_systems:
+          - Windows
+          - Windows Server
+        category: "Security Zones: Restricted Sites Zone"
+        policy: '"Web sites in less privileged Web content zones can navigate into this zone" is set to "Enabled: Disable".'
+        fix:
+          - fix_type: group_policy
+            path:
+              Computer Configuration\Administrative Templates\Windows Components\Internet Explorer\
+              Internet Control Panel\Security Page\Restricted Sites Zone
+            name: "Web sites in less privileged Web content zones can navigate into this zone"
+            value: "Enabled: Disable"
+            registry_hive: Computer
+            registry_path: Software\Policies\Microsoft\Windows\CurrentVersion\Internet Settings\Zones\4
+            registry_key: "2101"
+            registry_action: DWORD:3
+        references:
+          cis:
+            id: "8.3.38"
+            category: L1
+      - cid: C-WS-IE-113
+        operating_systems:
+          - Windows
+          - Windows Server
+        category: "Security Zones: Restricted Sites Zone"
+        policy: '"Don''t run antimalware programs against ActiveX controls" is set to "Enabled: Disable".'
+        fix:
+          - fix_type: group_policy
+            path:
+              Computer Configuration\Administrative Templates\Windows Components\Internet Explorer\
+              Internet Control Panel\Security Page\Restricted Sites Zone
+            name: "Don''t run antimalware programs against ActiveX controls"
+            value: "Enabled: Disable"
+            registry_hive: Computer
+            registry_path: Software\Policies\Microsoft\Windows\CurrentVersion\Internet Settings\Zones\4
+            registry_key: 270C
+            registry_action: DWORD:0
+        references:
+          cis:
+            id: "8.3.42"
+            category: L1
+      - cid: C-WS-IE-114
+        operating_systems:
+          - Windows
+          - Windows Server
+        category: "Security Zones: Restricted Sites Zone"
+        policy: '"Script ActiveX controls marked safe for scripting" is set to "Enabled: Disable".'
+        fix:
+          - fix_type: group_policy
+            path:
+              Computer Configuration\Administrative Templates\Windows Components\Internet Explorer\
+              Internet Control Panel\Security Page\Restricted Sites Zone
+            name: Script ActiveX controls marked safe for scripting
+            value: "Enabled: Disable"
+            registry_hive: Computer
+            registry_path: Software\Policies\Microsoft\Windows\CurrentVersion\Internet Settings\Zones\4
+            registry_key: "1405"
+            registry_action: DWORD:3
+        references:
+          cis:
+            id: "8.3.4"
+            category: L1
+      - cid: C-WS-IE-115
+        operating_systems:
+          - Windows
+          - Windows Server
+        category: "Security Zones: Restricted Sites Zone"
+        policy: '"Allow active scripting" is set to "Enabled: Disable".'
+        fix:
+          - fix_type: group_policy
+            path:
+              Computer Configuration\Administrative Templates\Windows Components\Internet Explorer\
+              Internet Control Panel\Security Page\Restricted Sites Zone
+            name: Allow active scripting
+            value: "Enabled: Disable"
+            registry_hive: Computer
+            registry_path: Software\Policies\Microsoft\Windows\CurrentVersion\Internet Settings\Zones\4
+            registry_key: "1400"
+            registry_action: DWORD:3
+        references:
+          cis:
+            id: "8.3.5"
+            category: L1
+      - cid: C-WS-IE-116
+        operating_systems:
+          - Windows
+          - Windows Server
+        category: "Security Zones: Restricted Sites Zone"
+        policy: '"Allow binary and script behaviors" is set to "Enabled: Disable".'
+        fix:
+          - fix_type: group_policy
+            path:
+              Computer Configuration\Administrative Templates\Windows Components\Internet Explorer\
+              Internet Control Panel\Security Page\Restricted Sites Zone
+            name: Allow binary and script behaviors
+            value: "Enabled: Disable"
+            registry_hive: Computer
+            registry_path: Software\Policies\Microsoft\Windows\CurrentVersion\Internet Settings\Zones\4
+            registry_key: "2000"
+            registry_action: DWORD:3
+        references:
+          cis:
+            id: "8.3.18"
+            category: L1
+      - cid: C-WS-IE-117
+        operating_systems:
+          - Windows
+          - Windows Server
+        category: "Security Zones: Restricted Sites Zone"
+        policy: '"Scripting of Java applets" is set to "Enabled: Disable".'
+        fix:
+          - fix_type: group_policy
+            path:
+              Computer Configuration\Administrative Templates\Windows Components\Internet Explorer\
+              Internet Control Panel\Security Page\Restricted Sites Zone
+            name: Scripting of Java applets
+            value: "Enabled: Disable"
+            registry_hive: Computer
+            registry_path: Software\Policies\Microsoft\Windows\CurrentVersion\Internet Settings\Zones\4
+            registry_key: "1402"
+            registry_action: DWORD:3
+        references:
+          cis:
+            id: "8.3.19"
+            category: L1
+      - cid: C-WS-IE-118
+        operating_systems:
+          - Windows
+          - Windows Server
+        category: "Security Zones: Restricted Sites Zone"
+        policy: '"Allow file downloads" is set to "Enabled: Disable".'
+        fix:
+          - fix_type: group_policy
+            path:
+              Computer Configuration\Administrative Templates\Windows Components\Internet Explorer\
+              Internet Control Panel\Security Page\Restricted Sites Zone
+            name: Allow file downloads
+            value: "Enabled: Disable"
+            registry_hive: Computer
+            registry_path: Software\Policies\Microsoft\Windows\CurrentVersion\Internet Settings\Zones\4
+            registry_key: "1803"
+            registry_action: DWORD:3
+        references:
+          cis:
+            id: "8.3.23"
+            category: L1
+      - cid: C-WS-IE-119
+        operating_systems:
+          - Windows
+          - Windows Server
+        category: "Security Zones: Restricted Sites Zone"
+        policy: '"Use SmartScreen Filter" is set to "Enabled: Enable".'
+        fix:
+          - fix_type: group_policy
+            path:
+              Computer Configuration\Administrative Templates\Windows Components\Internet Explorer\
+              Internet Control Panel\Security Page\Restricted Sites Zone
+            name: Use SmartScreen Filter
+            value: "Enabled: Enable"
+            registry_hive: Computer
+            registry_path: Software\Policies\Microsoft\Windows\CurrentVersion\Internet Settings\Zones\4
+            registry_key: "2301"
+            registry_action: DWORD:0
+        references:
+          cis:
+            id: "8.3.25"
+            category: L1
+      - cid: C-WS-IE-120
+        operating_systems:
+          - Windows
+          - Windows Server
+        category: "Security Zones: Restricted Sites Zone"
+        policy: '"Run ActiveX controls and plugins" is set to "Enabled: Disable".'
+        fix:
+          - fix_type: group_policy
+            path:
+              Computer Configuration\Administrative Templates\Windows Components\Internet Explorer\
+              Internet Control Panel\Security Page\Restricted Sites Zone
+            name: Run ActiveX controls and plugins
+            value: "Enabled: Disable"
+            registry_hive: Computer
+            registry_path: Software\Policies\Microsoft\Windows\CurrentVersion\Internet Settings\Zones\4
+            registry_key: "1200"
+            registry_action: DWORD:3
+        references:
+          cis:
+            id: "8.3.26"
+            category: L1
+      - cid: C-WS-IE-121
+        operating_systems:
+          - Windows
+          - Windows Server
+        category: "Security Zones: Restricted Sites Zone"
+        policy: '"Allow META REFRESH" is set to "Enabled: Disable".'
+        fix:
+          - fix_type: group_policy
+            path:
+              Computer Configuration\Administrative Templates\Windows Components\Internet Explorer\
+              Internet Control Panel\Security Page\Restricted Sites Zone
+            name: Allow META REFRESH
+            value: "Enabled: Disable"
+            registry_hive: Computer
+            registry_path: Software\Policies\Microsoft\Windows\CurrentVersion\Internet Settings\Zones\4
+            registry_key: "1608"
+            registry_action: DWORD:3
+        references:
+          cis:
+            id: "8.3.30"
+            category: L1
+  - category: "Security Zones: Local Machine Zone"
+    vulnerabilities:
+      - cid: C-WS-IE-122
+        operating_systems:
+          - Windows
+          - Windows Server
+        category: "Security Zones: Local Machine Zone"
+        policy: '"Java permissions" is set to "Enabled: Disable Java".'
+        fix:
+          - fix_type: group_policy
+            path:
+              Computer Configuration\Administrative Templates\Windows Components\Internet Explorer\
+              Internet Control Panel\Security Page\Local Machine Zone
+            name: Java permissions
+            value: "Enabled: Disable Java"
+            registry_hive: Computer
+            registry_path: Software\Policies\Microsoft\Windows\CurrentVersion\Internet Settings\Zones\0
+            registry_key: 1C00
+            registry_action: DWORD:0
+        references:
+          cis:
+            id: "8.4.1"
+            category: L1
+      - cid: C-WS-IE-123
+        operating_systems:
+          - Windows
+          - Windows Server
+        category: "Security Zones: Local Machine Zone"
+        policy: '"Use SmartScreen Filter" is set to "Enabled: Enable".'
+        fix:
+          - fix_type: group_policy
+            path:
+              Computer Configuration\Administrative Templates\Windows Components\Internet Explorer\
+              Internet Control Panel\Security Page\Local Machine Zone
+            name: Use SmartScreen Filter
+            value: "Enabled: Enable"
+            registry_hive: Computer
+            registry_path: Software\Policies\Microsoft\Windows\CurrentVersion\Internet Settings\Zones\0
+            registry_key: "2301"
+            registry_action: DWORD:0
+        references:
+          cis:
+            id: "8.4.2"
+            category: L1
+      - cid: C-WS-IE-124
+        operating_systems:
+          - Windows
+          - Windows Server
+        category: "Security Zones: Local Machine Zone"
+        policy: '"Don''t run antimalware programs against ActiveX controls" is set to "Enabled: Enable".'
+        fix:
+          - fix_type: group_policy
+            path:
+              Computer Configuration\Administrative Templates\Windows Components\Internet Explorer\
+              Internet Control Panel\Security Page\Local Machine Zone
+            name: Don''t run antimalware programs against ActiveX controls
+            value: "Enabled: Enable"
+            registry_hive: Computer
+            registry_path: Software\Policies\Microsoft\Windows\CurrentVersion\Internet Settings\Zones\0
+            registry_key: 270C
+            registry_action: DWORD:3
+        references:
+          cis:
+            id: "8.4.3"
+            category: L1
+  - category: "Security Zones: Trusted Sites Zone"
+    vulnerabilities:
+      - cid: C-WS-IE-125
+        operating_systems:
+          - Windows
+          - Windows Server
+        category: "Security Zones: Trusted Sites Zone"
+        policy: '"Java permissions" is set to "Enabled: Disable Java".'
+        fix:
+          - fix_type: group_policy
+            path:
+              Computer Configuration\Administrative Templates\Windows Components\Internet Explorer\
+              Internet Control Panel\Security Page\Trusted Sites Zone
+            name: Java permissions
+            value: "Enabled: Disable Java"
+            registry_hive: Computer
+            registry_path: Software\Policies\Microsoft\Windows\CurrentVersion\Internet Settings\Zones\2
+            registry_key: 1C00
+            registry_action: DWORD:0
+        references:
+          cis:
+            id: "8.5.1"
+            category: L1
+            value: "Enabled: High safety"
+      - cid: C-WS-IE-126
+        operating_systems:
+          - Windows
+          - Windows Server
+        category: "Security Zones: Trusted Sites Zone"
+        policy: '"Initialize and script ActiveX controls not marked as safe" is set to "Enabled: Disable".'
+        fix:
+          - fix_type: group_policy
+            path:
+              Computer Configuration\Administrative Templates\Windows Components\Internet Explorer\
+              Internet Control Panel\Security Page\Trusted Sites Zone
+            name: Initialize and script ActiveX controls not marked as safe
+            value: "Enabled: Disable"
+            registry_hive: Computer
+            registry_path: Software\Policies\Microsoft\Windows\CurrentVersion\Internet Settings\Zones\2
+            registry_key: "1201"
+            registry_action: DWORD:3
+        references:
+          cis:
+            id: "8.5.2"
+            category: L1
+      - cid: C-WS-IE-127
+        operating_systems:
+          - Windows
+          - Windows Server
+        category: "Security Zones: Trusted Sites Zone"
+        policy: '"Don''t run antimalware programs against ActiveX controls" is set to "Enabled: Disabled".'
+        fix:
+          - fix_type: group_policy
+            path:
+              Computer Configuration\Administrative Templates\Windows Components\Internet Explorer\
+              Internet Control Panel\Security Page\Trusted Sites Zone
+            name: Don''t run antimalware programs against ActiveX controls
+            value: "Enabled: Disabled"
+            registry_hive: Computer
+            registry_path: Software\Policies\Microsoft\Windows\CurrentVersion\Internet Settings\Zones\2
+            registry_key: 270C
+            registry_action: DWORD:0
+        references:
+          cis:
+            id: "8.5.3"
+            category: L1
+  - category: "Security Zones: Locked-Down Internet Zone"
+    vulnerabilities:
+      - cid: C-WS-IE-128
+        operating_systems:
+          - Windows
+          - Windows Server
+        category: "Security Zones: Locked-Down Internet Zone"
+        policy: '"Use SmartScreen Filter" is set to "Enabled: Enable".'
+        fix:
+          - fix_type: group_policy
+            path:
+              Computer Configuration\Administrative Templates\Windows Components\Internet Explorer\
+              Internet Control Panel\Security Page\Locked-Down Internet Zone
+            name: Use SmartScreen Filter
+            value: "Enabled: Enable"
+            registry_hive: Computer
+            registry_path: Software\Policies\Microsoft\Windows\CurrentVersion\Internet Settings\Lockdown_Zones\3
+            registry_key: "2301"
+            registry_action: DWORD:0
+        references:
+          cis:
+            id: "8.6.1"
+            category: L1
+      - cid: C-WS-IE-129
+        operating_systems:
+          - Windows
+          - Windows Server
+        category: "Security Zones: Locked-Down Internet Zone"
+        policy: '"Only allow approved domains to use ActiveX controls without prompt" is set to "Enabled: Enable".'
+        fix:
+          - fix_type: group_policy
+            path:
+              Computer Configuration\Administrative Templates\Windows Components\Internet Explorer\
+              Internet Control Panel\Security Page\Locked-Down Internet Zone
+            name: Allow only approved domains to use ActiveX controls without prompt
+            value: "Enabled: Enable"
+            registry_hive: Computer
+            registry_path: Software\Policies\Microsoft\Windows\CurrentVersion\Internet Settings\Lockdown_Zones\3
+            registry_key: 120b
+            registry_action: DWORD:3
+        references:
+          cis:
+            id: "8.6.2"
+            category: L1
+  - category: "Security Zones: Locked-Down Intranet Zone"
+    vulnerabilities:
+      - cid: C-WS-IE-130
+        operating_systems:
+          - Windows
+          - Windows Server
+        category: "Security Zones: Locked-Down Intranet Zone"
+        policy: '"Java permissions" is set to "Enabled: Disable Java".'
+        fix:
+          - fix_type: group_policy
+            path:
+              Computer Configuration\Administrative Templates\Windows Components\Internet Explorer\
+              Internet Control Panel\Security Page\Locked-Down Intranet Zone
+            name: Java permissions
+            value: "Enabled: Disable Java"
+            registry_hive: Computer
+            registry_path: Software\Policies\Microsoft\Windows\CurrentVersion\Internet Settings\Lockdown_Zones\1
+            registry_key: 1C00
+            registry_action: DWORD:0
+        references:
+          cis:
+            id: "8.7.1"
+            category: L1
+      - cid: C-WS-IE-131
+        operating_systems:
+          - Windows
+          - Windows Server
+        category: "Security Zones: Locked-Down Intranet Zone"
+        policy: '"Use SmartScreen Filter" is set to "Enabled: Enable".'
+        fix:
+          - fix_type: group_policy
+            path:
+              Computer Configuration\Administrative Templates\Windows Components\Internet Explorer\
+              Internet Control Panel\Security Page\Locked-Down Intranet Zone
+            name: Use SmartScreen Filter
+            value: "Enabled: Enable"
+            registry_hive: Computer
+            registry_path: Software\Policies\Microsoft\Windows\CurrentVersion\Internet Settings\Lockdown_Zones\1
+            registry_key: "2301"
+            registry_action: DWORD:0
+        references:
+          cis:
+            id: "8.7.2"
+            category: L1
+  - category: "Security Zones: Locked-Down Restricted Sites Zone"
+    vulnerabilities:
+      - cid: C-WS-IE-132
+        operating_systems:
+          - Windows
+          - Windows Server
+        category: "Security Zones: Locked-Down Restricted Sites Zone"
+        policy: '"Java permissions" is set to "Enabled: Disable Java".'
+        fix:
+          - fix_type: group_policy
+            path:
+              Computer Configuration\Administrative Templates\Windows Components\Internet Explorer\
+              Internet Control Panel\Security Page\Locked-Down Restricted Sites Zone
+            name: Java permissions
+            value: "Enabled: Disable Java"
+            registry_hive: Computer
+            registry_path: Software\Policies\Microsoft\Windows\CurrentVersion\Internet Settings\Lockdown_Zones\4
+            registry_key: 1C00
+            registry_action: DWORD:0
+        references:
+          cis:
+            id: "8.8.1"
+            category: L1
+      - cid: C-WS-IE-133
+        operating_systems:
+          - Windows
+          - Windows Server
+        category: "Security Zones: Locked-Down Restricted Sites Zone"
+        policy: '"Only allow approved domains to use ActiveX controls without prompt" is set to "Enabled: Enable".'
+        fix:
+          - fix_type: group_policy
+            path:
+              Computer Configuration\Administrative Templates\Windows Components\Internet Explorer\
+              Internet Control Panel\Security Page\Locked-Down Restricted Sites Zone
+            name: Allow only approved domains to use ActiveX controls without prompt
+            value: "Enabled: Enable"
+            registry_hive: Computer
+            registry_path: Software\Policies\Microsoft\Windows\CurrentVersion\Internet Settings\Lockdown_Zones\4
+            registry_key: 120b
+            registry_action: DWORD:3
+        references:
+          cis:
+            id: "8.8.2"
+            category: L1
+      - cid: C-WS-IE-134
+        operating_systems:
+          - Windows
+          - Windows Server
+        category: "Security Zones: Locked-Down Restricted Sites Zone"
+        policy: '"Use SmartScreen Filter" is set to "Enabled: Enable".'
+        fix:
+          - fix_type: group_policy
+            path:
+              Computer Configuration\Administrative Templates\Windows Components\Internet Explorer\
+              Internet Control Panel\Security Page\Locked-Down Restricted Sites Zone
+            name: Use SmartScreen Filter
+            value: "Enabled: Enable"
+            registry_hive: Computer
+            registry_path: Software\Policies\Microsoft\Windows\CurrentVersion\Internet Settings\Lockdown_Zones\4
+            registry_key: "2301"
+            registry_action: DWORD:0
+        references:
+          cis:
+            id: "8.8.3"
+            category: L1
+  - category: "Security Zones: Locked-Down Local Machine Zone"
+    vulnerabilities:
+      - cid: C-WS-IE-135
+        operating_systems:
+          - Windows
+          - Windows Server
+        category: "Security Zones: Locked-Down Local Machine Zone"
+        policy: '"Java permissions" is set to "Enabled: Disable Java".'
+        fix:
+          - fix_type: group_policy
+            path:
+              Computer Configuration\Administrative Templates\Windows Components\Internet Explorer\
+              Internet Control Panel\Security Page\Locked-Down Local Machine Zone
+            name: Java permissions
+            value: "Enabled: Disable Java"
+            registry_hive: Computer
+            registry_path: Software\Policies\Microsoft\Windows\CurrentVersion\Internet Settings\Lockdown_Zones\0
+            registry_key: 1C00
+            registry_action: DWORD:0
+        references:
+          cis:
+            id: "8.9.1"
+            category: L1
+      - cid: C-WS-IE-136
+        operating_systems:
+          - Windows
+          - Windows Server
+        category: "Security Zones: Locked-Down Local Machine Zone"
+        policy: '"Use SmartScreen Filter" is set to "Enabled: Enable".'
+        fix:
+          - fix_type: group_policy
+            path:
+              Computer Configuration\Administrative Templates\Windows Components\Internet Explorer\
+              Internet Control Panel\Security Page\Locked-Down Local Machine Zone
+            name: Use SmartScreen Filter
+            value: "Enabled: Enable"
+            registry_hive: Computer
+            registry_path: Software\Policies\Microsoft\Windows\CurrentVersion\Internet Settings\Lockdown_Zones\0
+            registry_key: "2301"
+            registry_action: DWORD:0
+        references:
+          cis:
+            id: "8.9.2"
+            category: L1
+  - category: "Security Zones: Locked-Down Trusted Sites Zone"
+    vulnerabilities:
+      - cid: C-WS-IE-137
+        operating_systems:
+          - Windows
+          - Windows Server
+        category: "Security Zones: Locked-Down Trusted Sites Zone"
+        policy: '"Java permissions" is set to "Enabled: Disable Java".'
+        fix:
+          - fix_type: group_policy
+            path:
+              Computer Configuration\Administrative Templates\Windows Components\Internet Explorer\
+              Internet Control Panel\Security Page\Locked-Down Trusted Sites Zone
+            name: Java permissions
+            value: "Enabled: Disable Java"
+            registry_hive: Computer
+            registry_path: Software\Policies\Microsoft\Windows\CurrentVersion\Internet Settings\Lockdown_Zones\2
+            registry_key: 1C00
+            registry_action: DWORD:0
+        references:
+          cis:
+            id: "8.10.1"
+            category: L1
+      - cid: C-WS-IE-138
+        operating_systems:
+          - Windows
+          - Windows Server
+        category: "Security Zones: Locked-Down Trusted Sites Zone"
+        policy: '"Use SmartScreen Filter" is set to "Enabled: Enable".'
+        fix:
+          - fix_type: group_policy
+            path:
+              Computer Configuration\Administrative Templates\Windows Components\Internet Explorer\
+              Internet Control Panel\Security Page\Locked-Down Trusted Sites Zone
+            name: Use SmartScreen Filter
+            value: "Enabled: Enable"
+            registry_hive: Computer
+            registry_path: Software\Policies\Microsoft\Windows\CurrentVersion\Internet Settings\Lockdown_Zones\2
+            registry_key: "2301"
+            registry_action: DWORD:0
+        references:
+          cis:
+            id: "8.10.2"
+            category: L1
+  - category: "Security Zones"
+    vulnerabilities:
+      - cid: C-WS-IE-139
+        operating_systems:
+          - Windows
+          - Windows Server
+        category: Security Zones
+        policy: '"Security Zones: Do not allow users to change policies" is set to "Enabled".'
+        fix:
+          - fix_type: group_policy
+            path: Computer Configuration\Administrative Templates\Windows Components\Internet Explorer
+            name: "Security Zones: Do not allow users to change policies"
+            value: Enabled
+            registry_hive: Computer
+            registry_path: Software\Policies\Microsoft\Windows\CurrentVersion\Internet Settings
+            registry_key: Security_options_edit
+            registry_action: DWORD:1
+        references:
+          cis:
+            id: "8.11"
+            category: L1
+      - cid: C-WS-IE-140
+        operating_systems:
+          - Windows
+          - Windows Server
+        category: Security Zones
+        policy: '"Security Zones: Do not allow users to add/delete sites" is set to "Enabled".'
+        fix:
+          - fix_type: group_policy
+            path: Computer Configuration\Administrative Templates\Windows Components\Internet Explorer
+            name: "Security Zones: Do not allow users to add/delete sites"
+            value: Enabled
+            registry_hive: Computer
+            registry_path: Software\Policies\Microsoft\Windows\CurrentVersion\Internet Settings
+            registry_key: Security_zones_map_edits
+            registry_action: DWORD:1
+        references:
+          cis:
+            id: "8.12"
+            category: L1
+      - cid: C-WS-IE-141
+        operating_systems:
+          - Windows
+          - Windows Server
+        category: Security Zones
+        policy: '"Security Zones: Use only machine settings" is set to "Enabled".'
+        fix:
+          - fix_type: group_policy
+            path: Computer Configuration\Administrative Templates\Windows Components\Internet Explorer
+            name: "Security Zones: Use only machine settings"
+            value: Enabled
+            registry_hive: Computer
+            registry_path: Software\Policies\Microsoft\Windows\CurrentVersion\Internet Settings
+            registry_key: Security_HKLM_only
+            registry_action: DWORD:1
+        references:
+          cis:
+            id: "8.13"
+            category: L1
+  - category: "Additional Settings"
+    vulnerabilities:
+      - cid: C-WS-IE-142
+        operating_systems:
+          - Windows
+          - Windows Server
+        category: Additional Settings
+        policy: '"Disable the Security page" is set to "Enabled".'
+        fix:
+          - fix_type: group_policy
+            path:
+              Computer Configuration\Administrative Templates\Windows Components\Internet Explorer\
+              Internet Control Panel
+            name: "Disable the Security page"
+            value: Enabled
+            registry_hive: Computer
+            registry_path: Software\Policies\Microsoft\Internet Explorer\Control Panel
+            registry_key: SecurityTab
+            registry_action: DWORD:1
+        references:
+          cis:
+            id: "9.1"
+            category: L1
+      - cid: C-WS-IE-143
+        operating_systems:
+          - Windows
+          - Windows Server
+        category: Additional Settings
+        policy: '"Disable the Advanced page" is set to "Enabled".'
+        fix:
+          - fix_type: group_policy
+            path:
+              Computer Configuration\Administrative Templates\Windows Components\Internet Explorer\
+              Internet Control Panel
+            name: "Disable the Advanced page"
+            value: Enabled
+            registry_hive: Computer
+            registry_path: Software\Policies\Microsoft\Internet Explorer\Control Panel
+            registry_key: AdvancedTab
+            registry_action: DWORD:1
+        references:
+          cis:
+            id: "9.2"
+            category: L1
+      - cid: C-WS-IE-144 #check: founded in Computer Configuration\Administrative Templates\Windows Components\Internet Explorer instead
+        operating_systems:
+          - Windows
+          - Windows Server
+        category: Additional Settings
+        policy: '"Make proxy settings per-machine (rather than per-user)" is set to "Enabled".'
+        fix:
+          - fix_type: group_policy
+            path:
+              Computer Configuration\Administrative Templates\Windows Components\Internet Explorer
+            name: "Make proxy settings per-machine (rather than per-user)"
+            value: Enabled
+            registry_hive: Computer
+            registry_path: Software\Policies\Microsoft\Windows\CurrentVersion\Internet Settings
+            registry_key: ProxySettingsPerUser
+            registry_action: DWORD:0
+        references:
+          cis:
+            id: "9.5"
+            category: L1
+      - cid: C-WS-IE-145 #check: founded in Computer Configuration\Administrative Templates\Windows Components\Internet Explorer\Security Features instead
+        operating_systems:
+          - Windows
+          - Windows Server
+        category: Additional Settings
+        policy: '"Do not display the reveal password button" is set to "Enabled".'
+        fix:
+          - fix_type: group_policy
+            path:
+              Computer Configuration\Administrative Templates\Windows Components\Internet Explorer\
+              Security Features
+            name: "Do not display the reveal password button"
+            value: Enabled
+            registry_hive: Computer
+            registry_path: Software\Policies\Microsoft\Internet Explorer\Main
+            registry_key: DisablePasswordReveal
+            registry_action: DWORD:1
+        references:
+          cis:
+            id: "9.6"
+            category: L1
+      # TODO: go to Credential User Interface and set that there
+      - cid: C-WS-IE-146
+        operating_systems:
+          - Windows
+          - Windows Server
+        category: Additional Settings
+        policy: '"Prevent changing proxy settings" is set to "Enabled".'
+        fix:
+          - fix_type: group_policy
+            path:
+              Computer Configuration\Administrative Templates\Windows Components\Internet Explorer\
+              Internet Control Panel
+            name: "Prevent changing proxy settings"
+            value: Enabled
+            registry_hive: Computer
+            registry_path: Software\Policies\Microsoft\Internet Explorer\Control Panel
+            registry_key: Proxy
+            registry_action: DWORD:1
+        references:
+          cis:
+            id: "9.7"
+            category: L1
+      - cid: C-WS-IE-147 
+        operating_systems:
+          - Windows
+          - Windows Server
+        category: Additional Settings
+        policy: '"Disable changing Automatic Configuration settings" is set to "Enabled".'
+        fix:
+          - fix_type: group_policy
+            path:
+              Computer Configuration\Administrative Templates\Windows Components\Internet Explorer\
+              Internet Control Panel
+            name: "Disable changing Automatic Configuration settings"
+            value: Enabled
+            registry_hive: Computer
+            registry_path: Software\Policies\Microsoft\Internet Explorer\Control Panel
+            registry_key: Autoconfig
+            registry_action: DWORD:1
+        references:
+          cis:
+            id: "9.8"
+            category: L1
+      - cid: C-WS-IE-148 #check: founded in Computer Configuration\Administrative Templates\Windows Components\Internet Explorer instead
+        operating_systems:
+          - Windows
+          - Windows Server
+        category: Additional Settings
+        policy: '"Prevent "Fix settings" functionality" is set to "Enabled".'
+        fix:
+          - fix_type: group_policy
+            path:
+              Computer Configuration\Administrative Templates\Windows Components\Internet Explorer
+            name: 'Prevent "Fix settings" functionality'
+            value: Enabled
+            registry_hive: Computer
+            registry_path: Software\Policies\Microsoft\Internet Explorer\Security
+            registry_key: DisableFixSecuritySettings
+            registry_action: DWORD:1
+        references:
+          cis:
+            id: "9.9"
+            category: L1
+      - cid: C-WS-IE-149 #check: founded in Computer Configuration\Administrative Templates\Windows Components\Internet Explorer instead
+        operating_systems:
+          - Windows
+          - Windows Server
+        category: Additional Settings
+        policy: '"Turn off the Security Settings Check feature" is set to "Disabled".'
+        fix:
+          - fix_type: group_policy
+            path:
+              Computer Configuration\Administrative Templates\Windows Components\Internet Explorer
+            name: Turn off the Security Settings Check feature
+            value: Disabled
+            registry_hive: Computer
+            registry_path: Software\Policies\Microsoft\Internet Explorer\Security
+            registry_key: DisableSecuritySettingsCheck
+            registry_action: DWORD:0
+        references:
+          cis:
+            id: "9.10"
+            category: L1
+      - cid: C-WS-IE-150 #check: founded in Computer Configuration\Administrative Templates\Windows Components\Internet Explorer instead
+        operating_systems:
+          - Windows
+          - Windows Server
+        category: Additional Settings
+        policy: '"Disable changing connection settings" is set to "Enabled".'
+        fix:
+          - fix_type: group_policy
+            path:
+              Computer Configuration\Administrative Templates\Windows Components\Internet Explorer
+            name: Disable changing connection settings
+            value: Enabled
+            registry_hive: Computer
+            registry_path: Software\Policies\Microsoft\Internet Explorer\Control Panel
+            registry_key: Connection Settings
+            registry_action: DWORD:1
+          - fix_type: group_policy
+            path:
+              Computer Configuration\Administrative Templates\Windows Components\Internet Explorer
+            name: Disable changing connection settings
+            value: Enabled
+            registry_hive: Computer
+            registry_path: Software\Policies\Microsoft\Internet Explorer\Control Panel
+            registry_key: Connwiz Admin Lock
+            registry_action: DWORD:1
+        references:
+          cis:
+            id: "9.11"
+            category: L1
+      - cid: C-WS-IE-151 #check: founded in Computer Configuration\Administrative Templates\Windows Components\Internet Explorer instead
+        operating_systems:
+          - Windows
+          - Windows Server
+        category: Additional Settings
+        policy: '"Turn off Crash Detection" is set to "Enabled".'
+        fix:
+          - fix_type: group_policy
+            path:
+              Computer Configuration\Administrative Templates\Windows Components\Internet Explorer
+            name: Turn off Crash Detection
+            value: Enabled
+            registry_hive: Computer
+            registry_path: Software\Policies\Microsoft\Internet Explorer\Restrictions
+            registry_key: NoCrashDetection
+            registry_action: DWORD:1
+        references:
+          cis:
+            id: "9.12"
+            category: L1
+      - cid: C-WS-IE-152 #check: founded in User Configuration\Administrative Templates\Windows Components\Internet Explorer instead
+        operating_systems:
+          - Windows
+          - Windows Server
+        category: Additional Settings
+        policy: '"Disable AutoComplete for forms" is set to "Enabled".'
+        fix:
+          - fix_type: group_policy
+            path:
+              User Configuration\Administrative Templates\Windows Components\Internet Explorer
+            name: Disable AutoComplete for forms
+            value: Enabled
+            registry_hive: Computer
+            registry_path: Software\Policies\Microsoft\Internet Explorer\Control Panel
+            registry_key: FormSuggest
+            registry_action: DWORD:1
+          - fix_type: group_policy
+            path:
+              User Configuration\Administrative Templates\Windows Components\Internet Explorer
+            name: Disable AutoComplete for forms
+            value: Enabled
+            registry_hive: Computer
+            registry_path: Software\Policies\Microsoft\Internet Explorer\Main
+            registry_key: Use FormSuggest
+            registry_action: SZ:no
+        references:
+          cis:
+            id: "9.13"
+            category: L1
+      - cid: C-WS-IE-153 #check: founded in User Configuration\Administrative Templates\Windows Components\Internet Explorer instead
+        operating_systems:
+          - Windows
+          - Windows Server
+        category: Additional Settings
+        policy: '"Turn on the auto-complete feature for user names and passwords on forms" is set to "Disabled".'
+        fix:
+          - fix_type: group_policy
+            path:
+              User Configuration\Administrative Templates\Windows Components\Internet Explorer
+            name: Turn on the auto-complete feature for user names and passwords on forms
+            value: Disabled
+            registry_hive: Computer
+            registry_path: Software\Policies\Microsoft\Internet Explorer\Control Panel
+            registry_key: FormSuggest Passwords
+            registry_action: DWORD:1
+          - fix_type: group_policy
+            path:
+              User Configuration\Administrative Templates\Windows Components\Internet Explorer
+            name: Turn on the auto-complete feature for user names and passwords on forms
+            value: Disabled
+            registry_hive: Computer
+            registry_path: Software\Policies\Microsoft\Internet Explorer\Main
+            registry_key: FormSuggest Passwords
+            registry_action: SZ:no
+          - fix_type: group_policy
+            path:
+              User Configuration\Administrative Templates\Windows Components\Internet Explorer
+            name: Turn on the auto-complete feature for user names and passwords on forms
+            value: Disabled
+            registry_hive: Computer
+            registry_path: Software\Policies\Microsoft\Internet Explorer\Main
+            registry_key: FormSuggest PW Ask
+            registry_action: SZ:no
+        references:
+          cis:
+            id: "9.14"
+            category: L1
+      - cid: C-WS-IE-154 
+        operating_systems:
+          - Windows
+          - Windows Server
+        category: Additional Settings
+        policy: '"Turn on 64-bit tab processes when running in Enhanced Protected Mode on 64-bit versions of Windows" is set to "Enabled".'
+        fix:
+          - fix_type: group_policy
+            path:
+              Computer Configuration\Administrative Templates\Windows Components\Internet Explorer\
+              Internet Control Panel
+            name: Turn on 64-bit tab processes when running in Enhanced Protected Mode on 64-bit versions of Windows
+            value: Enabled
+            registry_hive: Computer
+            registry_path: Software\Policies\Microsoft\Internet Explorer\Main 
+            registry_key: Isolation64Bit
+            registry_action: DWORD:1
+        references:
+          cis:
+            id: "9.15"
+            category: L1

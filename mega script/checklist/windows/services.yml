@@ -1,0 +1,1306 @@
+version: 1
+name: services
+vulnerabilities:
+  - cid: C-W-SRVC-BI-01
+    operating_systems:
+      - Windows
+    category: Built-in Services
+    policy: '"Bluetooth Audio Gateway Service" is set to "Disabled".'
+    fix:
+      - fix_type: windows_service
+        display_name: Bluetooth Audio Gateway Service
+        name: BTAGService
+        startup_type: Disabled
+        text: '"BTAGService",4,""'
+    references:
+      cis:
+        id: "5.1"
+        category: L2
+        value: Disabled
+      stig:
+        id: ""
+        category: ""
+        value: ""
+    notes: ""
+  - cid: C-W-SRVC-BI-02
+    operating_systems:
+      - Windows
+    category: Built-in Services
+    policy: '"Bluetooth Support Service" is set to "Disabled".'
+    fix:
+      - fix_type: windows_service
+        display_name: Bluetooth Support Service
+        name: bthserv
+        startup_type: Disabled
+        text: '"bthserv",4,""'
+    references:
+      cis:
+        id: "5.2"
+        category: L2
+        value: Disabled
+      stig:
+        id: ""
+        category: ""
+        value: ""
+    notes: ""
+  - cid: C-W-SRVC-BI-03
+    operating_systems:
+      - Windows
+    category: Built-in Services
+    policy: '"Computer Browser" is set to "Disabled".'
+    fix:
+      - fix_type: windows_service
+        display_name: Computer Browser
+        name: Browser
+        startup_type: Disabled
+        text: '"Browser",4,""'
+    references:
+      cis:
+        id: "5.3"
+        category: L1
+        value: Disabled
+      stig:
+        id: ""
+        category: ""
+        value: ""
+    notes: ""
+  - cid: C-W-SRVC-BI-04
+    operating_systems:
+      - Windows
+    category: Built-in Services
+    policy: '"Downloaded Maps Manager" is set to "Disabled".'
+    fix:
+      - fix_type: windows_service
+        display_name: Downloaded Maps Manager
+        name: MapsBroker
+        startup_type: Disabled
+        text: '"MapsBroker",4,""'
+    references:
+      cis:
+        id: "5.4"
+        category: L2
+        value: Disabled
+      stig:
+        id: ""
+        category: ""
+        value: ""
+    notes: ""
+  - cid: C-W-SRVC-BI-05
+    operating_systems:
+      - Windows
+    category: Built-in Services
+    policy: '"Geolocation Service" is set to "Disabled".'
+    fix:
+      - fix_type: windows_service
+        display_name: Geolocation Service
+        name: lfsvc
+        startup_type: Disabled
+        text: '"lfsvc",4,""'
+    references:
+      cis:
+        id: "5.5"
+        category: L2
+        value: Disabled
+      stig:
+        id: ""
+        category: ""
+        value: ""
+    notes: ""
+  - cid: C-W-SRVC-BI-06
+    operating_systems:
+      - Windows
+    category: Built-in Services
+    policy: '"Internet Connection Sharing (ICS)" is set to "Disabled".'
+    fix:
+      - fix_type: windows_service
+        display_name: Internet Connection Sharing (ICS)"
+        name: SharedAccess
+        startup_type: Disabled
+        text: '"SharedAccess",4,""'
+    references:
+      cis:
+        id: "5.8"
+        category: L1
+        value: Disabled
+      stig:
+        id: ""
+        category: ""
+        value: ""
+    notes: ""
+  - cid: C-W-SRVC-BI-07
+    operating_systems:
+      - Windows
+    category: Built-in Services
+    policy: '"Link-Layer Topology Discovery Mapper" is set to "Disabled".'
+    fix:
+      - fix_type: windows_service
+        display_name: Link-Layer Topology Discovery Mapper
+        name: lltdsvc
+        startup_type: Disabled
+        text: '"lltdsvc",4,""'
+    references:
+      cis:
+        id: "5.9"
+        category: L2
+        value: Disabled
+      stig:
+        id: ""
+        category: ""
+        value: ""
+    notes: ""
+  - cid: C-W-SRVC-BI-08
+    operating_systems:
+      - Windows
+    category: Built-in Services
+    policy: '"Microsoft iSCSI Initiator Service" is set to "Disabled".'
+    fix:
+      - fix_type: windows_service
+        display_name: Microsoft iSCSI Initiator Service
+        name: MSiSCSI
+        startup_type: Disabled
+        text: '"MSiSCSI",4,""'
+    references:
+      cis:
+        id: "5.12"
+        category: L2
+        value: Disabled
+      stig:
+        id: ""
+        category: ""
+        value: ""
+    notes: ""
+  - cid: C-W-SRVC-BI-09
+    operating_systems:
+      - Windows
+    category: Built-in Services
+    policy: '"Peer Name Resolution Protocol" is set to "Disabled".'
+    fix:
+      - fix_type: windows_service
+        display_name: Peer Name Resolution Protocol
+        name: PNRPsvc
+        startup_type: Disabled
+        text: '"PNRPsvc",4,""'
+    references:
+      cis:
+        id: "5.14"
+        category: L2
+        value: Disabled
+      stig:
+        id: ""
+        category: ""
+        value: ""
+    notes: ""
+  - cid: C-W-SRVC-BI-10
+    operating_systems:
+      - Windows
+    category: Built-in Services
+    policy: '"Peer Networking Grouping" is set to "Disabled".'
+    fix:
+      - fix_type: windows_service
+        display_name: Peer Networking Grouping
+        name: p2psvc
+        startup_type: Disabled
+        text: '"p2psvc",4,""'
+    references:
+      cis:
+        id: "5.15"
+        category: L2
+        value: Disabled
+      stig:
+        id: ""
+        category: ""
+        value: ""
+    notes: ""
+  - cid: C-W-SRVC-BI-11
+    operating_systems:
+      - Windows
+    category: Built-in Services
+    policy: '"Peer Networking Identity Manager" is set to "Disabled".'
+    fix:
+      - fix_type: windows_service
+        display_name: Peer Networking Identity Manager
+        name: p2pimsvc
+        startup_type: Disabled
+        text: '"p2pimsvc",4,""'
+    references:
+      cis:
+        id: "5.16"
+        category: L2
+        value: Disabled
+      stig:
+        id: ""
+        category: ""
+        value: ""
+    notes: ""
+  - cid: C-W-SRVC-BI-12
+    operating_systems:
+      - Windows
+    category: Built-in Services
+    policy: '"PNRP Machine Name Publication Service" is set to "Disabled".'
+    fix:
+      - fix_type: windows_service
+        display_name: PNRP Machine Name Publication Service
+        name: PNRPAutoReg
+        startup_type: Disabled
+        text: '"PNRPAutoReg",4,""'
+    references:
+      cis:
+        id: "5.17"
+        category: L2
+        value: Disabled
+      stig:
+        id: ""
+        category: ""
+        value: ""
+    notes: ""
+  - cid: C-W-SRVC-BI-13
+    operating_systems:
+      - Windows
+    category: Built-in Services
+    policy: '"Problem Reports and Solutions Control Panel Support" is set to "Disabled".'
+    fix:
+      - fix_type: windows_service
+        display_name: Problem Reports and Solutions Control Panel Support
+        name: wercplsupport
+        startup_type: Disabled
+        text: '"wercplsupport",4,""'
+    references:
+      cis:
+        id: "5.18"
+        category: L2
+        value: Disabled
+      stig:
+        id: ""
+        category: ""
+        value: ""
+    notes: ""
+  - cid: C-W-SRVC-BI-14
+    operating_systems:
+      - Windows
+    category: Built-in Services
+    policy: '"Remote Access Auto Connection Manager" is set to "Disabled".'
+    fix:
+      - fix_type: windows_service
+        display_name: Remote Access Auto Connection Manager
+        name: RasAuto
+        startup_type: Disabled
+        text: '"RasAuto",4,""'
+    references:
+      cis:
+        id: "5.19"
+        category: L2
+        value: Disabled
+      stig:
+        id: ""
+        category: ""
+        value: ""
+    notes: ""
+  - cid: C-W-SRVC-BI-15
+    operating_systems:
+      - Windows
+    category: Built-in Services
+    policy: '"Remote Desktop Configuration" is set to "Disabled".'
+    fix:
+      - fix_type: windows_service
+        display_name: Remote Desktop Configuration
+        name: SessionEnv
+        startup_type: Disabled
+        text: '"SessionEnv",4,""'
+    references:
+      cis:
+        id: "5.20"
+        category: L2
+        value: Disabled
+      stig:
+        id: ""
+        category: ""
+        value: ""
+    notes: ""
+  - cid: C-W-SRVC-BI-16
+    operating_systems:
+      - Windows
+    category: Built-in Services
+    policy: '"Remote Desktop Services" is set to "Disabled".'
+    fix:
+      - fix_type: windows_service
+        display_name: Remote Desktop Services
+        name: TermService
+        startup_type: Disabled
+        text: '"TermService",4,""'
+    references:
+      cis:
+        id: "5.21"
+        category: L2
+        value: Disabled
+      stig:
+        id: ""
+        category: ""
+        value: ""
+    notes: ""
+  - cid: C-W-SRVC-BI-17
+    operating_systems:
+      - Windows
+    category: Built-in Services
+    policy: '"Remote Desktop Services UserMode Port Redirector" is set to "Disabled".'
+    fix:
+      - fix_type: windows_service
+        display_name: Remote Desktop Services UserMode Port Redirector
+        name: UmRdpService
+        startup_type: Disabled
+        text: '"UmRdpService",4,""'
+    references:
+      cis:
+        id: "5.22"
+        category: L2
+        value: Disabled
+      stig:
+        id: ""
+        category: ""
+        value: ""
+    notes: ""
+  - cid: C-W-SRVC-BI-18
+    operating_systems:
+      - Windows
+    category: Built-in Services
+    policy: '"Remote Procedure Call (RPC) Locator" is set to "Disabled".'
+    fix:
+      - fix_type: windows_service
+        display_name: Remote Procedure Call (RPC) Locator
+        name: RpcLocator
+        startup_type: Disabled
+        text: '"RpcLocator",4,""'
+    references:
+      cis:
+        id: "5.23"
+        category: L1
+        value: Disabled
+      stig:
+        id: ""
+        category: ""
+        value: ""
+    notes: ""
+  - cid: C-W-SRVC-BI-19
+    operating_systems:
+      - Windows
+    category: Built-in Services
+    policy: '"Remote Registry" is set to "Disabled".'
+    fix:
+      - fix_type: windows_service
+        display_name: Remote Registry
+        name: RemoteRegistry
+        startup_type: Disabled
+        text: '"RemoteRegistry",4,""'
+    references:
+      cis:
+        id: "5.24"
+        category: L2
+        value: Disabled
+      stig:
+        id: ""
+        category: ""
+        value: ""
+    notes: ""
+  - cid: C-W-SRVC-BI-20
+    operating_systems:
+      - Windows
+    category: Built-in Services
+    policy: '"Routing and Remote Access" is set to "Disabled".'
+    fix:
+      - fix_type: windows_service
+        display_name: Routing and Remote Access
+        name: RemoteAccess
+        startup_type: Disabled
+        text: '"RemoteAccess",4,""'
+    references:
+      cis:
+        id: "5.25"
+        category: L1
+        value: Disabled
+      stig:
+        id: ""
+        category: ""
+        value: ""
+    notes: ""
+  - cid: C-W-SRVC-BI-21
+    operating_systems:
+      - Windows
+    applies_to:
+      - Not SMB
+    category: Built-in Services
+    policy: '"Server" is set to "Disabled".'
+    fix:
+      - fix_type: windows_service
+        display_name: Server
+        name: LanmanServer
+        startup_type: Disabled
+        text: '"LanmanServer",4,""'
+    references:
+      cis:
+        id: "5.26"
+        category: L2
+        value: Disabled
+      stig:
+        id: ""
+        category: ""
+        value: ""
+    notes: ""
+  - cid: C-W-SRVC-BI-22
+    operating_systems:
+      - Windows
+    category: Built-in Services
+    policy: '"SSDP Discovery" is set to "Disabled".'
+    fix:
+      - fix_type: windows_service
+        display_name: SSDP Discovery
+        name: SSDPSRV
+        startup_type: Disabled
+        text: '"SSDPSRV",4,""'
+    references:
+      cis:
+        id: "5.30"
+        category: L1
+        value: Disabled
+      stig:
+        id: ""
+        category: ""
+        value: ""
+    notes: ""
+  - cid: C-W-SRVC-BI-23
+    operating_systems:
+      - Windows
+    category: Built-in Services
+    policy: '"UPnP Device Host" is set to "Disabled".'
+    fix:
+      - fix_type: windows_service
+        display_name: UPnP Device Host
+        name: upnphost
+        startup_type: Disabled
+        text: '"upnphost",4,""'
+    references:
+      cis:
+        id: "5.31"
+        category: L1
+        value: Disabled
+      stig:
+        id: ""
+        category: ""
+        value: ""
+    notes: ""
+  - cid: C-W-SRVC-BI-24
+    operating_systems:
+      - Windows
+    category: Built-in Services
+    policy: '"Windows Error Reporting Service" is set to "Disabled".'
+    fix:
+      - fix_type: windows_service
+        display_name: Windows Error Reporting Service
+        name: WerSvc
+        startup_type: Disabled
+        text: '"WerSvc",4,""'
+    references:
+      cis:
+        id: "5.33"
+        category: L2
+        value: Disabled
+      stig:
+        id: ""
+        category: ""
+        value: ""
+    notes: ""
+  - cid: C-W-SRVC-BI-25
+    operating_systems:
+      - Windows
+    category: Built-in Services
+    policy: '"Windows Event Collector" is set to "Disabled".'
+    fix:
+      - fix_type: windows_service
+        display_name: Windows Event Collector
+        name: Wecsvc
+        startup_type: Disabled
+        text: '"Wecsvc",4,""'
+    references:
+      cis:
+        id: "5.34"
+        category: L2
+        value: Disabled
+      stig:
+        id: ""
+        category: ""
+        value: ""
+    notes: ""
+  - cid: C-W-SRVC-BI-26
+    operating_systems:
+      - Windows
+    category: Built-in Services
+    policy: '"Windows Mobile Hotspot Service" is set to "Disabled".'
+    fix:
+      - fix_type: windows_service
+        display_name: Windows Mobile Hotspot Service
+        name: icssvc
+        startup_type: Disabled
+        text: '"icssvc",4,""'
+    references:
+      cis:
+        id: "5.36"
+        category: L1
+        value: Disabled
+      stig:
+        id: ""
+        category: ""
+        value: ""
+    notes: ""
+  - cid: C-W-SRVC-BI-27
+    operating_systems:
+      - Windows
+    category: Built-in Services
+    policy: '"Windows Push Notifications System Service" is set to "Disabled".'
+    fix:
+      - fix_type: windows_service
+        display_name: Windows Push Notifications System Service
+        name: WpnService
+        startup_type: Disabled
+        text: '"WpnService",4,""'
+    references:
+      cis:
+        id: "5.37"
+        category: L2
+        value: Disabled
+      stig:
+        id: ""
+        category: ""
+        value: ""
+    notes: ""
+  - cid: C-W-SRVC-BI-28
+    operating_systems:
+      - Windows
+    category: Built-in Services
+    policy: '"Windows PushToInstall Service" is set to "Disabled".'
+    fix:
+      - fix_type: windows_service
+        display_name: Windows PushToInstall Service
+        name: PushToInstall
+        startup_type: Disabled
+        text: '"PushToInstall",4,""'
+    references:
+      cis:
+        id: "5.38"
+        category: L2
+        value: Disabled
+      stig:
+        id: ""
+        category: ""
+        value: ""
+    notes: ""
+  - cid: C-W-SRVC-BI-29
+    operating_systems:
+      - Windows
+    category: Built-in Services
+    policy: '"Windows Remote Management" is set to "Disabled".'
+    fix:
+      - fix_type: windows_service
+        display_name: Windows Remote Management
+        name: WS-Management
+        startup_type: Disabled
+        text: '"WS-Management",4,""'
+    references:
+      cis:
+        id: "5.39"
+        category: L2
+        value: Disabled
+      stig:
+        id: ""
+        category: ""
+        value: ""
+    notes: ""
+  - cid: C-W-SRVC-BI-30
+    operating_systems:
+      - Windows
+    category: Built-in Services
+    policy: '"Xbox Accessory Management Service" is set to "Disabled".'
+    fix:
+      - fix_type: windows_service
+        display_name: Xbox Accessory Management Service
+        name: XboxGipSvc
+        startup_type: Disabled
+        text: '"XboxGipSvc",4,""'
+    references:
+      cis:
+        id: "5.41"
+        category: L1
+        value: Disabled
+      stig:
+        id: ""
+        category: ""
+        value: ""
+    notes: ""
+  - cid: C-W-SRVC-BI-31
+    operating_systems:
+      - Windows
+    category: Built-in Services
+    policy: '"Xbox Live Auth Manager" is set to "Disabled".'
+    fix:
+      - fix_type: windows_service
+        display_name: Xbox Live Auth Manager
+        name: XblAuthManager
+        startup_type: Disabled
+        text: '"XblAuthManager",4,""'
+    references:
+      cis:
+        id: "5.42"
+        category: L1
+        value: Disabled
+      stig:
+        id: ""
+        category: ""
+        value: ""
+    notes: ""
+  - cid: C-W-SRVC-BI-32
+    operating_systems:
+      - Windows
+    category: Built-in Services
+    policy: '"Xbox Live Game Save" is set to "Disabled".'
+    fix:
+      - fix_type: windows_service
+        display_name: Xbox Live Game Save
+        name: XblGameSave
+        startup_type: Disabled
+        text: '"XblGameSave",4,""'
+    references:
+      cis:
+        id: "5.43"
+        category: L1
+        value: Disabled
+      stig:
+        id: ""
+        category: ""
+        value: ""
+    notes: ""
+  - cid: C-W-SRVC-BI-33
+    operating_systems:
+      - Windows
+    category: Built-in Services
+    policy: '"Xbox Live Networking Service" is set to "Disabled".'
+    fix:
+      - fix_type: windows_service
+        display_name: Xbox Live Networking Service
+        name: XboxNetApiSvc
+        startup_type: Disabled
+        text: '"XboxNetApiSvc",4,""'
+    references:
+      cis:
+        id: "5.44"
+        category: L1
+        value: Disabled
+      stig:
+        id: ""
+        category: ""
+        value: ""
+    notes: ""
+  - cid: C-W-SRVC-BI-34
+    operating_systems:
+      - Windows
+    category: Built-in Services
+    policy: '"Secondary Logon" is set to "Disabled".'
+    fix:
+      - fix_type: windows_service
+        display_name: Secondary Logon
+        name: seclogon
+        startup_type: "Disabled"
+        text: '"seclogon",4,""'
+    references:
+      cis:
+        id: ""
+        category: ""
+        value: ""
+      stig:
+        id: V-220732
+        category: CAT II
+        value: Disabled
+    notes: ""
+  - cid: C-W-SRVC-BI-35
+    operating_systems:
+      - Windows
+    category: Built-in Services
+    policy: '"Microsoft Defender Antivirus Service" is set to "Automatic".'
+    fix:
+      - fix_type: windows_service
+        display_name: Microsoft Defender Antivirus Service
+        name: WinDefend
+        startup_type: "Automatic"
+        text: '"WinDefend",2,""'
+  - cid: C-W-SRVC-BI-36
+    operating_systems:
+      - Windows
+    category: Built-in Services
+    policy: '"Windows Defender Firewall" is set to "Automatic".'
+    fix:
+      - fix_type: windows_service
+        display_name: Windows Defender Firewall
+        name: mpssvc
+        startup_type: "Automatic"
+        text: '"mpssvc",2,""'
+  - cid: C-W-SRVC-BI-37
+    operating_systems:
+      - Windows
+    category: Built-in Services
+    policy: '"Windows Event Log" is set to "Automatic".'
+    fix:
+      - fix_type: windows_service
+        display_name: Windows Event Log
+        name: EventLog
+        startup_type: "Automatic"
+        text: '"EventLog",2,""'
+  - cid: C-W-SRVC-BI-38
+    operating_systems:
+      - Windows
+    category: Built-in Services
+    policy: '"Windows Search" is set to "Automatic".'
+    fix:
+      - fix_type: windows_service
+        display_name: Windows Search
+        name: WSearch
+        startup_type: "Automatic"
+        text: '"WSearch",2,""'
+  - cid: C-W-SRVC-BI-39
+    operating_systems:
+      - Windows
+    category: Built-in Services
+    policy: '"Windows Update" is set to "Automatic".'
+    fix:
+      - fix_type: windows_service
+        display_name: Windows Update
+        name: wuauserv
+        startup_type: "Automatic"
+        text: '"wuauserv",2,""'
+  - cid: C-W-SRVC-BI-40
+    operating_systems:
+      - Windows
+    category: Built-in Services
+    policy: '"Windows Defender Advanced Threat Protection Service" is set to "Manual".'
+    fix:
+      - fix_type: windows_service
+        display_name: Windows Defender Advanced Threat Protection Service
+        name: Sense
+        startup_type: "Manual"
+        text: '"Sense",3,""'
+  - cid: C-W-SRVC-BI-41
+    operating_systems:
+      - Windows
+    category: Built-in Services
+    policy: '"Windows Defender Advanced Threat Protection Service" is set to "Manual".'
+    fix:
+      - fix_type: windows_service
+        display_name: Windows Defender Advanced Threat Protection Service
+        name: Sense
+        startup_type: "Automatic"
+        text: '"Sense",3,""'
+  - cid: C-W-SRVC-BI-42
+    operating_systems:
+      - Windows
+    category: Built-in Services
+    policy: Perform a final check of all Windows services.
+    fix:
+      - fix_type: manual
+        display_name: rform a
+        steps: Check through each service in services.msc to see if there is anything abnormal.
+  - cid: C-W-SRVC-OPT-01
+    operating_systems:
+      - Windows
+    applies_to:
+      - Not IIS
+    category: Optional Features
+    policy: '"IIS Admin Service" is set to "Disabled".'
+    fix:
+      - fix_type: windows_service
+        display_name: IIS Admin Service
+        name: IISADMIN
+        startup_type: "Disabled"
+        text: '"IISADMIN",4,""'
+    references:
+      cis:
+        id: "5.6"
+        category: L1
+        value: Disabled or Not Installed
+      stig:
+        id: V-220718
+        category: CAT I
+        value: Not Installed
+    notes: ""
+  - cid: C-W-SRVC-OPT-02
+    operating_systems:
+      - Windows
+    category: Optional Features
+    policy: '"Infrared monitor service" is set to "Disabled".'
+    fix:
+      - fix_type: windows_service
+        display_name: Infrared monitor service
+        name: irmon
+        startup_type: Disabled
+        text: '"irmon",4,""'
+    references:
+      cis:
+        id: "5.7"
+        category: L1
+        value: Disabled or Not Installed
+      stig:
+        id: ""
+        category: ""
+        value: ""
+    notes: ""
+  - cid: C-W-SRVC-OPT-03
+    operating_systems:
+      - Windows
+    category: Optional Features
+    policy: '"LxssManager" is set to "Disabled".'
+    fix:
+      - fix_type: windows_service
+        display_name: LxssManager
+        name: LxssManager
+        startup_type: Disabled
+        text: '"LxssManager",4,""'
+    references:
+      cis:
+        id: "5.10"
+        category: L1
+        value: Disabled or Not Installed
+      stig:
+        id: ""
+        category: ""
+        value: ""
+    notes: ""
+  - cid: C-W-SRVC-OPT-04
+    operating_systems:
+      - Windows
+    category: Optional Features
+    policy: '"Microsoft FTP Service" is set to "Disabled".'
+    fix:
+      - fix_type: windows_service
+        display_name: Microsoft FTP Service
+        name: FTPSVC
+        startup_type: Disabled
+        text: '"FTPSVC",4,""'
+    references:
+      cis:
+        id: "5.11"
+        category: L1
+        value: Disabled or Not Installed
+      stig:
+        id: ""
+        category: ""
+        value: ""
+    notes: ""
+  - cid: C-W-SRVC-OPT-05
+    operating_systems:
+      - Windows
+    category: Optional Features
+    policy: '"OpenSSH SSH Server" is set to "Disabled".'
+    fix:
+      - fix_type: windows_service
+        display_name: OpenSSH SSH Server
+        name: sshd
+        startup_type: Disabled
+        text: '"sshd",4,""'
+    references:
+      cis:
+        id: "5.13"
+        category: L1
+        value: Disabled or Not Installed
+      stig:
+        id: ""
+        category: ""
+        value: ""
+    notes: ""
+  - cid: C-W-SRVC-OPT-06
+    operating_systems:
+      - Windows
+    category: Optional Features
+    policy: '"Simple TCP/IP Services" is set to "Disabled".'
+    fix:
+      - fix_type: windows_service
+        display_name: Simple TCP/IP Services
+        name: simptcp
+        startup_type: Disabled
+        text: '"simptcp",4,""'
+    references:
+      cis:
+        id: "5.27"
+        category: L1
+        value: Disabled or Not Installed
+      stig:
+        id: V-220720
+        category: CAT II
+        value: Not Installed
+    notes: ""
+  - cid: C-W-SRVC-OPT-07
+    operating_systems:
+      - Windows
+    category: Optional Features
+    policy: '"SNMP Service" is set to "Disabled".'
+    fix:
+      - fix_type: windows_service
+        display_name: SNMP Service
+        name: SNMP
+        startup_type: Disabled
+        text: '"SNMP",4,""'
+    references:
+      cis:
+        id: "5.28"
+        category: L2
+        value: Disabled or Not Installed
+      stig:
+        id: V-220719
+        category: CAT II
+        value: Not Installed
+    notes: ""
+  - cid: C-W-SRVC-OPT-08
+    operating_systems:
+      - Windows
+    category: Optional Features
+    policy: '"Special Administration Console Helper" is set to "Disabled".'
+    fix:
+      - fix_type: windows_service
+        display_name: Special Administration Console Helper
+        name: sacsvr
+        startup_type: Disabled
+        text: '"sacsvr",4,""'
+    references:
+      cis:
+        id: "5.29"
+        category: L1
+        value: Disabled or Not Installed
+      stig:
+        id: ""
+        category: ""
+        value: ""
+    notes: ""
+  - cid: C-W-SRVC-OPT-09
+    operating_systems:
+      - Windows
+    category: Optional Features
+    policy: '"Web Management Service" is set to "Disabled".'
+    fix:
+      - fix_type: windows_service
+        display_name: Web Management Service
+        name: WMSvc
+        startup_type: Disabled
+        text: '"WMSvc",4,""'
+    references:
+      cis:
+        id: "5.32"
+        category: L1
+        value: Disabled or Not Installed
+      stig:
+        id: ""
+        category: ""
+        value: ""
+    notes: ""
+  - cid: C-W-SRVC-OPT-10
+    operating_systems:
+      - Windows
+    category: Optional Features
+    policy: '"Windows Media Player Network Sharing Service" is set to "Disabled".'
+    fix:
+      - fix_type: windows_service
+        display_name: Windows Media Player Network Sharing Service
+        name: WMPNetworkSvc
+        startup_type: Disabled
+        text: '"WMPNetworkSvc",4,""'
+    references:
+      cis:
+        id: "5.35"
+        category: L1
+        value: " Disabled or Not Installed"
+      stig:
+        id: ""
+        category: ""
+        value: ""
+    notes: ""
+  - cid: C-W-SRVC-OPT-11
+    operating_systems:
+      - Windows
+    category: Optional Features
+    policy: '"World Wide Web Publishing Service" is set to "Disabled".'
+    fix:
+      - fix_type: windows_service
+        display_name: World Wide Web Publishing Service
+        name: W3SVC
+        startup_type: Disabled
+        text: '"W3SVC",4,""'
+    references:
+      cis:
+        id: "5.40"
+        category: L1
+        value: Disabled or Not Installed
+      stig:
+        id: ""
+        category: ""
+        value: ""
+    notes: ""
+  - cid: C-W-SRVC-OPT-12
+    operating_systems:
+      - Windows
+    category: Optional Features
+    policy: '"Telnet Client" is set to "Disabled".'
+    fix:
+      - fix_type: windows_service
+        display_name: Telnet Client
+        name: tlntsvr
+        startup_type: Disabled
+        text: '"tlntsvr",4,""'
+    references:
+      cis:
+        id: ""
+        category: ""
+        value: ""
+      stig:
+        id: V-220721
+        category: CAT II
+        value: Not Installed
+    notes: ""
+  - cid: C-W-SRVC-OPT-13
+    operating_systems:
+      - Windows
+    applies_to:
+      - Not IIS
+    category: Optional Features
+    policy: '"IIS Admin Service" is set to "Not Installed".'
+    fix:
+      - fix_type: command
+        command: Disable-WindowsOptionalFeature -Online -FeatureName "IIS-WebServer"
+      - fix_type: command
+        command: Disable-WindowsOptionalFeature -Online -FeatureName "IIS-WebServerRole"
+    references:
+      cis:
+        id: "5.6"
+        category: L1
+        value: Disabled or Not Installed
+      stig:
+        id: V-220718
+        category: CAT I
+        value: Not Installed
+    notes: Basically we want to set all the services to disabled, and then uninstall the optional features to prevent any problems with uninstallation.
+  - cid: C-W-SRVC-OPT-14
+    operating_systems:
+      - Windows
+    category: Optional Features
+    policy: '"Infrared monitor service" is set to "Not Installed".'
+    fix:
+      - fix_type: manual
+        steps: Navigate to "Turn Windows Features on or off" and toggle off "Infrared monitor service".
+    references:
+      cis:
+        id: "5.7"
+        category: L1
+        value: Disabled or Not Installed
+      stig:
+        id: ""
+        category: ""
+        value: ""
+    notes: ""
+  - cid: C-W-SRVC-OPT-15
+    operating_systems:
+      - Windows
+    category: Optional Features
+    policy: '"LxssManager" is set to "Not Installed".'
+    fix:
+      - fix_type: manual
+        steps: Navigate to "Turn Windows Features on or off" and toggle off "LxssManager".
+    references:
+      cis:
+        id: "5.10"
+        category: L1
+        value: Disabled or Not Installed
+      stig:
+        id: ""
+        category: ""
+        value: ""
+    notes: ""
+  - cid: C-W-SRVC-OPT-16
+    operating_systems:
+      - Windows
+    category: Optional Features
+    policy: '"Microsoft FTP Service" is set to "Not Installed".'
+    fix:
+      - fix_type: manual
+        steps: Navigate to "Turn Windows Features on or off" and toggle off "Microsoft FTP Service".
+    references:
+      cis:
+        id: "5.11"
+        category: L1
+        value: Disabled or Not Installed
+      stig:
+        id: ""
+        category: ""
+        value: ""
+    notes: ""
+  - cid: C-W-SRVC-OPT-17
+    operating_systems:
+      - Windows
+    category: Optional Features
+    policy: '"OpenSSH SSH Server" is set to "Not Installed".'
+    fix:
+      - fix_type: manual
+        steps: Navigate to "Turn Windows Features on or off" and toggle off "OpenSSH SSH Server".
+    references:
+      cis:
+        id: "5.13"
+        category: L1
+        value: Disabled or Not Installed
+      stig:
+        id: ""
+        category: ""
+        value: ""
+    notes: ""
+  - cid: C-W-SRVC-OPT-18
+    operating_systems:
+      - Windows
+    category: Optional Features
+    policy: '"Simple TCP/IP Services" is set to "Not Installed".'
+    fix:
+      - fix_type: manual
+        steps: Navigate to "Turn Windows Features on or off" and toggle off "Simple TCP/IP Services".
+    references:
+      cis:
+        id: "5.27"
+        category: L1
+        value: Disabled or Not Installed
+      stig:
+        id: V-220720
+        category: CAT II
+        value: Not Installed
+    notes: ""
+  - cid: C-W-SRVC-OPT-19
+    operating_systems:
+      - Windows
+    category: Optional Features
+    policy: '"SNMP Service" is set to "Not Installed".'
+    fix:
+      - fix_type: manual
+        steps: Navigate to "Turn Windows Features on or off" and toggle off "SNMP Service".
+    references:
+      cis:
+        id: "5.28"
+        category: L2
+        value: Disabled or Not Installed
+      stig:
+        id: V-220719
+        category: CAT II
+        value: Not Installed
+    notes: ""
+  - cid: C-W-SRVC-OPT-20
+    operating_systems:
+      - Windows
+    category: Optional Features
+    policy: '"Special Administration Console Helper" is set to "Not Installed".'
+    fix:
+      - fix_type: manual
+        steps: Navigate to "Turn Windows Features on or off" and toggle off "Special Administration Console Helper".
+    references:
+      cis:
+        id: "5.29"
+        category: L1
+        value: Disabled or Not Installed
+      stig:
+        id: ""
+        category: ""
+        value: ""
+    notes: ""
+  - cid: C-W-SRVC-OPT-21
+    operating_systems:
+      - Windows
+    category: Optional Features
+    policy: '"Web Management Service" is set to "Not Installed".'
+    fix:
+      - fix_type: manual
+        steps: Navigate to "Turn Windows Features on or off" and toggle off "Web Management Service".
+    references:
+      cis:
+        id: "5.32"
+        category: L1
+        value: Disabled or Not Installed
+      stig:
+        id: ""
+        category: ""
+        value: ""
+    notes: ""
+  - cid: C-W-SRVC-OPT-22
+    operating_systems:
+      - Windows
+    category: Optional Features
+    policy: '"Windows Media Player Network Sharing Service" is set to "Not Installed".'
+    fix:
+      - fix_type: manual
+        steps: Navigate to "Turn Windows Features on or off" and toggle off "Windows Media Player Network Sharing Service".
+    references:
+      cis:
+        id: "5.35"
+        category: L1
+        value: "Disabled or Not Installed"
+      stig:
+        id: ""
+        category: ""
+        value: ""
+    notes: ""
+  - cid: C-W-SRVC-OPT-23
+    operating_systems:
+      - Windows
+    category: Optional Features
+    policy: '"World Wide Web Publishing Service" is set to "Not Installed".'
+    fix:
+      - fix_type: manual
+        steps: Navigate to "Turn Windows Features on or off" and toggle off "World Wide Web Publishing Service".
+    references:
+      cis:
+        id: "5.40"
+        category: L1
+        value: Disabled or Not Installed
+      stig:
+        id: ""
+        category: ""
+        value: ""
+    notes: ""
+  - cid: C-W-SRVC-OPT-24
+    operating_systems:
+      - Windows
+    category: Optional Features
+    policy: '"Telnet Client" is set to "Not Installed".'
+    fix:
+      - fix_type: command
+        command: Disable-WindowsOptionalFeature -Online -FeatureName "TelnetClient"
+    references:
+      cis:
+        id: ""
+        category: ""
+        value: ""
+      stig:
+        id: V-220721
+        category: CAT II
+        value: Not Installed
+    notes: ""
+  - cid: C-W-SRVC-OPT-25
+    operating_systems:
+      - Windows
+    category: Optional Features
+    policy: '"TFTP Client" is set to "Not Installed".'
+    fix:
+      - fix_type: command
+        command: Disable-WindowsOptionalFeature -Online -FeatureName "TFTP"
+    references:
+      cis:
+        id: ""
+        category: ""
+        value: ""
+      stig:
+        id: V-220722
+        category: CAT II
+        value: Not Installed
+    notes: ""
+  - cid: C-W-SRVC-OPT-26
+    operating_systems:
+      - Windows
+    category: Optional Features
+    policy: Remove all unnecessary Windows features.
+    fix:
+      - fix_type: manual
+        steps: Navigate to "Turn Windows Features on or off" and toggle off all unnecessary features.
+    notes: ""

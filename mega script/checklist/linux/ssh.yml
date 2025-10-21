@@ -1,0 +1,513 @@
+version: 1
+name: SSH Configuration
+vulnerabilities:
+  - cid: C-UDF-SSH-02
+    operating_systems:
+      - Ubuntu
+      - Debian
+      - Fedora
+    applies_to:
+      - SSH
+    category: SSH Config
+    policy: '"LogLevel" is set to "VERBOSE".'
+    fix:
+      - fix_type: config_file
+        file: /etc/ssh/sshd_config
+        text: LogLevel VERBOSE
+    references:
+      cis:
+        id: 5.2.4
+        category: L1
+        value: INFO
+
+    notes: Verbose is accepted by CIS.
+  - cid: C-UDF-SSH-03
+    operating_systems:
+      - Ubuntu
+      - Debian
+      - Fedora
+    applies_to:
+      - SSH
+    category: SSH Config
+    policy: '"X11Forwarding" is set to "no".'
+    fix:
+      - fix_type: config_file
+        file: /etc/ssh/sshd_config
+        text: X11Forwarding no
+    references:
+      cis:
+        id: 5.2.5
+        category: L1
+        value: "no"
+      stig:
+        id: V-238219
+        category: CAT I
+        value: "no"
+  - cid: C-UDF-SSH-04
+    operating_systems:
+      - Ubuntu
+      - Debian
+      - Fedora
+    applies_to:
+      - SSH
+    category: SSH Config
+    policy: '"MaxAuthTries" is set to "4".'
+    fix:
+      - fix_type: config_file
+        file: /etc/ssh/sshd_config
+        text: MaxAuthTries 4
+    references:
+      cis:
+        id: 5.2.6
+        category: L1
+        value: "4"
+  - cid: C-UDF-SSH-05
+    operating_systems:
+      - Ubuntu
+      - Debian
+      - Fedora
+    applies_to:
+      - SSH
+    category: SSH Config
+    policy: '"IgnoreRhosts" is set to "yes".'
+    fix:
+      - fix_type: config_file
+        file: /etc/ssh/sshd_config
+        text: IgnoreRhosts yes
+    references:
+      cis:
+        id: 5.2.7
+        category: L1
+        value: "yes"
+  - cid: C-UDF-SSH-06
+    operating_systems:
+      - Ubuntu
+      - Debian
+      - Fedora
+    applies_to:
+      - SSH
+    category: SSH Config
+    policy: '"Hostbasedauthentication" is set to "no".'
+    fix:
+      - fix_type: config_file
+        file: /etc/ssh/sshd_config
+        text: Hostbasedauthentication no
+    references:
+      cis:
+        id: 5.2.8
+        category: L1
+        value: "no"
+  - cid: C-UDF-SSH-07
+    operating_systems:
+      - Ubuntu
+      - Debian
+      - Fedora
+    applies_to:
+      - SSH
+    category: SSH Config
+    policy: '"PermitRootLogin" is set to "no".'
+    fix:
+      - fix_type: config_file
+        file: /etc/ssh/sshd_config
+        text: PermitRootLogin no
+    references:
+      cis:
+        id: 5.2.8
+        category: L1
+        value: "no"
+  - cid: C-UDF-SSH-08
+    operating_systems:
+      - Ubuntu
+      - Debian
+      - Fedora
+    applies_to:
+      - SSH
+    category: SSH Config
+    policy: '"PermitEmptyPasswords" is set to "no".'
+    fix:
+      - fix_type: config_file
+        file: /etc/ssh/sshd_config
+        text: PermitEmptyPasswords no
+    references:
+      cis:
+        id: 5.2.10
+        category: L1
+        value: "no"
+      stig:
+        id: V-238218
+        category: CAT I
+        value: "no"
+  - cid: C-UDF-SSH-09
+    operating_systems:
+      - Ubuntu
+      - Debian
+      - Fedora
+    applies_to:
+      - SSH
+    category: SSH Config
+    policy: '"PermitUserEnvironment" is set to "no".'
+    fix:
+      - fix_type: config_file
+        file: /etc/ssh/sshd_config
+        text: PermitUserEnvironment no
+    references:
+      cis:
+        id: 5.2.11
+        category: L1
+        value: "no"
+      stig:
+        id: V-238218
+        category: CAT I
+        value: "no"
+  - cid: C-UDF-SSH-10
+    operating_systems:
+      - Ubuntu
+      - Debian
+      - Fedora
+    applies_to:
+      - SSH
+    category: SSH Config
+    policy: '"Ciphers" is set to "aes256-ctr,aes192-ctr,aes128-ctr".'
+    fix:
+      - fix_type: config_file
+        file: /etc/ssh/sshd_config
+        text: Ciphers aes256-ctr,aes192-ctr,aes128-ctr
+    references:
+      cis:
+        id: 5.2.12
+        category: L1
+        value: <Depends>
+      stig:
+        id: V-238217
+        category: CAT II
+        value: aes256-ctr,aes192-ctr,aes128-ctr
+  - cid: C-UDF-SSH-11
+    operating_systems:
+      - Ubuntu
+      - Debian
+      - Fedora
+    applies_to:
+      - SSH
+    category: SSH Config
+    policy: '"MACs" is set to "hmac-sha2-512,hmac-sha2-256".'
+    fix:
+      - fix_type: config_file
+        file: /etc/ssh/sshd_config
+        text: MACs hmac-sha2-512,hmac-sha2-256
+    references:
+      cis:
+        id: 5.2.13
+        category: L1
+        value: <Depends>
+      stig:
+        id: V-238216
+        category: CAT II
+        value: hmac-sha2-512,hmac-sha2-256
+  - cid: C-UDF-SSH-12
+    operating_systems:
+      - Ubuntu
+      - Debian
+      - Fedora
+    applies_to:
+      - SSH
+    category: SSH Config
+    policy: '"KexAlgorithms" is set to "ecdh-sha2-nistp256,ecdh-sha2-nistp384,ecdh-sha2-nistp521,diffie-hellman-group-exchange-sha256,diffie-hellman-group16-sha512,diffie-hellman-group18-sha512,diffie-hellman-group14-sha256".'
+    fix:
+      - fix_type: config_file
+        file: /etc/ssh/sshd_config
+        text: KexAlgorithms ecdh-sha2-nistp256,ecdh-sha2-nistp384,ecdh-sha2-nistp521,diffie-hellman-group-exchange-sha256,diffie-hellman-group16-sha512,diffie-hellman-group18-sha512,diffie-hellman-group14-sha256
+    references:
+      cis:
+        id: 5.2.14
+        category: L1
+        value: <Depends>
+  - cid: C-UDF-SSH-13
+    operating_systems:
+      - Ubuntu
+      - Debian
+      - Fedora
+    applies_to:
+      - SSH
+    category: SSH Config
+    policy: '"ClientAliveInterval" is set to "300".'
+    fix:
+      - fix_type: config_file
+        file: /etc/ssh/sshd_config
+        text: ClientAliveInterval 300
+    references:
+      cis:
+        id: 5.2.15
+        category: L1
+        value: "300"
+      stig:
+        id: V-238213
+        category: CAT II
+        value: "600"
+  - cid: C-UDF-SSH-14
+    operating_systems:
+      - Ubuntu
+      - Debian
+      - Fedora
+    applies_to:
+      - SSH
+    category: SSH Config
+    policy: '"ClientAliveCountMax" is set to "1".'
+    fix:
+      - fix_type: config_file
+        file: /etc/ssh/sshd_config
+        text: ClientAliveCountMax 1
+    references:
+      cis:
+        id: 5.2.15
+        category: L1
+        value: "3"
+      stig:
+        id: V-238212
+        category: CAT II
+        value: "1"
+  - cid: C-UDF-SSH-15
+    operating_systems:
+      - Ubuntu
+      - Debian
+      - Fedora
+    applies_to:
+      - SSH
+    category: SSH Config
+    policy: '"LoginGraceTime" is set to "60".'
+    fix:
+      - fix_type: config_file
+        file: /etc/ssh/sshd_config
+        text: LoginGraceTime 60
+    references:
+      cis:
+        id: 5.2.16
+        category: L1
+        value: "60"
+  # - cid: C-UDF-SSH-16
+  #   operating_systems:
+  #     - Ubuntu
+  #     - Debian
+  #     - Fedora
+  #   applies_to:
+  #     - SSH
+  #   category: SSH Config
+  #   policy: '"AllowUsers,AllowGroups,DenyUsers,DenyGroups" is set to "".'
+  #   fix:
+  #     - fix_type: config_file
+  #       file: /etc/ssh/sshd_config
+  #       text: "AllowUsers,AllowGroups,DenyUsers,DenyGroups "
+  #   references:
+  #     cis:
+  #       id: 5.2.17
+  #       category: L1
+  #       value: ""
+  #   notes: ""
+  - cid: C-UDF-SSH-17
+    operating_systems:
+      - Ubuntu
+      - Debian
+      - Fedora
+    applies_to:
+      - SSH
+    category: SSH Config
+    policy: '"Banner" is set to "/etc/issue.net".'
+    fix:
+      - fix_type: config_file
+        file: /etc/ssh/sshd_config
+        text: Banner /etc/issue.net
+    references:
+      cis:
+        id: 5.2.18
+        category: L1
+        value: /etc/issue.net
+      stig:
+        id: V-238214
+        category: CAT II
+        value: /etc/issue.net
+  - cid: C-UDF-SSH-18
+    operating_systems:
+      - Ubuntu
+      - Debian
+      - Fedora
+    applies_to:
+      - SSH
+    category: SSH Config
+    policy: '"UsePAM" is set to "yes".'
+    fix:
+      - fix_type: config_file
+        file: /etc/ssh/sshd_config
+        text: UsePAM yes
+    references:
+      cis:
+        id: 5.2.19
+        category: L1
+        value: "yes"
+      stig:
+        id: V-238211
+        category: CAT II
+        value: "yes"
+  - cid: C-UDF-SSH-19
+    operating_systems:
+      - Ubuntu
+      - Debian
+      - Fedora
+    applies_to:
+      - SSH
+    category: SSH Config
+    policy: '"AllowTcpForwarding" is set to "no".'
+    fix:
+      - fix_type: config_file
+        file: /etc/ssh/sshd_config
+        text: AllowTcpForwarding no
+    references:
+      cis:
+        id: 5.2.20
+        category: L1
+        value: "no"
+  - cid: C-UDF-SSH-20
+    operating_systems:
+      - Ubuntu
+      - Debian
+      - Fedora
+    applies_to:
+      - SSH
+    category: SSH Config
+    policy: '"MaxStartups" is set to "10:30:60".'
+    fix:
+      - fix_type: config_file
+        file: /etc/ssh/sshd_config
+        text: MaxStartups 10:30:60
+    references:
+      cis:
+        id: 5.2.21
+        category: L1
+        value: 10:30:60
+  - cid: C-UDF-SSH-21
+    operating_systems:
+      - Ubuntu
+      - Debian
+      - Fedora
+    applies_to:
+      - SSH
+    category: SSH Config
+    policy: '"MaxSessions" is set to "10".'
+    fix:
+      - fix_type: config_file
+        file: /etc/ssh/sshd_config
+        text: MaxSessions 10
+    references:
+      cis:
+        id: 5.2.22
+        category: L1
+        value: "10"
+  - cid: C-UDF-SSH-22
+    operating_systems:
+      - Ubuntu
+      - Debian
+      - Fedora
+    applies_to:
+      - SSH
+    category: SSH Config
+    policy: '"PubkeyAuthentication" is set to "yes".'
+    fix:
+      - fix_type: config_file
+        file: /etc/ssh/sshd_config
+        text: PubkeyAuthentication yes
+    references:
+      stig:
+        id: V-238210
+        category: CAT II
+        value: "yes"
+  - cid: C-UDF-SSH-23
+    operating_systems:
+      - Ubuntu
+      - Debian
+      - Fedora
+    applies_to:
+      - SSH
+    category: SSH Config
+    policy: '"X11UseLocalhost" is set to "yes".'
+    fix:
+      - fix_type: config_file
+        file: /etc/ssh/sshd_config
+        text: X11UseLocalhost yes
+    references:
+      stig:
+        id: V-238220
+        category: CAT II
+        value: "yes"
+  - cid: C-UDF-SSH-24
+    operating_systems:
+      - Ubuntu
+      - Debian
+      - Fedora
+    applies_to:
+      - SSH
+    category: SSH Config
+    policy: '"Protocol" is set to "2".'
+    fix:
+      - fix_type: config_file
+        file: /etc/ssh/sshd_config
+        text: Protocol 2
+  - cid: C-UDF-SSH-25
+    operating_systems:
+      - Ubuntu
+      - Debian
+      - Fedora
+    applies_to:
+      - SSH
+    category: SSH Config
+    policy: '"PrintLastLog" is set to "no".'
+    fix:
+      - fix_type: config_file
+        file: /etc/ssh/sshd_config
+        text: PrintLastLog no
+  - cid: C-UDF-SSH-26
+    operating_systems:
+      - Ubuntu
+      - Debian
+      - Fedora
+    applies_to:
+      - SSH
+    category: File Permissions
+    policy: 'Permissions on /etc/ssh/sshd_config are root:root 600.'
+    fix:
+      - fix_type: linux_permissions
+        target: /etc/ssh/sshd_config
+        owner: root
+        group: root
+        mode: "600"
+  - cid: C-UDF-SSH-27
+    operating_systems:
+      - Ubuntu
+      - Debian
+      - Fedora
+    applies_to:
+      - SSH
+    category: File Permissions
+    policy: 'Permissions on SSH public host keys are root:root 644.'
+    fix:
+      - fix_type: manual
+        command: |
+          find /etc/ssh -xdev -type f -name 'ssh_host_*_key.pub' -exec chmod u-x,gowx {} \;
+          find /etc/ssh -xdev -type f -name 'ssh_host_*_key.pub' -exec chown root:root {} \;
+  - cid: C-UDF-SSH-28
+    operating_systems:
+      - Ubuntu
+      - Debian
+      - Fedora
+    applies_to:
+      - SSH
+    category: File Permissions
+    policy: 'Permissions on .ssh files 600.'
+    fix:
+      - fix_type: manual
+        steps:
+          run the following commands for each /home/user. 
+            chmod 600 .ssh/id_rsa
+            chmod 600 .ssh/id_rsa.pub
+            chmod 600 .ssh/authorized_keys
+            chmod 600 .ssh/known_hosts
+            chmod 600 .ssh/config
+
+

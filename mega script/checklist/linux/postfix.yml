@@ -1,0 +1,222 @@
+version: 1
+name: Postfix Configuration
+vulnerabilities:
+  - cid: C-UD-PF-00
+    operating_systems:
+      - Ubuntu
+      - Debian
+    applies_to:
+      - Not PF
+    category: Postfix Software
+    policy: Postfix is not installed if it is not listed as a critical service.
+    fix:
+      - fix_type: command
+        command: apt-get purge -y postfix 
+  - cid: C-UD-PF-01
+    operating_systems:
+      - Ubuntu
+      - Debian
+    applies_to:
+      - PF
+    category: Permissions
+    policy: Permissions are set on /etc/postfix as root:root 755.
+    fix:
+      - fix_type: linux_permissions
+        target: /etc/postfix
+        owner: root
+        group: root
+        mode: "755"
+    references:
+      link: https://security-24-7.com/hardening-guide-for-postfix-2-x/
+  - cid: C-UD-PF-02
+    operating_systems:
+      - Ubuntu
+      - Debian
+    applies_to:
+      - PF
+    category: Permissions
+    policy: Permissions are set on /etc/postfix/main.cf as root:root 644.
+    fix:
+      - fix_type: linux_permissions
+        target: /etc/postfix/main.cf
+        owner: root
+        group: root
+        mode: "644"
+    references:
+      link: https://security-24-7.com/hardening-guide-for-postfix-2-x/
+  - cid: C-UD-PF-03
+    operating_systems:
+      - Ubuntu
+      - Debian
+    applies_to:
+      - PF
+    category: Permissions
+    policy: Permissions are set on /etc/postfix/master.cf as root:root 644.
+    fix:
+      - fix_type: linux_permissions
+        target: /etc/postfix/master.cf
+        owner: root
+        group: root
+        mode: "644"
+    references:
+      link: https://security-24-7.com/hardening-guide-for-postfix-2-x/
+  - cid: C-UD-PF-04
+    operating_systems:
+      - Ubuntu
+      - Debian
+    applies_to:
+      - PF
+    category: Permissions
+    policy: Permissions are set on /etc/postfix/postfix-script as root:root 755.
+    fix:
+      - fix_type: linux_permissions
+        target: /etc/postfix/postfix-script*
+        owner: root
+        group: root
+        mode: "755"
+    references:
+      link: https://security-24-7.com/hardening-guide-for-postfix-2-x/
+  - cid: C-UD-PF-05
+    operating_systems:
+      - Ubuntu
+      - Debian
+    applies_to:
+      - PF
+    category: Permissions
+    policy: Permissions are set on /var/spool/postfix as root:root 755.
+    fix:
+      - fix_type: linux_permissions
+        target: /var/spool/postfix
+        owner: root
+        group: root
+        mode: "755"
+    references:
+      link: https://security-24-7.com/hardening-guide-for-postfix-2-x/
+  - cid: C-UD-PF-06
+    operating_systems:
+      - Ubuntu
+      - Debian
+    applies_to:
+      - PF
+    category: Permissions
+    policy: Permissions are set on /var/log/mail* as root:root 600.
+    fix:
+      - fix_type: linux_permissions
+        target: /var/log/mail*
+        owner: root
+        group: root
+        mode: "600"
+    references:
+      link: https://security-24-7.com/hardening-guide-for-postfix-2-x/
+  - cid: C-UD-PF-07
+    operating_systems:
+      - Ubuntu
+      - Debian
+    applies_to:
+      - PF
+    category: PF Config
+    policy: '"Verify command is disabled".'
+    fix:
+      - fix_type: config_file
+        file: /etc/postfix/main.cf
+        text: disable_vrfy_command = yes
+  - cid: C-UD-PF-08
+    operating_systems:
+      - Ubuntu
+      - Debian
+    applies_to:
+      - PF
+    category: PF Config
+    policy: '"Enable SASL Authentication".'
+    fix:
+      - fix_type: config_file
+        file: /etc/postfix/main.cf
+        text: smtpd_sasl_auth_enable = yes
+  - cid: C-UD-PF-09
+    operating_systems:
+      - Ubuntu
+      - Debian
+    applies_to:
+      - PF
+    category: PF Config
+    policy: '"Disallow any methods that do allow anonymous authentication".'
+    fix:
+      - fix_type: config_file
+        file: /etc/postfix/main.cf
+        text: smtp_sasl_security_options = noanonymous,noplaintext
+  - cid: C-UD-PF-10
+    operating_systems:
+      - Ubuntu
+      - Debian
+    applies_to:
+      - PF
+    category: PF Config
+    policy: '"Restrict to authenticated recipients".'
+    fix:
+      - fix_type: config_file
+        file: /etc/postfix/main.cf
+        text: smtpd_recipient_restrictions = permit_sasl_authenticated, permit_mynetworks, reject_unauth_destination
+  - cid: C-UD-PF-11
+    operating_systems:
+      - Ubuntu
+      - Debian
+    applies_to:
+      - PF
+    category: PF Config
+    policy: '"Require HELO" from clients when connecting.'
+    fix:
+      - fix_type: config_file
+        file: /etc/postfix/main.cf
+        text: smtpd_helo_required = yes
+  - cid: C-UD-PF-12
+    operating_systems:
+      - Ubuntu
+      - Debian
+    applies_to:
+      - PF
+    category: PF Config
+    policy: '"Require HELO" from clients when connecting.'
+    fix:
+      - fix_type: config_file
+        file: /etc/postfix/main.cf
+        text: smtpd_helo_required = yes
+  - cid: C-UD-PF-13
+    operating_systems:
+      - Ubuntu
+      - Debian
+    applies_to:
+      - PF
+    category: PF Config
+    policy: '"Enable STARTTLS encryption".'
+    fix:
+      - fix_type: config_file
+        file: /etc/postfix/main.cf
+        text: smtp_use_tls = yes
+  - cid: C-UD-PF-14
+    operating_systems:
+      - Ubuntu
+      - Debian
+    applies_to:
+      - PF
+    category: PF Config
+    policy: '"Location of CA certificates".'
+    fix:
+      - fix_type: config_file
+        file: /etc/postfix/main.cf
+        text: smtp_tls_CAfile = /etc/ssl/certs/ca-certificates.crt
+    note: If not present, run apt-get install ca-certificates. 
+  - cid: C-UD-PF-14
+    operating_systems:
+      - Ubuntu
+      - Debian
+    applies_to:
+      - PF
+    category: PF Config
+    policy: '"Location of CA certificates".'
+    fix:
+      - fix_type: config_file
+        file: /etc/postfix/main.cf
+        text: smtp_tls_CAfile = /etc/ssl/certs/ca-certificates.crt
+    note: If not present, run apt-get install ca-certificates. 
+      smtp_tls_loglevel = 1
+

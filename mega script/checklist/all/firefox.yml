@@ -1,0 +1,731 @@
+# Polcies.json contains all correct policies.
+version: 1.0
+name: Firefox Configuration
+vulnerabilities:
+  - cid: C-WSUDF-FF-01
+    operating_systems:
+      - Windows
+      - Windows Server
+      - Ubuntu
+      - Debian
+      - Fedora
+    category: Firefox
+    policy: Firefox is updated to the latest version.
+    fix:
+      - fix_type: manual
+        steps: Run Ninte.
+    references:
+      stig:
+        id: V-251545
+        category: CAT I
+  - cid: C-WSUDF-FF-02
+    operating_systems:
+      - Windows
+      - Windows Server
+      - Ubuntu
+      - Debian
+      - Fedora
+    category: Firefox Configuration
+    policy: Firefox is refreshed.
+    fix:
+      - fix_type: manual
+        steps: Visit about:support and click Refresh Firefox...
+  - cid: C-WSUDF-FF-03
+    operating_systems:
+      - Windows
+      - Windows Server
+      - Ubuntu
+      - Debian
+      - Fedora
+    category: Firefox Configuration
+    policy: Firefox is configured to allow only TLS 1.2 or above.
+    fix:
+      - fix_type: firefox
+        key: SSLVersionMin
+        value: tls1.2
+    references:
+      stig:
+        id: V-251546
+        category: CAT I
+  - cid: C-WSUDF-FF-04
+    operating_systems:
+      - Windows
+      - Windows Server
+      - Ubuntu
+      - Debian
+      - Fedora
+    category: Firefox Configuration
+    policy: Firefox is configured to ask which certificate to present when a certificate is required.
+    fix:
+      - fix_type: firefox
+        key: security.default_personal_cert
+        value: { "Value": "Ask Every Time", "Status": "locked" }
+        preference: true
+    references:
+      stig:
+        id: V-251547
+        category: CAT II
+  - cid: C-WSUDF-FF-05
+    operating_systems:
+      - Windows
+      - Windows Server
+      - Ubuntu
+      - Debian
+      - Fedora
+    category: Firefox Configuration
+    policy: Firefox is configured to not automatically check for updates in installed search plugins.
+    fix:
+      - fix_type: firefox
+        key: browser.search.update
+        value: { "Value": false, "Status": "locked" }
+        preference: true
+    references:
+      stig:
+        id: V-251548
+        category: CAT II
+  - cid: C-WSUDF-FF-06
+    operating_systems:
+      - Windows
+      - Windows Server
+      - Ubuntu
+      - Debian
+      - Fedora
+    category: Firefox Configuration
+    policy: Firefox is configured to not automatically check for updates in installed search plugins.
+    fix:
+      - fix_type: firefox
+        key: ExtensionUpdate
+        value: false
+    references:
+      stig:
+        id: V-251549
+        category: CAT II
+  - cid: C-WSUDF-FF-07
+    operating_systems:
+      - Windows
+      - Windows Server
+      - Ubuntu
+      - Debian
+      - Fedora
+    category: Firefox Configuration
+    policy: Firefox is configured to not automatically execute or download certain MIME types.
+    fix:
+      - fix_type: manual
+        steps: Check Firefox applications settings to make sure no MIME types are set to be opened by an application that can execute code.
+    references:
+      stig:
+        id: V-251550
+        category: CAT II
+  - cid: C-WSUDF-FF-08
+    operating_systems:
+      - Windows
+      - Windows Server
+      - Ubuntu
+      - Debian
+      - Fedora
+    category: Firefox Configuration
+    policy: Firefox is configured to disable form fill assistance.
+    fix:
+      - fix_type: firefox
+        key: DisableFormHistory
+        value: true
+    references:
+      stig:
+        id: V-251551
+        category: CAT II
+  - cid: C-WSUDF-FF-09
+    operating_systems:
+      - Windows
+      - Windows Server
+      - Ubuntu
+      - Debian
+      - Fedora
+    category: Firefox Configuration
+    policy: Firefox is configured to not use a password store.
+    fix:
+      - fix_type: firefox
+        key: PasswordManagerEnabled
+        value: false
+    references:
+      stig:
+        id: V-251552
+        category: CAT II
+  - cid: C-WSUDF-FF-10
+    operating_systems:
+      - Windows
+      - Windows Server
+      - Ubuntu
+      - Debian
+      - Fedora
+    category: Firefox Configuration
+    policy: Firefox is configured to block pop-ups.
+    fix:
+      - fix_type: firefox
+        key: PopupBlocking
+        value: { "Default": true, "Locked": true }
+    references:
+      stig:
+        id: V-251553
+        category: CAT II
+  - cid: C-WSUDF-FF-11
+    operating_systems:
+      - Windows
+      - Windows Server
+      - Ubuntu
+      - Debian
+      - Fedora
+    category: Firefox Configuration
+    policy: Firefox is configured prevent JavaScript from moving or resizing windows.
+    fix:
+      - fix_type: firefox
+        key: dom.disable_window_move_resize
+        value: { "Value": true, "Locked": true }
+        preference: true
+    references:
+      stig:
+        id: V-251554
+        category: CAT II
+  - cid: C-WSUDF-FF-12
+    operating_systems:
+      - Windows
+      - Windows Server
+      - Ubuntu
+      - Debian
+      - Fedora
+    category: Firefox Configuration
+    policy: Firefox is configured to prevent JavaScript from raising or lowering windows.
+    fix:
+      - fix_type: firefox
+        key: dom.disable_window_flip
+        value: { "Value": true, "Locked": true }
+        preference: true
+    references:
+      stig:
+        id: V-251555
+        category: CAT II
+  - cid: C-WSUDF-FF-13
+    operating_systems:
+      - Windows
+      - Windows Server
+      - Ubuntu
+      - Debian
+      - Fedora
+    category: Firefox Configuration
+    policy: Firefox is configured to disable the installation of extensions.
+    fix:
+      - fix_type: firefox
+        key: InstallAddonsPermission
+        value: { "Default": false }
+    references:
+      stig:
+        id: V-251557
+        category: CAT II
+  - cid: C-WSUDF-FF-14
+    operating_systems:
+      - Windows
+      - Windows Server
+      - Ubuntu
+      - Debian
+      - Fedora
+    category: Firefox Configuration
+    policy: Firefox is configured to prevent background submission of information to Mozilla.
+    fix:
+      - fix_type: firefox
+        key: DisableTelemetry
+        value: true
+    references:
+      stig:
+        id: V-251558
+        category: CAT II
+  - cid: C-WSUDF-FF-15
+    operating_systems:
+      - Windows
+      - Windows Server
+      - Ubuntu
+      - Debian
+      - Fedora
+    category: Firefox Configuration
+    policy: Firefox development tools are disabled.
+    fix:
+      - fix_type: firefox
+        key: DisableDeveloperTools
+        value: true
+    references:
+      stig:
+        id: V-251559
+        category: CAT III
+  - cid: C-WSUDF-FF-16
+    operating_systems:
+      - Windows
+      - Windows Server
+      - Ubuntu
+      - Debian
+      - Fedora
+    category: Firefox Configuration
+    policy: Firefox prevents users from quickly deleting data.
+    fix:
+      - fix_type: firefox
+        key: DisableForgetButton
+        value: true
+    references:
+      stig:
+        id: V-251562
+        category: CAT II
+  - cid: C-WSUDF-FF-17
+    operating_systems:
+      - Windows
+      - Windows Server
+      - Ubuntu
+      - Debian
+      - Fedora
+    category: Firefox Configuration
+    policy: Firefox private browsing is disabled.
+    fix:
+      - fix_type: firefox
+        key: DisablePrivateBrowsing
+        value: true
+    references:
+      stig:
+        id: V-251563
+        category: CAT II
+  - cid: C-WSUDF-FF-18
+    operating_systems:
+      - Windows
+      - Windows Server
+      - Ubuntu
+      - Debian
+      - Fedora
+    category: Firefox Configuration
+    policy: Firefox search suggestions are disabled.
+    fix:
+      - fix_type: firefox
+        key: SearchSuggestEnabled
+        value: false
+    references:
+      stig:
+        id: V-251564
+        category: CAT II
+  - cid: C-WSUDF-FF-19
+    operating_systems:
+      - Windows
+      - Windows Server
+      - Ubuntu
+      - Debian
+      - Fedora
+    category: Firefox Configuration
+    policy: Firefox autoplay is disabled.
+    fix:
+      - fix_type: firefox
+        key: Permissions
+        value: { "Autoplay": { "Default": "block-audio-video" } }
+    references:
+      stig:
+        id: V-251565
+        category: CAT III
+  - cid: C-WSUDF-FF-20
+    operating_systems:
+      - Windows
+      - Windows Server
+      - Ubuntu
+      - Debian
+      - Fedora
+    category: Firefox Configuration
+    policy: Firefox network prediction is disabled.
+    fix:
+      - fix_type: firefox
+        key: NetworkPrediction
+        value: false
+    references:
+      stig:
+        id: V-251566
+        category: CAT II
+  - cid: C-WSUDF-FF-21
+    operating_systems:
+      - Windows
+      - Windows Server
+      - Ubuntu
+      - Debian
+      - Fedora
+    category: Firefox Configuration
+    policy: Firefox fingerprinting protection and cryptomining protection is enabled.
+    fix:
+      - fix_type: firefox
+        key: EnableTrackingProtection
+        value: { "Fingerprinting": true, "Cryptomining": true }
+    references:
+      stig:
+        id: V-251567, V-251568
+        category: CAT II
+  - cid: C-WSUDF-FF-22
+    operating_systems:
+      - Windows
+      - Windows Server
+      - Ubuntu
+      - Debian
+      - Fedora
+    category: Firefox Configuration
+    policy: Firefox Enhanced Tracking Protection is enabled.
+    fix:
+      - fix_type: firefox
+        key: browser.contentblocking.category
+        value: { "Value": "strict", "Status": "locked" }
+        preference: true
+    references:
+      stig:
+        id: V-251569
+        category: CAT II
+  - cid: C-WSUDF-FF-23
+    operating_systems:
+      - Windows
+      - Windows Server
+      - Ubuntu
+      - Debian
+      - Fedora
+    category: Firefox Configuration
+    policy: Firefox extension recommendations are disabled.
+    fix:
+      - fix_type: firefox
+        key: extensions.htmlaboutaddons.recommendations.enabled
+        value: { "Value": "false", "Status": "locked" }
+        preference: true
+    references:
+      stig:
+        id: V-251570
+        category: CAT II
+  - cid: C-WSUDF-FF-24
+    operating_systems:
+      - Windows
+      - Windows Server
+      - Ubuntu
+      - Debian
+      - Fedora
+    category: Firefox Configuration
+    policy: Firefox deprecated ciphers are disabled.
+    fix:
+      - fix_type: firefox
+        key: DisabledCiphers
+        value: { "TLS_RSA_WITH_3DES_EDE_CBC_SHA": true }
+    references:
+      stig:
+        id: V-251571
+        category: CAT II
+  - cid: C-WSUDF-FF-25
+    operating_systems:
+      - Windows
+      - Windows Server
+      - Ubuntu
+      - Debian
+      - Fedora
+    category: Firefox Configuration
+    policy: Firefox does not recommend extensions to users.
+    fix:
+      - fix_type: firefox
+        key: UserMessaging
+        value: { "ExtensionRecommendations": false }
+    references:
+      stig:
+        id: V-251572
+        category: CAT II
+  - cid: C-WSUDF-FF-26
+    operating_systems:
+      - Windows
+      - Windows Server
+      - Ubuntu
+      - Debian
+      - Fedora
+    category: Firefox Configuration
+    policy: Firefox New Tab page does not show top sites and other recommendations.
+    fix:
+      - fix_type: firefox
+        key: FirefoxHome
+        value:
+          {
+            "Search": false,
+            "TopSites": false,
+            "SponsoredTopSites": false,
+            "Pocket": false,
+            "SponsoredPocket": false,
+            "Highlights": false,
+            "Snippets": false,
+            "locked": true,
+          }
+    references:
+      stig:
+        id: V-251573
+        category: CAT II
+  - cid: C-WSUDF-FF-27
+    operating_systems:
+      - Windows
+      - Windows Server
+      - Ubuntu
+      - Debian
+      - Fedora
+    category: Firefox Configuration
+    policy: Firefox is configured such that DNS over HTTPS is disabled.
+    fix:
+      - fix_type: firefox
+        key: DNSOverHTTPS
+        value: { "Enabled": false }
+    references:
+      stig:
+        id: V-251577
+        category: CAT II
+  - cid: C-WSUDF-FF-28
+    operating_systems:
+      - Windows
+      - Windows Server
+      - Ubuntu
+      - Debian
+      - Fedora
+    category: Firefox Configuration
+    policy: Firefox accounts are disabled.
+    fix:
+      - fix_type: firefox
+        key: DisableFirefoxAccounts
+        value: true
+    references:
+      stig:
+        id: V-251578
+        category: CAT II
+  - cid: C-WSUDF-FF-29
+    operating_systems:
+      - Windows
+      - Windows Server
+      - Ubuntu
+      - Debian
+      - Fedora
+    category: Firefox Configuration
+    policy: Firefox feedback reporting is disabled.
+    fix:
+      - fix_type: firefox
+        key: DisableFeedbackCommands
+        value: true
+    references:
+      stig:
+        id: V-251580
+        category: CAT II
+  - cid: C-WSUDF-FF-30
+    operating_systems:
+      - Windows
+      - Windows Server
+      - Ubuntu
+      - Debian
+      - Fedora
+    category: Firefox Configuration
+    policy: Firefox encrypted media extensions are disabled.
+    fix:
+      - fix_type: firefox
+        key: EncryptedMediaExtensions
+        value: { "Enabled": false, "Locked": true }
+    references:
+      stig:
+        id: V-251581
+        category: CAT II
+  - cid: C-WSUDF-FF-31
+    operating_systems:
+      - Windows
+      - Windows Server
+      - Ubuntu
+      - Debian
+      - Fedora
+    category: Firefox Configuration
+    policy: Firefox is configured to not delete data on shutdown.
+    fix:
+      - fix_type: firefox
+        key: SanitizeOnShutdown
+        value:
+          {
+            "Cache": false,
+            "Cookies": false,
+            "Downloads": false,
+            "FormData": false,
+            "History": false,
+            "Sessions": false,
+            "SiteSettings": false,
+            "OfflineApps": false,
+            "Locked": true,
+          }
+    references:
+      stig:
+        id: V-252881
+        category: CAT II
+  - cid: C-WSUDF-FF-32
+    operating_systems:
+      - Windows
+      - Windows Server
+      - Ubuntu
+      - Debian
+      - Fedora
+    category: Firefox Configuration
+    policy: Firefox Studies is disabled.
+    fix:
+      - fix_type: firefox
+        key: DisableFirefoxStudies
+        value: true
+    references:
+      stig:
+        id: V-252909
+        category: CAT II
+
+  - cid: C-WSUDF-FF-33
+    operating_systems:
+      - Windows
+      - Windows Server
+      - Ubuntu
+      - Debian
+      - Fedora
+    category: Firefox Configuration
+    policy: Firefox updates automatically.
+    fix:
+      - fix_type: firefox
+        key: AppAutoUpdate
+        value: true
+
+  - cid: C-WSUDF-FF-34
+    operating_systems:
+      - Windows
+      - Windows Server
+      - Ubuntu
+      - Debian
+      - Fedora
+    category: Firefox Configuration
+    policy: Firefox's background updater is running.
+    fix:
+      - fix_type: firefox
+        key: BackgroundAppUpdate
+        value: true
+  - cid: C-WSUDF-FF-35
+    operating_systems:
+      - Windows
+      - Windows Server
+      - Ubuntu
+      - Debian
+      - Fedora
+    category: Firefox Configuration
+    policy: Access is blocked to the Add-ons Manager.
+    fix:
+      - fix_type: firefox
+        key: BlockAboutAddons
+        value: true
+  - cid: C-WSUDF-FF-36
+    operating_systems:
+      - Windows
+      - Windows Server
+      - Ubuntu
+      - Debian
+      - Fedora
+    category: Firefox Configuration
+    policy: Updates are enabled.
+    fix:
+      - fix_type: firefox
+        key: DisableAppUpdate
+        value: false
+  - cid: C-WSUDF-FF-37
+    operating_systems:
+      - Windows
+      - Windows Server
+      - Ubuntu
+      - Debian
+      - Fedora
+    category: Firefox Configuration
+    policy: HTTPS-only mode is enabled.
+    fix:
+      - fix_type: firefox
+        key: "dom.security.https_only_mode"
+        value: { "Value": true, "Status": locked }
+        preference: true
+  - cid: C-WSUDF-FF-38
+    operating_systems:
+      - Windows
+      - Windows Server
+      - Ubuntu
+      - Debian
+      - Fedora
+    category: Firefox Configuration
+    policy: Do Not Track requests are being sent.
+    fix:
+      - fix_type: firefox
+        key: "privacy.donottrackheader.enabled"
+        value: { "Value": true, "Status": locked }
+        preference: true
+  - cid: C-WSUDF-FF-38
+    operating_systems:
+      - Windows
+      - Windows Server
+      - Ubuntu
+      - Debian
+      - Fedora
+    category: Firefox Configuration
+    policy: Firefox blocks dangerous and deceptive content.
+    fix:
+      - fix_type: firefox
+        key: "browser.safebrowsing.malware.enabled"
+        value: { "Value": true, "Status": locked }
+        preference: true
+      - fix_type: firefox
+        key: "browser.safebrowsing.phshing.enabled"
+        value: { "Value": true, "Status": locked }
+        preference: true
+  - cid: C-WSUDF-FF-38
+    operating_systems:
+      - Windows
+      - Windows Server
+      - Ubuntu
+      - Debian
+      - Fedora
+    category: Firefox Configuration
+    policy: Firefox blocks dangerous downloads.
+    fix:
+      - fix_type: firefox
+        key: "browser.safebrowsing.downloads.enabled"
+        value: { "Value": true, "Status": locked }
+        preference: true
+  - cid: C-WSUDF-FF-38
+    operating_systems:
+      - Windows
+      - Windows Server
+      - Ubuntu
+      - Debian
+      - Fedora
+    category: Firefox Configuration
+    policy: Firefox warns about unwanted and uncommon software.
+    fix:
+      - fix_type: firefox
+        key: "browser.safebrowsing.downloads.remote.block_potentially_unwanted"
+        value: { "Value": true, "Status": locked }
+        preference: true
+      - fix_type: firefox
+        key: "browser.safebrowsing.downloads.remote.block_uncommon"
+        value: { "Value": true, "Status": locked }
+        preference: true
+  - cid: C-WSUDF-FF-38
+    operating_systems:
+      - Windows
+      - Windows Server
+      - Ubuntu
+      - Debian
+      - Fedora
+    category: Firefox Configuration
+    policy: Firefox warns about unwanted and uncommon software.
+    fix:
+      - fix_type: firefox
+        key: "browser.safebrowsing.downloads.remote.block_potentially_unwanted"
+        value: { "Value": true, "Status": locked }
+        preference: true
+      - fix_type: firefox
+        key: "browser.safebrowsing.downloads.remote.block_uncommon"
+        value: { "Value": true, "Status": locked }
+        preference: true
+  - cid: C-WSUDF-FF-38
+    operating_systems:
+      - Windows
+      - Windows Server
+      - Ubuntu
+      - Debian
+      - Fedora
+    optional: true
+    category: Firefox Configuration
+    policy: Install arkenfox user.js.
+    fix:
+      - fix_type: manual
+        steps: This is an OPTIONAL vulnera

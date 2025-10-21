@@ -1,0 +1,227 @@
+version: 1
+name: "Group Policy: Windows Components - Event Log"
+vulnerabilities:
+  - cid: C-W-GP-ADM-ELS-01
+    operating_systems:
+      - Windows
+    category: ""
+    policy:
+      '"Control Event Log behavior when the log file reaches its maximum size"
+      is set to "Disabled".'
+    fix:
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Administrative Templates\Windows Components\Event
+          Log Service\Application
+        name: Control Event Log behavior when the log file reaches its maximum size
+        value: Disabled
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\Windows\EventLog\Application
+        registry_key: Retention
+        registry_action: SZ:0
+    references:
+      cis:
+        id: 18.9.26.1.1
+        category: L1
+        value: Disabled
+      stig:
+        id: ""
+        category: ""
+        value: ""
+    notes: ""
+  - cid: C-W-GP-ADM-ELS-02
+    operating_systems:
+      - Windows
+    category: ""
+    policy:
+      '"Specify the maximum log file size (KB): Maximum Log Size (KB)" is set
+      to "32,768 KB or greater".'
+    fix:
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Administrative Templates\Windows Components\Event
+          Log Service\Application
+        name: "Specify the maximum log file size (KB): Maximum Log Size (KB)"
+        value: 32,768 KB or greater
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\Windows\EventLog\Application
+        registry_key: MaxSize
+        registry_action: DWORD:32768
+    references:
+      cis:
+        id: 18.9.26.1.2
+        category: L1
+        value: 32,768 KB or greater
+      stig:
+        id: V-220779
+        category: CAT II
+        value: 32768 or greater
+    notes: ""
+  - cid: C-W-GP-ADM-ELS-03
+    operating_systems:
+      - Windows
+    category: ""
+    policy:
+      '"Control Event Log behavior when the log file reaches its maximum size"
+      is set to "Disabled".'
+    fix:
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Administrative Templates\Windows Components\Event
+          Log Service\Security
+        name: Control Event Log behavior when the log file reaches its maximum size
+        value: Disabled
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\Windows\EventLog\Security
+        registry_key: Retention
+        registry_action: SZ:0
+    references:
+      cis:
+        id: 18.9.26.2.1
+        category: L1
+        value: Disabled
+      stig:
+        id: ""
+        category: ""
+        value: ""
+    notes: ""
+  - cid: C-W-GP-ADM-ELS-04
+    operating_systems:
+      - Windows
+    category: ""
+    policy:
+      '"Specify the maximum log file size (KB): Maximum Log Size (KB)" is set
+      to "196,608 KB or greater".'
+    fix:
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Administrative Templates\Windows Components\Event
+          Log Service\Security
+        name: "Specify the maximum log file size (KB): Maximum Log Size (KB)"
+        value: 196,608 KB or greater
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\Windows\EventLog\Security
+        registry_key: MaxSize
+        registry_action: DWORD:196608
+    references:
+      cis:
+        id: 18.9.26.2.2
+        category: L1
+        value: 196,608 KB or greater
+      stig:
+        id: V-220780
+        category: CAT II
+        value: 1024000 or greater
+    notes: ""
+  - cid: C-W-GP-ADM-ELS-05
+    operating_systems:
+      - Windows
+    category: ""
+    policy:
+      '"Control Event Log behavior when the log file reaches its maximum size"
+      is set to "Disabled".'
+    fix:
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Administrative Templates\Windows Components\Event
+          Log Service\Setup
+        name: Control Event Log behavior when the log file reaches its maximum size
+        value: Disabled
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\Windows\EventLog\Setup
+        registry_key: Retention
+        registry_action: SZ:0
+    references:
+      cis:
+        id: 18.9.26.3.1
+        category: L1
+        value: Disabled
+      stig:
+        id: ""
+        category: ""
+        value: ""
+    notes: ""
+  - cid: C-W-GP-ADM-ELS-06
+    operating_systems:
+      - Windows
+    category: ""
+    policy:
+      '"Specify the maximum log file size (KB): Maximum Log Size (KB)" is set
+      to "32,768 KB or greater".'
+    fix:
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Administrative Templates\Windows Components\Event
+          Log Service\Setup
+        name: "Specify the maximum log file size (KB): Maximum Log Size (KB)"
+        value: 32,768 KB or greater
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\Windows\EventLog\Setup
+        registry_key: MaxSize
+        registry_action: DWORD:32768
+    references:
+      cis:
+        id: 18.9.26.3.2
+        category: L1
+        value: 32,768 KB or greater
+      stig:
+        id: ""
+        category: ""
+        value: ""
+    notes: ""
+  - cid: C-W-GP-ADM-ELS-07
+    operating_systems:
+      - Windows
+    category: ""
+    policy:
+      '"Control Event Log behavior when the log file reaches its maximum size"
+      is set to "Disabled".'
+    fix:
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Administrative Templates\Windows Components\Event
+          Log Service\System
+        name: Control Event Log behavior when the log file reaches its maximum size
+        value: Disabled
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\Windows\EventLog\System
+        registry_key: Retention
+        registry_action: SZ:0
+    references:
+      cis:
+        id: 18.9.26.4.1
+        category: L1
+        value: Disabled
+      stig:
+        id: ""
+        category: ""
+        value: ""
+    notes: ""
+  - cid: C-W-GP-ADM-ELS-08
+    operating_systems:
+      - Windows
+    category: ""
+    policy:
+      '"Specify the maximum log file size (KB): Maximum Log Size (KB)" is set
+      to "32,768 KB or greater".'
+    fix:
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Administrative Templates\Windows Components\Event
+          Log Service\System
+        name: "Specify the maximum log file size (KB): Maximum Log Size (KB)"
+        value: 32,768 KB or greater
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\Windows\EventLog\System
+        registry_key: MaxSize
+        registry_action: DWORD:32768
+    references:
+      cis:
+        id: 18.9.26.4.2
+        category: L1
+        value: 32,768 KB or greater
+      stig:
+        id: V-220781
+        category: CAT II
+        value: 32768 or greater
+    notes: ""

@@ -1,0 +1,372 @@
+version: 1.0
+name: Services (Fedora)
+vulnerabilities:
+  - cid: C-F-SRVC-01
+    operating_systems:
+      - Fedora
+    category: Servers
+    policy: xinetd is not installed.
+    fix:
+      - fix_type: command
+        command: dnf remove xinetd
+    references:
+      cis:
+        id: 2.2.1
+        category: L1
+  - cid: C-F-SRVC-02
+    operating_systems:
+      - Fedora
+    category: Servers
+    policy: Avahi Server is not installed.
+    fix:
+      - fix_type: command
+        command: |
+          systemctl stop avahi-daemon.socket avahi-daemon.service
+          dnf remove avahi-autoipd avahi
+    references:
+      cis:
+        id: 2.2.3
+        category: L1
+    notes: ""
+  - cid: C-F-SRVC-03
+    operating_systems:
+      - Fedora
+    category: Servers
+    policy: CUPS is not installed.
+    fix:
+      - fix_type: command
+        command: dnf remove cups
+    references:
+      cis:
+        id: 2.2.4
+        category: L1
+    notes: ""
+  - cid: C-F-SRVC-04
+    operating_systems:
+      - Fedora
+    category: Servers
+    policy: DHCP Server is not installed.
+    fix:
+      - fix_type: command
+        command: dnf remove dhcp-server
+    references:
+      cis:
+        id: 2.2.5
+        category: L1
+    notes: ""
+  - cid: C-F-SRVC-05
+    operating_systems:
+      - Fedora
+    category: Servers
+    policy: DNS is not installed.
+    fix:
+      - fix_type: command
+        command: dnf remove bind
+    references:
+      cis:
+        id: 2.2.6
+        category: L1
+    notes: ""
+  - cid: C-F-SRVC-06
+    operating_systems:
+      - Fedora
+    applies_to:
+      - Not FTP
+    category: Servers
+    policy: FTP is not installed.
+    fix:
+      - fix_type: command
+        command: dnf remove ftp
+    references:
+      cis:
+        id: 2.2.7
+        category: L1
+    notes: "removing *ftp* doesn't seem to work - look into"
+  - cid: C-F-SRVC-07
+    operating_systems:
+      - Fedora
+    category: Servers
+    policy: HTTPD is not installed.
+    fix:
+      - fix_type: command
+        command: dnf remove httpd
+    references:
+      cis:
+        id: 2.2.8
+        category: L1
+    notes: ""
+  - cid: C-F-SRVC-08
+    operating_systems:
+      - Fedora
+    category: Servers
+    policy: Nginx is not installed.
+    fix:
+      - fix_type: command
+        command: dnf remove nginx
+    references:
+      cis:
+        id: 2.2.9
+        category: L1
+    notes: ""
+  - cid: C-F-SRVC-09
+    operating_systems:
+      - Fedora
+    category: Servers
+    policy: IMAP and POP3 server are not installed.
+    fix:
+      - fix_type: command
+        command: dnf remove dovecot cyrus-imapd
+    references:
+      cis:
+        id: 2.2.10
+        category: L1
+    notes: ""
+  - cid: C-F-SRVC-10
+    operating_systems:
+      - Fedora
+    applies_to:
+      - Not Samba
+    category: Servers
+    policy: Samba is not installed.
+    fix:
+      - fix_type: command
+        command: dnf remove samba
+    references:
+      cis:
+        id: 2.2.11
+        category: L1
+    notes: ""
+  - cid: C-F-SRVC-11
+    operating_systems:
+      - Fedora
+    category: Servers
+    policy: HTTP Proxy Server is not installed.
+    fix:
+      - fix_type: command
+        command: dnf remove squid
+    references:
+      cis:
+        id: 2.2.12
+        category: L1
+    notes: ""
+  - cid: C-F-SRVC-12
+    operating_systems:
+      - Fedora
+    category: Servers
+    policy: SNMP Server is not installed.
+    fix:
+      - fix_type: command
+        command: dnf remove net-snmp
+    references:
+      cis:
+        id: 2.2.13
+        category: L1
+    notes: ""
+  - cid: C-F-SRVC-13
+    operating_systems:
+      - Fedora
+    category: Servers
+    policy: NIS Server is not installed.
+    fix:
+      - fix_type: command
+        command: dnf remove ypserv
+    references:
+      cis:
+        id: 2.2.13
+        category: L1
+    notes: ""
+  - cid: C-F-SRVC-14
+    operating_systems:
+      - Fedora
+    applies_to:
+      - Not Telnet
+    category: Servers
+    policy: Telnet is not installed.
+    fix:
+      - fix_type: command
+        command: dnf remove telnet
+    references:
+      cis:
+        id: 2.2.14
+        category: L1
+    notes: ""
+  - cid: C-F-SRVC-15
+    operating_systems:
+      - Fedora
+    applies_to:
+      - Not Mail
+    category: Servers
+    policy: Postfix removed.
+    fix:
+      - fix_type: command
+        command: systemctl stop postfix; systemctl disable postfix; dnf remove postfix
+    references:
+      cis:
+        id: 2.2.14
+        category: L1
+    notes: ""
+  - cid: C-F-SRVC-15
+    operating_systems:
+      - Fedora
+    category: Servers
+    policy: nfs-utils is removed. 
+    fix:
+      - fix_type: command
+        command: dnf remove nfs-utils
+    references:
+      stig:
+        id: V-238327
+        category: CAT I
+    notes: "If nfs package is required as dependency, run systemctl --now mask nfs-server."
+  - cid: C-F-SRVC-16
+    operating_systems:
+      - Fedora
+    category: Clients
+    policy: RPC Client is removed.
+    fix:
+      - fix_type: command
+        command: dnf remove rpcbind
+    references:
+      cis:
+        id: 2.3.1
+        category: L1
+    notes: "If rpcbind package is required as dependency, mask rpcbind and rpcbind.socket."
+  - cid: C-F-SRVC-17
+    operating_systems:
+      - Fedora
+    category: Clients
+    policy: Rsync client is removed.
+    fix:
+      - fix_type: command
+        command: dnf remove rsync
+    references:
+      cis:
+        id: 2.3.2
+        category: L1
+    notes: "If rsync is required as dependency, mask rsyncd."
+  - cid: C-F-SRVC-18
+    operating_systems:
+      - Fedora
+    category: Clients
+    policy: NIS client is removed.
+    fix:
+      - fix_type: command
+        command: dnf remove ypbind
+    references:
+      cis:
+        id: 2.3.3
+        category: L1
+    notes: ""
+  - cid: C-F-SRVC-19
+    operating_systems:
+      - Fedora
+    category: Clients
+    policy: RSH client is removed.
+    fix:
+      - fix_type: command
+        command: dnf remove rsh
+    references:
+      cis:
+        id: 2.3.2
+        category: L1
+    notes: ""
+  - cid: C-F-SRVC-20
+    operating_systems:
+      - Fedora
+    category: Clients
+    policy: Talk client is removed.
+    fix:
+      - fix_type: command
+        command: dnf remove talk
+    references:
+      cis:
+        id: 2.3.3
+        category: L1
+    notes: ""
+  - cid: C-F-SRVC-21
+    operating_systems:
+      - Fedora
+    category: Clients
+    policy: Telent is removed.
+    fix:
+      - fix_type: command
+        command: dnf remove telnet
+    references:
+      cis:
+        id: 2.3.4
+        category: L1
+    notes: ""
+  - cid: C-F-SRVC-22
+    operating_systems:
+      - Fedora
+    category: Clients
+    policy: LDAP is removed.
+    fix:
+      - fix_type: command
+        command: dnf remove openldap-clients
+    references:
+      cis:
+        id: 2.3.5
+        category: L1
+    notes: ""
+  - cid: C-F-SRVC-23
+    operating_systems:
+      - Fedora
+    category: Clients
+    policy: TFTP is removed.
+    fix:
+      - fix_type: command
+        command: dnf remove tftp
+    references:
+      cis:
+        id: 2.3.6
+        category: L1
+    notes: ""
+
+  - cid: C-F-SRVC-23
+    operating_systems:
+      - Fedora
+    category: Clients
+    policy: Check for remaining nonessential services.
+    fix:
+      - fix_type: manual
+        steps: |
+          Run command: `lsof -i -P -n | grep -v "(ESTABLISHED)"``
+          This will show services that are currently listening on a network port.
+          In addition, run `systemctl --type=service`.
+          Run `apt purge <service>` or `systemctl stop <service>; systemctl disable <service>` to remove it.
+    references:
+      cis:
+        id: "2.4"
+        category: L1
+    notes: ""
+  - cid: C-F-SRVC-23
+    operating_systems:
+      - Fedora
+    category: Clients
+    policy: Check for remaining nonessential services.
+    fix:
+      - fix_type: manual
+        steps: |
+          Run command: `lsof -i -P -n | grep -v "(ESTABLISHED)"``
+          This will show services that are currently listening on a network port.
+          In addition, run `systemctl --type=service`.
+          Run `dnf remove <service>` or `systemctl stop <service>; systemctl disable <service>` to remove it.
+    references:
+      cis:
+        id: "2.4"
+        category: L1
+    notes: ""
+  - cid: C-FF-SRVC-24
+    operating_systems:
+      - Fedora
+    category: Built-In
+    policy: Systemd-timesyncd is enabled and running.
+    fix:
+      - fix_type: command
+        command: systemctl unmask systemd-timesyncd.service; systemctl --now enable systemd-timesyncd.service
+    references:
+      cis:
+        id: 2.1.3.2
+        category: L1
+    notes: ""

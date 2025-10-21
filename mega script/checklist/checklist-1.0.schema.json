@@ -1,0 +1,618 @@
+{
+    "$schema": "https://json-schema.org/draft-07/schema",
+    "title": "Record of vulnerabilities in a specific category",
+    "description": "This document details vulnerabilities in a specific category.",
+    "type": "object",
+    "properties": {
+        "version": {
+            "description": "The version number for the document.",
+            "type": "number"
+        },
+        "name": {
+            "description": "The name of the document.",
+            "type": "string"
+        },
+        "vulnerabilities": {
+            "description": "The list of vulnerabilities.",
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "cid": {
+                        "description": "Checklist ID (follows format C-[W/S/U/D]-XX-NN)",
+                        "type": "string"
+                    },
+                    "operating_systems": {
+                        "description": "The operating systems that this checklist item pertains to.",
+                        "type": "array",
+                        "items": {
+                            "enum": [
+                                "Windows",
+                                "Windows Server",
+                                "Ubuntu",
+                                "Ubuntu 20",
+                                "Ubuntu 22",
+                                "Debian",
+                                "Fedora"
+                            ]
+                        }
+                    },
+                    "applies_to": {
+                        "description": "The types of image that this checklist item applies to.",
+                        "type": "array",
+                        "items": {
+                            "enum": [
+                                "RDP",
+                                "Not RDP",
+                                "SMB",
+                                "Not SMB",
+                                "SSH",
+                                "Not SSH",
+                                "Samba",
+                                "Not Samba",
+                                "Mail",
+                                "Not Mail",
+                                "OpenVPN",
+                                "Not OpenVPN",
+                                "AD",
+                                "Not AD",
+                                "apache2",
+                                "Not apache2",
+                                "FTP",
+                                "Not FTP",
+                                "MYSQL",
+                                "Not MYSQL",
+                                "PHP",
+                                "Not PHP",
+                                "DNS",
+                                "Not DNS",
+                                "IIS",
+                                "Not IIS"
+                            ]
+                        }
+                    },
+                    "optional": {
+                        "description": "Whether PoochBot should prompt whether or not to run this vulnerability.",
+                        "type": "boolean"
+                    },
+                    "category": {
+                        "description": "Sensible category that this vulnerability goes under.",
+                        "type": "string"
+                    },
+                    "policy": {
+                        "description": "Text that describes the list of vulnerabilties.",
+                        "type": "string"
+                    },
+                    "fix": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "fix_type": {
+                                    "description": "The type of fix to perform.",
+                                    "type": "string"
+                                }
+                            },
+                            "allOf": [{
+                                    "if": {
+                                        "properties": {
+                                            "fix_type": {
+                                                "const": "config_file"
+                                            }
+                                        }
+                                    },
+                                    "then": {
+                                        "properties": {
+                                            "file": {
+                                                "description": "The path of the file to edit.",
+                                                "type": "string"
+                                            },
+                                            "text": {
+                                                "description": "Text option to set in the config file (one line only).",
+                                                "type": "string"
+                                            }
+                                        },
+                                        "required": [
+                                            "file",
+                                            "text"
+                                        ]
+                                    }
+                                },
+                                {
+                                    "if": {
+                                        "properties": {
+                                            "fix_type": {
+                                                "const": "config_file_mknew"
+                                            }
+                                        }
+                                    },
+                                    "then": {
+                                        "properties": {
+                                            "file": {
+                                                "description": "The path of the file to edit.",
+                                                "type": "string"
+                                            },
+                                            "text": {
+                                                "description": "Text to add at the bottom of the config file.",
+                                                "type": "string"
+                                            }
+                                        },
+                                        "required": [
+                                            "file",
+                                            "text"
+                                        ]
+                                    }
+                                },
+                                {
+                                    "if": {
+                                        "properties": {
+                                            "fix_type": {
+                                                "const": "config_file_mknew_toml"
+                                            }
+                                        }
+                                    },
+                                    "then": {
+                                        "properties": {
+                                            "file": {
+                                                "description": "The path of the file to edit.",
+                                                "type": "string"
+                                            },
+                                            "key": {
+                                                "description": "The key to set the value under.",
+                                                "type": "string"
+                                            },
+                                            "value": {
+                                                "description": "The line to set under the key.",
+                                                "type": "string"
+                                            }
+                                        },
+                                        "required": [
+                                            "file",
+                                            "key",
+                                            "value"
+                                        ]
+                                    }
+                                },
+                                {
+                                    "if": {
+                                        "properties": {
+                                            "fix_type": {
+                                                "const": "config_file_copyover"
+                                            }
+                                        }
+                                    },
+                                    "then": {
+                                        "properties": {
+                                            "file": {
+                                                "description": "The file to be copied over.",
+                                                "type": "string"
+                                            },
+                                            "source": {
+                                                "description": "The source file that you want to copy over the config file location. This can be a space-separated list.",
+                                                "type": "string"
+                                            }
+                                        },
+                                        "required": [
+                                            "source",
+                                            "file"
+                                        ]
+                                    }
+                                },
+                                {
+                                    "if": {
+                                        "properties": {
+                                            "fix_type": {
+                                                "const": "config_file_mknew_inlinetext"
+                                            }
+                                        }
+                                    },
+                                    "then": {
+                                        "properties": {
+                                            "file": {
+                                                "description": "The path to the file to write text into.",
+                                                "type": "string"
+                                            },
+                                            "text": {
+                                                "description": "The text to write into the file (overwrites previous data).",
+                                                "type": "string"
+                                            }
+                                        },
+                                        "required": [
+                                            "file",
+                                            "text"
+                                        ]
+                                    }
+                                },
+                                {
+                                    "if": {
+                                        "properties": {
+                                            "fix_type": {
+                                                "const": "command"
+                                            }
+                                        }
+                                    },
+                                    "then": {
+                                        "properties": {
+                                            "command": {
+                                                "description": "Command to run.",
+                                                "type": "string"
+                                            }
+                                        },
+                                        "required": [
+                                            "command"
+                                        ]
+                                    }
+                                },
+                                {
+                                    "if": {
+                                        "properties": {
+                                            "fix_type": {
+                                                "const": "group_policy"
+                                            }
+                                        }
+                                    },
+                                    "then": {
+                                        "properties": {
+                                            "path": {
+                                                "description": "The GUI path to the policy.",
+                                                "type": "string"
+                                            },
+                                            "name": {
+                                                "description": "The GUI name of the policy.",
+                                                "type": "string"
+                                            },
+                                            "value": {
+                                                "description": "The GUI value of the policy.",
+                                                "type": "string"
+                                            },
+                                            "registry_hive": {
+                                                "description": "The registry hive for the policy.",
+                                                "enum": [
+                                                    "Computer",
+                                                    "User"
+                                                ]
+                                            },
+                                            "registry_path": {
+                                                "description": "The registry path for the policy.",
+                                                "type": "string"
+                                            },
+                                            "registry_key": {
+                                                "description": "The registry key for the policy.",
+                                                "type": "string"
+                                            },
+                                            "registry_action": {
+                                                "description": "The \"action\" to take. Actions are defined in the LGPO manual.",
+                                                "type": "string"
+                                            }
+                                        },
+                                        "required": [
+                                            "path",
+                                            "name",
+                                            "value",
+                                            "registry_hive",
+                                            "registry_path",
+                                            "registry_key",
+                                            "registry_action"
+                                        ]
+                                    }
+                                },
+                                {
+                                    "if": {
+                                        "properties": {
+                                            "fix_type": {
+                                                "const": "group_policy_sec"
+                                            }
+                                        }
+                                    },
+                                    "then": {
+                                        "properties": {
+                                            "path": {
+                                                "description": "The GUI path to the policy.",
+                                                "type": "string"
+                                            },
+                                            "name": {
+                                                "description": "The GUI name of the policy.",
+                                                "type": "string"
+                                            },
+                                            "value": {
+                                                "description": "The GUI value of the policy.",
+                                                "type": "string"
+                                            },
+                                            "category": {
+                                                "description": "Category in the inf file. Can be System Access, Event Audit, Registry Values, or Privilege Rights",
+                                                "enum": [
+                                                    "System Access",
+                                                    "Event Audit",
+                                                    "Registry Values",
+                                                    "Privilege Rights",
+                                                    "Service General Setting"
+                                                ]
+                                            },
+                                            "text": {
+                                                "description": "Text to add at the bottom of the config file.",
+                                                "type": "string"
+                                            }
+                                        },
+                                        "required": [
+                                            "category",
+                                            "text"
+                                        ]
+                                    }
+                                },
+                                {
+                                    "if": {
+                                        "properties": {
+                                            "fix_type": {
+                                                "const": "group_policy_aaud"
+                                            }
+                                        }
+                                    },
+                                    "then": {
+                                        "properties": {
+                                            "path": {
+                                                "description": "The GUI path to the policy.",
+                                                "type": "string"
+                                            },
+                                            "name": {
+                                                "description": "The GUI name of the policy.",
+                                                "type": "string"
+                                            },
+                                            "value": {
+                                                "description": "The GUI value of the policy.",
+                                                "type": "string"
+                                            },
+                                            "policy_target": {
+                                                "type": "string"
+                                            },
+                                            "subcategory": {
+                                                "type": "string"
+                                            },
+                                            "subcategory_guid": {
+                                                "type": "string"
+                                            },
+                                            "inclusion_setting": {
+                                                "type": "string"
+                                            },
+                                            "exclusion_setting": {
+                                                "type": "string"
+                                            },
+                                            "setting_value": {
+                                                "type": "number"
+                                            }
+                                        },
+                                        "required": [
+                                            "path",
+                                            "name",
+                                            "value",
+                                            "policy_target",
+                                            "subcategory",
+                                            "subcategory_guid",
+                                            "inclusion_setting",
+                                            "exclusion_setting",
+                                            "setting_value"
+                                        ]
+                                    }
+                                },
+                                {
+                                    "if": {
+                                        "properties": {
+                                            "fix_type": {
+                                                "const": "windows_service"
+                                            }
+                                        }
+                                    },
+                                    "then": {
+                                        "properties": {
+                                            "display_name": {
+                                                "description": "The display name of the service.",
+                                                "type": "string"
+                                            },
+                                            "name": {
+                                                "description": "The internal name of the service.",
+                                                "type": "string"
+                                            },
+                                            "startup_type": {
+                                                "description": "The startup type for the service.",
+                                                "enum": [
+                                                    "Automatic",
+                                                    "Manual",
+                                                    "Disabled"
+                                                ]
+                                            },
+                                            "text": {
+                                                "description": "Text to add at the bottom of the config file.",
+                                                "type": "string"
+                                            }
+                                        },
+                                        "required": [
+                                            "display_name",
+                                            "name",
+                                            "startup_type"
+                                        ]
+                                    }
+                                },
+                                {
+                                    "if": {
+                                        "properties": {
+                                            "fix_type": {
+                                                "const": "linux_permissions"
+                                            }
+                                        }
+                                    },
+                                    "then": {
+                                        "properties": {
+                                            "target": {
+                                                "description": "The file or directory to set the permissions for.",
+                                                "type": "string"
+                                            },
+                                            "owner": {
+                                                "description": "The requested owner of the file or directory.",
+                                                "type": "string"
+                                            },
+                                            "group": {
+                                                "description": "The requested group of the file or directory.",
+                                                "type": "string"
+                                            },
+                                            "mode": {
+                                                "description": "The requested permissions in numeric form (XXX).",
+                                                "type": "string"
+                                            }
+                                        },
+                                        "required": [
+                                            "target"
+                                        ]
+                                    }
+                                },
+                                {
+                                    "if": {
+                                        "properties": {
+                                            "fix_type": {
+                                                "const": "manual"
+                                            }
+                                        }
+                                    },
+                                    "then": {
+                                        "properties": {
+                                            "steps": {
+                                                "description": "Description of how to fix the vulnerability.",
+                                                "type": "string"
+                                            },
+                                            "module_id": {
+                                                "description": "ID of a module that can help fix this vulnerability.",
+                                                "type": "string"
+                                            }
+                                        },
+                                        "required": [
+                                            "steps"
+                                        ]
+                                    }
+                                },
+                                {
+                                    "if": {
+                                        "properties": {
+                                            "fix_type": {
+                                                "const": "automated_module"
+                                            }
+                                        }
+                                    },
+                                    "then": {
+                                        "properties": {
+                                            "module_id": {
+                                                "description": "The ID of the module that fixes this vulnerability.",
+                                                "type": "string"
+                                            }
+                                        },
+                                        "required": [
+                                            "module_id"
+                                        ]
+                                    }
+                                },
+                                {
+                                    "if": {
+                                        "properties": {
+                                            "fix_type": {
+                                                "const": "vulnerability"
+                                            }
+                                        }
+                                    },
+                                    "then": {
+                                        "properties": {
+                                            "cid": {
+                                                "description": "The ID of the vulnerability that fixes this vulnerability.",
+                                                "type": "string"
+                                            }
+                                        },
+                                        "required": [
+                                            "cid"
+                                        ]
+                                    }
+                                },
+                                {
+                                    "if": {
+                                        "properties": {
+                                            "fix_type": {
+                                                "const": "firefox"
+                                            }
+                                        }
+                                    },
+                                    "then": {
+                                        "properties": {
+                                            "key": {
+                                                "description": "The name of the Firefox policy.",
+                                                "type": "string"
+                                            },
+                                            "value": {
+                                                "description": "The value of the Firefox policy."
+                                            },
+                                            "preference": {
+                                                "description": "If the Firefox policy is a preference. This means that it goes into a different part of the policy file.",
+                                                "type": "boolean"
+                                            }
+                                        },
+                                        "required": [
+                                            "key",
+                                            "value"
+                                        ]
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "references": {
+                        "description": "The sources this vulnerability was obtained from.",
+                        "type": "object",
+                        "properties": {
+                            "cis": {
+                                "type": "object",
+                                "properties": {
+                                    "id": {
+                                        "type": "string"
+                                    },
+                                    "category": {
+                                        "type": "string"
+                                    }
+                                },
+                                "required": [
+                                    "id",
+                                    "category"
+                                ]
+                            },
+                            "stig": {
+                                "type": "object",
+                                "properties": {
+                                    "id": {
+                                        "type": "string"
+                                    },
+                                    "category": {
+                                        "type": "string"
+                                    }
+                                },
+                                "required": [
+                                    "id",
+                                    "category"
+                                ]
+                            },
+                            "other": {
+                                "type": "string"
+                            }
+                        },
+                        "additionalProperties": false
+                    },
+                    "notes": {
+                        "type": "string"
+                    }
+                },
+                "additionalProperties": false,
+                "required": [
+                    "cid",
+                    "operating_systems",
+                    "category",
+                    "policy",
+                    "fix"
+                ]
+            }
+        }
+    },
+    "additionalProperties": false,
+    "minProperties": 3
+}

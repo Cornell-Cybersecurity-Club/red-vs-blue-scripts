@@ -1,0 +1,357 @@
+version: 1
+name: "Group Policy: Windows Components - Windows Update"
+vulnerabilities:
+  - cid: C-W-GP-ADM-UPD-01
+    operating_systems:
+      - Windows
+    category: ""
+    policy: '"Configure Automatic Updates" is set to "Enabled".'
+    fix:
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Administrative Templates\Windows Components\Windows
+          Update
+        name: Configure Automatic Updates
+        value: Enabled
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\Windows\WindowsUpdate\AU
+        registry_key: NoAutoUpdate
+        registry_action: DWORD:0
+    references:
+      cis:
+        id: 18.9.103.2
+        category: L1
+        value: Enabled
+      stig:
+        id: ""
+        category: ""
+        value: ""
+    notes: ""
+  - cid: C-W-GP-ADM-UPD-02
+    operating_systems:
+      - Windows
+    category: ""
+    policy:
+      '"Configure Automatic Updates: Scheduled install day" is set to "0 - Every
+      day".'
+    fix:
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Administrative Templates\Windows Components\Windows
+          Update
+        name: "Configure Automatic Updates: Scheduled install day"
+        value: 0 - Every day
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\Windows\WindowsUpdate\AU
+        registry_key: AUOptions
+        registry_action: DWORD:3
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Administrative Templates\Windows Components\Windows
+          Update
+        name: "Configure Automatic Updates: Scheduled install day"
+        value: 0 - Every day
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\Windows\WindowsUpdate\AU
+        registry_key: AutomaticMaintenanceEnabled
+        registry_action: DELETE
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Administrative Templates\Windows Components\Windows
+          Update
+        name: "Configure Automatic Updates: Scheduled install day"
+        value: 0 - Every day
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\Windows\WindowsUpdate\AU
+        registry_key: ScheduledInstallDay
+        registry_action: DWORD:0
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Administrative Templates\Windows Components\Windows
+          Update
+        name: "Configure Automatic Updates: Scheduled install day"
+        value: 0 - Every day
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\Windows\WindowsUpdate\AU
+        registry_key: ScheduledInstallTime
+        registry_action: DWORD:3
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Administrative Templates\Windows Components\Windows
+          Update
+        name: "Configure Automatic Updates: Scheduled install day"
+        value: 0 - Every day
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\Windows\WindowsUpdate\AU
+        registry_key: ScheduledInstallEveryWeek
+        registry_action: DWORD:1
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Administrative Templates\Windows Components\Windows
+          Update
+        name: "Configure Automatic Updates: Scheduled install day"
+        value: 0 - Every day
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\Windows\WindowsUpdate\AU
+        registry_key: ScheduledInstallFirstWeek
+        registry_action: DELETE
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Administrative Templates\Windows Components\Windows
+          Update
+        name: "Configure Automatic Updates: Scheduled install day"
+        value: 0 - Every day
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\Windows\WindowsUpdate\AU
+        registry_key: ScheduledInstallSecondWeek
+        registry_action: DELETE
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Administrative Templates\Windows Components\Windows
+          Update
+        name: "Configure Automatic Updates: Scheduled install day"
+        value: 0 - Every day
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\Windows\WindowsUpdate\AU
+        registry_key: ScheduledInstallThirdWeek
+        registry_action: DELETE
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Administrative Templates\Windows Components\Windows
+          Update
+        name: "Configure Automatic Updates: Scheduled install day"
+        value: 0 - Every day
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\Windows\WindowsUpdate\AU
+        registry_key: ScheduledInstallFourthWeek
+        registry_action: DELETE
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Administrative Templates\Windows Components\Windows
+          Update
+        name: "Configure Automatic Updates: Scheduled install day"
+        value: 0 - Every day
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\Windows\WindowsUpdate\AU
+        registry_key: AllowMUUpdateService
+        registry_action: DELETE
+    references:
+      cis:
+        id: 18.9.103.3
+        category: L1
+        value: 0 - Every day
+      stig:
+        id: ""
+        category: ""
+        value: ""
+    notes: ""
+  - cid: C-W-GP-ADM-UPD-03
+    operating_systems:
+      - Windows
+    category: ""
+    policy:
+      '"No auto-restart with logged on users for scheduled automatic updates installations"
+      is set to "Disabled".'
+    fix:
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Administrative Templates\Windows Components\Windows
+          Update
+        name: No auto-restart with logged on users for scheduled automatic updates installations
+        value: Disabled
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\Windows\WindowsUpdate\AU
+        registry_key: NoAutoRebootWithLoggedOnUsers
+        registry_action: DWORD:0
+    references:
+      cis:
+        id: 18.9.103.4
+        category: L1
+        value: Disabled
+      stig:
+        id: ""
+        category: ""
+        value: ""
+    notes: ""
+  - cid: C-W-GP-ADM-UPD-04
+    operating_systems:
+      - Windows
+    category: ""
+    policy: '"Remove access to "Pause updates" feature" is set to "Enabled".'
+    fix:
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Administrative Templates\Windows Components\Windows
+          Update
+        name: Remove access to "Pause updates" feature
+        value: Enabled
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\Windows\WindowsUpdate
+        registry_key: SetDisablePauseUXAccess
+        registry_action: DWORD:1
+    references:
+      cis:
+        id: 18.9.103.5
+        category: L1
+        value: Enabled
+      stig:
+        id: ""
+        category: ""
+        value: ""
+    notes: ""
+  - cid: C-W-GP-ADM-UPD-05
+    operating_systems:
+      - Windows
+    category: ""
+    policy: '"Manage preview builds" is set to "Enabled".'
+    fix:
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Administrative Templates\Windows Components\Windows
+          Update for Business
+        name: Manage preview builds
+        value: "Enabled"
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\Windows\WindowsUpdate
+        registry_key: ManagePreviewBuilds
+        registry_action: DWORD:1
+    references:
+      cis:
+        id: 18.9.103.1.1
+        category: L1
+        value: "Enabled: Disable preview builds"
+      stig:
+        id: ""
+        category: ""
+        value: ""
+    notes: ""
+  - cid: C-W-GP-ADM-UPD-05a
+    operating_systems:
+      - Windows
+    category: ""
+    policy: '"Manage preview builds" is set to "Enabled: Disable preview builds".'
+    fix:
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Administrative Templates\Windows Components\Windows
+          Update for Business
+        name: Manage preview builds
+        value: "Enabled: Disable preview builds"
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\Windows\WindowsUpdate
+        registry_key: ManagePreviewBuildsPolicyValue
+        registry_action: DWORD:0
+    references:
+      cis:
+        id: 18.9.103.1.1
+        category: L1
+        value: "Enabled: Disable preview builds"
+      stig:
+        id: ""
+        category: ""
+        value: ""
+    notes: ""
+  - cid: C-W-GP-ADM-UPD-06
+    operating_systems:
+      - Windows
+    category: ""
+    policy:
+      '"Select when Preview Builds and Feature Updates are received" is set to
+      "Enabled: Semi-Annual Channel, 180 or more days".'
+    fix:
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Administrative Templates\Windows Components\Windows
+          Update for Business
+        name: Select when Preview Builds and Feature Updates are received
+        value: "Enabled: Semi-Annual Channel, 180 or more days"
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\Windows\WindowsUpdate
+        registry_key: DeferFeatureUpdates
+        registry_action: DWORD:1
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Administrative Templates\Windows Components\Windows
+          Update for Business
+        name: Select when Preview Builds and Feature Updates are received
+        value: "Enabled: Semi-Annual Channel, 180 or more days"
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\Windows\WindowsUpdate
+        registry_key: BranchReadinessLevel
+        registry_action: DWORD:16
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Administrative Templates\Windows Components\Windows
+          Update for Business
+        name: Select when Preview Builds and Feature Updates are received
+        value: "Enabled: Semi-Annual Channel, 180 or more days"
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\Windows\WindowsUpdate
+        registry_key: DeferFeatureUpdatesPeriodInDays
+        registry_action: DWORD:180
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Administrative Templates\Windows Components\Windows
+          Update for Business
+        name: Select when Preview Builds and Feature Updates are received
+        value: "Enabled: Semi-Annual Channel, 180 or more days"
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\Windows\WindowsUpdate
+        registry_key: PauseFeatureUpdatesStartTime
+        registry_action: "SZ:"
+    references:
+      cis:
+        id: 18.9.103.1.2
+        category: L1
+        value: "Enabled: Semi-Annual Channel, 180 or more days"
+      stig:
+        id: ""
+        category: ""
+        value: ""
+    notes: ""
+  - cid: C-W-GP-ADM-UPD-07
+    operating_systems:
+      - Windows
+    category: ""
+    policy: '"Select when Quality Updates are receieved" is set to "Enabled: 0 days".'
+    fix:
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Administrative Templates\Windows Components\Windows
+          Update for Business
+        name: Select when Quality Updates are receieved
+        value: "Enabled: 0 days"
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\Windows\WindowsUpdate
+        registry_key: DeferQualityUpdates
+        registry_action: DWORD:1
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Administrative Templates\Windows Components\Windows
+          Update for Business
+        name: Select when Quality Updates are receieved
+        value: "Enabled: 0 days"
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\Windows\WindowsUpdate
+        registry_key: DeferQualityUpdatesPeriodInDays
+        registry_action: DWORD:0
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Administrative Templates\Windows Components\Windows
+          Update for Business
+        name: Select when Quality Updates are receieved
+        value: "Enabled: 0 days"
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\Windows\WindowsUpdate
+        registry_key: PauseQualityUpdatesStartTime
+        registry_action: "SZ:"
+    references:
+      cis:
+        id: 18.9.103.1.3
+        category: L1
+        value: "Enabled: 0 days"
+      stig:
+        id: ""
+        category: ""
+        value: ""
+    notes: ""

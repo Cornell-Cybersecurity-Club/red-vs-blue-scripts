@@ -1,0 +1,1307 @@
+version: 1
+name: "Group Policy: Windows Components - AV"
+vulnerabilities:
+  - cid: C-W-GP-ADM-MAV-01
+    operating_systems:
+      - Windows
+    category: ""
+    policy:
+      '"Configure detection for potentially unwanted applications" is set to "Enabled:
+      Block".'
+    fix:
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Administrative Templates\Windows Components\Microsoft
+          Defender Antivirus
+        name: Configure detection for potentially unwanted applications
+        value: "Enabled: Block"
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\Windows Defender
+        registry_key: PUAProtection
+        registry_action: DWORD:1
+    references:
+      cis:
+        id: 18.9.45.14
+        category: L1
+        value: "Enabled: Block"
+      stig:
+        id: V-213426
+        category: CAT I
+        value: "Enabled: Block"
+  - cid: C-W-GP-ADM-MAV-02
+    operating_systems:
+      - Windows
+    category: ""
+    policy: '"Turn off Microsoft Defender Antivirus" is set to "Disabled".'
+    fix:
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Administrative Templates\Windows Components\Microsoft
+          Defender Antivirus
+        name: Turn off Microsoft Defender Antivirus
+        value: Disabled
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\Windows Defender
+        registry_key: DisableAntiSpyware
+        registry_action: DWORD:0
+    references:
+      cis:
+        id: 18.9.45.15
+        category: L1
+        value: Disabled
+      stig:
+        id: V-213428
+        category: CAT I
+        value: Not Configured
+  - cid: C-W-GP-ADM-MAV-02
+    operating_systems:
+      - Windows
+    category: ""
+    policy: '"Turn off routine remediation" is set to "Disabled".'
+    fix:
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Administrative Templates\Windows Components\Microsoft
+          Defender Antivirus
+        name: Turn off routine remediation
+        value: Disabled
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\Windows Defender
+        registry_key: DisableRoutinelyTakingAction
+        registry_action: DWORD:0
+    references:
+      stig:
+        id: V-213427
+        category: CAT II
+        value: Disabled or Not Configured
+  - cid: C-W-GP-ADM-MAV-03
+    operating_systems:
+      - Windows
+    category: ""
+    policy: '"Path Exclusions" is set to "Disabled".'
+    fix:
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Administrative Templates\Windows Components\Microsoft
+          Defender Antivirus\Exclusions
+        name: Path Exclusions
+        value: Disabled
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\Windows Defender\Exclusions
+        registry_key: Exclusions_Paths
+        registry_action: DELETE
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Administrative Templates\Windows Components\Microsoft
+          Defender Antivirus\Exclusions
+        name: Path Exclusions
+        value: Disabled
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\Windows Defender\Exclusions\Paths
+        registry_key: "*"
+        registry_action: DELETEALLVALUES
+    references:
+      stig:
+        id: V-213429
+        category: CAT II
+        value: Disabled or Not Configured
+  - cid: C-W-GP-ADM-MAV-03
+    operating_systems:
+      - Windows
+    category: ""
+    policy: '"Process Exclusions" is set to "Disabled".'
+    fix:
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Administrative Templates\Windows Components\Microsoft
+          Defender Antivirus\Exclusions
+        name: Process Exclusions
+        value: Disabled
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\Windows Defender\Exclusions
+        registry_key: Exclusions_Processes
+        registry_action: DELETE
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Administrative Templates\Windows Components\Microsoft
+          Defender Antivirus\Exclusions
+        name: Process Exclusions
+        value: Disabled
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\Windows Defender\Exclusions\Processes
+        registry_key: "*"
+        registry_action: DELETEALLVALUES
+    references:
+      stig:
+        id: V-213430
+        category: CAT II
+        value: Disabled or Not Configured
+  - cid: C-W-GP-ADM-MAV-03
+    operating_systems:
+      - Windows
+    category: ""
+    policy: '"Turn off Auto Exclusions" is set to "Disabled".'
+    fix:
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Administrative Templates\Windows Components\Microsoft
+          Defender Antivirus\Exclusions
+        name: Turn off Auto Exclusions
+        value: Disabled
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\Windows Defender\Exclusions
+        registry_key: DisableAutoExclusions
+        registry_action: DWORD:0
+    references:
+      stig:
+        id: V-213431
+        category: CAT II
+        value: Disabled
+  - cid: C-W-GP-ADM-MAV-03
+    operating_systems:
+      - Windows
+    category: ""
+    policy:
+      '"Configure local setting override for reporting to Microsoft MAPS" is set
+      to "Disabled".'
+    fix:
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Administrative Templates\Windows Components\Microsoft
+          Defender Antivirus\MAPS
+        name: Configure local setting override for reporting to Microsoft MAPS
+        value: Disabled
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\Windows Defender\Spynet
+        registry_key: LocalSettingOverrideSpynetReporting
+        registry_action: DWORD:0
+    references:
+      cis:
+        id: 18.9.45.3.1
+        category: L1
+        value: Disabled
+      stig:
+        id: V-213432
+        category: CAT II
+        value: Disabled or Not Configured
+  - cid: C-W-GP-ADM-MAV-03
+    operating_systems:
+      - Windows
+    category: ""
+    policy: '"Configure the "Block at First Sight" feature" is set to "Enabled".'
+    fix:
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Administrative Templates\Windows Components\Microsoft
+          Defender Antivirus\MAPS
+        name: Configure the "Block at First Sight" feature
+        value: Enabled
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\Windows Defender\Spynet
+        registry_key: DisableBlockAtFirstSeen
+        registry_action: DWORD:0
+    references:
+      stig:
+        id: V-213433
+        category: CAT II
+        value: Enabled
+    notes: Requires "Join Microsoft MAPS" to be enabled.
+  - cid: C-W-GP-ADM-MAV-04
+    operating_systems:
+      - Windows
+    category: ""
+    policy: '"Join Microsoft MAPS" is set to "Enabled: Advanced Membership".'
+    fix:
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Administrative Templates\Windows Components\Microsoft
+          Defender Antivirus\MAPS
+        name: Join Microsoft MAPS
+        value: Disabled
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\Windows Defender\Spynet
+        registry_key: SpynetReporting
+        registry_action: DWORD:2
+    references:
+      cis:
+        id: 18.9.45.3.2
+        category: L2
+        value: Disabled
+      stig:
+        id: V-213434
+        category: CAT II
+        value: "Enabled: Advanced MAPS"
+  - cid: C-W-GP-ADM-MAV-04
+    operating_systems:
+      - Windows
+    category: ""
+    policy: '"Send file samples when further analysis is required" is set to "Enabled".'
+    fix:
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Administrative Templates\Windows Components\Microsoft
+          Defender Antivirus\MAPS
+        name: Send file samples when further analysis is required
+        value: Enabled
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\Windows Defender\Spynet
+        registry_key: SubmitSamplesConsent
+        registry_action: DWORD:1
+    references:
+      stig:
+        id: V-213435
+        category: CAT II
+        value: "Enabled: Send safe samples"
+  - cid: C-W-GP-ADM-MAV-05
+    operating_systems:
+      - Windows
+    category: ""
+    policy: '"`Configure Attack Surface Reduction rules`" is set to "Enabled".'
+    fix:
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Administrative Templates\Windows Components\Microsoft
+          Defender Antivirus\Microsoft Defender Exploit Guard\Attack Surface Reduction
+        name: Configure Attack Surface Reduction rules
+        value: Enabled
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\Windows Defender\Windows Defender Exploit Guard\ASR
+        registry_key: ExploitGuard_ASR_Rules
+        registry_action: DWORD:1
+    references:
+      cis:
+        id: 18.9.45.4.1.1
+        category: L1
+        value: Enabled
+  - cid: C-W-GP-ADM-MAV-06
+    operating_systems:
+      - Windows
+    category: ""
+    policy:
+      '"Configure Attack Surface Reduction rules: Set the state for each ASR rule" is set to
+      "26190899-1602-49e8-8b27-eb1d0a1ce869: 1,
+      3b576869-a4ec-4529-8536-b80a7769e899: 1,
+      5beb7efe-fd9a-4556-801d-275e5ffc04cc: 1,
+      75668c1f-73b5-4cf0-bb93-3ecf5cb7cc84: 1,
+      7674ba52-37eb-4a4f-a9a1-f0f9a1619a2c: 1,
+      92e97fa1-2edf-4476-bdd6-9dd0b4dddc7b: 1,
+      9e6c4e1f-7d60-472f-ba1a-a39ef669e4b2: 1,
+      b2b3f03d-6a65-4f7b-a9c7-1c7ef74a9ba4: 1,
+      be9ba2d9-53ea-4cdc-84e5-9b1eeee46550: 1,
+      d3e037e1-3eb8-44c8-a917-57927947596d: 1,
+      d4f940ab-401b-4efc-aadc-ad5f3c50688a: 1,
+      e6db77e5-3df2-4cf1-b95a-636979351e5b: 1".'
+    fix:
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Administrative Templates\Windows Components\Microsoft
+          Defender Antivirus\Microsoft Defender Exploit Guard\Attack Surface Reduction
+        name: "Configure Attack Surface Reduction rules: Set the state for each ASR rule"
+        value: 26190899-1602-49e8-8b27-eb1d0a1ce869:1
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\Windows Defender\Windows Defender Exploit Guard\ASR\Rules
+        registry_key: 26190899-1602-49e8-8b27-eb1d0a1ce869
+        registry_action: SZ:1
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Administrative Templates\Windows Components\Microsoft
+          Defender Antivirus\Microsoft Defender Exploit Guard\Attack Surface Reduction
+        name: "Configure Attack Surface Reduction rules: Set the state for each ASR rule"
+        value: 3b576869-a4ec-4529-8536-b80a7769e899:1
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\Windows Defender\Windows Defender Exploit Guard\ASR\Rules
+        registry_key: 3b576869-a4ec-4529-8536-b80a7769e899
+        registry_action: SZ:1
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Administrative Templates\Windows Components\Microsoft
+          Defender Antivirus\Microsoft Defender Exploit Guard\Attack Surface Reduction
+        name: "Configure Attack Surface Reduction rules: Set the state for each ASR rule"
+        value: 5beb7efe-fd9a-4556-801d-275e5ffc04cc:1
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\Windows Defender\Windows Defender Exploit Guard\ASR\Rules
+        registry_key: 5beb7efe-fd9a-4556-801d-275e5ffc04cc
+        registry_action: SZ:1
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Administrative Templates\Windows Components\Microsoft
+          Defender Antivirus\Microsoft Defender Exploit Guard\Attack Surface Reduction
+        name: "Configure Attack Surface Reduction rules: Set the state for each ASR rule"
+        value: 75668c1f-73b5-4cf0-bb93-3ecf5cb7cc84:1
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\Windows Defender\Windows Defender Exploit Guard\ASR\Rules
+        registry_key: 75668c1f-73b5-4cf0-bb93-3ecf5cb7cc84
+        registry_action: SZ:1
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Administrative Templates\Windows Components\Microsoft
+          Defender Antivirus\Microsoft Defender Exploit Guard\Attack Surface Reduction
+        name: "Configure Attack Surface Reduction rules: Set the state for each ASR rule"
+        value: 7674ba52-37eb-4a4f-a9a1-f0f9a1619a2c:1
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\Windows Defender\Windows Defender Exploit Guard\ASR\Rules
+        registry_key: 7674ba52-37eb-4a4f-a9a1-f0f9a1619a2c
+        registry_action: SZ:1
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Administrative Templates\Windows Components\Microsoft
+          Defender Antivirus\Microsoft Defender Exploit Guard\Attack Surface Reduction
+        name: "Configure Attack Surface Reduction rules: Set the state for each ASR rule"
+        value: 92e97fa1-2edf-4476-bdd6-9dd0b4dddc7b:1
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\Windows Defender\Windows Defender Exploit Guard\ASR\Rules
+        registry_key: 92e97fa1-2edf-4476-bdd6-9dd0b4dddc7b
+        registry_action: SZ:1
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Administrative Templates\Windows Components\Microsoft
+          Defender Antivirus\Microsoft Defender Exploit Guard\Attack Surface Reduction
+        name: "Configure Attack Surface Reduction rules: Set the state for each ASR rule"
+        value: 9e6c4e1f-7d60-472f-ba1a-a39ef669e4b2:1
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\Windows Defender\Windows Defender Exploit Guard\ASR\Rules
+        registry_key: 9e6c4e1f-7d60-472f-ba1a-a39ef669e4b2
+        registry_action: SZ:1
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Administrative Templates\Windows Components\Microsoft
+          Defender Antivirus\Microsoft Defender Exploit Guard\Attack Surface Reduction
+        name: "Configure Attack Surface Reduction rules: Set the state for each ASR rule"
+        value: b2b3f03d-6a65-4f7b-a9c7-1c7ef74a9ba4:1
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\Windows Defender\Windows Defender Exploit Guard\ASR\Rules
+        registry_key: b2b3f03d-6a65-4f7b-a9c7-1c7ef74a9ba4
+        registry_action: SZ:1
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Administrative Templates\Windows Components\Microsoft
+          Defender Antivirus\Microsoft Defender Exploit Guard\Attack Surface Reduction
+        name: "Configure Attack Surface Reduction rules: Set the state for each ASR rule"
+        value: be9ba2d9-53ea-4cdc-84e5-9b1eeee46550:1
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\Windows Defender\Windows Defender Exploit Guard\ASR\Rules
+        registry_key: be9ba2d9-53ea-4cdc-84e5-9b1eeee46550
+        registry_action: SZ:1
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Administrative Templates\Windows Components\Microsoft
+          Defender Antivirus\Microsoft Defender Exploit Guard\Attack Surface Reduction
+        name: "Configure Attack Surface Reduction rules: Set the state for each ASR rule"
+        value: d3e037e1-3eb8-44c8-a917-57927947596d:1
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\Windows Defender\Windows Defender Exploit Guard\ASR\Rules
+        registry_key: d3e037e1-3eb8-44c8-a917-57927947596d
+        registry_action: SZ:1
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Administrative Templates\Windows Components\Microsoft
+          Defender Antivirus\Microsoft Defender Exploit Guard\Attack Surface Reduction
+        name: "Configure Attack Surface Reduction rules: Set the state for each ASR rule"
+        value: d4f940ab-401b-4efc-aadc-ad5f3c50688a:1
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\Windows Defender\Windows Defender Exploit Guard\ASR\Rules
+        registry_key: d4f940ab-401b-4efc-aadc-ad5f3c50688a
+        registry_action: SZ:1
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Administrative Templates\Windows Components\Microsoft
+          Defender Antivirus\Microsoft Defender Exploit Guard\Attack Surface Reduction
+        name: "Configure Attack Surface Reduction rules: Set the state for each ASR rule"
+        value: e6db77e5-3df2-4cf1-b95a-636979351e5b:1
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\Windows Defender\Windows Defender Exploit Guard\ASR\Rules
+        registry_key: e6db77e5-3df2-4cf1-b95a-636979351e5b
+        registry_action: SZ:1
+    references:
+      cis:
+        id: 18.9.45.4.1.2
+        category: L1
+        value:
+          "26190899-1602-49e8-8b27-eb1d0a1ce869: 1, 3b576869-a4ec-4529-8536-b80a7769e899:
+          1, 5beb7efe-fd9a-4556-801d-275e5ffc04cc: 1, 75668c1f-73b5-4cf0-bb93-3ecf5cb7cc84:
+          1, 7674ba52-37eb-4a4f-a9a1-f0f9a1619a2c: 1, 92e97fa1-2edf-4476-bdd6-9dd0b4dddc7b:
+          1, 9e6c4e1f-7d60-472f-ba1a-a39ef669e4b2: 1, b2b3f03d-6a65-4f7b-a9c7-1c7ef74a9ba4:
+          1, be9ba2d9-53ea-4cdc-84e5-9b1eeee46550: 1, d3e037e1-3eb8-44c8-a917-57927947596d:
+          1, d4f940ab-401b-4efc-aadc-ad5f3c50688a: 1, e6db77e5-3df2-4cf1-b95a-636979351e5b:
+          1"
+      stig:
+        id: V-213456 to V-213462
+        category: CAT II
+        value:
+          "BE9BA2D9-53EA-4CDC-84E5-9B1EEEE46550: 1, D4F940AB-401B-4EFC-AADC-AD5F3C50688A:
+          1, 3B576869-A4EC-4529-8536-B80A7769E899: 1, 75668C1F-73B5-4CF0-BB93-3ECF5CB7CC84:
+          1, D3E037E1-3EB8-44C8-A917-57927947596D: 1, 5BEB7EFE-FD9A-4556-801D-275E5FFC04CC:
+          1, 92E97FA1-2EDF-4476-BDD6-9DD0B4DDDC7B: 1"
+    notes: "TODO: fix this line its crazy long"
+  - cid: C-W-GP-ADM-MAV-07
+    operating_systems:
+      - Windows
+    category: ""
+    policy:
+      '"Prevent users and apps from accessing dangerous websites" is set to "Enabled:
+      Block".'
+    fix:
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Administrative Templates\Windows Components\Microsoft
+          Defender Antivirus\Microsoft Defender Exploit Guard\Network Protection
+        name: Prevent users and apps from accessing dangerous websites
+        value: "Enabled: Block"
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\Windows Defender\Windows Defender Exploit Guard\Network Protection
+        registry_key: EnableNetworkProtection
+        registry_action: DWORD:1
+    references:
+      cis:
+        id: 18.8.45.4.3.1
+        category: L1
+        value: "Enabled: Block"
+      stig:
+        id: V-213463
+        category: CAT II
+        value: "Enabled: Block"
+  - cid: C-W-GP-ADM-MAV-08
+    operating_systems:
+      - Windows
+    category: ""
+    policy: '"Enable file hash computation feature" is set to "Enabled".'
+    fix:
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Administrative Templates\Windows Components\Microsoft
+          Defender Antivirus\MpEngine
+        name: Enable file hash computation feature
+        value: Enabled
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\Windows Defender\MpEngine
+        registry_key: EnableFileHashComputation
+        registry_action: DWORD:1
+    references:
+      cis:
+        id: 18.9.45.5.1
+        category: L2
+        value: Enabled
+  - cid: C-W-GP-ADM-MAV-08
+    operating_systems:
+      - Windows
+    category: ""
+    policy: '"Turn on protocol recognition" is set to "Enabled".'
+    fix:
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Administrative Templates\Windows Components\Microsoft
+          Defender Antivirus\Network Inspection System
+        name: Turn on protocol recognition
+        value: Enabled
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\Windows Defender\NIS
+        registry_key: DisableProtocolRecognition
+        registry_action: DWORD:0
+    references:
+      stig:
+        id: V-213436
+        category: CAT II
+        value: Enabled or Not Configured
+  - cid: C-W-GP-ADM-MAV-09
+    operating_systems:
+      - Windows
+    category: ""
+    policy:
+      '"Configure local setting override for monitoring file and program activity
+      on your computer" is set to "Disabled".'
+    fix:
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Administrative Templates\Windows Components\Microsoft
+          Defender Antivirus\Real-time Protection
+        name:
+          Configure local setting override for monitoring file and program activity
+          on your computer
+        value: Disabled
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\Windows Defender\Real-Time Protection
+        registry_key: LocalSettingOverrideDisableOnAccessProtection
+        registry_action: DWORD:0
+    references:
+      stig:
+        id: V-213437
+        category: CAT II
+        value: Disabled or Not Configured
+  - cid: C-W-GP-ADM-MAV-09
+    operating_systems:
+      - Windows
+    category: ""
+    policy:
+      '"Configure local setting override for monitoring for incoming and outgoing
+      file activity" is set to "Disabled".'
+    fix:
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Administrative Templates\Windows Components\Microsoft
+          Defender Antivirus\Real-time Protection
+        name:
+          Configure local setting override for monitoring for incoming and outgoing file
+          activity
+        value: Disabled
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\Windows Defender\Real-Time Protection
+        registry_key: LocalSettingOverrideRealtimeScanDirection
+        registry_action: DWORD:0
+    references:
+      stig:
+        id: V-213438
+        category: CAT II
+        value: Disabled or Not Configured
+  - cid: C-W-GP-ADM-MAV-09
+    operating_systems:
+      - Windows
+    category: ""
+    policy:
+      '"Configure local setting override for scanning all downloaded files and
+      attachments" is set to "Disabled".'
+    fix:
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Administrative Templates\Windows Components\Microsoft
+          Defender Antivirus\Real-time Protection
+        name: Configure local setting override for scanning all downloaded files and attachments
+        value: Disabled
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\Windows Defender\Real-Time Protection
+        registry_key: LocalSettingOverrideDisableIOAVProtection
+        registry_action: DWORD:0
+    references:
+      stig:
+        id: V-213439
+        category: CAT II
+        value: Disabled or Not Configured
+  - cid: C-W-GP-ADM-MAV-09
+    operating_systems:
+      - Windows
+    category: ""
+    policy:
+      '"Configure local setting override for turn on behavior monitoring" is set
+      to "Disabled".'
+    fix:
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Administrative Templates\Windows Components\Microsoft
+          Defender Antivirus\Real-time Protection
+        name: Configure local setting override for turn on behavior monitoring
+        value: Disabled
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\Windows Defender\Real-Time Protection
+        registry_key: LocalSettingOverrideDisableBehaviorMonitoring
+        registry_action: DWORD:0
+    references:
+      stig:
+        id: V-213440
+        category: CAT II
+        value: Disabled or Not Configured
+  - cid: C-W-GP-ADM-MAV-09
+    operating_systems:
+      - Windows
+    category: ""
+    policy:
+      '"Configure local setting override to turn on real-time protection" is set
+      to "Disabled".'
+    fix:
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Administrative Templates\Windows Components\Microsoft
+          Defender Antivirus\Real-time Protection
+        name: Configure local setting override to turn on real-time protection
+        value: Disabled
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\Windows Defender\Real-Time Protection
+        registry_key: LocalSettingOverrideDisableRealtimeMonitoring
+        registry_action: DWORD:0
+    references:
+      stig:
+        id: V-213441
+        category: CAT II
+        value: Disabled or Not Configured
+  - cid: C-W-GP-ADM-MAV-09
+    operating_systems:
+      - Windows
+    category: ""
+    policy:
+      '"Configure monitoring for incoming and outgoing file and program activity"
+      is set to "Disabled".'
+    fix:
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Administrative Templates\Windows Components\Microsoft
+          Defender Antivirus\Real-time Protection
+        name: Configure monitoring for incoming and outgoing file and program activity
+        value: Disabled
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\Windows Defender\Real-Time Protection
+        registry_key: RealtimeScanDirection
+        registry_action: DELETE
+    references:
+      stig:
+        id: V-213442
+        category: CAT II
+        value: Disabled or Not Configured
+  - cid: C-W-GP-ADM-MAV-09
+    operating_systems:
+      - Windows
+    category: ""
+    policy: '"Monitor file and program activity on your computer" is set to "Enabled".'
+    fix:
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Administrative Templates\Windows Components\Microsoft
+          Defender Antivirus\Real-time Protection
+        name: Monitor file and program activity on your computer
+        value: Enabled
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\Windows Defender\Real-Time Protection
+        registry_key: DisableOnAccessProtection
+        registry_action: DWORD:0
+    references:
+      stig:
+        id: V-213443
+        category: CAT II
+        value: Enabled or Not Configured
+  - cid: C-W-GP-ADM-MAV-09
+    operating_systems:
+      - Windows
+    category: ""
+    policy: '"Scan all downloaded files and attachments" is set to "Enabled".'
+    fix:
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Administrative Templates\Windows Components\Microsoft
+          Defender Antivirus\Real-time Protection
+        name: Scan all downloaded files and attachments
+        value: Enabled
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\Windows Defender\Real-Time Protection
+        registry_key: DisableIOAVProtection
+        registry_action: DWORD:0
+    references:
+      cis:
+        id: 18.9.45.8.1
+        category: L1
+        value: Enabled
+      stig:
+        id: V-213444
+        category: CAT II
+        value: Enabled or Not Configured
+  - cid: C-W-GP-ADM-MAV-10
+    operating_systems:
+      - Windows
+    category: ""
+    policy: '"Turn off real-time protection" is set to "Disabled".'
+    fix:
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Administrative Templates\Windows Components\Microsoft
+          Defender Antivirus\Real-time Protection
+        name: Turn off real-time protection
+        value: Disabled
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\Windows Defender\Real-Time Protection
+        registry_key: DisableRealtimeMonitoring
+        registry_action: DWORD:0
+    references:
+      cis:
+        id: 18.9.45.8.2
+        category: L1
+        value: Disabled
+      stig:
+        id: V-213445
+        category: CAT II
+        value: Disabled or Not Configured
+  - cid: C-W-GP-ADM-MAV-11
+    operating_systems:
+      - Windows
+    category: ""
+    policy: '"Turn on behavior monitoring" is set to "Enabled".'
+    fix:
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Administrative Templates\Windows Components\Microsoft
+          Defender Antivirus\Real-time Protection
+        name: Turn on behavior monitoring
+        value: Enabled
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\Windows Defender\Real-Time Protection
+        registry_key: DisableBehaviorMonitoring
+        registry_action: DWORD:0
+    references:
+      cis:
+        id: 18.9.45.8.3
+        category: L1
+        value: Enabled
+      stig:
+        id: V-213446
+        category: CAT II
+        value: Enabled or Not Configured
+  - cid: C-W-GP-ADM-MAV-11
+    operating_systems:
+      - Windows
+    category: ""
+    policy:
+      '"Turn on process scanning whenever real-time protection is enabled" is
+      set to "Enabled".'
+    fix:
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Administrative Templates\Windows Components\Microsoft
+          Defender Antivirus\Real-time Protection
+        name: Turn on process scanning whenever real-time protection is enabled
+        value: Enabled
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\Windows Defender\Real-Time Protection
+        registry_key: DisableScanOnRealtimeEnable
+        registry_action: DWORD:0
+    references:
+      stig:
+        id: V-213447
+        category: CAT II
+        value: Enabled or Not Configured
+  - cid: C-W-GP-ADM-MAV-12
+    operating_systems:
+      - Windows
+    category: ""
+    policy: '"Configure Watson events" is set to "Disabled".'
+    fix:
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Administrative Templates\Windows Components\Microsoft
+          Defender Antivirus\Reporting
+        name: Configure Watson events
+        value: Disabled
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\Windows Defender\Reporting
+        registry_key: DisableGenericRePorts
+        registry_action: DWORD:1
+    references:
+      cis:
+        id: 18.9.45.10.1
+        category: L2
+        value: Disabled
+  - cid: C-W-GP-ADM-MAV-13
+    operating_systems:
+      - Windows
+    category: ""
+    policy: '"Scan archive files" is set to "Enabled".'
+    fix:
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Administrative Templates\Windows Components\Microsoft
+          Defender Antivirus\Scan
+        name: Scan archive files
+        value: Enabled
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\Windows Defender\Scan
+        registry_key: DisableArchiveScanning
+        registry_action: DWORD:0
+    references:
+      stig:
+        id: V-213448
+        category: CAT II
+        value: Enabled or Not Configured
+  - cid: C-W-GP-ADM-MAV-13
+    operating_systems:
+      - Windows
+    category: ""
+    policy: '"Scan removable drives" is set to "Enabled".'
+    fix:
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Administrative Templates\Windows Components\Microsoft
+          Defender Antivirus\Scan
+        name: Scan removable drives
+        value: Enabled
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\Windows Defender\Scan
+        registry_key: DisableRemovableDriveScanning
+        registry_action: DWORD:0
+    references:
+      cis:
+        id: 18.9.45.11.1
+        category: L1
+        value: Enabled
+      stig:
+        id: V-213449
+        category: CAT II
+        value: Enabled
+  - cid: C-W-GP-ADM-MAV-13
+    operating_systems:
+      - Windows
+    category: ""
+    policy:
+      '"Specify the day of the week to run a scheduled scan" is set to "Enabled:
+      Every Day".'
+    fix:
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Administrative Templates\Windows Components\Microsoft
+          Defender Antivirus\Scan
+        name: Specify the day of the week to run a scheduled scan
+        value: "Enabled: Every Day"
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\Windows Defender\Scan
+        registry_key: ScheduleDay
+        registry_action: DWORD:0
+    references:
+      stig:
+        id: V-213450
+        category: CAT II
+        value: "Enabled: <Anything but never>"
+    notes: TODO pop this one
+  - cid: C-W-GP-ADM-MAV-14
+    operating_systems:
+      - Windows
+    category: ""
+    policy: '"Turn on e-mail scanning" is set to "Enabled".'
+    fix:
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Administrative Templates\Windows Components\Microsoft
+          Defender Antivirus\Scan
+        name: Turn on e-mail scanning
+        value: Enabled
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\Windows Defender\Scan
+        registry_key: DisableEmailScanning
+        registry_action: DWORD:0
+    references:
+      cis:
+        id: 18.9.45.11.2
+        category: L1
+        value: Enabled
+      stig:
+        id: V-213451
+        category: CAT II
+        value: Enabled
+  - cid: C-W-GP-ADM-MAV-14
+    operating_systems:
+      - Windows
+    category: ""
+    policy:
+      '"Define the number of days before spyware security intelligence is considered out of date"
+      is set to "Enabled: 7 days".'
+    fix:
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Administrative Templates\Windows Components\Microsoft
+          Defender Antivirus\Security Intelligence Updates
+        name: Define the number of days before spyware security intelligence
+          is considered out of date
+        value: "Enabled: 7 days"
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\Windows Defender\Signature Updates
+        registry_key: ASSignatureDue
+        registry_action: DWORD:7
+    references:
+      stig:
+        id: V-213452
+        category: CAT I
+        value: "Enabled: 7 days or less"
+    notes:
+      "Recent location change! TODO: check if this applies on older systems also
+      pop this one"
+  - cid: C-W-GP-ADM-MAV-14
+    operating_systems:
+      - Windows
+    category: ""
+    policy:
+      '"Define the number of days before virus security intelligence is considered out
+      of date" is set to "Enabled: 7 days".'
+    fix:
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Administrative Templates\Windows Components\Microsoft
+          Defender Antivirus\Security Intelligence Updates
+        name:
+          Define the number of days before virus security intelligence is considered out of
+          date
+        value: "Enabled: 7 days"
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\Windows Defender\Signature Updates
+        registry_key: AVSignatureDue
+        registry_action: DWORD:7
+    references:
+      stig:
+        id: V-213453
+        category: CAT I
+        value: "Enabled: 7 days or less"
+    notes: "TODO: pop"
+  - cid: C-W-GP-ADM-MAV-14
+    operating_systems:
+      - Windows
+    category: ""
+    policy:
+      '"Specify the day of the week to check for security intelligence updates" is set to
+      "Disabled".'
+    fix:
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Administrative Templates\Windows Components\Microsoft
+          Defender Antivirus\Security Intelligence Updates
+        name: Specify the day of the week to check for security intelligence updates
+        value: "Disabled"
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\Windows Defender\Signature Updates
+        registry_key: ScheduleDay
+        registry_action: DWORD:0
+    references:
+      stig:
+        id: V-213454
+        category: CAT II
+        value: "Enabled: Every Day"
+    notes: "Enabled: Every Day automatically sets itself to Disabled bc it's the default"
+  - cid: C-W-GP-ADM-MAV-14
+    operating_systems:
+      - Windows
+    category: ""
+    policy:
+      '"Specify threat alert levels at which default action should not be taken
+      when detected" is set to "Enabled".'
+    fix:
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Administrative Templates\Windows Components\Microsoft
+          Defender Antivirus\Threats
+        name:
+          Specify threat alert levels at which default action should not be taken
+          when detected
+        value: "Enabled: 5:3, 4:3, 2:3"
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\Windows Defender\Threats
+        registry_key: Threats_ThreatSeverityDefaultAction
+        registry_action: DWORD:1
+    references:
+      stig:
+        id: V-213455,V-213464,V-213465,V-213466
+        category: CAT II
+        value: "Enabled: 5:2 or 5:3, 4:2 or 4:3, 2:2 or 2:3, 1:2 or 1:3"
+  - cid: C-W-GP-ADM-MAV-14a
+    operating_systems:
+      - Windows
+    category: ""
+    policy:
+      '"Specify threat alert levels at which default action should not be taken
+      when detected" is set to "Enabled: 5:3, 4:3, 2:3".'
+    fix:
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Administrative Templates\Windows Components\Microsoft
+          Defender Antivirus\Threats
+        name:
+          Specify threat alert levels at which default action should not be taken
+          when detected
+        value: "5:3"
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\Windows Defender\Threats\ThreatSeverityDefaultAction
+        registry_key: "5"
+        registry_action: SZ:3
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Administrative Templates\Windows Components\Microsoft
+          Defender Antivirus\Threats
+        name:
+          Specify threat alert levels at which default action should not be taken
+          when detected
+        value: "4:3"
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\Windows Defender\Threats\ThreatSeverityDefaultAction
+        registry_key: "4"
+        registry_action: SZ:3
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Administrative Templates\Windows Components\Microsoft
+          Defender Antivirus\Threats
+        name:
+          Specify threat alert levels at which default action should not be taken
+          when detected
+        value: "2:3"
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\Windows Defender\Threats\ThreatSeverityDefaultAction
+        registry_key: "2"
+        registry_action: SZ:3
+    references:
+      stig:
+        id: V-213455,V-213464,V-213465,V-213466
+        category: CAT II
+        value: "Enabled: 5:2 or 5:3, 4:2 or 4:3, 2:2 or 2:3, 1:2 or 1:3"
+  - cid: C-W-GP-ADM-MAV-15
+    operating_systems:
+      - Windows
+    category: ""
+    policy:
+      '"Allow auditing events in Microsoft Defender Application Guard" is set
+      to "Enabled".'
+    fix:
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Administrative Templates\Windows Components\Microsoft
+          Defender Application Guard
+        name: Allow auditing events in Microsoft Defender Application Guard
+        value: Enabled
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\AppHVSI
+        registry_key: AuditApplicationGuard
+        registry_action: DWORD:1
+    references:
+      cis:
+        id: 18.9.46.1
+        category: NG
+        value: Enabled
+  - cid: C-W-GP-ADM-MAV-16
+    operating_systems:
+      - Windows
+    category: ""
+    policy:
+      '"Allow camera and microphone access in Microsoft Defender Application Guard"
+      is set to "Disabled".'
+    fix:
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Administrative Templates\Windows Components\Microsoft
+          Defender Application Guard
+        name: Allow camera and microphone access in Microsoft Defender Application Guard
+        value: Disabled
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\AppHVSI
+        registry_key: AllowCameraMicrophoneRedirection
+        registry_action: DWORD:0
+    references:
+      cis:
+        id: 18.9.46.2
+        category: NG
+        value: Disabled
+  - cid: C-W-GP-ADM-MAV-17
+    operating_systems:
+      - Windows
+    category: ""
+    policy:
+      '"Allow data persistence for Microsoft Defender Application Guard" is set
+      to "Disabled".'
+    fix:
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Administrative Templates\Windows Components\Microsoft
+          Defender Application Guard
+        name: Allow data persistence for Microsoft Defender Application Guard
+        value: Disabled
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\AppHVSI
+        registry_key: AllowPersistence
+        registry_action: DWORD:0
+    references:
+      cis:
+        id: 18.9.46.3
+        category: NG
+        value: Disabled
+  - cid: C-W-GP-ADM-MAV-18
+    operating_systems:
+      - Windows
+    category: ""
+    policy:
+      '"Allow files to download and save to the host operating system from Microsoft
+      Defender Application Guard" is set to "Disabled".'
+    fix:
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Administrative Templates\Windows Components\Microsoft
+          Defender Application Guard
+        name:
+          Allow files to download and save to the host operating system from Microsoft
+          Defender Application Guard
+        value: Disabled
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\AppHVSI
+        registry_key: SaveFilesToHost
+        registry_action: DWORD:0
+    references:
+      cis:
+        id: 18.9.46.4
+        category: NG
+        value: Disabled
+  - cid: C-W-GP-ADM-MAV-19
+    operating_systems:
+      - Windows
+    category: ""
+    policy:
+      '"Configure Microsoft Defender Application Guard clipboard settings" is
+      set to "Enabled".'
+    fix:
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Administrative Templates\Windows Components\Microsoft
+          Defender Application Guard
+        name: Configure Microsoft Defender Application Guard clipboard settings
+        value: Enabled
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\AppHVSI
+        registry_key: AppHVSIClipboardSettings
+        registry_action: DWORD:1
+    references:
+      cis:
+        id: 18.9.46.5
+        category: NG
+        value: Enabled
+  - cid: C-W-GP-ADM-MAV-20
+    operating_systems:
+      - Windows
+    category: ""
+    policy:
+      '"Configure Microsoft Defender Application Guard clipboard settings: Clipboard
+      behavior setting" is set to "Enable clipboard operation from an isolated session
+      to the host".'
+    fix:
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Administrative Templates\Windows Components\Microsoft
+          Defender Application Guard
+        name:
+          "Configure Microsoft Defender Application Guard clipboard settings: Clipboard
+          behavior setting"
+        value: Enable clipboard operation from an isolated session to the host
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\AppHVSI
+        registry_key: AppHVSIClipboardFileType
+        registry_action: DWORD:1
+    references:
+      cis:
+        id: 18.9.46.5
+        category: NG
+        value: Enable clipboard operation from an isolated session to the host
+  - cid: C-W-GP-ADM-MAV-21
+    operating_systems:
+      - Windows
+    category: ""
+    policy:
+      '"Turn on Microsoft Defender Application Guard in Managed Mode" is set to
+      "Enabled: 1".'
+    fix:
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Administrative Templates\Windows Components\Microsoft
+          Defender Application Guard
+        name: Turn on Microsoft Defender Application Guard in Managed Mode
+        value: "Enabled: 1"
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\AppHVSI
+        registry_key: AllowAppHVSI_ProviderSet
+        registry_action: DWORD:1
+    references:
+      cis:
+        id: 18.9.46.6
+        category: NG
+        value: "Enabled: 1"
+  - cid: C-W-GP-ADM-MAV-24
+    operating_systems:
+      - Windows
+    category: ""
+    policy: '"Prevent users from modifying settings" is set to "Enabled".'
+    fix:
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Administrative Templates\Windows Components\Windows
+          Security\App and browser protection
+        name: Prevent users from modifying settings
+        value: Enabled
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\Windows Defender Security Center\App and Browser protection
+        registry_key: DisallowExploitProtectionOverride
+        registry_action: DWORD:1
+    references:
+      cis:
+        id: 18.9.100.2.1
+        category: L1
+        value: Enabled
+  - cid: C-W-GP-ADM-MAV-25
+    operating_systems:
+      - Windows
+    category: ""
+    policy: '"Configure Windows Defender SmartScreen" is set to "Enabled".'
+    fix:
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Administrative Templates\Windows Components\Windows
+          Defender SmartScreen\Explorer
+        name: Configure Windows Defender SmartScreen
+        value: "Enabled: Warn and prevent bypass"
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\Windows\System
+        registry_key: EnableSmartScreen
+        registry_action: DWORD:1
+    references:
+      cis:
+        id: 18.9.81.1.1
+        category: L1
+        value: "Enabled: Warn and prevent bypass"
+  - cid: C-W-GP-ADM-MAV-25a
+    operating_systems:
+      - Windows
+    category: ""
+    policy:
+      '"Configure Windows Defender SmartScreen" is set to "Enabled: Warn and prevent
+      bypass".'
+    fix:
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Administrative Templates\Windows Components\Windows
+          Defender SmartScreen\Explorer
+        name: Configure Windows Defender SmartScreen
+        value: "Enabled: Warn and prevent bypass"
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\Windows\System
+        registry_key: ShellSmartScreenLevel
+        registry_action: SZ:Block
+    references:
+      cis:
+        id: 18.9.81.1.1
+        category: L1
+        value: "Enabled: Warn and prevent bypass"
+  - cid: C-W-GP-ADM-MAV-26
+    operating_systems:
+      - Windows
+    category: ""
+    policy: '"Configure Windows Defender SmartScreen" is set to "Enabled".'
+    fix:
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Administrative Templates\Windows Components\Windows
+          Defender SmartScreen\Microsoft Edge
+        name: Configure Windows Defender SmartScreen
+        value: Enabled
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\MicrosoftEdge\PhishingFilter
+        registry_key: EnabledV9
+        registry_action: DWORD:1
+    references:
+      cis:
+        id: 18.9.81.2.1
+        category: L1
+        value: Enabled
+  - cid: C-W-GP-ADM-MAV-27
+    operating_systems:
+      - Windows
+    category: ""
+    policy:
+      '"Prevent bypassing Windows Defender SmartScreen prompts for sites" is set
+      to "Enabled".'
+    fix:
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Administrative Templates\Windows Components\Windows
+          Defender SmartScreen\Microsoft Edge
+        name: Prevent bypassing Windows Defender SmartScreen prompts for sites
+        value: Enabled
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\MicrosoftEdge\PhishingFilter
+        registry_key: PreventOverride
+        registry_action: DWORD:1
+    references:
+      cis:
+        id: 18.9.81.2.2
+        category: L1
+        value: Enabled

@@ -1,0 +1,75 @@
+version: 1
+name: user_auditing
+vulnerabilities:
+  - cid: C-WS-UA-01
+    operating_systems:
+      - Windows
+      - Windows Server
+    category: Passwords
+    policy: All user passwords are reset.
+    fix:
+      - fix_type: automated_module
+        module_id: windows.user_auditing
+  - cid: C-WS-UA-02
+    operating_systems:
+      - Windows
+      - Windows Server
+    category: Passwords
+    policy: All user passwords expire.
+    fix:
+      - fix_type: automated_module
+        module_id: windows.user_auditing
+  - cid: C-WS-UA-03
+    operating_systems:
+      - Windows
+      - Windows Server
+    category: Authorized/Unauthorized Users
+    policy: Each requested user account is present on the system.
+    fix:
+      - fix_type: automated_module
+        module_id: windows.user_auditing
+  - cid: C-WS-UA-04
+    operating_systems:
+      - Windows
+      - Windows Server
+    category: Authorized/Unauthorized Users
+    policy: No user accounts are present on the system that are not requested to be.
+    fix:
+      - fix_type: automated_module
+        module_id: windows.user_auditing
+  - cid: C-WS-UA-05
+    operating_systems:
+      - Windows
+      - Windows Server
+    category: User Permissions
+    policy: No user accounts are part of the Administrators group that are not supposed to be.
+    fix:
+      - fix_type: automated_module
+        module_id: windows.user_auditing
+  - cid: C-WS-UA-06
+    operating_systems:
+      - Windows
+      - Windows Server
+    category: User Permissions
+    policy: No user accounts that are supposed to be part of the Administrators group are not.
+    fix:
+      - fix_type: automated_module
+        module_id: windows.user_auditing
+  - cid: C-WS-UA-07
+    operating_systems:
+      - Windows
+      - Windows Server
+    category: Built-in Accounts
+    policy: The built-in administrator account is disabled.
+    fix:
+      - fix_type: automated_module
+        module_id: windows.user_auditing
+  - cid: C-WS-UA-08
+    operating_systems:
+      - Windows
+      - Windows Server
+    category: Built-in Accounts
+    policy: The built-in guest account is disabled.
+    fix:
+      - fix_type: automated_module
+        module_id: windows.user_auditing

@@ -1,0 +1,262 @@
+version: 1.0
+name: Password Policies
+vulnerabilities:
+  - cid: C-UD-PWD-PASS-01
+    operating_systems:
+      - Ubuntu
+      - Debian
+    category: pam_pwquality
+    policy: pam_pwquality is installed.
+    fix:
+      - fix_type: command
+        command: apt-get install -y libpam-pwquality
+    references:
+      cis:
+        id: "5.4.1"
+        category: L1
+      stig:
+        id: V-238228
+        category: CAT II
+  - cid: C-UDF-PWD-02
+    operating_systems:
+      - Ubuntu
+      - Debian
+    category: PAM
+    policy: "[Preparation] PAM Configuration is imported."
+    fix:
+      - fix_type: manual
+        steps: |
+          This vuln is fixed by importing the common-password and common-auth files located in ./support/linux/config_files.
+          The next two steps in this checklist are to copy the pam files into the appropriate directories.
+          Before continuing, please create a root terminal using `sudo -i` and keep it open in order to revert any problems with these pam files.
+          The backups will be named common-password.bak, common-auth.bak, common-account.bak, and login.bak.
+    references:
+      cis:
+        id: 5.4.3
+        category: L1
+  - cid: C-UDF-PWD-02
+    operating_systems:
+      - Ubuntu
+      - Debian
+    category: PAM
+    policy: "PAM Configuration is imported."
+    fix:
+      - fix_type: config_file_copyover
+        file: /etc/pam.d/common-password
+        source: ./support/linux/config_files/ubu20/common-password
+      - fix_type: config_file_copyover
+        file: /etc/pam.d/common-auth
+        source: ./support/linux/config_files/ubu20/common-auth
+      - fix_type: config_file_copyover
+        file: /etc/pam.d/common-account
+        source: ./support/linux/config_files/ubu20/common-account
+      - fix_type: config_file_copyover
+        file: /etc/pam.d/login
+        source: ./support/linux/config_files/ubu20/login
+    references:
+      cis:
+        id: 5.4.3
+        category: L1
+  # - cid: C-UD-PAM-PASS-02
+  #   operating_systems:
+  #     - Ubuntu 22
+  #   category: common-password
+  #   policy: pam_pwhistory remembers 5 passwords.
+  #   fix:
+  #     - fix_type: config_file
+  #       file: /etc/common-password
+  #       text: password  requisite     pam_pwhistory.so  remember=5
+  # - cid: C-UD-PAM-PASS-03
+  #   operating_systems:
+  #     - Ubuntu 22
+  #   category: common-password
+  #   policy: pam_pwquality is included.
+  #   fix:
+  #     - fix_type: config_file
+  #       file: /etc/common-password
+  #       text: password  requisite     pam_pwquality.so retry=3
+  # - cid: C-UD-PAM-PASS-04
+  #   operating_systems:
+  #     - Ubuntu 22
+  #   category: common-password
+  #   policy: "(default edited) pam_unix uses `obscure use_authtok try_first_pass yescrypt remember=5 rounds=65536`."
+  #   fix:
+  #     - fix_type: config_file
+  #       file: /etc/common-password
+  #       text: password    [success=1 default=ignore]    pam_unix.so obscure use_authtok try_first_pass yescrypt remember=5 rounds=65536
+  # - cid: C-UD-PAM-PASS-05
+  #   operating_systems:
+  #     - Ubuntu 22
+  #   category: common-password
+  #   policy: "(default) pam_deny is included."
+  #   fix:
+  #     - fix_type: config_file
+  #       file: /etc/common-password
+  #       text: password    requisite            pam_deny.so
+  # - cid: C-UD-PAM-PASS-06
+  #   operating_systems:
+  #     - Ubuntu 22
+  #   category: common-password
+  #   policy: "(default) pam_permit is included."
+  #   fix:
+  #     - fix_type: config_file
+  #       file: /etc/common-password
+  #       text: password    required            pam_permit.so
+  # - cid: C-UD-PAM-PASS-07
+  #   operating_systems:
+  #     - Ubuntu 22
+  #   category: common-password
+  #   policy: "(default) pam_gnome_keyring is included."
+  #   fix:
+  #     - fix_type: config_file
+  #       file: /etc/common-password
+  #       text: password    optional    pam_gnome_keyring.so
+  # - cid: C-UD-PAM-AUTH-01
+  #   operating_systems:
+  #     - Ubuntu 22
+  #   category: common-auth
+  #   policy: pam_faillock preauth is configured.
+  #   fix:
+  #     - fix_type: config_file
+  #       file: /etc/common-auth
+  #       text: auth  required      pam_faillock.so preauth
+  # - cid: C-UD-PAM-AUTH-01
+  #   operating_systems:
+  #     - Ubuntu 22
+  #   category: common-auth
+  #   policy: "(default edited) pam_unix is included with nullok_secure."
+  #   fix:
+  #     - fix_type: config_file
+  #       file: /etc/common-auth
+  #       text: auth  [success=1 default=ignore]      pam_unix.so nullok_secure
+  # - cid: C-UD-PAM-AUTH-02
+  #   operating_systems:
+  #     - Ubuntu 22
+  #   category: common-auth
+  #   policy: pam_faillock authfail is configured.
+  #   fix:
+  #     - fix_type: config_file
+  #       file: /etc/common-auth
+  #       text: auth  [default=die]     pam_faillock.so authfail
+  # - cid: C-UD-PAM-AUTH-03
+  #   operating_systems:
+  #     - Ubuntu 22
+  #   category: common-auth
+  #   policy: pam_faillock authsucc is configured.
+  #   fix:
+  #     - fix_type: config_file
+  #       file: /etc/common-auth
+  #       text: auth  sufficient      pam_faillock.so authsucc
+  # - cid: C-UD-PAM-AUTH-04
+  #   operating_systems:
+  #     - Ubuntu 22
+  #   category: common-auth
+  #   policy: "(default) pam_deny is included."
+  #   fix:
+  #     - fix_type: config_file
+  #       file: /etc/common-auth
+  #       text: auth    requisite            pam_deny.so
+  # - cid: C-UD-PAM-AUTH-05
+  #   operating_systems:
+  #     - Ubuntu 22
+  #   category: common-auth
+  #   policy: "(default) pam_permit is included."
+  #   fix:
+  #     - fix_type: config_file
+  #       file: /etc/common-auth
+  #       text: auth    required            pam_permit.so
+  # - cid: C-UD-PAM-AUTH-06
+  #   operating_systems:
+  #     - Ubuntu 22
+  #   category: common-auth
+  #   policy: "(default) pam_cap is included."
+  #   fix:
+  #     - fix_type: config_file
+  #       file: /etc/common-auth
+  #       text: auth    optional            pam_cap.so
+  # - cid: C-UD-PAM-AUTH-07
+  #   operating_systems:
+  #     - Ubuntu 22
+  #   category: common-auth
+  #   policy: pam_faildelay is configured to a 4000000 delay.
+  #   fix:
+  #     - fix_type: config_file
+  #       file: /etc/common-auth
+  #       text: auth  required      pam_faildelay.so delay=4000000
+  # - cid: C-UD-PAM-ACCT-01
+  #   operating_systems:
+  #     - Ubuntu 22
+  #   category: common-account
+  #   policy: "(default) pam_unix is included."
+  #   fix:
+  #     - fix_type: config_file
+  #       file: /etc/common-auth
+  #       text: account [success=1 new_authtok_reqd=done default=ignore]      pam_unix.so
+  # - cid: C-UD-PAM-ACCT-02
+  #   operating_systems:
+  #     - Ubuntu 22
+  #   category: common-account
+  #   policy: "(default) pam_deny is included."
+  #   fix:
+  #     - fix_type: config_file
+  #       file: /etc/common-auth
+  #       text: account    requisite            pam_deny.so
+  # - cid: C-UD-PAM-ACCT-03
+  #   operating_systems:
+  #     - Ubuntu 22
+  #   category: common-account
+  #   policy: "(default) pam_permit is included."
+  #   fix:
+  #     - fix_type: config_file
+  #       file: /etc/common-auth
+  #       text: account    required            pam_permit.so
+  # - cid: C-UD-PAM-ACCT-04
+  #   operating_systems:
+  #     - Ubuntu 22
+  #   category: common-account
+  #   policy: "(default) pam_faillock is included."
+  #   fix:
+  #     - fix_type: config_file
+  #       file: /etc/common-auth
+  #       text: account    required    pam_faillock.so
+  # - cid: C-UD-PAM-LOGIN-01
+  #   operating_systems:
+  #     - Ubuntu 22
+  #   category: login
+  #   policy: pam_lastlog shows failed login attempts.
+  #   fix:
+  #     - fix_type: command
+  #       command: sed -i 's/pam_lastlog.so.*/pam_lastlog.so showfailed/' /etc/pam.d/login
+  # - cid: C-UD-PAM-LOGIN-02
+  #   operating_systems:
+  #     - Ubuntu 22
+  #   category: login
+  #   policy: pam_faildelay has a larger delay.
+  #   fix:
+  #     - fix_type: command
+  #       command: sed -i 's/delay=.*/delay=4000000/' /etc/pam.d/login
+  #   notes: TODO uncomment stuff in login??? aka pam_access
+
+  - cid: C-UD-PAM-APPARMOR-01
+    operating_systems:
+      - Ubuntu
+    category: apparmor
+    policy: pam_apparmor is enforcing apparmor profiles.
+    fix:
+      - fix_type: config_file
+        file: /etc/pam.d/apparmor
+        text: session optional pam_apparmor.so order=user,group,default
+    references:
+      other: https://github.com/konstruktoid/hardening/blob/master/scripts/apparmor
+  - cid: C-UD-PAM-SESS-01
+    operating_systems:
+      - Ubuntu
+    category: common-session
+    policy: pam_umask is enforcing a umask of 077.
+    fix:
+      - fix_type: config_file
+        file: /etc/pam.d/apparmor
+        text: session optional pam_umask.so
+    references:
+      other: https://github.com/konstruktoid/hardening/blob/master/scripts/apparmor
+# TODO add su

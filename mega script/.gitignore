@@ -1,0 +1,14 @@
+#vscode
+/.vscode
+
+#python
+__pycache__
+
+#logs
+poochbot_verbose.log
+poochbot.log
+
+#generated folders
+/data
+/generated
+/backups

@@ -1,0 +1,1932 @@
+#version 2 of https://www.stigviewer.com/stig/microsoft_iis_10.0_server/
+version: 1.1
+name: IIS Server Configuration
+groups:
+  - category: Basic Configurations
+    vulnerabilities:
+      - cid: C-S-IIS-BAS-01
+        operating_systems:
+          - Windows Server
+        category: Basic Configurations
+        policy: 'Ensure web content is on non-system partition'
+        fix:
+          - fix_type: manual
+            steps: |
+              1. Go to web content in C:\inetpub\wwwroot\
+              2. Move web folder onto its own dedicated non-system drive
+              3. Change mappings for applications like Virtual Directories to the new location
+        references:
+          cis:
+            id: "1.1"
+            category: L1
+        notes: 'The default location for web content is: %systemdrive%\inetpub\wwwroot.'
+      
+      - cid: C-S-IIS-BAS-02
+        operating_systems:
+          - Windows Server
+        category: Basic Configurations
+        policy: 'Ensure "host headers" are on all sites.'
+        fix:
+          - fix_type: manual
+            steps: |
+              1. Open IIS Manager 
+              2. In the Connections pane expand the Sites node and select Default Web Site 
+              3. In the Actions pane click Bindings
+              4. In the Site Bindings dialog box, select the binding for which host headers are going to be configured, Port 80 in this example 
+              5. Click Edit 
+              6. Under host name,  enter  the sites FQDN, such as <www.examplesite.com> 
+              7. Click OK, then Close
+        references:
+          cis:
+            id: "1.2"
+            category: L1
+        notes: "Requiring a host header may impair site functionality for HTTP/1.0 clients. By default, host headers are not required or set up automatically."
+      
+      - cid: C-S-IIS-BAS-03
+        operating_systems:
+          - Windows Server
+        category: Basic Configurations
+        policy: 'Ensure "directory browsing" is set to disabled.'
+        fix:
+          - fix_type: command
+            command: powershell.exe -c Set-WebConfigurationProperty -Filter system.webserver/directorybrowse -PSPath iis:\ -Name Enabled  -Value False
+        references:
+          cis:
+            id: "1.3"
+            category: L1
+        notes: "In IIS, directory browsing is disabled by default."
+
+      - cid: C-S-IIS-BAS-04
+        operating_systems:
+          - Windows Server
+        category: Basic Configurations
+        policy: 'Ensure "application pool identity" is configured for all application pools.'
+        fix:
+          - fix_type: manual
+            steps: |
+              1. Open the IIS Manager GUI
+              2. In the connections pane, expand the server node and click Application Pools
+              3. On the Application Pools page, select the DefaultAppPool, and then click Advanced Settings in the Actions pane
+              4. For the Identity property, click the "..." button to open the Application Pool Identity dialog box
+              5. Select the Built-in account option choose ApplicationPoolIdentity from the list, or input a unique application user created for this purpose
+              6. Restart IIS
+        references:
+          cis:
+            id: "1.4"
+            category: L1
+        notes: "By Default, the DefaultAppPool in IIS is configured to use the ApplicationPoolIdentity account."
+
+      - cid: C-S-IIS-BAS-05
+        operating_systems:
+          - Windows Server
+        category: Basic Connfigurations
+        policy: 'Ensure "unique application pools" is set for sites.'
+        fix:
+          - fix_type: manual
+            steps: |
+              1. Open IIS Manager 
+              2. Open the Sites  node underneath  the machine  node 
+              3. Select the Site to be changed 
+              4. In the Actions pane,  select Basic Settings 
+              5. Click the Select... box next to the Application Pool text box 
+              6. Select the desired  Application  Pool 
+              7. Once selected,  click OK
+        references:
+          cis:
+            id: "1.5"
+            category: L1
+        notes: "By default, all Sites created will use the Default Application Pool (DefaultAppPool)."
+
+      - cid: C-S-IIS-BAS-06
+        operating_systems:
+          - Windows Server
+        category: Basic Configurations
+        policy: 'Ensure "application pool identity" is configured for anonymous user identity.'
+        fix:
+          - fix_type: manual
+            steps: |
+              1. Open the IIS Manager GUI and navigate to the desired server, site, or application
+              2. In Features View, find and double-click the Authentication icon
+              3. Select the Anonymous Authentication option and in the Actions pane select Edit...
+              4. Choose Application pool identity in the modal window and then press the OK button
+        references:
+          cis:
+            id: "1.6"
+            category: L1
+        notes: "The default identity for the anonymous user is the IUSR virtual account."
+
+      - cid: C-S-IIS-BAS-07
+        operating_systems:
+          - Windows Server
+        category: Basic Configurations
+        policy: 'Ensure WebDav feature is disabled.'
+        fix:
+          - fix_type: command
+            command: powershell.exe -c Remove-WindowsFeature Web-DAV-Publishing
+        references:
+          cis:
+            id: "1.7"
+            category: L1
+        notes: "The default state of WebDAV Publishing is disabled"
+      
+      - cid: C-S-IIS-01
+        operating_systems:
+          - Windows Server
+        category: Basic Configurations
+        policy: 'All accounts installed with the IIS 10.0 web server software and tools must have passwords assigned and default passwords changed.'
+        fix:
+          - fix_type: manual
+            steps: |
+              1. Access the IIS 10.0 web server.
+              2. Access the "Apps" menu. Under Administrative Tools, select Computer Management.
+              3. In left pane, expand "Local Users and Groups" and click on "Users".
+              4. Change passwords for any local accounts present that are used by IIS 10.0, then verify with System Administrator default passwords have been changed.
+              5. Develop an internal process for changing passwords on a regular basis.
+        references:
+          stig:
+            id: "V-218823"
+            category: CAT I
+        notes: 'During installation of the web server software, accounts are created for the web server to operate properly. The accounts installed can have either no password installed or a default password, which will be known and documented by the vendor and the user community. The first things an attacker will try when presented with a logon screen are the default user identifiers with default passwords. Installed applications may also install accounts with no password, making the logon even easier. Once the web server is installed, the passwords for any created accounts should be changed and documented. The new passwords must meet the requirements for all passwords, i.e., upper/lower characters, numbers, special characters, time until change, reuse policy, etc. Service accounts or system accounts that have no logon capability do not need to have passwords set or changed.'
+
+      - cid: C-S-IIS-03
+        operating_systems:
+          - Windows Server
+        category: Basic Configurations
+        policy: 'All IIS 10.0 web server sample code, example applications, and tutorials must be removed from a production IIS 10.0 server.'
+        fix:
+          - fix_type: manual
+            steps: |
+              1. Navigate to the following folders:
+              inetpub\
+              Program Files\Common Files\System\msadc
+              Program Files (x86)\Common Files\System\msadc
+              2. Remove any executable sample code, example applications, or tutorials which are not explicitly used by a production website.
+        references:
+          stig:
+            id: "V-218795"
+            category: CAT I
+        notes: 'Web server documentation, sample code, example applications, and tutorials may be an exploitable threat to a web server. A production web server may only contain components that are operationally necessary (i.e., compiled code, scripts, web content, etc.). Delete all directories containing samples and any scripts used to execute the samples.'
+
+      - cid: C-S-IIS-14
+        operating_systems:
+          - Windows Server
+        category: Basic Configurations
+        policy: 'The IIS 10.0 web server must not be running on a system providing any other role.'
+        fix:
+          - fix_type: manual
+            steps: |
+              1. Review programs installed on the OS.
+              2. Open Control Panel.
+              3. Open Programs and Features.
+              4. The following programs may be installed without any additional documentation:
+              Administration Pack for IIS
+              IIS Search Engine Optimization Toolkit
+              Microsoft .NET Framework version 3.5 SP1 or greater
+              Microsoft Web Platform Installer version 3.x or greater
+              Virtual Machine Additions
+              5. Remove all unapproved programs and roles from the production web server.
+        references:
+          stig:
+            id: “V-218817”
+            category: CAT II
+        notes: 'Web servers provide numerous processes, features, and functionalities that utilize TCP/IP ports. Some of these processes may be deemed unnecessary or too unsecure to run on a production system. The web server must provide the capability to disable or deactivate network-related services deemed non-essential to the server mission, are too unsecure, or are prohibited by the PPSM CAL and vulnerability assessments.'
+
+      - cid: C-S-IIS-21
+        operating_systems:
+          - Windows Server
+        category: Basic Configurations
+        policy: 'The IIS 10.0 web server must be tuned to handle the operational requirements of the hosted application.'
+        fix:
+          - fix_type: manual
+            steps: |
+              1. Access the IIS 10.0 web server registry.
+              2. Verify the following keys are present and configured. The required setting depends upon the requirements of the application. These settings must be explicitly configured to show a conscientious tuning has been made.
+              3. Navigate to HKLM\SYSTEM\CurrentControlSet\Services\HTTP\Parameters\
+              4. Configure the following registry keys to levels to accommodate the hosted applications.
+              "URIEnableCache"
+              "UriMaxUriBytes"
+              "UriScavengerPeriod"
+        references:
+          stig:
+            id: “V-218819”
+            category: CAT II
+        notes: 'A Denial of Service (DoS) can occur when the web server is overwhelmed and can no longer respond to additional requests. A web server not properly tuned may become overwhelmed and cause a DoS condition even with expected traffic from users. To avoid a DoS, the web server must be tuned to handle the expected traffic for the hosted applications.'
+
+      - cid: C-S-IIS-22
+        operating_systems:
+          - Windows Server
+        category: Basic Configurations
+        policy: 'The Internet Printing Protocol (IPP) must be disabled on the IIS 10.0 web server.'
+        fix:
+          - fix_type: manual
+            steps: |
+              1. Click “Start”, click “Administrative Tools”, and then click “Server Manager”.
+              2. Expand the roles node, right-click “Print Services”, and then select “Remove Roles Services”.
+              3. If the Internet Printing option is checked, clear the check box, click “Next”, and then click “Remove” to complete the wizard.
+        references:
+          stig:
+            id: “V-218818”
+            category: CAT II
+        notes: 'The use of IPP on an IIS web server allows client access to shared printers. This privileged access could allow remote code execution by increasing the web servers attack surface. Additionally, since IPP does not support SSL, it is considered a risk and will not be deployed.'
+
+      - cid: C-S-IIS-23
+        operating_systems:
+          - Windows Server
+        category: Basic Configurations
+        policy: 'The IIS 10.0 web server must have Multipurpose Internet Mail Extensions (MIME) that invoke OS shell programs disabled.'
+        fix:
+          - fix_type: manual
+            steps: |
+              1. Open the IIS 10.0 Manager.
+              2. Click the IIS 10.0 web server name.
+              3. Under IIS, double-click the "MIME Types" icon.
+              4. From the "Group by:" drop-down list, select "Content Type".
+              5. From the list of extensions under "Application", remove MIME types for OS shell program extensions, to include at a minimum, the following extensions:
+              .exe
+              .dll
+              .com
+              .bat
+              .csh
+              6. Under the "Actions" pane, click "Apply".
+        references:
+          stig:
+            id: “V-218798”
+            category: CAT II
+        notes: "Controlling what a user of a hosted application can access is part of the security posture of the web server. Any time a user can access more functionality than is needed for the operation of the hosted application poses a security issue. A user with too much access can view information that is not needed for the user's job role, or the user could use the function in an unintentional manner. A MIME tells the web server the type of program, various file types, and extensions and what external utilities or programs are needed to execute the file type. A shell is a program that serves as the basic interface between the user and the operating system to ensure hosted application users do not have access to these programs. Shell programs may execute shell escapes and can perform unauthorized activities that could damage the security posture of the web server."
+
+      - cid: C-S-IIS-24
+        operating_systems:
+          - Windows Server
+        category: Basic Configurations
+        policy: 'The IIS 10.0 web server must have Web Distributed Authoring and Versioning (WebDAV) disabled.'
+        fix:
+          - fix_type: manual
+            steps: |
+              1. Access Server Manager on the IIS 10.0 web server.
+              2. Click the IIS 10.0 web server name.
+              3. Click on "Manage".
+              4. Select "Add Roles and Features".
+              5. Click "Next" in the "Before you begin" dialog box.
+              6. Select "Role-based or feature-based installation" on the "Installation Type" dialog box and click "Next".
+              7. Select the IIS 10.0 web server in the "Server Selection" dialog box.
+              8. From the "Windows Features" dialog box, navigate to "World Wide Web Services" >> "Common HTTP Features".
+              9. De-select "WebDAV Publishing", and click "Next" to complete removing the WebDAV Publishing feature from the IIS 10.0 web server.
+        references:
+          stig:
+            id: “V-218799”
+            category: CAT II
+        notes: 'A web server can be installed with functionality that by its nature is not secure. Web Distributed Authoring (WebDAV) is an extension to the HTTP protocol which, when developed, was meant to allow users to create, change, and move documents on a server, typically a web server or web share. Allowing this functionality, development, and deployment is much easier for web authors. WebDAV is not widely used and has serious security concerns because it may allow clients to modify unauthorized files on the web server.'
+
+      - cid: C-S-IIS-27
+        operating_systems:
+          - Windows Server
+        category: Basic Configurations
+        policy: 'The IIS 10.0 web server must not perform user management for hosted applications.'
+        fix:
+          - fix_type: manual
+            steps: |
+              1. Reconfigure any hosted applications on the IIS 10.0 web server to perform user management outside the IIS 10.0 web server.
+              2. Document how the hosted application user management is accomplished.
+        references:
+          stig:
+            id: “V-218792”
+            category: CAT II
+        notes: 'User management and authentication can be an essential part of any application hosted by the web server. Along with authenticating users, the user management function must perform several other tasks enterprise-wide, such as password complexity, locking users after a configurable number of failed logons, and management of temporary and emergency accounts. The web server contains a minimal user management function, but the web server user management function does not offer enterprise-wide user management, and user management is not the primary function of the web server. User management for the hosted applications should be done through a facility built for enterprise-wide user management, such as LDAP and Active Directory.'
+
+      - cid: C-S-IIS-28
+        operating_systems:
+          - Windows Server
+        category: Basic Configurations
+        policy: 'The IIS 10.0 web server must only contain functions necessary for operation.'
+        fix:
+          - fix_type: manual
+            steps: |
+              1. Click “Start”.
+              2. Open Control Panel.
+              3. Click “Programs”.
+              4. Click “Programs and Features”.
+              5. Review the installed programs. If any programs are installed other than those required for the IIS 10.0 web services, this is a finding.
+              6. Note: If additional software is needed, supporting documentation must be signed by the ISSO.
+        references:
+          stig:
+            id: “V-218793”
+            category: CAT II
+        notes: 'A web server can provide many features, services, and processes. Some of these may be deemed unnecessary or too unsecure to run on a production DoD system. The web server must provide the capability to disable, uninstall, or deactivate functionality and services deemed non-essential to the web server mission or that adversely impact server performance.'
+
+      - cid: C-S-IIS-31
+        operating_systems:
+          - Windows Server
+        category: Basic Configurations
+        policy: 'The IIS 10.0 web server must be reviewed on a regular basis to remove any Operating System features, utility programs, plug-ins, and modules not necessary for operation.'
+        fix:
+          - fix_type: manual
+            steps: "Remove all utility programs, Operating System features, or modules installed that are not necessary for web server operation."
+        references:
+          stig:
+            id: “V-218797”
+            category: CAT II
+        notes: 'Just as running unneeded services and protocols is a danger to the web server at the lower levels of the OSI model, running unneeded utilities and programs is a danger at the application layer of the OSI model. Office suites, development tools, and graphic editors are examples of such troublesome programs. Individual productivity tools have no legitimate place or use on an enterprise production web server and are prone to security risks. The web server installation process must provide options allowing the installer to choose which utility programs, services, and modules are to be installed or removed. By having a process for installation and removal, the web server is guaranteed to be in a more stable and secure state than if these services and programs were installed and removed manually.'
+
+      - cid: C-S-IIS-34
+        operating_systems:
+          - Windows Server
+        category: Basic Configurations
+        policy: 'Unspecified file extensions on a production IIS 10.0 web server must be removed.'
+        fix:
+          - fix_type: manual
+            steps: |
+              1. Open the IIS 10.0 Manager.
+              2. Click the IIS 10.0 web server name.
+              3. Double-click the "ISAPI and CGI restrictions" icon.
+              4. Click "Edit Feature Settings".
+              5. Remove the check from the "Allow unspecified CGI modules" and the "Allow unspecified ISAPI modules" check boxes.
+              6. Click "OK".
+        references:
+          stig:
+            id: “V-218824”
+            category: CAT II
+        notes: 'By allowing unspecified file extensions to execute, the web servers attack surface is significantly increased. This increased risk can be reduced by only allowing specific ISAPI extensions or CGI extensions to run on the web server.'
+
+      - cid: C-S-IIS-38
+        operating_systems:
+          - Windows Server
+        category: Basic Configurations
+        policy: 'The IIS 10.0 web server must augment re-creation to a stable and known baseline.'
+        fix:
+          - fix_type: manual
+            steps: |
+              1. Prepare documentation for disaster recovery methods for the IIS 10.0 web server in the event of the necessity for rollback.
+              2. Document and test the disaster recovery methods designed.
+        references:
+          stig:
+            id: “V-218806”
+            category: CAT II
+        notes: 'Making certain that the web server has not been updated by an unauthorized user is always a concern. Adding patches, functions, and modules that are untested and not part of the baseline opens the possibility for security risks. The web server must offer, and not hinder, a method that allows for the quick and easy reinstallation of a verified and patched baseline to guarantee the production web server is up-to-date and has not been modified to add functionality or expose security risks. When the web server does not offer a method to roll back to a clean baseline, external methods, such as a baseline snapshot or virtualizing the web server, can be used.'
+
+      - cid: C-S-IIS-40
+        operating_systems:
+          - Windows Server
+        category: Basic Configurations
+        policy: 'The IIS 10.0 web server must perform RFC 5280-compliant certification path validation.'
+        fix:
+          - fix_type: manual
+            steps: |
+              1. Open the IIS 10.0 Manager.
+              2. Click the IIS 10.0 web server name.
+              3. Double-click the "Server Certificate" icon.
+              4. Import a valid DoD certificate and remove any non-DoD certificates.
+        references:
+          stig:
+            id: “V-218800”
+            category: CAT II
+        notes: 'This check verifies the server certificate is actually a DoD-issued certificate used by the organization being reviewed. This is used to verify the authenticity of the website to the user. If the certificate is not issued by the DoD or if the certificate has expired, then there is no assurance the use of the certificate is valid, and therefore; the entire purpose of using a certificate is compromised.'
+
+      - cid: C-S-IIS-41
+        operating_systems:
+          - Windows Server
+        category: Basic Configurations
+        policy: 'Java software installed on a production IIS 10.0 web server must be limited to .class files and the Java Virtual Machine.'
+        fix:
+          - fix_type: manual
+            steps: "Remove all files from the web server with both .java and .jpp extensions."
+        references:
+          stig:
+            id: “V-218801”
+            category: CAT II
+        notes: "Mobile code in hosted applications allows the developer to add functionality and displays to hosted applications that are fluid, as opposed to a static web page. The data presentation becomes more appealing to the user, is easier to analyze, and is less complicated to navigate through the hosted application and data. Some mobile code technologies in use in today's applications are: Java, JavaScript, ActiveX, PDF, Postscript, Shockwave movies, Flash animations, and VBScript. The DoD has created policies that define the usage of mobile code on DoD systems. The usage restrictions and implementation guidance apply to both the selection and use of mobile code installed on organizational servers and mobile code downloaded and executed on individual workstations. Source code for a Java program is often stored in files with either .java or .jpp file extensions. From the .java and .jpp files the Java compiler produces a binary file with an extension of .class. The .java or .jpp file could therefore reveal sensitive information regarding an application's logic and permissions to resources on the server."
+
+      - cid: C-S-IIS-42
+        operating_systems:
+          - Windows Server
+        category: Basic Configurations
+        policy: 'The IIS 10.0 web server must separate the hosted applications from hosted web server management functionality.'
+        fix:
+          - fix_type: manual
+            steps: "Develop a method to manage the hosted applications, either by moving its management functions off of the IIS 10.0 web server or by accessing the application's management via a uniquely assigned IP address."
+        references:
+          stig:
+            id: “V-218801”
+            category: CAT II
+        notes: 'The separation of user functionality from web server management can be accomplished by moving management functions to a separate IP address or port. To further separate the management functions, separate authentication methods and certificates should be used. By moving the management functionality, the possibility of accidental discovery of the management functions by non-privileged users during hosted application use is minimized.'
+
+      - cid: C-S-IIS-43
+        operating_systems:
+          - Windows Server
+        category: Basic Configurations
+        policy: 'Directory Browsing on the IIS 10.0 web server must be disabled.'
+        fix:
+          - fix_type: manual
+            steps: |
+              1. Open the IIS 10.0 Manager.
+              2. Click the IIS 10.0 web server name.
+              3. Double-click the "Directory Browsing" icon.
+              4. Under the "Actions" pane click "Disabled".
+              5. Under the "Actions" pane, click "Apply".
+        references:
+          stig:
+            id: “V-218808”
+            category: CAT II
+        notes: 'Directory browsing allows the contents of a directory to be displayed upon request from a web client. If directory browsing is enabled for a directory in IIS, users could receive a web page listing the contents of the directory. If directory browsing is enabled, the risk of inadvertently disclosing sensitive content is increased.'
+
+      - cid: C-S-IIS-44
+        operating_systems:
+          - Windows Server
+        category: Basic Configurations
+        policy: 'The IIS 10.0 web server Indexing must only index web content.'
+        fix:
+          - fix_type: manual
+            steps: |
+              1. Access the IIS 10.0 Web Server.
+              2. Access an administrator command prompt and type "regedit " to access the server's registry.
+              3. Navigate to HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\ContentIndex\Catalogs\.
+              4. If this key exists, then indexing is enabled. 
+              5. If the key does not exist, this check is Not Applicable.
+              6. Review the Catalog keys to determine if directories other than web document directories are being indexed.
+        references:
+          stig:
+            id: “V-218809”
+            category: CAT II
+        notes: 'The indexing service can be used to facilitate a search function for websites. Enabling indexing may facilitate a directory traversal exploit and reveal unwanted information to a malicious user. Indexing must be limited to web document directories only.'
+
+      - cid: C-S-IIS-46
+        operating_systems:
+          - Windows Server
+        category: Basic Configurations
+        policy: 'HTTPAPI Server version must be removed from the HTTP Response Header information.'
+        fix:
+          - fix_type: manual
+            steps: |
+              1. Navigate to “HKLM\System\CurrentControlSet\Services\HTTP\Parameters”.
+              2. Create REG_DWORD “DisableServerHeader” and set it to “1”.
+              3. Note: This can be performed multiple ways, this is an example.
+        references:
+          stig:
+            id: “V-241788”
+            category: CAT III
+        notes: 'HTTP Response Headers contain information that could enable an attacker to gain access to an information system. Failure to prevent the sending of certain HTTP Response Header information to remote requesters exposes internal configuration information to potential attackers.'
+
+      - cid: C-S-IIS-47
+        operating_systems:
+          - Windows Server
+        category: Basic Configurations
+        policy: 'The IIS 10.0 web server must enable HTTP Strict Transport Security (HSTS).'
+        fix:
+          - fix_type: manual
+            steps: |
+              1. Using the Configuration Editor in the IIS Manager or Powershell:
+              2. Enable HSTS.
+              3. Set includeSubDomains to True.
+              4. Set max-age to a value greater than 0.
+              5. Set redirectHttpToHttps to True.
+        references:
+          stig:
+            id: “V-218827”
+            category: CAT III
+        notes: 'HTTP Strict Transport Security (HSTS) ensures browsers always connect to a website over TLS. HSTS exists to remove the need for redirection configurations. HSTS relies on the browser, web server, and a public "Allowlist". If the browser does not support HSTS, it will be ignored.'
+  - category: Configure Authentication and Authorization
+    vulnerabilities:
+      - cid: C-S-IIS-CON-01
+        operating_systems:
+          - Windows Server
+        category: Configure Authentication and Authorization
+        policy: 'Ensure "global authorization rule" is set to restrict access.'
+        fix:
+          - fix_type: manual
+            steps: 1. Connect to Internet Information Services (IIS Manager)
+              2. Select the server
+              3. Select Authorization Rules
+              4. Remove the "Allow All Users" rule
+              5. Click Add Allow Rule...
+              6. Allow access to the user(s), user groups, or roles that are authorized across all of the web sites and applications (e.g. the Administrators group)
+        references:
+          cis:
+            id: "2.1"
+            category: L1
+        notes: "The default server-level setting is to allow all users access."
+
+      - cid: C-S-IIS-CON-02
+        operating_systems:
+          - Windows Server
+        category: Configure Authentication and Authorization
+        policy: 'Ensure access to sensitive site features is restricted to authenticated principals only.'
+        fix:
+          - fix_type: manual
+            steps: |
+              1. Open IIS Manager and navigate to level with sensitive content
+              2. In Features View, double-click Authentication
+              3. On the Authentication page, make sure an authentication module is enabled, while anonymous authentication is enabled (Forms Authentication can have anonymous as well)
+              4. If necessary, select the desired authentication module, then in the Actions pane, click Enable
+        references:
+          cis:
+            id: "2.2"
+            category: L1
+        notes: "The default installation of IIS supports Anonymous Authentication without further electing additional methods."
+
+      - cid: C-S-IIS-CON-03
+        operating_systems:
+          - Windows Server
+        category: Configure Authentication and Authorization
+        policy: 'Ensure "forms authentication" require SSL.'
+        fix:
+          - fix_type: manual
+            steps: |
+              1. Open IIS Manager and navigate to the appropriate tier
+              2. In Features View, double-click Authentication
+              3. On the Authentication page, select Forms Authentication
+              4. In the Actions pane, click Edit
+              5. Check the Requires SSL checkbox in the cookie settings section, click OK
+        references:
+          cis:
+            id: "2.3"
+            category: L1
+        notes: "SSL is not required when Forms Authentication is enabled."
+
+      - cid: C-S-IIS-CON-04
+        operating_systems:
+          - Windows Server
+        category: Configure Authentication and Authorization
+        policy: 'Ensure "forms authentication" is set to use cookies.'
+        fix:
+          - fix_type: manual
+            steps: |
+              1. Open IIS Manager and navigate to the level where Forms Authentication is enabled
+              2. In Features View, double-click Authentication
+              3. On the Authentication page, select Forms Authentication
+              4. In the Actions pane, click Edit
+              5. In the Cookie settings section, select Use cookies from the Mode dropdown
+        references:
+          cis:
+            id: "2.4"
+            category: L2
+        notes: "The default setting for Cookie Mode is Auto Detect which will only use cookies if the device profile supports cookies."
+
+      - cid: C-S-IIS-CON-05
+        operating_systems:
+          - Windows Server
+        category: Configure Authentication and Authorization
+        policy: 'Ensure "cookie protection mode" is configured for forms authentication.'
+        fix:
+          - fix_type: manual
+            steps: |
+              1. Open IIS Manager and navigate to the level where Forms Authentication is enabled
+              2. In Features View, double-click Authentication
+              3. On the Authentication page, select Forms Authentication
+              4. In the Actions pane, click Edit
+              5. In the Cookie settings section, verify the drop-down for Protection mode is set for Encryption and validation
+        references:
+          cis:
+            id: "2.5"
+            category: L1
+        notes: "When cookies are used for Forms Authentication, the default cookie protection mode is All, meaning the application encrypts and validates the cookie."
+
+      - cid: C-S-IIS-CON-06
+        operating_systems:
+          - Windows Server
+        category: Configure Authentication and Authorization
+        policy: 'Ensure transport layer security for "basic authentication" is configured.'
+        fix:
+          - fix_type: manual
+            steps: |
+              To protect Basic Authentication with transport layer security:
+                1. Open IIS Manager
+                2. In the Connections pane on the left, select the server to be configured
+                3. In the Connections pane, expand the server, then expand Sites and select the site to be configured
+                4. In the Actions pane, click Bindings; the Site Bindings dialog appears
+                5. If an HTTPS binding is available, click Close and see below "To require SSL"
+                6. If no HTTPS binding is visible, perform the following steps
+              To add an HTTPS binding:
+                1. In the Site Bindings dialog, click Add; the Add Site Binding dialog appears
+                2. Under Type, select https
+                3. Under SSL certificate, select an X.509 certificate
+                4. Click OK, then close
+              To require SSL:
+                1. In Features View, double-click SSL Settings
+                2. On the SSL Settings page, select Require SSL.
+                3. In the Actions pane, click Apply
+        references:
+          cis:
+            id: "2.6"
+            category: L1
+        notes: "Transport Layer Security is not enabled by default when Basic Authentication is configured."
+
+      - cid: C-S-IIS-CON-07
+        operating_systems:
+          - Windows Server
+        category: Configure Authentication and Authorization
+        policy: 'Ensure "passwordFormat" is not set to clear.'
+        fix:
+          - fix_type: manual
+            steps: |
+              1. Locate and open the configuration file where the credentials are stored
+              2. Find the <credentials> element
+              3. If present, ensure passwordFormat is not set to Clear
+              4. Change passwordFormat to SHA1
+              5. The clear text passwords will need to be replaced with the appropriate hashed version.
+        references:
+          cis:
+            id: "2.7"
+            category: L1
+        notes: "The default passwordFormat method is SHA1."
+
+      - cid: C-S-IIS-CON-08
+        operating_systems:
+          - Windows Server
+        category: Configure Authentication and Authorization
+        policy: 'Ensure "credentials" are not stored in configuration files.'
+        fix:
+          - fix_type: manual
+            steps: |
+              1. Locate and open the configuration file where the credentials are stored
+              2. Find the <credentials> element
+              3. If present, remove the section
+        references:
+          cis:
+            id: "2.8"
+            category: L2
+        notes: "The default passwordFormat method is SHA1."
+
+      - cid: C-S-IIS-02
+        operating_systems:
+          - Windows Server
+        category: Configure Authentication and Authorization
+        policy: 'Remote access to the IIS 10.0 web server must follow access policy or work in conjunction with enterprise tools designed to enforce policy requirements.'
+        fix:
+          - fix_type: manual
+            steps: "Ensure the web server administration is only performed over a secure path."
+
+        references:
+          stig:
+            id: "V-218811"
+            category: CAT I
+        notes: 'Logging into a web server remotely using an unencrypted protocol or service when performing updates and maintenance is a major risk. Data, such as user account, is transmitted in plaintext and can easily be compromised. When performing remote administrative tasks, a protocol or service that encrypts the communication channel must be used.'
+
+      - cid: C-S-IIS-05
+        operating_systems:
+          - Windows Server
+        category: Configure Authentication and Authorization
+        policy: 'IIS 10.0 Web server accounts accessing the directory tree, the shell, or other operating system functions and utilities must only be administrative accounts.'
+        fix:
+          - fix_type: manual
+            steps: |
+              1. Ensure non-administrators are not allowed access to the directory tree, the shell, or other operating system functions and utilities.
+              2. All non-administrator access to shell scripts and operating system functions must be mission essential and documented.
+              3. If this IIS 10 installation is supporting Microsoft Exchange, and not otherwise hosting any content, this requirement is Not Applicable.
+        references:
+          stig:
+            id: "V-218802"
+            category: CAT I
+        notes: 'As a rule, accounts on a web server are to be kept to a minimum. Only administrators, web managers, developers, auditors, and web authors require accounts on the machine hosting the web server. This is in addition to the anonymous web user account. The resources to which these accounts have access must also be closely monitored and controlled. Only the SA needs access to all the system’s capabilities, while the web administrator and associated staff require access and control of the web content and web server configuration files. The anonymous web user account must not have access to system resources as that account could then control the server.'
+
+      - cid: C-S-IIS-06
+        operating_systems:
+          - Windows Server
+        category: Configure Authentication and Authorization
+        policy: 'An IIS Server configured to be a SMTP relay must require authentication.'
+        fix:
+          - fix_type: manual
+            steps: "Configure the relay server with a specific allowed IP address, from the same network as the relay, and implement TLS."
+
+        references:
+          stig:
+            id: "V-228572"
+            category: CAT II 
+        notes: 'Anonymous SMTP relays are strictly prohibited. An anonymous SMTP relay can be a vector for many types of malicious activity not limited to server exploitation for the sending of SPAM mail, access to emails, phishing, DoS attacks, etc. Enabling TLS, authentication, and strictly assigning IP addresses that can communicate with the relay greatly reduce the risk of the implementation.'
+
+      - cid: C-S-IIS-15
+        operating_systems:
+          - Windows Server
+        category: Configure Authentication and Authorization
+        policy: 'Access to web administration tools must be restricted to the web manager and the web managers designees.'
+        fix:
+          - fix_type: manual
+            steps: |
+              1. Right-click "InetMgr.exe", then click "Properties" from the "Context" menu.
+              2. Select the "Security" tab.
+              3. Review the groups and user names.
+              4. The following accounts may have Full control privileges:
+              TrustedInstaller
+              Web Managers
+              Web Manager designees
+              CREATOR OWNER: Full Control, Subfolders and files only
+              5. The following accounts may have read and execute, or read permissions:
+              Non Web Manager Administrators
+              ALL APPLICATION PACKAGES (built-in security group)
+              ALL RESTRICTED APPLICATION PACKAGES (built-in security group)
+              SYSTEM
+              Users
+              6. Specific users may be granted read and execute and read permissions.
+              7. Compare the local documentation authorizing specific users, against the users observed when reviewing the groups and users.
+              8. If any other access is observed, this is a finding.
+        references:
+          stig:
+            id: “V-218816”
+            category: CAT II
+        notes: 'A web server can be modified through parameter modification, patch installation, upgrades to the web server or modules, and security parameter changes. With each of these changes, there is the potential for an adverse effect such as a DoS, web server instability, or hosted application instability. To limit changes to the web server and limit exposure to any adverse effects from the changes, files such as the web server application files, libraries, and configuration files must have permissions and ownership set properly to only allow privileged users access. The key web service administrative and configuration tools must only be accessible by the web server staff. All users granted this authority will be documented and approved by the ISSO. Access to the IIS Manager will be limited to authorized users and administrators. Satisfies: SRG-APP-000380-WSR-000072, SRG-APP-000435-WSR-000147, SRG-APP-000033-WSR-000169'
+
+      - cid: C-S-IIS-17
+        operating_systems:
+          - Windows Server
+        category: Configure Authentication and Authorization
+        policy: 'IIS 10.0 web server system files must conform to minimum file permission requirements.'
+        fix:
+          - fix_type: manual
+            steps: |
+              1. Open Explorer and navigate to the inetpub directory.
+              2. Right-click "inetpub" and select "Properties".
+              3. Click the "Security" tab.
+              4. Set the following permissions: 
+              SYSTEM: Full control
+              Administrators: Full control
+              TrustedInstaller: Full control
+              ALL APPLICATION PACKAGES (built-in security group): Read and execute
+              Users: Read and execute, list folder contents
+              CREATOR OWNER: special permissions to subkeys
+        references:
+          stig:
+            id: “V-218814”
+            category: CAT II
+        notes: 'This check verifies the key web server system configuration files are owned by the SA or the web administrator controlled account. These same files that control the configuration of the web server, and thus its behavior, must also be accessible by the account running the web service. If these files are altered by a malicious user, the web server would no longer be under the control of its managers and owners; properties in the web server configuration could be altered to compromise the entire server platform.'
+
+      - cid: C-S-IIS-30
+        operating_systems:
+          - Windows Server
+        category: Configure Authentication and Authorization
+        policy: 'The accounts created by uninstalled features (i.e., tools, utilities, specific, etc.) must be deleted from the IIS 10.0 server.'
+        fix:
+          - fix_type: manual
+            steps: |
+              1. Access the IIS 10.0 web server.
+              2. Access “Apps” menu. Under “Administrative Tools”, select “Computer Management”.
+              3. In the left pane, expand "Local Users and Groups" and click "Users".
+              4. Delete any local accounts which were created by features which have been uninstalled or are not used.
+        references:
+          stig:
+            id: “V-218796”
+            category: CAT II
+        notes: "Accounts used for web server features such as documentation, sample code, example applications, tutorials, utilities, and services created when the feature is not installed, become an exploitable threat to a web server. These accounts become inactive, are not monitored through regular use, and passwords for the accounts are not created or updated. An attacker, through very little effort, can use these accounts to gain access to the web server and begin investigating ways to elevate the account privileges. The accounts used for web server features not installed must not be created and must be deleted when these features are uninstalled."
+
+      - cid: C-S-IIS-35
+        operating_systems:
+          - Windows Server
+        category: Configure Authentication and Authorization
+        policy: 'The IIS 10.0 web server must have a global authorization rule configured to restrict access.'
+        fix:
+          - fix_type: manual
+            steps: |
+              1. Open the IIS 10.0 Manager.
+              2. Click the IIS 10.0 web server name.
+              3. Double-click the ".NET Authorization Rules" icon.
+              4. Alter the list as necessary to ensure "All Users" is set to "Allow", and "Anonymous Users" is set to "Deny".
+              5. Remove any other line items.
+        references:
+          stig:
+            id: “V-218825”
+            category: CAT II
+        notes: 'Authorization rules can be configured at the server, website, folder (including Virtual Directories), or file level. It is recommended that URL Authorization be configured to only grant access to the necessary security principals. Configuring a global Authorization rule that restricts access ensures inheritance of the settings down through the hierarchy of web directories. This will ensure access to current and future content is only granted to the appropriate principals, mitigating risk of unauthorized access.'
+  - category: ASP.NET Configuration Recommendations
+    vulnerabilities:
+      - cid: C-S-IIS-ASP-01
+        operating_systems:
+          - Windows Server
+        category: ASP.NET Configuration Recommendations
+        policy: 'Ensure "deployment method retail" is set.'
+        fix:
+          - fix_type: manual
+            steps: |
+              1. Open the machine.config file located in: %systemroot%\Microsoft.NET\Framework<bitness (if not the 32 bit)>\<framework version>\CONFIG
+              2. Add the line <deployment retail="true" /> within the <system.web> section
+              3. If systems are 64-bit, do the same for the machine.config located in: %systemroot%\Microsoft.NET\Framework<bitness (if not the 32 bit)>\<framework version>\CONFIG
+        references:
+          cis:
+            id: "3.1"
+            category: L1
+        notes: "The <deployment retail> tag is not included in the machine.config by default."
+
+      - cid: C-S-IIS-ASP-02
+        operating_systems:
+          - Windows Server
+        category: ASP.NET Configuration Recommendations
+        policy: 'Ensure "debug" is turned off.'
+        fix:
+          - fix_type: manual
+            steps: |
+              1. Open IIS Manager and navigate desired server, site, or application
+              2. In Features View, double-click .NET Compilation
+              3. On the .NET Compilation page, in the Behavior section, ensure the Debug field is set to False
+              4. When finished, click Apply in the Actions pane
+        references:
+          cis:
+            id: "3.2"
+            category: L2
+        notes: "The compilation of debug binaries is not enabled by default."
+
+      - cid: C-S-IIS-ASP-03
+        operating_systems:
+          - Windows Server
+        category: ASP.NET Configuration Recommendations
+        policy: 'Ensure custom error messages are not off.'
+        fix:
+          - fix_type: manual
+            steps: |
+              1. Open the IIS Manager GUI and navigate to the site to be configured
+              2. In Features View, find and double-click .NET Error Pages icon
+              3. In the Actions Pane, click Edit Feature Settings
+              4. In modal dialog, choose On or Remote Only for Mode settings
+              5. Click OK
+        references:
+          cis:
+            id: "3.3"
+            category: L2
+        notes: The default value is <customErrors mode= "RemoteOnly" />.
+
+      - cid: C-S-IIS-ASP-04
+        operating_systems:
+          - Windows Server
+        category: ASP.NET Configuration Recommendations
+        policy: 'Ensure IIS HTTP detailed errors are hidden from displaying remotely.'
+        fix:
+          - fix_type: manual
+            steps: |
+              1. Open IIS Manager with Administrative privileges
+              2. In the Connections pane on the left, expand the server, then expand the Sites folder
+              3. Select the Web site or application to be configured
+              4. In Features View, select Error Pages, in the Actions pane, select Open Feature
+              5. In the Actions pane, select Edit Feature Settings
+              6. In the Edit Error Pages Settings dialog, under Error Responses, select either Custom error pages or Detailed errors for local requests and custom error pages for remote requests
+              7. Click OK and exit the Edit Error Pages Settings dialog
+        references:
+          cis:
+            id: "3.4"
+            category: L1
+          stig:
+            id: “V-218810”
+            category: CAT II
+        notes: "The default errorMode is DetailedLocalOnly."
+
+      - cid: C-S-IIS-ASP-05
+        operating_systems:
+          - Windows Server
+        category: ASP.NET Configuration Recommendations
+        policy: 'Ensure ASP.NET stack tracing is not enabled.'
+        fix:
+          - fix_type: manual
+            steps: |
+              1. Ensure <deployment retail="true" /> is enabled in the machine.config.
+              2. Remove all attribute references to ASP.NET tracing by deleting the trace and trace enable attributes.
+        references:
+          cis:
+            id: "3.5"
+            category: L2
+        notes: "The default value for ASP.NET tracing is off."
+
+      - cid: C-S-IIS-ASP-06
+        operating_systems:
+          - Windows Server
+        category: ASP.NET Configuration Recommendations
+        policy: 'Ensure "httpcookie" mode is configured for session state.'
+        fix:
+          - fix_type: manual
+            steps: |
+              1. Open the IIS Manager GUI and navigate desired server, site, or application
+              2. In Features View, find and double-click the Session State icon
+              3. In the Cookie Settings section, choose Use Cookies from the Mode dropdown
+              4. In the Actions Pane, click Apply
+        references:
+          cis:
+            id: "3.6"
+            category: L2
+        notes: "By default, IIS maintains session state data for a managed code application in the worker process where the application runs e.g. In Process."
+
+      - cid: C-S-IIS-ASP-07
+        operating_systems:
+          - Windows Server
+        category: ASP.NET Configuration Recommendations
+        policy: 'Ensure "cookies" are set with HttpOnly attribute.'
+        fix:
+          - fix_type: manual
+            steps: |
+              1. Locate and open the application's web.config file
+              2. Add the <httpCookies httpOnlyCookies="true" /> tag within <system.web>.
+        references:
+          cis:
+            id: "3.7"
+            category: L1
+        notes: "By default, ASP.NET 2.0 does not force cookies to httpOnly."
+
+      - cid: C-S-IIS-ASP-08
+        operating_systems:
+          - Windows Server
+        category: ASP.NET Configuration Recommendations
+        policy: 'Ensure "MachineKey validation method - .Net 3.5" is configured.'
+        fix:
+          - fix_type: command
+            command: appcmd.exe %systemroot%\system32\inetsrv\appcmd set config /commit:WEBROOT /section:machineKey /validation:SHA1
+        references:
+          cis:
+            id: "3.8"
+            category: L2
+        notes: "The default Machine Key validation method is SHA1."
+
+      - cid: C-S-IIS-ASP-09
+        operating_systems:
+          - Windows Server
+        category: ASP.NET Configuration Recommendations
+        policy: 'Ensure "MachineKey validation method - .Net 4.5" is configured.'
+        fix:
+          - fix_type: command
+            command: powershell.exe -c Set-WebConfigurationProperty -pspath "MACHINE/WEBROOT"  -filter "system.web/machineKey" -name "validation" -value "AES"
+        references:
+          cis:
+            id: "3.9"
+            category: L1
+        notes: "The default Machine Key validation method is SHA256."
+
+      - cid: C-S-IIS-ASP-10
+        operating_systems:
+          - Windows Server
+        category: ASP.NET Configuration Recommendations
+        policy: 'Ensure global .NET trust level is configured.'
+        fix:
+          - fix_type: manual
+            steps: |
+              1. Open IIS Manager and navigate to the level that was configured, the server in this example
+              2. In the features view, double click .NET Trust Levels
+              3. On the .NET Trust Levels page, verify that Medium (web_mediumtrust.config) is selected in the Trust Level dropdown
+        references:
+          cis:
+            id: "3.10"
+            category: L1
+        notes: "By default, ASP.NET web applications run under the full trust setting."
+
+      - cid: C-S-IIS-ASP-11
+        operating_systems:
+          - Windows Server
+        category: ASP.NET Configuration Recommendations
+        policy: 'Ensure X-Powered-By Header is removed.'
+        fix:
+          - fix_type: command
+            command: powershell.exe -c Remove-WebConfigurationProperty -pspath "MACHINE/WEBROOT/APPHOST" -filter "system.webserver/httpProtocol/customHeaders" -name "." -AtElement @{name="X-Powered-By"}
+        references:
+          cis:
+            id: "3.11"
+            category: L2
+        notes: "N/A"
+
+      - cid: C-S-IIS-ASP-12
+        operating_systems:
+          - Windows Server
+        category: ASP.NET Configuration Recommendations
+        policy: 'Ensure Server Header is removed.'
+        fix:
+          - fix_type: command
+            command: powershell.exe -c Set-WebConfigurationProperty -pspath "MACHINE/WEBROOT/APPHOST/" -filter "system.webServer/security/requestFiltering" -name "removeServerHeader" -value "True"
+        references:
+          cis:
+            id: "3.12"
+            category: L2
+        notes: "Microsoft-IIS/10.0"
+
+      - cid: C-S-IIS-36
+        operating_systems:
+          - Windows Server
+        category: ASP.NET Configuration Recommendations
+        policy: 'The IIS 10.0 web server must use cookies to track session state.'
+        fix:
+          - fix_type: manual
+            steps: |
+              1. Open the IIS 10.0 Manager.
+              2. Click the IIS 10.0 web server name.
+              3. Under "ASP.Net", double-click the "Session State" icon.
+              4. Under "Cookie Settings", select "Use Cookies” from the "Mode" drop-down list.
+              5. Click "Apply" in the "Actions" pane.
+        references:
+          stig:
+            id: “V-218804”
+            category: CAT II
+        notes: 'Cookies are used to exchange data between the web server and the client. Cookies, such as a session cookie, may contain session information and user credentials used to maintain a persistent connection between the user and the hosted application since HTTP/HTTPS is a stateless protocol. Using URI will embed the session ID as a query string in the Uniform Resource Identifier (URI) request and then the URI is redirected to the originally requested URL. The changed URI request is used for the duration of the session, so no cookie is necessary. By requiring expired session IDs to be regenerated while using URI, potential attackers have less time to capture a cookie and gain access to the Web server content. Satisfies: SRG-APP-000223-WSR-000011, SRG-APP-000220-WSR-000201'
+
+      - cid: C-S-IIS-37
+        operating_systems:
+          - Windows Server
+        category: ASP.NET Configuration Recommendations
+        policy: 'The IIS 10.0 web server must accept only system-generated session identifiers.'
+        fix:
+          - fix_type: manual
+            steps: |
+              1. Open the IIS 10.0 Manager.
+              2. Click the IIS 10.0 web server name.
+              3. Under the "ASP.NET" section, select "Session State".
+              4. Under "Cookie Settings", select the "Use Cookies" mode from the "Mode:" drop-down list.
+              5. Under “Time-out (in minutes), enter a value of “20 or less”.
+        references:
+          stig:
+            id: “V-218805”
+            category: CAT II
+        notes: 'ASP.NET provides a session state, which is available as the HttpSessionState class, as a method of storing session-specific information that is visible only within the session. ASP.NET session state identifies requests from the same browser during a limited time window as a session and provides the ability to persist variable values for the duration of that session. When using the URI mode for cookie settings under session state, IIS will reject and reissue session IDs that do not have active sessions. Configuring IIS to expire session IDs and regenerate tokens gives a potential attacker less time to capture a cookie and gain access to server content.'
+
+      - cid: C-S-IIS-39
+        operating_systems:
+          - Windows Server
+        category: ASP.NET Configuration Recommendations
+        policy: 'The production IIS 10.0 web server must utilize SHA2 encryption for the Machine Key.'
+        fix:
+          - fix_type: manual
+            steps: |
+              1. Open the IIS 10.0 Manager.
+              2. Click the IIS 10.0 web server name.
+              3. Double-click the "Machine Key" icon in the web server Home Pane.
+              4. Set the Validation method to "HMACSHA256" or stronger.
+              5. Set the Encryption method to "Auto".
+              6. Click "Apply" in the "Actions" pane.
+        references:
+          stig:
+            id: “V-218807”
+            category: CAT II
+        notes: 'The Machine Key element of the ASP.NET web.config specifies the algorithm and keys that ASP.NET will use for encryption. The Machine Key feature can be managed to specify hashing and encryption settings for application services such as view state, forms authentication, membership and roles, and anonymous identification. Ensuring a strong encryption method can mitigate the risk of data tampering in crucial functional areas such as forms authentication cookies, or view state.'
+
+      - cid: C-S-IIS-45
+        operating_systems:
+          - Windows Server
+        category: ASP.NET Configuration Recommendations
+        policy: 'ASP.NET version must be removed from the HTTP Response Header information.'
+        fix:
+          - fix_type: manual
+            steps: |
+              1. Open the IIS 10.0 Manager.
+              2. Under the "Connections" pane on the left side of the management console, select the IIS 10.0 web server.
+              3. Click the HTTP Response Headers button.
+              4. Click to select the “X-Powered-By” HTTP Header.
+              5. Click “Remove” in the Actions Panel.
+              6. Note: This can be performed multiple ways, this is an example.
+        references:
+          stig:
+            id: “V-241789”
+            category: CAT III
+        notes: 'HTTP Response Headers contain information that could enable an attacker to gain access to an information system. Failure to prevent the sending of certain HTTP Response Header information to remote requesters exposes internal configuration information to potential attackers.'
+  - category: Request Filtering and Other Restriction Modules
+    vulnerabilities:
+      - cid: C-S-IIS-REQ-01
+        operating_systems:
+          - Windows Server
+        category: Request Filtering and Other Restriction Modules
+        policy: 'Ensure Server Header is removed.'
+        fix:
+          - fix_type: manual
+            steps: |
+              1. Open Internet Information Services (IIS) Manager
+              2. In the Connections pane, click on the server, site, application, or directory to be configured
+              3. In the Home pane, double-click Request Filtering
+              4. Click Edit Feature Settings... in the Actions pane
+              5. Under the Request Limits section, key the maximum content length in bytes that will allow applications to retain their intended functionality, such as 30000000 (approx. 28.6 MB)
+        references:
+          cis:
+            id: "4.1"
+            category: L2
+        notes: 'When request filtering is installed on a system, the default value is: maxAllowedContentLength="30000000", which is approximately 28.6MB.'
+
+      - cid: C-S-IIS-REQ-02
+        operating_systems:
+          - Windows Server
+        category: Request Filtering and Other Restriction Modules
+        policy: 'Ensure "maxURL request filter" is configured.'
+        fix:
+          - fix_type: manual
+            steps: |
+              1. Open Internet Information Services (IIS) Manager
+              2. In the Connections pane, click on the connection, site, application, or directory to be configured
+              3. In the Home pane, double-click Request Filtering
+              4. Click Edit Feature Settings... in the Actions pane
+              5. Under the Request Limits section, key the maximum URL length in bytes that has been tested with web applications
+        references:
+          cis:
+            id: "4.2"
+            category: L2
+        notes: 'When Request Filtering is installed on a system, the default value for maxURL="4096"'
+
+      - cid: C-S-IIS-REQ-03
+        operating_systems:
+          - Windows Server
+        category: Request Filtering and Other Restriction Modules
+        policy: 'Ensure "MaxQueryString request filter" is configured.'
+        fix:
+          - fix_type: manual
+            steps: |
+              1. Open Internet Information Services (IIS) Manager
+              2. In the Connections pane, go to the connection, site, application, or directory to be configured
+              3. In the Home pane, double-click Request Filtering
+              4. Click Edit Feature Settings... in the Actions pane
+              5. Under the Request Limits section, key in a safe upper bound in the Maximum query string (Bytes) textbox
+        references:
+          cis:
+            id: "4.3"
+            category: L2
+        notes: 'When request filtering is installed on a system, the default value is maxQueryString="2048".'
+
+      - cid: C-S-IIS-REQ-04
+        operating_systems:
+          - Windows Server
+        category: Request Filtering and Other Restriction Modules
+        policy: 'Ensure non-ASCII characters in URLs are not allowed.'
+        fix:
+          - fix_type: manual
+            steps: |
+              1. Open Internet Information Services (IIS) Manager
+              2. In the Connections pane, go to the connection, site, application, or directory to be configured
+              3. In the Home pane, double-click Request Filtering
+              4. Click Edit Feature Settings... in the Actions pane
+              5. Under the General section, uncheck Allow high-bit characters
+        references:
+          cis:
+            id: "4.4"
+            category: L2
+        notes: "When Request Filtering is installed on a system, the default behavior is to allow high-bit characters in URI."
+
+      - cid: C-S-IIS-REQ-05
+        operating_systems:
+          - Windows Server
+        category: Request Filtering and Other Restriction Modules
+        policy: 'Ensure Double-Encoded requests will be rejected.'
+        fix:
+          - fix_type: manual
+            steps: |
+              1. Open Internet Information Services (IIS) Manager
+              2. In the Connections pane, select the site, application, or directory to be configured
+              3. In the Home pane, double-click Request Filtering
+              4. Click Edit Feature Settings... in the Actions pane
+              5. Under the General section, uncheck Allow double escaping
+        references:
+          cis:
+            id: "4.5"
+            category: L1
+        notes: "When Request Filtering is installed on a system, the default behavior is to not allow double-encoded requests."
+
+      - cid: C-S-IIS-REQ-06
+        operating_systems:
+          - Windows Server
+        category: Request Filtering and Other Restriction Modules
+        policy: 'Ensure "HTTP Trace Method" is disabled.'
+        fix:
+          - fix_type: manual
+            steps: |
+              1. Open Internet Information Services (IIS) Manager
+              2. In the Connections pane, select the site, application, or directory to be configured
+              3. In the Home pane, double-click Request Filtering
+              4. In the Request Filtering pane, click the HTTP verbs tab, and then click Deny Verb... in the Actions pane
+              5. In the Deny Verb dialog box, enter the TRACE, and then click OK
+        references:
+          cis:
+            id: "4.6"
+            category: L1
+        notes: "The TRACE verb is not filtered by default."
+
+      - cid: C-S-IIS-REQ-07
+        operating_systems:
+          - Windows Server
+        category: Request Filtering and Other Restriction Modules
+        policy: 'Ensure Unlisted File Extensions are not allowed.'
+        fix:
+          - fix_type: manual
+            steps: |
+              1. Open Internet Information Services (IIS) Manager
+              2. In the Connections pane, select the server
+              3. In the Home pane, double-click Request Filtering
+              4. Click Edit Feature Settings... in the Actions pane
+              5. Under the General section, uncheck Allow unlisted file name extensions
+        references:
+          cis:
+            id: "4.7"
+            category: L1
+        notes: "The default Request Filtering configuration allows all unlisted file extensions to be requested."
+
+      - cid: C-S-IIS-REQ-08
+        operating_systems:
+          - Windows Server
+        category: Request Filtering and Other Restriction Modules
+        policy: 'Ensure Handler is not granted Write and Script/Execute.'
+        fix:
+          - fix_type: manual
+            steps: |
+              1. Open Notepad as Administrator
+              2. Open the ApplicationHost.config file in %systemroot%\system32\inetsrv\config
+              3. Edit the <handlers> section accessPolicy attribute so that Write is not present when Script or Execute are present
+        references:
+          cis:
+            id: "4.8"
+            category: L1
+        notes: "The default handlers accessPolicy is Read, Script."
+
+      - cid: C-S-IIS-REQ-09
+        operating_systems:
+          - Windows Server
+        category: Request Filtering and Other Restriction Modules
+        policy: 'Ensure "notListedIsapisAllowed" is set to false.'
+        fix:
+          - fix_type: manual
+            steps: |
+              1. Open IIS Manager as Administrator
+              2. In the Connections pane on the left, select server to be configured
+              3. In Features View, select ISAPI and CGI Restrictions; in the Actions pane, select Open Feature
+              4. In the Actions pane, select Edit Feature Settings
+              5. In the Edit ISAPI and CGI Restrictions Settings dialog, clear the Allow unspecified ISAPI modules check box, if checked
+              6. Click OK
+        references:
+          cis:
+            id: "4.9"
+            category: L1
+        notes: "The default value for notListedIsapisAllowed is false."
+
+      - cid: C-S-IIS-REQ-10
+        operating_systems:
+          - Windows Server
+        category: Request Filtering and Other Restriction Modules
+        policy: 'Ensure "notListedCgisAllowed" is set to false.'
+        fix:
+          - fix_type: manual
+            steps: |
+              1. Open IIS Manager as Administrator
+              2. In the Connections pane on the left, select the server to configure
+              3. In Features View, select ISAPI and CGI Restrictions; in the Actions pane, select Open Feature
+              4. In the Actions pane, select Edit Feature Settings
+              5. In the Edit ISAPI and CGI Restrictions Settings dialog, clear the Allow unspecified CGI modules check box
+              6. Click OK
+        references:
+          cis:
+            id: "4.10"
+            category: L1
+        notes: "The default value for notListedCgisAllowed is false."
+
+      - cid: C-S-IIS-REQ-11
+        operating_systems:
+          - Windows Server
+        category: Request Filtering and Other Restriction Modules
+        policy: 'Ensure "Dynamic IP Address Restrictions" is enabled.'
+        fix:
+          - fix_type: manual
+            steps: |
+              1. Open IIS Manager.
+              2. Open the IP Address and Domain Restrictions feature.
+              3. Click Edit Dynamic Restrictions Settings..
+              4. Check the Deny IP Address based on the number of concurrent requests and the Deny IP Address based on the number of requests over a period of time boxes. The values can be tweaked as needed for your specific environment.
+        references:
+          cis:
+            id: "4.11"
+            category: L1
+        notes: "By default Dynamic IP Restrictions are not enabled."
+
+      - cid: C-S-IIS-18
+        operating_systems:
+          - Windows Server
+        category: Request Filtering and Other Restriction Modules
+        policy: 'The IIS 10.0 web server must provide the capability to immediately disconnect or disable remote access to the hosted applications.'
+        fix:
+          - fix_type: manual
+            steps: |
+              1. Prepare documented procedures for shutting down an IIS 10.0 website in the event of an attack.
+              2. The procedure should, at a minimum, provide the following steps:
+              3. Determine the respective website for the application at risk of an attack.
+              4. Access the IIS 10.0 web server IIS Manager.
+              5. Select the respective website. 
+              6. In the "Actions" pane, under "Manage Website", click "Stop".
+              7. If necessary, stop all websites.
+              8. If necessary, stop the IIS 10.0 web server by selecting the web server in the IIS Manager.
+              9. In the "Actions" pane, under "Manage Server", click "Stop".
+        references:
+          stig:
+            id: “V-218813”
+            category: CAT II
+        notes: 'During an attack on the web server or any of the hosted applications, the system administrator may need to disconnect or disable access by users to stop the attack. The web server must provide a capability to disconnect users to a hosted application without compromising other hosted applications unless deemed necessary to stop the attack. Methods to disconnect or disable connections are to stop the application service for a specified hosted application, stop the web server, or block all connections through web server access list. The web server capabilities used to disconnect or disable users from connecting to hosted applications and the web server must be documented to make certain that, during an attack, the proper action is taken to conserve connectivity to any other hosted application if possible and to make certain log data is conserved for later forensic analysis.'
+
+      - cid: C-S-IIS-19
+        operating_systems:
+          - Windows Server
+        category: Request Filtering and Other Restriction Modules
+        policy: 'The IIS 10.0 web server must restrict inbound connections from non-secure zones.'
+        fix:
+          - fix_type: manual
+            steps: |
+              1. Open the IIS 10.0 Manager.
+              2. Click the IIS 10.0 web server name.
+              3. Under "Management", double-click "Management Service".
+              4. Stop the Web Management Service under the "Actions" pane.
+              5. Configure only known, secure IP ranges as "Allow".
+              6. Select "Apply" in "Actions" pane.
+              7. Restart the Web Management Service under the "Actions" pane.
+        references:
+          stig:
+            id: “V-218812”
+            category: CAT II
+        notes: 'Remote access to the web server is any access that communicates through an external, non-organization-controlled network. Remote access can be used to access hosted applications or to perform management functions. A web server can be accessed remotely and must be capable of restricting access from what the DoD defines as non-secure zones. Non-secure zones are defined as any IP, subnet, or region defined as a threat to the organization. The non-secure zones must be defined for public web servers logically located in a DMZ, as well as private web servers with perimeter protection devices. By restricting access from non-secure zones through internal web server access lists, the web server can stop or slow denial of service (DoS) attacks on the web server.'
+
+      - cid: C-S-IIS-29
+        operating_systems:
+          - Windows Server
+        category: Request Filtering and Other Restriction Modules
+        policy: 'The IIS 10.0 web server must only contain functions necessary for operation.'
+        fix:
+          - fix_type: manual
+            steps: |
+              1. Open the IIS 10.0 Manager.
+              2. Under the "Connections" pane on the left side of the management console, select the IIS 10.0 web server.
+              3. Under the IIS installed features, "Application Request Routing Cache" is present, double-click the icon to open the feature.
+              4. From the right "Actions" pane, under "Proxy", select "Server Proxy Settings...".
+              5. In the "Application Request Routing" settings window, remove the check from the "Enable proxy" check box.
+              6. Click "Apply" in the "Actions" pane.
+        references:
+          stig:
+            id: “V-218794”
+            category: CAT II
+        notes: 'A web server should be primarily a web server or a proxy server but not both, for the same reasons that other multi-use servers are not recommended. Scanning for web servers that also proxy requests into an otherwise protected network is a common attack, making the attack anonymous.'
+
+      - cid: C-S-IIS-33
+        operating_systems:
+          - Windows Server
+        category: Request Filtering and Other Restriction Modules
+        policy: 'The IIS 10.0 websites MaxConnections setting must be configured to limit the number of allowed simultaneous session requests.'
+        fix:
+          - fix_type: manual
+            steps: |
+              1. Access the IIS 10.0 IIS Manager.
+              2. Click the IIS 10.0 server.
+              3. Select "Configuration Editor" under the "Management" section.
+              4. From the "Section:" drop-down list at the top of the configuration editor, locate "system.applicationHost/sites".
+              5. Expand "siteDefaults".
+              6. Expand "limits".
+              7. Set the "maxconnections" parameter to a value greater than zero.
+        references:
+          stig:
+            id: “V-218826”
+            category: CAT II
+        notes: 'Resource exhaustion can occur when an unlimited number of concurrent requests are allowed on a website, facilitating a Denial of Service (DoS) attack. Mitigating this kind of attack will include limiting the number of concurrent HTTP/HTTPS requests per IP address and may include, where feasible, limiting parameter values associated with keepalive (i.e., a parameter used to limit the amount of time a connection may be inactive).'
+  - category: IIS Logging Recommendations
+    vulnerabilities:
+      - cid: C-S-IIS-IIS-01
+        operating_systems:
+          - Windows Server
+        category: IIS Logging Recommendations
+        policy: 'Ensure Default IIS web log location is moved.'
+        fix:
+          - fix_type: manual
+            steps: Set-WebConfigurationProperty -pspath "MACHINE/WEBROOT/APPHOST" -filter "system.applicationHost/sites/siteDefaults/logFile" -name "directory" -value <new log location>
+        references:
+          cis:
+            id: "5.1"
+            category: L1
+        notes: "HYEAN NOTE: manually set log file"
+
+      - cid: C-S-IIS-IIS-02
+        operating_systems:
+          - Windows Server
+        category: IIS Logging Recommendations
+        policy: 'Ensure Advanced IIS logging is enabled.'
+        fix:
+          - fix_type: manual
+            steps: |
+              1. Open Internet Information Services (IIS) Manager
+              2. Click the server in the Connections pane
+              3. Double-click the Logging icon on the Home page
+              4. Click Select Fields
+              5. The fields that will be logged need to be configured using the Add or Edit Fields button.
+        references:
+          cis:
+            id: "5.2"
+            category: L1
+        notes: "There may be performance considerations depending on the extent of the configuration. IIS Advanced Logging is enabled by default."
+
+      - cid: C-S-IIS-IIS-03
+        operating_systems:
+          - Windows Server
+        category: IIS Logging Recommendations
+        policy: 'Ensure "ETW Logging" is enabled.'
+        fix:
+          - fix_type: manual
+            steps: |
+              To configure ETW logging:
+              1. Open IIS Manager
+              2. Select the server or site to enable ETW
+              3. Select Logging.
+              4. Ensure Log file format is W3C.
+              5. Select Both log file and ETW event
+              6. Save your settings.
+        references:
+          cis:
+            id: "5.3"
+            category: L1
+        notes: "N/A"
+
+      - cid: C-S-IIS-25
+        operating_systems:
+          - Windows Server
+        category: IIS Logging Recommendations
+        policy: 'The log information from the IIS 10.0 web server must be protected from unauthorized modification or deletion.'
+        fix:
+          - fix_type: manual
+            steps: |
+              1. Open the IIS 10.0 Manager.
+              2. Click the IIS 10.0 web server name.
+              3. Click the "Logging" icon.
+              4. Click "Browse" and navigate to the directory where the log files are stored.
+              5. Right-click the log file directory to review and click "Properties".
+              6. Click the "Security" tab.
+              7. Set the log file permissions for the appropriate group(s) (SYSTEM - Full Control; Administrators - Full Control).
+              8. Click "OK".
+              9. Select "Apply" in the "Actions" pane.
+        references:
+          stig:
+            id: “V-218790”
+            category: CAT II
+        notes: "A major tool in exploring the website use, attempted use, unusual conditions, and problems are the access and error logs. In the event of a security incident, these logs can provide the System Administrator (SA) and the web manager with valuable information. Failure to protect log files could enable an attacker to modify the log file data or falsify events to mask an attacker's activity. Satisfies: SRG-APP-000120-WSR-000070, SRG-APP-000118-WSR-000068, SRG-APP-000118-WSR-000069"
+
+      - cid: C-S-IIS-07
+        operating_systems:
+          - Windows Server
+        category: IIS Logging Recommendations
+        policy: 'The IIS 10.0 web server must produce log records containing sufficient information to establish the identity of any user/subject or process associated with an event.'
+        fix:
+          - fix_type: manual
+            steps: |
+              0. Access the IIS 10.0 web server IIS Manager.
+              1. Click the IIS 10.0 web server name.
+              2. Under "IIS", double-click the "Logging" icon.
+              3. Verify the "Format:" under "Log File" is configured to "W3C".
+              4. Select the "Fields" button.
+              5. Under "Standard Fields", select "User Agent", "User Name", and "Referrer".
+              6. Under "Custom Fields", select the following fields:
+              7. Click on the "Source Type" drop-down list and select "Request Header".
+              8. Click on the "Source" drop-down list and select "Authorization".
+              9. Click "OK" to add.
+              10. Click on the "Source" drop-down list and select "Content-Type".
+              11. Click on the "Source Type" drop-down list and select "Response Header".
+              12. Click "OK" to add.
+              13. Click "OK".
+              14. Click "Apply" under the "Actions" pane.
+        references:
+          stig:
+            id: "V-218789"
+            category: CAT II
+        notes: 'Web server logging capability is critical for accurate forensic analysis. Without sufficient and accurate information, a correct replay of the events cannot be determined. Determining user accounts, processes running on behalf of the user, and running process identifiers also enable a better understanding of the overall event. User tool identification is also helpful to determine if events are related to overall user access or specific client tools. Log record content that may be necessary to satisfy the requirement of this control includes: time stamps, source and destination addresses, user/process identifiers, event descriptions, success/fail indications, file names involved, and access control or flow control rules invoked.'
+
+      - cid: C-S-IIS-08
+        operating_systems:
+          - Windows Server
+        category: IIS Logging Recommendations
+        policy: 'The IIS 10.0 web server must produce log records that contain sufficient information to establish the outcome (success or failure) of IIS 10.0 web server events.'
+        fix:
+          - fix_type: manual
+            steps: |
+              0. Access the IIS 10.0 web server IIS Manager.
+              1. Click the IIS 10.0 web server name.
+              2. Under "IIS", double-click the "Logging" icon.
+              3. Verify the "Format:" under "Log File" is configured to "W3C".
+              4. Select the "Fields" button.
+              5. Under "Custom Fields", click the "Add Field..." button.
+              6. For each field being added, give a name unique to what the field is capturing.
+              7. Click on the "Source Type" drop-down list and select "Request Header".
+              8. Click on the "Source" drop-down list and select "Connection".
+              9. Click "OK" to add.
+              10. Click on the "Source Type" drop-down list and select "Request Header".
+              11. Click on the "Source" drop-down list and select "Warning".
+              12. Click "OK" to add.
+              13. Click "Apply" under the "Actions" pane.
+        references:
+          stig:
+            id: “V-218788”
+            category: CAT II
+        notes: 'Web server logging capability is critical for accurate forensic analysis. Without sufficient and accurate information, a correct replay of the events cannot be determined. Ascertaining the success or failure of an event is important during forensic analysis. Correctly determining the outcome will add information to the overall reconstruction of the loggable event. By determining the success or failure of the event correctly, analysis of the enterprise can be undertaken to determine if events tied to the event occurred in other areas within the enterprise. Without sufficient information establishing the success or failure of the logged event, investigation into the cause of event is severely hindered. The success or failure also provides a means to measure the impact of an event and help authorized personnel determine the appropriate response. Log record content that may be necessary to satisfy the requirement of this control includes, but is not limited to, time stamps, source and destination IP addresses, user/process identifiers, event descriptions, application-specific events, success/fail indications, file names involved, access control, or flow control rules invoked.'
+
+      - cid: C-S-IIS-09
+        operating_systems:
+          - Windows Server
+        category: IIS Logging Recommendations
+        policy: 'An IIS 10.0 web server behind a load balancer or proxy server must produce log records containing the source client IP and destination information.'
+        fix:
+          - fix_type: manual
+            steps: |
+              1. Interview the System Administrator to review the configuration of the IIS 10.0 architecture and determine if inbound web traffic is passed through a proxy.
+              2. If the IIS 10.0 web server is receiving inbound web traffic through a proxy, the audit logs must be reviewed to determine if correct source information is being passed through by the proxy server.
+              3. Follow this procedure for web server and each website:
+              4. Open the IIS 10.0 Manager.
+              5. Click the IIS 10.0 web server name.
+              6. Click the "Logging" icon.
+              7. Click on "View log files" under the "Actions" pane.
+              8. When the log file is displayed, review source IP information in log entries and verify the entries do not reflect the IP address of the proxy server.
+        references:
+          stig:
+            id: “V-218787”
+            category: CAT II
+        notes: 'Web server logging capability is critical for accurate forensic analysis. Without sufficient and accurate information, a correct replay of the events cannot be determined. Ascertaining the correct source (e.g., source IP), of the events is important during forensic analysis. Correctly determining the source of events will add information to the overall reconstruction of the loggable event. By determining the source of the event correctly, analysis of the enterprise can be undertaken to determine if events tied to the source occurred in other areas within the enterprise. A web server behind a load balancer or proxy server, when not configured correctly, will record the load balancer or proxy server as the source of every loggable event. When looking at the information forensically, this information is not helpful in the investigation of events. The web server must record with each event the client source of the event.'
+
+      - cid: C-S-IIS-10
+        operating_systems:
+          - Windows Server
+        category: IIS Logging Recommendations
+        policy: 'Both the log file and Event Tracing for Windows (ETW) for the IIS 10.0 web server must be enabled.'
+        fix:
+          - fix_type: manual
+            steps: |
+              1. Open the IIS 10.0 Manager.
+              2. Click the IIS 10.0 server name.
+              3. Click the "Logging" icon.
+              4. Under Log Event Destination, select the "Both log file and ETW event" radio button.
+              5. Under the "Actions" pane, click "Apply".
+        references:
+          stig:
+            id: "V-218786"
+            category: CAT II
+        notes: 'Internet Information Services (IIS) on Windows Server 2012 provides basic logging capabilities. However, because IIS takes some time to flush logs to disk, administrators do not have access to logging information in real-time. In addition, text-based log files can be difficult and time-consuming to process. In IIS 10.0, the administrator has the option of sending logging information to Event Tracing for Windows (ETW). This option gives the administrator the ability to use standard query tools, or create custom tools, for viewing real-time logging information in ETW. This provides a significant advantage over parsing text-based log files that are not updated in real time. Satisfies: SRG-APP-000092-WSR-000055, SRG-APP-000108-WSR-000166, SRG-APP-000358-WSR-000063'
+
+      - cid: C-S-IIS-11
+        operating_systems:
+          - Windows Server
+        category: IIS Logging Recommendations
+        policy: 'The enhanced logging for the IIS 10.0 web server must be enabled and capture all user and web server events.'
+        fix:
+          - fix_type: manual
+            steps: |
+              1. Open the IIS 10.0 Manager.
+              2. Click the IIS 10.0 web server name.
+              3. Click the "Logging" icon.
+              4. Under Format select "W3C".
+              5. Select the following fields: Date, Time, Client IP Address, User Name, Method, URI Query, Protocol Status, and Referrer.
+              6. Under the "Actions" pane, click "Apply".
+        references:
+          stig:
+            id: “V-218785”
+            category: CAT II
+        notes: 'Log files are a critical component to the successful management of an IS used within the DoD. By generating log files with useful information, web administrators can leverage them in the event of a disaster, malicious attack, or other site specific needs. Ascertaining the correct order of the events that occurred is important during forensic analysis. Events that appear harmless by themselves might be flagged as a potential threat when properly viewed in sequence. By also establishing the event date and time, an event can be properly viewed with an enterprise tool to fully see a possible threat in its entirety. Without sufficient information establishing when the log event occurred, investigation into the cause of event is severely hindered. Log record content that may be necessary to satisfy the requirement of this control includes, but is not limited to, time stamps, source and destination IP addresses, user/process identifiers, event descriptions, application-specific events, success/fail indications, file names involved, access control, or flow control rules invoked. Satisfies: SRG-APP-000092-WSR-000055, SRG-APP-000093-WSR-000053, SRG-APP-000095-WSR-000056, SRG-APP-000096-WSR-000057, SRG-APP-000097-WSR-000058, SRG-APP-000097-WSR-000059'
+
+      - cid: C-S-IIS-16
+        operating_systems:
+          - Windows Server
+        category: IIS Logging Recommendations
+        policy: 'The IIS 10.0 web server must use a logging mechanism configured to allocate log record storage capacity large enough to accommodate the logging requirements of the IIS 10.0 web server.'
+        fix:
+          - fix_type: manual
+            steps: |
+              1. Open the IIS 10.0 Manager.
+              2. Click the IIS 10.0 web server name.
+              3. Under "IIS" double-click on the "Logging" icon.
+              4. If necessary, in the "Logging" configuration box, re-designate a log path to a location able to house the logs.
+              5. Under "Log File Rollover", de-select the "Do not create new log files" setting.
+              6. Configure a schedule to rollover log files on a regular basis.
+        references:
+          stig:
+            id: “V-218815”
+            category: CAT II
+        notes: 'To ensure the logging mechanism used by the web server has sufficient storage capacity in which to write the logs, the logging mechanism must be able to allocate log record storage capacity. The task of allocating log record storage capacity is usually performed during initial installation of the logging mechanism. The system administrator will usually coordinate the allocation of physical drive space with the web server administrator along with the physical location of the partition and disk. Refer to NIST SP 800-92 for specific requirements on log rotation and storage dependent on the impact of the web server.'
+
+      - cid: C-S-IIS-26
+        operating_systems:
+          - Windows Server
+        category: IIS Logging Recommendations
+        policy: 'The log data and records from the IIS 10.0 web server must be backed up onto a different system or media.'
+        fix:
+          - fix_type: manual
+            steps: |
+              1. The IIS 10.0 web server and website log files should be backed up by the system backup.
+              2. To determine if log files are backed up by the system backup, determine the location of the web server log files and each website's log files.
+              3. Open the IIS 10.0 Manager.
+              4. Click the IIS 10.0 server name.
+              5. Click the "Logging" icon.
+              6. Under "Log File" >> "Directory" obtain the path of the log file.
+              7. Once all locations are known, consult with the System Administrator to review the server's backup procedure and policy.
+              8. Verify the paths of all log files are part of the system backup.
+              9. Verify log files are backed up to an unrelated system or onto separate media on which the system the web server is running.
+        references:
+          stig:
+            id: “V-218791”
+            category: CAT II
+        notes: 'Protection of log data includes ensuring log data is not accidentally lost or deleted. Backing up log records to an unrelated system, or onto separate media than the system on which the web server is running, helps to ensure the log records will be retained in the event of a catastrophic system failure.'
+  - category: FTP Requests
+    vulnerabilities:
+      - cid: C-S-IIS-FTP-01
+        operating_systems:
+          - Windows Server
+        category: FTP Requests
+        policy: 'Ensure FTP requests are encrypted.'
+        fix:
+          - fix_type: command
+            command: powershell.exe -c Set-WebConfigurationProperty -pspath "MACHINE/WEBROOT/APPHOST" -filter "system.applicationHost/sites/siteDefaults/ftpServer/security/ssl" -name "controlChannelPolicy" -value "SslRequire"
+          - fix_type: command
+            command: powershell.exe -c Set-WebConfigurationProperty -pspath "MACHINE/WEBROOT/APPHOST" -filter "system.applicationHost/sites/siteDefaults/ftpServer/security/ssl" -name "dataChannelPolicy" -value "SslRequire"
+        references:
+          cis:
+            id: "6.1"
+            category: L1
+        notes: "By default, FTP sites are not SSL enabled."
+  - category: Transport Encryption
+    vulnerabilities:
+      - cid: C-S-IIS-TRA-01
+        operating_systems:
+          - Windows Server
+        category: Transport Encryption
+        policy: 'Ensure HSTS Header is set.'
+        fix:
+          - fix_type: command
+            command: appcmd.exe %systemroot%\system32\inetsrv\appcmd.exe set config -section:system.webServer/httpProtocol /+"customHeaders.[name="Strict-Transport-Security",value="max-age=480; preload"]"
+          - fix_type: command
+            command: appcmd.exe %systemroot%\system32\inetsrv\appcmd.exe set config -section:system.webServer/httpProtocol /+"customHeaders.[name="Strict-Transport-Security",value="max-age=480; includeSubDomains; preload"]"
+          - fix_type: command
+            command: appcmd.exe %systemroot%\system32\inetsrv\appcmd.exe set config "<em>Website"</em> -section:system.webServer/httpProtocol /+"customHeaders.[name="Strict-Transport-Security",value="max-age=480; preload"]"
+          - fix_type: command
+            command: appcmd.exe %systemroot%\system32\inetsrv\appcmd.exe set config "<em>Website"</em> -section:system.webServer/httpProtocol /+"customHeaders.[name="Strict-Transport-Security",value="max-age=480; includeSubDomains; preload"]"
+        references:
+          cis:
+            id: "7.1"
+            category: L1
+        notes: "Any value greater than 0 meets this recommendation. The examples above are specific to 8 minutes but can be adjusted to meet your requirements."
+
+      - cid: C-S-IIS-TRA-02
+        operating_systems:
+          - Windows Server
+        category: Transport Encryption
+        policy: 'Ensure SSLv2 is Disabled.'
+        fix:
+          - fix_type: command
+            command: powershell.exe -c New-Item "HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\SSL 2.0\Server" -Force | Out-Null
+          - fix_type: command
+            command: powershell.exe -c New-Item "HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\SSL 2.0\Client" -Force | Out-Null
+          - fix_type: command
+            command: powershell.exe -c New-ItemProperty -path "HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\SSL 2.0\Server" -name "Enabled" -value "0" -PropertyType "DWord" -Force | Out-Null
+          - fix_type: command
+            command: powershell.exe -c New-ItemProperty -path "HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\SSL 2.0\Client" -name "Enabled" -value "0" -PropertyType "DWord" -Force | Out-Null
+          - fix_type: command
+            command: powershell.exe -c New-ItemProperty -path "HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\SSL 2.0\Server" -name "DisabledByDefault" -value "1" -PropertyType "DWord" -Force | Out-Null
+          - fix_type: command
+            command: powershell.exe -c New-ItemProperty -path "HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\SSL 2.0\Client" -name "DisabledByDefault" -value "1" -PropertyType "DWord" -Force | Out-Null
+        references:
+          cis:
+            id: "7.2"
+            category: L1
+        notes: "Enabled"
+
+      - cid: C-S-IIS-TRA-03
+        operating_systems:
+          - Windows Server
+        category: Transport Encryption
+        policy: 'Ensure SSLv3 is Disabled.'
+        fix:
+          - fix_type: command
+            command: powershell.exe -c New-Item "HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\SSL 3.0\Server" -Force | Out-Null
+          - fix_type: command
+            command: powershell.exe -c New-Item "HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\SSL 3.0\Client" -Force | Out-Null
+          - fix_type: command
+            command: powershell.exe -c New-ItemProperty -path "HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\SSL 3.0\Server" -name "Enabled" -value "0" -PropertyType "DWord" -Force | Out-Null
+          - fix_type: command
+            command: powershell.exe -c New-ItemProperty -path "HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\SSL 3.0\Client" -name "Enabled" -value "0" -PropertyType "DWord" -Force | Out-Null
+          - fix_type: command
+            command: powershell.exe -c New-ItemProperty -path "HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\SSL 3.0\Server" -name "DisabledByDefault" -value "1" -PropertyType "DWord" -Force | Out-Null
+          - fix_type: command
+            command: powershell.exe -c New-ItemProperty -path "HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\SSL 3.0\Client" -name "DisabledByDefault" -value "1" -PropertyType "DWord" -Force | Out-Null
+        references:
+          cis:
+            id: "7.3"
+            category: L1
+        notes: "Enabled"
+
+      - cid: C-S-IIS-TRA-04
+        operating_systems:
+          - Windows Server
+        category: Transport Encryption
+        policy: 'Ensure TLS 1.0 is Disabled.'
+        fix:
+          - fix_type: command
+            command: powershell.exe -c New-Item "HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.0\Server" -Force | Out-Null
+          - fix_type: command
+            command: powershell.exe -c New-Item "HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.0\Client" -Force | Out-Null
+          - fix_type: command
+            command: powershell.exe -c New-ItemProperty -path "HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.0\Server" -name "Enabled" -value "0" -PropertyType "DWord" -Force | Out-Null
+          - fix_type: command
+            command: powershell.exe -c New-ItemProperty -path "HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.0\Client" -name "Enabled" -value "0" -PropertyType "DWord" -Force | Out-Null
+          - fix_type: command
+            command: powershell.exe -c New-ItemProperty -path "HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.0\Server" -name "DisabledByDefault" -value "1" -PropertyType "DWord" -Force | Out-Null
+          - fix_type: command
+            command: powershell.exe -c New-ItemProperty -path "HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.0\Client" -name "DisabledByDefault" -value "1" -PropertyType "DWord" -Force | Out-Null
+        references:
+          cis:
+            id: "7.4"
+            category: L1
+        notes: "N/A"
+
+      - cid: C-S-IIS-TRA-05
+        operating_systems:
+          - Windows Server
+        category: Transport Encryption
+        policy: 'Ensure TLS 1.1 is Disabled.'
+        fix:
+          - fix_type: command
+            command: powershell.exe -c New-Item "HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.1\Server" -Force | Out-Null
+          - fix_type: command
+            command: powershell.exe -c New-Item "HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.1\Client" -Force | Out-Null
+          - fix_type: command
+            command: powershell.exe -c New-ItemProperty -path "HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.1\Server" -name "Enabled" -value "0" -PropertyType "DWord" -Force | Out-Null
+          - fix_type: command
+            command: powershell.exe -c New-ItemProperty -path "HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.1\Client" -name "Enabled" -value "0" -PropertyType "DWord" -Force | Out-Null
+          - fix_type: command
+            command: powershell.exe -c New-ItemProperty -path "HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.1\Server" -name "DisabledByDefault" -value "1" -PropertyType "DWord" -Force | Out-Null
+          - fix_type: command
+            command: powershell.exe -c New-ItemProperty -path "HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.1\Client" -name "DisabledByDefault" -value "1" -PropertyType "DWord" -Force | Out-Null
+        references:
+          cis:
+            id: "7.5"
+            category: L1
+        notes: "N/A"
+
+      - cid: C-S-IIS-TRA-06
+        operating_systems:
+          - Windows Server
+        category: Transport Encryption
+        policy: 'Ensure TLS 1.2 is Enabled.'
+        fix:
+          - fix_type: command
+            command: powershell.exe -c New-Item "HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.2\Server" -Force | Out-Null
+          - fix_type: command
+            command: powershell.exe -c New-ItemProperty -path "HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.2\Server" -name "Enabled" -value "1" -PropertyType "DWord" -Force | Out-Null
+          - fix_type: command
+            command: powershell.exe -c New-ItemProperty -path "HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.2\Server" -name "DisabledByDefault" -value "0" -PropertyType "DWord" -Force | Out-Null
+        references:
+          cis:
+            id: "7.6"
+            category: L1
+        notes: "N/A"
+
+      - cid: C-S-IIS-TRA-07
+        operating_systems:
+          - Windows Server
+        category: Transport Encryption
+        policy: 'Ensure NULL Cipher Suites is Disabled.'
+        fix:
+          - fix_type: command
+            command: powershell.exe -c New-Item "HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Ciphers\NULL" -Force | Out-Null
+          - fix_type: command
+            command: powershell.exe -c New-ItemProperty -path "HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Ciphers\NULL" -name "Enabled" -value "0" -PropertyType "DWord" -Force | Out-Null
+        references:
+          cis:
+            id: "7.7"
+            category: L1
+        notes: "N/A"
+
+      - cid: C-S-IIS-TRA-08
+        operating_systems:
+          - Windows Server
+        category: Transport Encryption
+        policy: 'Ensure DES Cipher Suites is Disabled.'
+        fix:
+          - fix_type: command
+            command: powershell.exe -c (Get-Item "HKLM:\").OpenSubKey("SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Ciphers", $true).CreateSubKey("DES 56/56")
+          - fix_type: command
+            command: powershell.exe -c New-ItemProperty -path "HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Ciphers\DES 56/56" -name "Enabled" -value "0" -PropertyType "DWord" -Force | Out-Null
+        references:
+          cis:
+            id: "7.8"
+            category: L1
+        notes: "N/A"
+
+      - cid: C-S-IIS-TRA-09
+        operating_systems:
+          - Windows Server
+        category: Transport Encryption
+        policy: 'Ensure RC4 Cipher Suites is Disabled.'
+        fix:
+          - fix_type: command
+            command: powershell.exe -c (Get-Item "HKLM:\").OpenSubKey("SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Ciphers", $true).CreateSubKey("RC4 40/128")
+          - fix_type: command
+            command: powershell.exe -c New-ItemProperty -path "HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Ciphers\RC4 40/128" -name "Enabled" -value "0" -PropertyType "DWord" -Force | Out-Null
+          - fix_type: command
+            command: powershell.exe -c (Get-Item "HKLM:\").OpenSubKey("SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Ciphers", $true).CreateSubKey("RC4 56/128")
+          - fix_type: command
+            command: powershell.exe -c New-ItemProperty -path "HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Ciphers\RC4 56/128" -name "Enabled" -value "0" -PropertyType "DWord" -Force | Out-Null
+          - fix_type: command
+            command: powershell.exe -c (Get-Item "HKLM:\").OpenSubKey("SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Ciphers", $true).CreateSubKey("RC4 64/128")
+          - fix_type: command
+            command: powershell.exe -c New-ItemProperty -path "HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Ciphers\RC4 64/128" -name "Enabled" -value "0" -PropertyType "DWord" -Force | Out-Null
+          - fix_type: command
+            command: powershell.exe -c (Get-Item "HKLM:\").OpenSubKey("SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Ciphers", $true).CreateSubKey("RC4 128/128")
+          - fix_type: command
+            command: powershell.exe -c New-ItemProperty -path "HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Ciphers\RC4 128/128" -name "Enabled" -value "0" -PropertyType "DWord" -Force | Out-Null
+        references:
+          cis:
+            id: "7.9"
+            category: L1
+        notes: "N/A"
+
+      - cid: C-S-IIS-TRA-10
+        operating_systems:
+          - Windows Server
+        category: Transport Encryption
+        policy: 'Ensure AES 128/128 Cipher Suite is Disabled.'
+        fix:
+          - fix_type: command
+            command: powershell.exe -c (Get-Item "HKLM:\").OpenSubKey("SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Ciphers", $true).CreateSubKey("AES 128/128")
+          - fix_type: command
+            command: powershell.exe -c New-ItemProperty -path "HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Ciphers\AES 128/128" -name "Enabled" -value "0" -PropertyType "DWord" -Force | Out-Null
+        references:
+          cis:
+            id: "7.10"
+            category: L1
+        notes: "N/A"
+
+      - cid: C-S-IIS-TRA-11
+        operating_systems:
+          - Windows Server
+        category: Transport Encryption
+        policy: 'Ensure AES 256/256 Cipher Suite is Enabled.'
+        fix:
+          - fix_type: command
+            command: powershell.exe -c (Get-Item "HKLM:\").OpenSubKey("SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Ciphers", $true).CreateSubKey("AES 256/256")
+          - fix_type: command
+            command: powershell.exe -c New-ItemProperty -path "HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Ciphers\AES 256/256" -name "Enabled" -value "1" -PropertyType "DWord" -Force | Out-Null
+        references:
+          cis:
+            id: "7.11"
+            category: L1
+        notes: "N/A"
+
+      - cid: C-S-IIS-TRA-12
+        operating_systems:
+          - Windows Server
+        category: Transport Encryption
+        policy: 'Ensure TLS Cipher Suite ordering is Configured.'
+        fix:
+          - fix_type: command
+            command: powershell.exe -c New-Item "HKLM:\SOFTWARE\Policies\Microsoft\Cryptography\Configuration\SSL\00010002" -Force | Out-Null
+          - fix_type: command
+            command: powershell.exe -c New-ItemProperty -path "HKLM:\SOFTWARE\Policies\Microsoft\Cryptography\Configuration\SSL\00010002" -name "Functions" -value "TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384,TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384,TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA384,TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA256,TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384,TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256" -PropertyType "MultiString" -Force | Out-Null
+        references:
+          cis:
+            id: "7.12"
+            category: L1
+        notes: "N/A"
+
+      - cid: C-S-IIS-04
+        operating_systems:
+          - Windows Server
+        category: Transport Encryption
+        policy: 'An IIS 10.0 web server must maintain the confidentiality of controlled information during transmission through the use of an approved Transport Layer Security (TLS) version.'
+        fix:
+          - fix_type: manual
+            steps: |
+              1. Access the IIS 10.0 Web Server.
+              2. Access an administrator command prompt and type "regedit " to access the server's registry.
+              3. Navigate to the following registry paths and configure the "DisabledByDefault" REG_DWORD with the appropriate values:
+                HKLM\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.2\Server 
+                With a REG_DWORD value of "0" for "DisabledByDefault"
+                HKLM\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.0\Server
+                HKLM\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.1\Server
+                HKLM\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\SSL 2.0\Server
+                HKLM\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\SSL 3.0\Server
+              4. With a REG_DWORD value of "1" for "DisabledByDefault"
+              5. With a REG_DWORD value of "0" for "Enabled"
+        references:
+          stig:
+            id: "V-218821"
+            category: CAT I 
+        notes: 'TLS encryption is a required security setting for a private web server. Encryption of private information is essential to ensuring data confidentiality. If private information is not encrypted, it can be intercepted and easily read by an unauthorized party. A private web server must use a FIPS 140-2-approved TLS version, and all non-FIPS-approved SSL versions must be disabled. NIST SP 800-52 specifies the preferred configurations for government systems.'
+
+      - cid: C-S-IIS-12
+        operating_systems:
+          - Windows Server
+        category: Transport Encryption
+        policy: 'The IIS 10.0 web server remote authors or content providers must only use secure encrypted logons and connections to upload web server content.'
+        fix:
+          - fix_type: manual
+            steps: "Ensure the web server administration is only performed over a secure path."
+        references:
+          stig:
+            id: “V-218784”
+            category: CAT II
+        notes: 'Logging onto a web server remotely using an unencrypted protocol or service when performing updates and maintenance is a major risk. Data, such as user account, is transmitted in plaintext and can easily be compromised. When performing remote administrative tasks, a protocol or service that encrypts the communication channel must be used. An alternative to remote administration of the web server is to perform web server administration locally at the console. Local administration at the console implies physical access to the server.'
+
+      - cid: C-S-IIS-13
+        operating_systems:
+          - Windows Server
+        category: Transport Encryption
+        policy: 'The IIS 10.0 web server must maintain the confidentiality of controlled information during transmission through the use of an approved Transport Layer Security (TLS) version.'
+        fix:
+          - fix_type: manual
+            steps: "Configure the web server to use an approved TLS version (TLS 1.2 or higher) according to NIST SP 800-52 and to disable all non-approved versions."
+        references:
+          cis:
+            id: “V-218822”
+            category: CAT II
+        notes: 'TLS is a required transmission protocol for a web server hosting controlled information. The use of TLS provides confidentiality of data in transit between the web server and client. FIPS 140-2-approved TLS versions must be enabled and non-FIPS-approved SSL versions must be disabled. NIST SP 800-52 defines the approved TLS versions for government applications.'
+
+      - cid: C-S-IIS-32
+        operating_systems:
+          - Windows Server
+        category: Transport Encryption
+        policy: 'IIS 10.0 web server session IDs must be sent to the client using TLS.'
+        fix:
+          - fix_type: manual
+            steps: |
+              1. Open the IIS 10.0 Manager.
+              2. Click the IIS 10.0 web server name.
+              3. Under "Management" section, double-click the "Configuration Editor" icon.
+              4. From the "Section:" drop-down list, select "system.webServer/asp".
+              5. Expand the "session" section.
+              6. Select "True" for the "keepSessionIdSecure" setting.
+              7. Select "Apply" from the "Actions" pane.
+        references:
+          stig:
+            id: “V-218820”
+            category: CAT II
+        notes: 'The HTTP protocol is a stateless protocol. To maintain a session, a session identifier is used. The session identifier is a piece of data used to identify a session and a user. If the session identifier is compromised by an attacker, the session can be hijacked. By encrypting the session identifier, the identifier becomes more difficult for an attacker to hijack, decrypt, and use before the session has expired.'

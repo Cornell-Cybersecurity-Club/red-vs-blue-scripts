@@ -1,0 +1,191 @@
+version: 1
+name: Folder and File Permissions
+vulnerabilities:
+  - cid: C-UDF-PERM-01
+    operating_systems:
+      - Ubuntu
+      - Debian
+      - Fedora
+    category: Permissions
+    policy: Permissions are set on /etc/passwd as root:root 644
+    fix:
+      - fix_type: linux_permissions
+        target: /etc/passwd
+        owner: root
+        group: root
+        mode: "644"
+    references:
+      cis:
+        id: "6.1.2"
+        category: L1
+  - cid: C-UDF-PERM-02
+    operating_systems:
+      - Ubuntu
+      - Debian
+      - Fedora
+    category: Permissions
+    policy: Permissions are set on /etc/shadow as root:root o-rwx,g-wx
+    fix:
+      - fix_type: linux_permissions
+        target: /etc/shadow
+        owner: root
+        group: root
+        mode: "o-rwx,g-wx"
+    references:
+      cis:
+        id: "6.1.3"
+        category: L1
+  - cid: C-UDF-PERM-03
+    operating_systems:
+      - Ubuntu
+      - Debian
+      - Fedora
+    category: Permissions
+    policy: Permissions are set on /etc/group as root:root 644
+    fix:
+      - fix_type: linux_permissions
+        target: /etc/group
+        owner: root
+        group: root
+        mode: "644"
+    references:
+      cis:
+        id: "6.1.4"
+        category: L1
+  - cid: C-UDF-PERM-04
+    operating_systems:
+      - Ubuntu
+      - Debian
+      - Fedora
+    category: Permissions
+    policy: Permissions are set on /etc/gshadow as root:root o-rwx,g-rw
+    fix:
+      - fix_type: linux_permissions
+        target: /etc/gshadow
+        owner: root
+        group: root
+        mode: "o-rwx,g-rw"
+    references:
+      cis:
+        id: "6.1.5"
+        category: L1
+  - cid: C-UDF-PERM-05
+    operating_systems:
+      - Ubuntu
+      - Debian
+      - Fedora
+    category: Permissions
+    policy: Permissions are set on /etc/passwd- as root:root u-x,go-rwx
+    fix:
+      - fix_type: linux_permissions
+        target: /etc/passwd-
+        owner: root
+        group: root
+        mode: u-x,go-rwx
+    references:
+      cis:
+        id: "6.1.6"
+        category: L1
+  - cid: C-UDF-PERM-06
+    operating_systems:
+      - Ubuntu
+      - Debian
+      - Fedora
+    category: Permissions
+    policy: Permissions are set on /etc/shadow- as root:root o-rwx,g-rw
+    fix:
+      - fix_type: linux_permissions
+        target: /etc/shadow-
+        owner: root
+        group: root
+        mode: "o-rwx,g-rw"
+    references:
+      cis:
+        id: "6.1.7"
+        category: L1
+  - cid: C-UDF-PERM-07
+    operating_systems:
+      - Ubuntu
+      - Debian
+      - Fedora
+    category: Permissions
+    policy: Permissions are set on /etc/group- as root:root u-x,go-wx
+    fix:
+      - fix_type: linux_permissions
+        target: /etc/group-
+        owner: root
+        group: root
+        mode: "u-x,go-wx"
+    references:
+      cis:
+        id: "6.1.8"
+        category: L1
+  - cid: C-UDF-PERM-08
+    operating_systems:
+      - Ubuntu
+      - Debian
+      - Fedora
+    category: Permissions
+    policy: Permissions are set on /etc/gshadow- as root:root o-rwx,g-rw
+    fix:
+      - fix_type: linux_permissions
+        target: /etc/gshadow-
+        owner: root
+        group: root
+        mode: "o-rwx,g-rw"
+    references:
+      cis:
+        id: "6.1.9"
+        category: L1
+  - cid: C-UDF-PERM-09
+    operating_systems:
+      - Ubuntu
+      - Debian
+      - Fedora
+    category: Permissions
+    policy: Directories that contain system commands should be set to root:root 0755.
+    fix:
+      - fix_type: linux_permissions
+        target: /bin /sbin /usr/bin /usr/sbin /usr/local/bin /usr/local/sbin
+        owner: root
+        group: root
+        mode: "0755"
+    references:
+      stig:
+        id: V-238344, V-238345, V-238346
+        category: CAT II
+  - cid: C-UDF-PERM-10
+    operating_systems:
+      - Ubuntu
+      - Debian
+      - Fedora
+    category: Permissions
+    policy: Operating system library files should have mode 0755.
+    fix:
+      - fix_type: linux_permissions
+        target: /lib /lib64 /usr/lib
+        owner: root
+        group: root
+        mode: "0755"
+        recursive: true
+    references:
+      stig:
+        id: V-238347, V-238349, V-238351
+        category: CAT II
+  - cid: C-UDF-PERM-11
+    operating_systems:
+      - Ubuntu
+      - Debian
+      - Fedora
+    category: Permissions
+    policy: Operating system library directories should have mode 0755.
+    fix:
+      - fix_type: linux_permissions
+        target: /lib /lib64 /usr/lib
+        owner: root
+        group: root
+        mode: "0755"
+    references:
+      stig:
+        id: V-238348, V-238350, V-238352
+        category: CAT II

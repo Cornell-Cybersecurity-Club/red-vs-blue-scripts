@@ -1,0 +1,565 @@
+version: 1.0
+name: Audit
+vulnerabilities:
+  - cid: C-UD-AUD-01
+    operating_systems:
+      - Ubuntu
+      - Debian
+    category: Auditd
+    policy: Auditd is installed.
+    fix:
+      - fix_type: command
+        command: apt-get install -y auditd audispd-plugins
+    references:
+      cis:
+        id: 4.1.1.1
+        category: L2
+      stig:
+        id: V-238298
+        category: CAT II
+  - cid: C-F-AUD-01
+    operating_systems:
+      - Fedora
+    category: Auditd
+    policy: Auditd is installed.
+    fix:
+      - fix_type: command
+        command: dnf install -y audit audit-libs
+    references:
+      cis:
+        id: 4.1.1.1
+        category: L2
+  - cid: C-UDF-AUD-02
+    operating_systems:
+      - Ubuntu
+      - Debian
+      - Fedora
+    category: Auditd
+    policy: Auditd service is enabled and active.
+    fix:
+      - fix_type: command
+        command: systemctl --now enable auditd
+    references:
+      cis:
+        id: 4.1.1.2
+        category: L2
+      stig:
+        id: V-238298
+        category: CAT II
+  - cid: C-UDF-AUD-03
+    operating_systems:
+      - Ubuntu
+      - Debian
+      - Fedora
+    category: auditd.conf
+    policy: Audit log storage size is configured.
+    fix:
+      - fix_type: config_file
+        file: /etc/audit/auditd.conf
+        text: max_log_file = 1000
+    references:
+      cis:
+        id: 4.1.2.1
+        category: L2
+  - cid: C-UDF-AUD-04
+    operating_systems:
+      - Ubuntu
+      - Debian
+      - Fedora
+    category: auditd.conf
+    policy: Audit logs are not automatically deleted.
+    fix:
+      - fix_type: config_file
+        file: /etc/audit/auditd.conf
+        text: max_log_file_action = keep_logs
+    references:
+      cis:
+        id: 4.1.2.2
+        category: L2
+  - cid: C-UDF-AUD-05
+    operating_systems:
+      - Ubuntu
+      - Debian
+      - Fedora
+    category: auditd.conf
+    policy: System is disabled and root is notified when audit logs are full.
+    fix:
+      - fix_type: config_file
+        file: /etc/audit/auditd.conf
+        text: space_left = 25%
+      - fix_type: config_file
+        file: /etc/audit/auditd.conf
+        text: space_left_action = email
+      - fix_type: config_file
+        file: /etc/audit/auditd.conf
+        text: action_mail_acct = root
+      - fix_type: config_file
+        file: /etc/audit/auditd.conf
+        text: admin_space_left_action = halt
+      - fix_type: config_file
+        file: /etc/audit/auditd.conf
+        text: disk_full_action = HALT
+    references:
+      cis:
+        id: 4.1.2.3
+        category: L2
+      stig:
+        id: V-238243, V-238244
+        category: CAT II
+  - cid: C-UDF-AUD-06
+    operating_systems:
+      - Ubuntu
+      - Debian
+      - Fedora
+    category: auditd.conf
+    policy: Audit log file is /var/log/audit.log.
+    fix:
+      - fix_type: config_file
+        file: /etc/audit/auditd.conf
+        text: log_file = /var/log/audit/audit.log
+  - cid: C-UDF-AUD-07
+    operating_systems:
+      - Ubuntu
+      - Debian
+      - Fedora
+    category: auditd.conf
+    policy: Log files are owned by root.
+    fix:
+      - fix_type: config_file
+        file: /etc/audit/auditd.conf
+        text: log_group = root
+    references:
+      stig:
+        id: V-238247
+        category: CAT II
+  - cid: C-UDF-AUD-08
+    operating_systems:
+      - Ubuntu
+      - Debian
+      - Fedora
+    category: Audit Log File Permissions
+    policy: Audit log files are root:adm 0600.
+    fix:
+      - fix_type: linux_permissions
+        target: /var/log/audit/*
+        owner: root
+        group: root
+        mode: "0600"
+    references:
+      cis:
+        id: 4.1.4.1-4.1.4.3
+        category: L1
+      stig:
+        id: V-238245, V-238246
+        category: CAT II
+  - cid: C-UDF-AUD-09
+    operating_systems:
+      - Ubuntu
+      - Debian
+      - Fedora
+    category: Audit Log File Permissions
+    policy: Audit log directory is 0750.
+    fix:
+      - fix_type: linux_permissions
+        target: /var/log/audit
+        mode: "g-w,o-rwx"
+    references:
+      cis:
+        id: 4.1.4.4
+        category: L1
+  - cid: C-UDF-AUD-10
+    operating_systems:
+      - Ubuntu
+      - Debian
+      - Fedora
+    category: Audit Log File Permissions
+    policy: Audit configuration files are root:root 640.
+    fix:
+      - fix_type: linux_permissions
+        target: /etc/audit.rules
+        owner: root
+        group: root
+        mode: "0640"
+      - fix_type: linux_permissions
+        target: /etc/audit/rules.d
+        owner: root
+        group: root
+        mode: "0640"
+      - fix_type: linux_permissions
+        target: /etc/auditd.conf
+        owner: root
+        group: root
+        mode: "0640"
+    references:
+      cis:
+        id: 4.1.4.5-4.1.4.7
+        category: L1
+      stig:
+        id: V-238249, V-238250, V-238251
+        category: CAT II
+  - cid: C-UDF-AUD-11
+    operating_systems:
+      - Ubuntu
+      - Debian
+      - Fedora
+    category: Audit Log File Permissions
+    policy: Audit tools are root:root 755.
+    fix:
+      - fix_type: linux_permissions
+        target: /sbin/auditctl /sbin/aureport /sbin/ausearch /sbin/autrace /sbin/auditd /sbin/augenrules
+        owner: root
+        group: root
+        mode: "755"
+    references:
+      cis:
+        id: 4.1.4.8-4.1.4.10
+        category: L1
+      stig:
+        id: V-238300 to V-238302
+        category: CAT II
+  - cid: C-UDF-AUD-12
+    operating_systems:
+      - Ubuntu
+      - Debian
+      - Fedora
+    category: Audit Log File Permissions
+    policy: Cryptographic mechanisms are used to protect the integrity of audit tools.
+    fix:
+      - fix_type: config_file
+        file: /etc/aide/aide.conf
+        text: /sbin/auditctl p+i+n+u+g+s+b+acl+xattrs+sha512
+      - fix_type: config_file
+        file: /etc/aide/aide.conf
+        text: /sbin/auditd p+i+n+u+g+s+b+acl+xattrs+sha512
+      - fix_type: config_file
+        file: /etc/aide/aide.conf
+        text: /sbin/ausearch p+i+n+u+g+s+b+acl+xattrs+sha512
+      - fix_type: config_file
+        file: /etc/aide/aide.conf
+        text: /sbin/aureport p+i+n+u+g+s+b+acl+xattrs+sha512
+      - fix_type: config_file
+        file: /etc/aide/aide.conf
+        text: /sbin/autrace p+i+n+u+g+s+b+acl+xattrs+sha512
+      - fix_type: config_file
+        file: /etc/aide/aide.conf
+        text: /sbin/augenrules p+i+n+u+g+s+b+acl+xattrs+sha512
+    references:
+      cis:
+        id: 4.1.4.11
+        category: L1
+      stig:
+        id: V-238303
+        category: CAT II
+  - cid: C-UDF-AUD-13
+    operating_systems:
+      - Ubuntu
+      - Debian
+      - Fedora
+    category: Audit
+    policy: Log files are set to 640.
+    fix:
+      - fix_type: command
+        command: find /var/log -perm /137 -type f -exec chmod 640 '{}' \;
+    references:
+      stig:
+        id: V-238337
+        category: CAT II
+  - cid: C-UDF-AUD-14
+    operating_systems:
+      - Ubuntu
+      - Debian
+      - Fedora
+    category: Audit
+    policy: The /var/log directory must be root:syslog 0750.
+    fix:
+      - fix_type: linux_permissions
+        target: /var/log
+        owner: root
+        group: syslog
+        mode: "0750"
+    references:
+      stig:
+        id: V-238338, V-238339, V-238340
+        category: CAT II
+  - cid: C-UDF-AUD-15
+    operating_systems:
+      - Ubuntu
+      - Debian
+      - Fedora
+    category: Audit
+    policy: The /var/log/syslog file must be syslog:adm 0640.
+    fix:
+      - fix_type: linux_permissions
+        target: /var/log/syslog
+        owner: syslog
+        group: adm
+        mode: "0640"
+    references:
+      stig:
+        id: V-238341, V-238342, V-238343
+        category: CAT II
+  - cid: C-UDF-AUD-16
+    operating_systems:
+      - Ubuntu
+      - Debian
+      - Fedora
+    category: audit.rules
+    policy: audit.rules file is imported.
+    fix:
+      - fix_type: config_file_copyover
+        file: /etc/audit/rules.d/audit.rules
+        source: ./support/linux/config_files/audit.rules
+  - cid: C-UDF-AUD-17
+    operating_systems:
+      - Ubuntu
+      - Debian
+      - Fedora
+    category: audit.rules
+    policy: Rules are merged into active configuration.
+    fix:
+      - fix_type: command
+        command: augenrules --load
+    references:
+      stig:
+        id: V-238297
+        category: CAT II
+  - cid: C-UD-AUD-18
+    operating_systems:
+      - Ubuntu
+      - Debian
+    category: rsyslog
+    policy: rsyslog is installed.
+    fix:
+      - fix_type: command
+        command: apt-get install -y rsyslog
+      - fix_type: command
+        command: systemctl enable --now rsyslog
+    references:
+      stig:
+        id: V-238353
+        category: CAT II
+  - cid: C-F-AUD-18
+    operating_systems:
+      - Fedora
+    category: rsyslog
+    policy: rsyslog is installed.
+    fix:
+      - fix_type: command
+        command: dnf install -y rsyslog
+      - fix_type: command
+        command: systemctl enable --now rsyslog
+    references:
+      cis:
+        id: 4.1.2.5
+        category: STIG
+  - cid: C-F-AUD-19
+    operating_systems:
+      - Fedora
+    category: rsyslog
+    policy: Ensure the operating system has the packages required for encrypting offloaded audit logs
+    fix:
+      - fix_type: command
+        command: dnf install -y rsyslog-gnutls
+    references:
+      cis:
+        id: 4.1.2.6
+        category: STIG
+  - cid: C-UD-AUD-20
+    operating_systems:
+      - Ubuntu
+      - Debian
+    category: rsyslog
+    policy: Rsyslog creates files with mode 0600.
+    fix:
+      - fix_type: config_file
+        file: /etc/rsyslog.conf
+        text: $FileCreateMode 0600
+    references:
+      cis:
+        id: 4.2.2.4
+        category: L1
+  - cid: C-UD-AUD-21
+    operating_systems:
+      - Ubuntu
+      - Debian
+    category: rsyslog
+    policy: Verify that rsyslog is not receiving logs from a remote client.
+    fix:
+      - fix_type: manual
+        steps: |
+          Run these two commands to check if rsyslog is using remote clients.
+          grep '$ModLoad imtcp' /etc/rsyslog.conf /etc/rsyslog.d/*.conf 
+          grep '$InputTCPServerRun' /etc/rsyslog.conf /etc/rsyslog.d/*.conf
+    references:
+      cis:
+        id: 4.2.2.7
+        category: L1
+  - cid: C-UDF-RSYSLOG-01
+    operating_systems:
+      - Ubuntu
+      - Debian
+      - Fedora
+    category: rsyslog
+    policy: The operating system monitors all remote access methods.
+    fix:
+      - fix_type: config_file
+        file: /etc/rsyslog.d/50-default.conf
+        text: |
+          auth.*,authpriv.* /var/log/secure 
+          daemon.* /var/log/messages
+      - fix_type: command
+        command: systemctl restart rsyslog.service
+    references:
+      stig:
+        id: V-238324
+        category: CAT II
+  - cid: C-UD-AUD-22
+    operating_systems:
+      - Ubuntu
+      - Debian
+    category: journald
+    policy: systemd-journal-remote is not installed.
+    fix:
+      - fix_type: command
+        command: apt purge -y systemd-journal-remote
+  - cid: C-UDF-AUD-23
+    operating_systems:
+      - Ubuntu
+      - Debian
+      - Fedora
+    category: journald
+    policy: journald is not configured to receive logs from a remote client.
+    fix:
+      - fix_type: command
+        command: systemctl --now disable systemd-journal-remote.socket
+    references:
+      cis:
+        id: 4.2.1.1.4
+        category: L1
+  - cid: C-UDF-AUD-24
+    operating_systems:
+      - Ubuntu
+      - Debian
+      - Fedora
+    category: journald
+    policy: journald is not configured to receive logs from a remote client.
+    fix:
+      - fix_type: manual
+        steps: Check that `systemctl is-enabled systemd-journald.service` returns `static`.
+    references:
+      cis:
+        id: 4.2.1.2
+        category: L1
+  - cid: C-UDF-AUD-25
+    operating_systems:
+      - Ubuntu
+      - Debian
+      - Fedora
+    category: journald
+    policy: Journald default file permissions are set to 0640.
+    fix:
+      - fix_type: manual
+        steps: |
+          If /etc/tmpfiles.d/systemd.conf exists, copy /usr/lib/tmpfiles.d/systemd.conf to it.
+          Set the permissions of /etc/tmpfiles.d/systemd.conf to 0640.
+    references:
+      cis:
+        id: 4.2.1.7
+        category: L1
+  - cid: C-UDF-AUD-26
+    operating_systems:
+      - Ubuntu
+      - Debian
+      - Fedora
+    category: logrotate.conf
+    policy: Logrotate rotates log files daily.
+    fix:
+      - fix_type: config_file
+        file: /etc/logrotate.conf
+        text: daily
+    references:
+      other: https://github.com/konstruktoid/hardening/blob/master/misc/logrotate.conf
+  - cid: C-UDF-AUD-27
+    operating_systems:
+      - Ubuntu
+      - Debian
+      - Fedora
+    category: logrotate.conf
+    policy: Logrotate uses the syslog group.
+    fix:
+      - fix_type: config_file
+        file: /etc/logrotate.conf
+        text: su root syslog
+    references:
+      other: https://github.com/konstruktoid/hardening/blob/master/misc/logrotate.conf
+  - cid: C-UDF-AUD-28
+    operating_systems:
+      - Ubuntu
+      - Debian
+      - Fedora
+    category: logrotate.conf
+    policy: Logrotate keeps 7 days of backlogs.
+    fix:
+      - fix_type: config_file
+        file: /etc/logrotate.conf
+        text: rotate 7
+    references:
+      other: https://github.com/konstruktoid/hardening/blob/master/misc/logrotate.conf
+  - cid: C-UDF-AUD-29
+    operating_systems:
+      - Ubuntu
+      - Debian
+      - Fedora
+    category: logrotate.conf
+    policy: Logrotate creates new log files after rotating old ones.
+    fix:
+      - fix_type: config_file
+        file: /etc/logrotate.conf
+        text: create
+    references:
+      other: https://github.com/konstruktoid/hardening/blob/master/misc/logrotate.conf
+  - cid: C-UDF-AUD-30
+    operating_systems:
+      - Ubuntu
+      - Debian
+      - Fedora
+    category: logrotate.conf
+    policy: Logrotate uses the date as a suffic for rotated log files.
+    fix:
+      - fix_type: config_file
+        file: /etc/logrotate.conf
+        text: dateext
+    references:
+      other: https://github.com/konstruktoid/hardening/blob/master/misc/logrotate.conf
+  - cid: C-UDF-AUD-31
+    operating_systems:
+      - Ubuntu
+      - Debian
+      - Fedora
+    category: logrotate.conf
+    policy: Logrotate compresses log files.
+    fix:
+      - fix_type: config_file
+        file: /etc/logrotate.conf
+        text: compress
+    references:
+      other: https://github.com/konstruktoid/hardening/blob/master/misc/logrotate.conf
+  - cid: C-UDF-AUD-32
+    operating_systems:
+      - Ubuntu
+      - Debian
+      - Fedora
+    category: logrotate.conf
+    policy: Logrotate uses xz to compress log files.
+    fix:
+      - fix_type: config_file
+        file: /etc/logrotate.conf
+        text: compresscmd /usr/bin/xz
+      - fix_type: config_file
+        file: /etc/logrotate.conf
+        text: uncompresscmd /usr/bin/unxz
+      - fix_type: config_file
+        file: /etc/logrotate.conf
+        text: compressext .xz
+    references:
+      other: https://github.com/konstruktoid/hardening/blob/master/misc/logrotate.conf

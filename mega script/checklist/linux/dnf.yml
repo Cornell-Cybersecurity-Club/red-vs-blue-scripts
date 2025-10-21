@@ -1,0 +1,30 @@
+version: 1.0
+name: dnf
+vulnerabilities:
+  - cid: C-F-DNF-01
+    operating_systems:
+      - Fedora
+    category: DNF Configuration
+    policy: gpgcheck is globally activated. 
+    fix:
+      - fix_type: config_file
+        file: /etc/dnf/dnf.conf
+        text: gpgcheck=1
+    references:
+      cis:
+        id: 1.2.2
+        category: L1
+    notes: add to all files in /etc/yum.repos.d?
+  - cid: C-F-DNF-02
+    operating_systems:
+      - Fedora
+    category: DNF Configuration
+    policy: gpgcheck is globally activated. 
+    fix:
+      - fix_type: config_file
+        file: /etc/dnf/dnf.conf
+        text: gpgcheck=1
+    references:
+      cis:
+        id: 1.2.2
+        category: L1

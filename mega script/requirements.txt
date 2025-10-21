@@ -1,0 +1,8 @@
+pyyaml
+terminaltables
+rich
+distro
+flatdict
+dotmap
+requests
+beautifulsoup4

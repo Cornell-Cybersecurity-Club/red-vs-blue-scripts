@@ -1,0 +1,563 @@
+version: 1
+name: "Group Policy: Plugins (MS Security Guide and MSS)"
+vulnerabilities:
+  - cid: C-W-GP-ADM-MSSG-01
+    operating_systems:
+      - Windows
+    category: ""
+    policy: '"Apply UAC restrictions to local accounts on network logons" is set to "Enabled".'
+    fix:
+      - fix_type: group_policy
+        path: Computer Configuration\Administrative Templates\MS Security Guide
+        name: Apply UAC restrictions to local accounts on network logons
+        value: Enabled
+        registry_hive: Computer
+        registry_path: SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System
+        registry_key: LocalAccountTokenFilterPolicy
+        registry_action: DWORD:0
+    references:
+      cis:
+        id: 18.3.1
+        category: L1
+        value: Enabled
+      stig:
+        id: V-220799
+        category: CAT II
+        value: Enabled
+    notes: ""
+  - cid: C-W-GP-ADM-MSSG-02
+    operating_systems:
+      - Windows
+    category: ""
+    policy: '"Configure SMB v1 client driver" is set to "Enabled".'
+    fix:
+      - fix_type: group_policy
+        path: Computer Configuration\Administrative Templates\MS Security Guide
+        name: Configure SMB v1 client driver
+        value: Enabled
+        registry_hive: Computer
+        registry_path: SYSTEM\CurrentControlSet\Services\MrxSmb10
+        registry_key: Start
+        registry_action: DWORD:4
+    references:
+      cis:
+        id: 18.3.2
+        category: L1
+        value: Enabled
+      stig:
+        id: V-220731
+        category: CAT II
+        value: Enabled
+    notes: ""
+  - cid: C-W-GP-ADM-MSSG-04
+    operating_systems:
+      - Windows
+    category: ""
+    policy: '"Configure SMB v1 server" is set to "Disabled".'
+    fix:
+      - fix_type: group_policy
+        path: Computer Configuration\Administrative Templates\MS Security Guide
+        name: Configure SMB v1 server
+        value: Disabled
+        registry_hive: Computer
+        registry_path: SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters
+        registry_key: SMB1
+        registry_action: DWORD:0
+    references:
+      cis:
+        id: 18.3.3
+        category: L1
+        value: Disabled
+      stig:
+        id: V-220730
+        category: CAT II
+        value: Disabled
+    notes: ""
+  - cid: C-W-GP-ADM-MSSG-05
+    operating_systems:
+      - Windows
+    category: ""
+    policy:
+      '"Enable Structured Exception Handling Overwrite Protection (SEHOP)" is
+      set to "Enabled".'
+    fix:
+      - fix_type: group_policy
+        path: Computer Configuration\Administrative Templates\MS Security Guide
+        name: Enable Structured Exception Handling Overwrite Protection (SEHOP)
+        value: Enabled
+        registry_hive: Computer
+        registry_path: SYSTEM\CurrentControlSet\Control\Session Manager\kernel
+        registry_key: DisableExceptionChainValidation
+        registry_action: DWORD:0
+    references:
+      cis:
+        id: 18.3.4
+        category: L1
+        value: Enabled
+      stig:
+        id: V-220727
+        category: CAT I
+        value: Enabled
+    notes: ""
+  - cid: C-W-GP-ADM-MSSG-06
+    operating_systems:
+      - Windows
+    category: ""
+    policy: '"NetBT NodeType configuration" is set to "Enabled: P-node (recommended)".'
+    fix:
+      - fix_type: group_policy
+        path: Computer Configuration\Administrative Templates\MS Security Guide
+        name: NetBT NodeType configuration
+        value: "Enabled: P-node (recommended)"
+        registry_hive: Computer
+        registry_path: SYSTEM\CurrentControlSet\Services\NetBT\Parameters
+        registry_key: NodeType
+        registry_action: DWORD:2
+    references:
+      cis:
+        id: 18.3.5
+        category: L1
+        value: "Enabled: P-node (recommended)"
+      stig:
+        id: ""
+        category: ""
+        value: ""
+    notes: ""
+  - cid: C-W-GP-ADM-MSSG-07
+    operating_systems:
+      - Windows
+    category: ""
+    policy: '"Remove "Run as Different User" from context menus" is set to "Enabled".'
+    fix:
+      - fix_type: group_policy
+        path: Computer Configuration\Administrative Templates\MS Security Guide
+        name: Remove "Run as Different User" from context menus
+        value: Enabled
+        registry_hive: Computer
+        registry_path: SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer
+        registry_key: NoStartBanner
+        registry_action: DWORD:1
+      - fix_type: group_policy
+        path: Computer Configuration\Administrative Templates\MS Security Guide
+        name: Remove "Run as Different User" from context menus
+        value: Enabled
+        registry_hive: Computer
+        registry_path: SOFTWARE\Classes\batfile\shell\runasuser
+        registry_key: SuppressionPolicy
+        registry_action: DWORD:4096
+      - fix_type: group_policy
+        path: Computer Configuration\Administrative Templates\MS Security Guide
+        name: Remove "Run as Different User" from context menus
+        value: Enabled
+        registry_hive: Computer
+        registry_path: SOFTWARE\Classes\cmdfile\shell\runasuser
+        registry_key: SuppressionPolicy
+        registry_action: DWORD:4096
+      - fix_type: group_policy
+        path: Computer Configuration\Administrative Templates\MS Security Guide
+        name: Remove "Run as Different User" from context menus
+        value: Enabled
+        registry_hive: Computer
+        registry_path: SOFTWARE\Classes\exefile\shell\runasuser
+        registry_key: SuppressionPolicy
+        registry_action: DWORD:4096
+      - fix_type: group_policy
+        path: Computer Configuration\Administrative Templates\MS Security Guide
+        name: Remove "Run as Different User" from context menus
+        value: Enabled
+        registry_hive: Computer
+        registry_path: SOFTWARE\Classes\mscfile\shell\runasuser
+        registry_key: SuppressionPolicy
+        registry_action: DWORD:4096
+    references:
+      cis:
+        id: ""
+        category: ""
+        value: ""
+      stig:
+        id: V-220801
+        category: CAT II
+        value: Enabled
+    notes: ""
+  - cid: C-W-GP-ADM-MSSG-08
+    operating_systems:
+      - Windows
+    category: ""
+    policy: '"WDigest Authentication" is set to "Disabled".'
+    fix:
+      - fix_type: group_policy
+        path: Computer Configuration\Administrative Templates\MS Security Guide
+        name: WDigest Authentication
+        value: Disabled
+        registry_hive: Computer
+        registry_path: SYSTEM\CurrentControlSet\Control\SecurityProviders\WDigest
+        registry_key: UseLogonCredential
+        registry_action: DWORD:0
+    references:
+      cis:
+        id: 18.3.6
+        category: L1
+        value: Disabled
+      stig:
+        id: V-220800
+        category: CAT II
+        value: Disabled
+    notes: ""
+  - cid: C-W-GP-ADM-MSS-01
+    operating_systems:
+      - Windows
+    category: ""
+    policy:
+      '"MSS: (AutoAdminLogon) Enable Automatic Logon (not recommended)" is set
+      to "Disabled".'
+    fix:
+      - fix_type: group_policy
+        path: Computer Configuration\Administrative Templates\MSS (Legacy)
+        name: "MSS: (AutoAdminLogon) Enable Automatic Logon (not recommended)"
+        value: Disabled
+        registry_hive: Computer
+        registry_path: SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon
+        registry_key: AutoAdminLogon
+        registry_action: SZ:0
+    references:
+      cis:
+        id: 18.4.1
+        category: L1
+        value: Disabled
+      stig:
+        id: ""
+        category: ""
+        value: ""
+    notes: ""
+  - cid: C-W-GP-ADM-MSS-02
+    operating_systems:
+      - Windows
+    category: ""
+    policy:
+      '"MSS: (DisableIPSourceRouting IPv6) IP source routing protection level
+      (protects against packet spoofing)" is set to "Enabled: Highest protection, source
+      routing is completely disabled".'
+    fix:
+      - fix_type: group_policy
+        path: Computer Configuration\Administrative Templates\MSS (Legacy)
+        name:
+          "MSS: (DisableIPSourceRouting IPv6) IP source routing protection level (protects
+          against packet spoofing)"
+        value: "Enabled: Highest protection, source routing is completely disabled"
+        registry_hive: Computer
+        registry_path: SYSTEM\CurrentControlSet\Services\Tcpip6\Parameters
+        registry_key: DisableIPSourceRouting
+        registry_action: DWORD:2
+    references:
+      cis:
+        id: 18.4.2
+        category: L1
+        value: "Enabled: Highest protection, source routing is completely disabled"
+      stig:
+        id: V-220795
+        category: CAT II
+        value: Highest protection, source routing is completely disabled
+    notes: ""
+  - cid: C-W-GP-ADM-MSS-03
+    operating_systems:
+      - Windows
+    category: ""
+    policy:
+      '"MSS: (DisableIPSourceRouting) IP source routing protection level (protects
+      against packet spoofing)" is set to "Enabled: Highest protection, source routing
+      is completely disabled".'
+    fix:
+      - fix_type: group_policy
+        path: Computer Configuration\Administrative Templates\MSS (Legacy)
+        name:
+          "MSS: (DisableIPSourceRouting) IP source routing protection level (protects
+          against packet spoofing)"
+        value: "Enabled: Highest protection, source routing is completely disabled"
+        registry_hive: Computer
+        registry_path: SYSTEM\CurrentControlSet\Services\Tcpip\Parameters
+        registry_key: DisableIPSourceRouting
+        registry_action: DWORD:2
+    references:
+      cis:
+        id: 18.4.3
+        category: L1
+        value: "Enabled: Highest protection, source routing is completely disabled"
+      stig:
+        id: V-220796
+        category: CAT II
+        value: Highest protection, source routing is completely disabled
+    notes: ""
+  - cid: C-W-GP-ADM-MSS-04
+    operating_systems:
+      - Windows
+    category: ""
+    policy:
+      '"MSS: (DisableSavePassword) Prevent the dial-up password from being saved"
+      is set to "Enabled".'
+    fix:
+      - fix_type: group_policy
+        path: Computer Configuration\Administrative Templates\MSS (Legacy)
+        name: "MSS: (DisableSavePassword) Prevent the dial-up password from being saved"
+        value: Enabled
+        registry_hive: Computer
+        registry_path: SYSTEM\CurrentControlSet\Services\RasMan\Parameters
+        registry_key: DisableSavePassword
+        registry_action: DWORD:1
+    references:
+      cis:
+        id: 18.4.4
+        category: L2
+        value: Enabled
+      stig:
+        id: ""
+        category: ""
+        value: ""
+    notes: ""
+  - cid: C-W-GP-ADM-MSS-05
+    operating_systems:
+      - Windows
+    category: ""
+    policy:
+      '"MSS: (EnableICMPRedirect) Allow ICMP redirects to override OSPF generated
+      routes" is set to "Disabled".'
+    fix:
+      - fix_type: group_policy
+        path: Computer Configuration\Administrative Templates\MSS (Legacy)
+        name:
+          "MSS: (EnableICMPRedirect) Allow ICMP redirects to override OSPF generated
+          routes"
+        value: Disabled
+        registry_hive: Computer
+        registry_path: SYSTEM\CurrentControlSet\Services\Tcpip\Parameters
+        registry_key: EnableICMPRedirect
+        registry_action: DWORD:0
+    references:
+      cis:
+        id: 18.4.5
+        category: L1
+        value: Disabled
+      stig:
+        id: V-220797
+        category: CAT III
+        value: Disabled
+    notes: ""
+  - cid: C-W-GP-ADM-MSS-06
+    operating_systems:
+      - Windows
+    category: ""
+    policy:
+      '"MSS: (KeepAliveTime) How often keep-alive packets are sent in milliseconds"
+      is set to "Enabled: 300,000 or 5 minutes (recommended)".'
+    fix:
+      - fix_type: group_policy
+        path: Computer Configuration\Administrative Templates\MSS (Legacy)
+        name: "MSS: (KeepAliveTime) How often keep-alive packets are sent in milliseconds"
+        value: "Enabled: 300,000 or 5 minutes (recommended)"
+        registry_hive: Computer
+        registry_path: SYSTEM\CurrentControlSet\Services\Tcpip\Parameters
+        registry_key: KeepAliveTime
+        registry_action: DWORD:300000
+    references:
+      cis:
+        id: 18.4.6
+        category: L2
+        value: "Enabled: 300,000 or 5 minutes (recommended)"
+      stig:
+        id: ""
+        category: ""
+        value: ""
+    notes: ""
+  - cid: C-W-GP-ADM-MSS-07
+    operating_systems:
+      - Windows
+    category: ""
+    policy:
+      '"MSS: (NoNameReleaseOnDemand) Allow the computer to ignore NetBIOS name
+      release requests except from WINS servers" is set to "Enabled".'
+    fix:
+      - fix_type: group_policy
+        path: Computer Configuration\Administrative Templates\MSS (Legacy)
+        name:
+          "MSS: (NoNameReleaseOnDemand) Allow the computer to ignore NetBIOS name
+          release requests except from WINS servers"
+        value: Enabled
+        registry_hive: Computer
+        registry_path: SYSTEM\CurrentControlSet\Services\NetBT\Parameters
+        registry_key: NoNameReleaseOnDemand
+        registry_action: DWORD:1
+    references:
+      cis:
+        id: 18.4.7
+        category: L1
+        value: Enabled
+      stig:
+        id: V-220798
+        category: CAT III
+        value: Enabled
+    notes: ""
+  - cid: C-W-GP-ADM-MSS-08
+    operating_systems:
+      - Windows
+    category: ""
+    policy:
+      '"MSS: (PerformRouterDiscovery) Allow IRDP to detect and configure Default
+      Gateway addresses (could lead to DoS)" is set to "Disabled".'
+    fix:
+      - fix_type: group_policy
+        path: Computer Configuration\Administrative Templates\MSS (Legacy)
+        name:
+          "MSS: (PerformRouterDiscovery) Allow IRDP to detect and configure Default
+          Gateway addresses (could lead to DoS)"
+        value: Disabled
+        registry_hive: Computer
+        registry_path: SYSTEM\CurrentControlSet\Services\Tcpip\Parameters
+        registry_key: PerformRouterDiscovery
+        registry_action: DWORD:0
+    references:
+      cis:
+        id: 18.4.8
+        category: L2
+        value: Disabled
+      stig:
+        id: ""
+        category: ""
+        value: ""
+    notes: ""
+  - cid: C-W-GP-ADM-MSS-09
+    operating_systems:
+      - Windows
+    category: ""
+    policy:
+      '"MSS: (SafeDllSearchMode) Enable Safe DLL search mode (recommended)" is
+      set to "Enabled".'
+    fix:
+      - fix_type: group_policy
+        path: Computer Configuration\Administrative Templates\MSS (Legacy)
+        name: "MSS: (SafeDllSearchMode) Enable Safe DLL search mode (recommended)"
+        value: Enabled
+        registry_hive: Computer
+        registry_path: SYSTEM\CurrentControlSet\Control\Session Manager
+        registry_key: SafeDllSearchMode
+        registry_action: DWORD:1
+    references:
+      cis:
+        id: 18.4.9
+        category: L1
+        value: Enabled
+      stig:
+        id: ""
+        category: ""
+        value: ""
+    notes: ""
+  - cid: C-W-GP-ADM-MSS-10
+    operating_systems:
+      - Windows
+    category: ""
+    policy:
+      '"MSS: (ScreenSaverGracePeriod) The time in seconds before the screen saver
+      grace period expires (0 recommended)" is set to "Enabled: 5 or fewer seconds".'
+    fix:
+      - fix_type: group_policy
+        path: Computer Configuration\Administrative Templates\MSS (Legacy)
+        name:
+          "MSS: (ScreenSaverGracePeriod) The time in seconds before the screen saver
+          grace period expires (0 recommended)"
+        value: "Enabled: 5 or fewer seconds"
+        registry_hive: Computer
+        registry_path: SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon
+        registry_key: ScreenSaverGracePeriod
+        registry_action: SZ:0
+    references:
+      cis:
+        id: 18.4.10
+        category: L1
+        value: "Enabled: 5 or fewer seconds"
+      stig:
+        id: ""
+        category: ""
+        value: ""
+    notes: ""
+  - cid: C-W-GP-ADM-MSS-11
+    operating_systems:
+      - Windows
+    category: ""
+    policy:
+      '"MSS: (TcpMaxDataRetransmissions IPv6) How many times unacknowledged data
+      is retransmitted" is set to "Enabled: 3".'
+    fix:
+      - fix_type: group_policy
+        path: Computer Configuration\Administrative Templates\MSS (Legacy)
+        name:
+          "MSS: (TcpMaxDataRetransmissions IPv6) How many times unacknowledged data
+          is retransmitted"
+        value: "Enabled: 3"
+        registry_hive: Computer
+        registry_path: SYSTEM\CurrentControlSet\Services\Tcpip6\Parameters
+        registry_key: TcpMaxDataRetransmissions
+        registry_action: DWORD:3
+    references:
+      cis:
+        id: 18.4.11
+        category: L2
+        value: "Enabled: 3"
+      stig:
+        id: ""
+        category: ""
+        value: ""
+    notes: ""
+  - cid: C-W-GP-ADM-MSS-12
+    operating_systems:
+      - Windows
+    category: ""
+    policy:
+      '"MSS: (TcpMaxDataRetransmissions) How many times unacknowledged data is
+      retransmitted" is set to "Enabled: 3".'
+    fix:
+      - fix_type: group_policy
+        path: Computer Configuration\Administrative Templates\MSS (Legacy)
+        name:
+          "MSS: (TcpMaxDataRetransmissions) How many times unacknowledged data is
+          retransmitted"
+        value: "Enabled: 3"
+        registry_hive: Computer
+        registry_path: SYSTEM\CurrentControlSet\Services\Tcpip\Parameters
+        registry_key: TcpMaxDataRetransmissions
+        registry_action: DWORD:3
+    references:
+      cis:
+        id: 18.4.12
+        category: L2
+        value: "Enabled: 3"
+      stig:
+        id: ""
+        category: ""
+        value: ""
+    notes: ""
+  - cid: C-W-GP-ADM-MSS-13
+    operating_systems:
+      - Windows
+    category: ""
+    policy:
+      '"MSS: (WarningLevel) Percentage threshold for the security event log at
+      which the system will generate a warning" is set to "Enabled: 90%".'
+    fix:
+      - fix_type: group_policy
+        path: Computer Configuration\Administrative Templates\MSS (Legacy)
+        name:
+          "MSS: (WarningLevel) Percentage threshold for the security event log at
+          which the system will generate a warning"
+        value: "Enabled: 90% or less"
+        registry_hive: Computer
+        registry_path: SYSTEM\CurrentControlSet\Services\Eventlog\Security
+        registry_key: WarningLevel
+        registry_action: DWORD:90
+    references:
+      cis:
+        id: 18.4.13
+        category: L1
+        value: "Enabled: 90% or less"
+      stig:
+        id: ""
+        category: ""
+        value: ""
+    notes: ""

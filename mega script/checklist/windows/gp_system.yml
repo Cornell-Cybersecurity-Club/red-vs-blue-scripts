@@ -1,0 +1,1760 @@
+version: 1
+name: "Group Policy: System"
+vulnerabilities:
+  - cid: C-W-GP-ADM-SYS-01
+    operating_systems:
+      - Windows
+    category: ""
+    policy: '"Include command line in process creation events" is set to "Enabled".'
+    fix:
+      - fix_type: group_policy
+        path: Computer Configuration\Administrative Templates\System\Audit Process Creation
+        name: Include command line in process creation events
+        value: Enabled
+        registry_hive: Computer
+        registry_path: Software\Microsoft\Windows\CurrentVersion\Policies\System\Audit
+        registry_key: ProcessCreationIncludeCmdLine_Enabled
+        registry_action: DWORD:1
+    references:
+      cis:
+        id: 18.8.3.1
+        category: L1
+        value: Disabled
+      stig:
+        id: V-220809
+        category: CAT II
+        value: Enabled
+    notes: ""
+  - cid: C-W-GP-ADM-SYS-02
+    operating_systems:
+      - Windows
+    category: ""
+    policy: '"Encryption Oracle Remediation" is set to "Enabled: Force Updated Clients".'
+    fix:
+      - fix_type: group_policy
+        path: Computer Configuration\Administrative Templates\System\Credentials Delegation
+        name: Encryption Oracle Remediation
+        value: "Enabled: Force Updated Clients"
+        registry_hive: Computer
+        registry_path: Software\Microsoft\Windows\CurrentVersion\Policies\System\CredSSP\Parameters
+        registry_key: AllowEncryptionOracle
+        registry_action: DWORD:0
+    references:
+      cis:
+        id: 18.8.4.1
+        category: L1
+        value: "Enabled: Force Updated Clients"
+      stig:
+        id: ""
+        category: ""
+        value: ""
+    notes: ""
+  - cid: C-W-GP-ADM-SYS-03
+    operating_systems:
+      - Windows
+    category: ""
+    policy:
+      '"Remote host allows delegation of non-exportable credentials" is set to
+      "Enabled".'
+    fix:
+      - fix_type: group_policy
+        path: Computer Configuration\Administrative Templates\System\Credentials Delegation
+        name: Remote host allows delegation of non-exportable credentials
+        value: Enabled
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\Windows\CredentialsDelegation
+        registry_key: AllowProtectedCreds
+        registry_action: DWORD:1
+    references:
+      cis:
+        id: 18.8.4.2
+        category: L1
+        value: Enabled
+      stig:
+        id: V-220810
+        category: CAT II
+        value: Enabled
+    notes: ""
+  - cid: C-W-GP-ADM-SYS-04
+    operating_systems:
+      - Windows
+    category: ""
+    policy: '"Turn on Virtualization Based Security" is set to "Enabled".'
+    fix:
+      - fix_type: group_policy
+        path: Computer Configuration\Administrative Templates\System\Device Guard
+        name: Turn on Virtualization Based Security
+        value: Enabled
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\Windows\DeviceGuard
+        registry_key: EnableVirtualizationBasedSecurity
+        registry_action: DWORD:1
+    references:
+      cis:
+        id: 18.8.5.1
+        category: NG
+        value: Enabled
+      stig:
+        id: V-220811
+        category: CAT III
+        value: Enabled
+    notes: ""
+  - cid: C-W-GP-ADM-SYS-05
+    operating_systems:
+      - Windows
+    category: ""
+    policy:
+      '"Turn on Virtualization Based Security: Select Platform Security Level"
+      is set to "Secure Boot and DMA Protection".'
+    fix:
+      - fix_type: group_policy
+        path: Computer Configuration\Administrative Templates\System\Device Guard
+        name: "Turn on Virtualization Based Security: Select Platform Security Level"
+        value: Secure Boot and DMA Protection
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\Windows\DeviceGuard
+        registry_key: RequirePlatformSecurityFeatures
+        registry_action: DWORD:3
+    references:
+      cis:
+        id: 18.8.5.2
+        category: NG
+        value: Secure Boot and DMA Protection
+      stig:
+        id: V-220811
+        category: CAT III
+        value: Secure Boot or Secure Boot and DMA Protection
+    notes: ""
+  - cid: C-W-GP-ADM-SYS-06
+    operating_systems:
+      - Windows
+    category: ""
+    policy:
+      '"Turn on Virtualization Based Security: Virtualization Based Protection
+      of Code Integrity" is set to "Enabled with UEFI Lock".'
+    fix:
+      - fix_type: group_policy
+        path: Computer Configuration\Administrative Templates\System\Device Guard
+        name:
+          "Turn on Virtualization Based Security: Virtualization Based Protection
+          of Code Integrity"
+        value: Enabled with UEFI Lock
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\Windows\DeviceGuard
+        registry_key: HypervisorEnforcedCodeIntegrity
+        registry_action: DWORD:1
+    references:
+      cis:
+        id: 18.8.5.3
+        category: NG
+        value: Enabled with UEFI Lock
+      stig:
+        id: ""
+        category: ""
+        value: ""
+    notes: ""
+  - cid: C-W-GP-ADM-SYS-07
+    operating_systems:
+      - Windows
+    category: ""
+    policy:
+      '"Turn on Virtualization Based Security: Require UEFI Memory Attributes
+      Table" is set to "TRUE".'
+    fix:
+      - fix_type: group_policy
+        path: Computer Configuration\Administrative Templates\System\Device Guard
+        name: "Turn on Virtualization Based Security: Require UEFI Memory Attributes Table"
+        value: "TRUE"
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\Windows\DeviceGuard
+        registry_key: HVCIMATRequired
+        registry_action: DWORD:1
+    references:
+      cis:
+        id: 18.8.5.4
+        category: NG
+        value: "TRUE"
+      stig:
+        id: ""
+        category: ""
+        value: ""
+    notes: ""
+  - cid: C-W-GP-ADM-SYS-08
+    operating_systems:
+      - Windows
+    category: ""
+    policy:
+      '"Turn on Virtualization Based Security: Credential Guard Configuration"
+      is set to "Enabled with UEFI Lock".'
+    fix:
+      - fix_type: group_policy
+        path: Computer Configuration\Administrative Templates\System\Device Guard
+        name: "Turn on Virtualization Based Security: Credential Guard Configuration"
+        value: Enabled with UEFI Lock
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\Windows\DeviceGuard
+        registry_key: LsaCfgFlags
+        registry_action: DWORD:1
+    references:
+      cis:
+        id: 18.8.5.5
+        category: NG
+        value: Enabled with UEFI Lock
+      stig:
+        id: V-220812
+        category: CAT I
+        value: Enabled with UEFI lock
+    notes: ""
+  - cid: C-W-GP-ADM-SYS-09
+    operating_systems:
+      - Windows
+    category: ""
+    policy:
+      '"Turn on Virtualization Based Security: Secure Launch Configuration" is
+      set to "Enabled".'
+    fix:
+      - fix_type: group_policy
+        path: Computer Configuration\Administrative Templates\System\Device Guard
+        name: "Turn on Virtualization Based Security: Secure Launch Configuration"
+        value: Enabled
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\Windows\DeviceGuard
+        registry_key: ConfigureSystemGuardLaunch
+        registry_action: DWORD:1
+    references:
+      cis:
+        id: 18.8.5.6
+        category: NG
+        value: Enabled
+      stig:
+        id: ""
+        category: ""
+        value: ""
+    notes: ""
+  - cid: C-W-GP-ADM-SYS-10
+    operating_systems:
+      - Windows
+    category: ""
+    policy:
+      '"Prevent installation of devices that match any of these device IDs" is
+      set to "Enabled".'
+    fix:
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Administrative Templates\System\Device Installation\Device
+          Installation Restrictions
+        name: Prevent installation of devices that match any of these device IDs
+        value: Enabled
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\Windows\DeviceInstall\Restrictions
+        registry_key: DenyDeviceIDs
+        registry_action: DWORD:1
+    references:
+      cis:
+        id: 18.8.7.1.1
+        category: BL
+        value: Enabled
+      stig:
+        id: ""
+        category: ""
+        value: ""
+    notes: ""
+  - cid: C-W-GP-ADM-SYS-11
+    operating_systems:
+      - Windows
+    category: ""
+    policy:
+      '"Prevent installation of devices that match any of these device IDs: Prevent
+      installation of devices that match any of these device IDs" is set to "PCI\CC_0C0A".'
+    fix:
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Administrative Templates\System\Device Installation\Device
+          Installation Restrictions
+        name:
+          "Prevent installation of devices that match any of these device IDs: Prevent
+          installation of devices that match any of these device IDs"
+        value: PCI\CC_0C0A
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\Windows\DeviceInstall\Restrictions\DenyDeviceIDs
+        registry_key: "*"
+        registry_action: DELETEALLVALUES
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Administrative Templates\System\Device Installation\Device
+          Installation Restrictions
+        name:
+          "Prevent installation of devices that match any of these device IDs: Prevent
+          installation of devices that match any of these device IDs"
+        value: PCI\CC_0C0A
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\Windows\DeviceInstall\Restrictions\DenyDeviceIDs
+        registry_key: "1"
+        registry_action: SZ:PCI\\CC_0C0A
+    references:
+      cis:
+        id: 18.8.7.1.2
+        category: BL
+        value: PCI\CC_0C0A
+      stig:
+        id: ""
+        category: ""
+        value: ""
+    notes: ""
+  - cid: C-W-GP-ADM-SYS-12
+    operating_systems:
+      - Windows
+    category: ""
+    policy:
+      '"Prevent installation of devices that match any of these device IDs: Also
+      apply to matching devices that are already installed." is set to "TRUE".'
+    fix:
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Administrative Templates\System\Device Installation\Device
+          Installation Restrictions
+        name:
+          "Prevent installation of devices that match any of these device IDs: Also
+          apply to matching devices that are already installed."
+        value: "TRUE"
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\Windows\DeviceInstall\Restrictions
+        registry_key: DenyDeviceIDsRetroactive
+        registry_action: DWORD:1
+    references:
+      cis:
+        id: 18.8.7.1.3
+        category: BL
+        value: "TRUE"
+      stig:
+        id: ""
+        category: ""
+        value: ""
+    notes: ""
+  - cid: C-W-GP-ADM-SYS-13
+    operating_systems:
+      - Windows
+    category: ""
+    policy:
+      '"Prevent installation of devices using drivers that match these device
+      setup classes" is set to "Enabled".'
+    fix:
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Administrative Templates\System\Device Installation\Device
+          Installation Restrictions
+        name:
+          Prevent installation of devices using drivers that match these device setup
+          classes
+        value: Enabled
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\Windows\DeviceInstall\Restrictions
+        registry_key: DenyDeviceClasses
+        registry_action: DWORD:1
+    references:
+      cis:
+        id: 18.8.7.1.4
+        category: BL
+        value: Enabled
+      stig:
+        id: ""
+        category: ""
+        value: ""
+    notes: ""
+  - cid: C-W-GP-ADM-SYS-14
+    operating_systems:
+      - Windows
+    category: ""
+    policy:
+      '"Prevent installation of devices using drivers that match these device
+      setup classes: Prevent installation of devices using drivers for these device
+      setup" is set to "{d48179be-ec20-11d1-b6b8-00c04fa372a7}, {7ebefbc0-3200-11d2-b4c2-
+      00a0C9697d07}, {c06ff265-ae09-48f0-812c-16753d7cba83}, {6bdd1fc1-810f-11d0- bec7-08002be2092f}".'
+    fix:
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Administrative Templates\System\Device Installation\Device
+          Installation Restrictions
+        name:
+          "Prevent installation of devices using drivers that match these device setup
+          classes: Prevent installation of devices using drivers for these device setup"
+        value:
+          "{d48179be-ec20-11d1-b6b8-00c04fa372a7}, {7ebefbc0-3200-11d2-b4c2- 00a0C9697d07},
+          {c06ff265-ae09-48f0-812c-16753d7cba83}, {6bdd1fc1-810f-11d0- bec7-08002be2092f}"
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\Windows\DeviceInstall\Restrictions\DenyDeviceClasses
+        registry_key: "*"
+        registry_action: DELETEALLVALUES
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Administrative Templates\System\Device Installation\Device
+          Installation Restrictions
+        name:
+          "Prevent installation of devices using drivers that match these device setup
+          classes: Prevent installation of devices using drivers for these device setup"
+        value: "{d48179be-ec20-11d1-b6b8-00c04fa372a7}"
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\Windows\DeviceInstall\Restrictions\DenyDeviceClasses
+        registry_key: "1"
+        registry_action: SZ:{d48179be-ec20-11d1-b6b8-00c04fa372a7}
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Administrative Templates\System\Device Installation\Device
+          Installation Restrictions
+        name:
+          "Prevent installation of devices using drivers that match these device setup
+          classes: Prevent installation of devices using drivers for these device setup"
+        value: "{7ebefbc0-3200-11d2-b4c2- 00a0C9697d07}"
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\Windows\DeviceInstall\Restrictions\DenyDeviceClasses
+        registry_key: "2"
+        registry_action: SZ:{7ebefbc0-3200-11d2-b4c2- 00a0C9697d07}
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Administrative Templates\System\Device Installation\Device
+          Installation Restrictions
+        name:
+          "Prevent installation of devices using drivers that match these device setup
+          classes: Prevent installation of devices using drivers for these device setup"
+        value: "{c06ff265-ae09-48f0-812c-16753d7cba83}"
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\Windows\DeviceInstall\Restrictions\DenyDeviceClasses
+        registry_key: "3"
+        registry_action: SZ:{c06ff265-ae09-48f0-812c-16753d7cba83}
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Administrative Templates\System\Device Installation\Device
+          Installation Restrictions
+        name:
+          "Prevent installation of devices using drivers that match these device setup
+          classes: Prevent installation of devices using drivers for these device setup"
+        value: "{6bdd1fc1-810f-11d0- bec7-08002be2092f}"
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\Windows\DeviceInstall\Restrictions\DenyDeviceClasses
+        registry_key: "4"
+        registry_action: SZ:{6bdd1fc1-810f-11d0- bec7-08002be2092f}
+    references:
+      cis:
+        id: 18.8.7.1.5
+        category: BL
+        value:
+          "{d48179be-ec20-11d1-b6b8-00c04fa372a7}, {7ebefbc0-3200-11d2-b4c2- 00a0C9697d07},
+          {c06ff265-ae09-48f0-812c-16753d7cba83}, {6bdd1fc1-810f-11d0- bec7-08002be2092f}"
+      stig:
+        id: ""
+        category: ""
+        value: ""
+    notes: ""
+  - cid: C-W-GP-ADM-SYS-15
+    operating_systems:
+      - Windows
+    category: ""
+    policy:
+      '"Prevent installation of devices using drivers that match these device
+      setup classes: Also apply to matching devices that are already installed." is
+      set to "TRUE".'
+    fix:
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Administrative Templates\System\Device Installation\Device
+          Installation Restrictions
+        name:
+          "Prevent installation of devices using drivers that match these device setup
+          classes: Also apply to matching devices that are already installed."
+        value: "TRUE"
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\Windows\DeviceInstall\Restrictions
+        registry_key: DenyDeviceClassesRetroactive
+        registry_action: DWORD:1
+    references:
+      cis:
+        id: 18.8.7.1.6
+        category: BL
+        value: "TRUE"
+      stig:
+        id: ""
+        category: ""
+        value: ""
+    notes: ""
+  - cid: C-W-GP-ADM-SYS-16
+    operating_systems:
+      - Windows
+    category: ""
+    policy:
+      '"Boot-Start Driver Initialization Policy" is set to "Enabled: Good, unknown
+      and bad but critical".'
+    fix:
+      - fix_type: group_policy
+        path: Computer Configuration\Administrative Templates\System\Early Launch Antimalware
+        name: Boot-Start Driver Initialization Policy
+        value: "Enabled: Good, unknown and bad but critical"
+        registry_hive: Computer
+        registry_path: System\CurrentControlSet\Policies\EarlyLaunch
+        registry_key: DriverLoadPolicy
+        registry_action: DWORD:3
+    references:
+      cis:
+        id: 18.8.14.1
+        category: L1
+        value: "Enabled: Good, unknown and bad but critical"
+      stig:
+        id: V-220813
+        category: CAT II
+        value: "Enabled: Good, unknown and bad but critical"
+    notes: ""
+  - cid: C-W-GP-ADM-SYS-17
+    operating_systems:
+      - Windows
+    category: ""
+    policy:
+      '"Configure registry policy processing: Do not apply during periodic background
+      processing" is set to "Enabled: FALSE".'
+    fix:
+      - fix_type: group_policy
+        path: Computer Configuration\Administrative Templates\System\Group Policy
+        name:
+          "Configure registry policy processing: Do not apply during periodic background
+          processing"
+        value: "Enabled: FALSE"
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\Windows\Group Policy\{35378EAC-683F-11D2-A89A-00C04FBBCFA2}
+        registry_key: NoBackgroundPolicy
+        registry_action: DWORD:0
+    references:
+      cis:
+        id: 18.8.21.2
+        category: L1
+        value: "Enabled: FALSE"
+      stig:
+        id: ""
+        category: ""
+        value: ""
+    notes: ""
+  - cid: C-W-GP-ADM-SYS-18
+    operating_systems:
+      - Windows
+    category: ""
+    policy:
+      '"Configure registry policy processing: Process even if the Group Policy
+      objects have not changed" is set to "Enabled: TRUE".'
+    fix:
+      - fix_type: group_policy
+        path: Computer Configuration\Administrative Templates\System\Group Policy
+        name:
+          "Configure registry policy processing: Process even if the Group Policy
+          objects have not changed"
+        value: "Enabled: TRUE"
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\Windows\Group Policy\{35378EAC-683F-11D2-A89A-00C04FBBCFA2}
+        registry_key: NoGPOListChanges
+        registry_action: DWORD:0
+    references:
+      cis:
+        id: 18.8.21.3
+        category: L1
+        value: "Enabled: TRUE"
+      stig:
+        id: V-220814
+        category: CAT II
+        value: "Enabled: TRUE"
+    notes: ""
+  - cid: C-W-GP-ADM-SYS-19
+    operating_systems:
+      - Windows
+    category: ""
+    policy: '"Continue experiences on this device" is set to "Disabled".'
+    fix:
+      - fix_type: group_policy
+        path: Computer Configuration\Administrative Templates\System\Group Policy
+        name: Continue experiences on this device
+        value: Disabled
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\Windows\System
+        registry_key: EnableCdp
+        registry_action: DWORD:0
+    references:
+      cis:
+        id: 18.8.21.4
+        category: L1
+        value: Disabled
+      stig:
+        id: ""
+        category: ""
+        value: ""
+    notes: ""
+  - cid: C-W-GP-ADM-SYS-20
+    operating_systems:
+      - Windows
+    category: ""
+    policy: '"Turn off background refresh of Group Policy" is set to "Disabled".'
+    fix:
+      - fix_type: group_policy
+        path: Computer Configuration\Administrative Templates\System\Group Policy
+        name: Turn off background refresh of Group Policy
+        value: Disabled
+        registry_hive: Computer
+        registry_path: Software\Microsoft\Windows\CurrentVersion\Policies\System
+        registry_key: DisableBkGndGroupPolicy
+        registry_action: DELETE
+    references:
+      cis:
+        id: 18.8.24.5
+        category: L1
+        value: Disabled
+      stig:
+        id: ""
+        category: ""
+        value: ""
+    notes: ""
+  - cid: C-W-GP-ADM-SYS-21
+    operating_systems:
+      - Windows
+    category: ""
+    policy: '"Turn off access to the Store" is set to "Enabled".'
+    fix:
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Administrative Templates\System\Internet Communication
+          Management\Internet Communications settings
+        name: Turn off access to the Store
+        value: Enabled
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\Windows\Explorer
+        registry_key: NoUseStoreOpenWith
+        registry_action: DWORD:1
+    references:
+      cis:
+        id: 18.8.22.1.1
+        category: L2
+        value: Enabled
+      stig:
+        id: ""
+        category: ""
+        value: ""
+    notes: ""
+  - cid: C-W-GP-ADM-SYS-22
+    operating_systems:
+      - Windows
+    category: ""
+    policy: '"Turn off downloading of print drivers over HTTP" is set to "Enabled".'
+    fix:
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Administrative Templates\System\Internet Communication
+          Management\Internet Communications settings
+        name: Turn off downloading of print drivers over HTTP
+        value: Enabled
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\Windows NT\Printers
+        registry_key: DisableWebPnPDownload
+        registry_action: DWORD:1
+    references:
+      cis:
+        id: 18.8.22.1.2
+        category: L1
+        value: Enabled
+      stig:
+        id: V-220815
+        category: CAT II
+        value: Enabled
+    notes: ""
+  - cid: C-W-GP-ADM-SYS-23
+    operating_systems:
+      - Windows
+    category: ""
+    policy: '"Turn off handwriting personalization data sharing" is set to "Enabled".'
+    fix:
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Administrative Templates\System\Internet Communication
+          Management\Internet Communications settings
+        name: Turn off handwriting personalization data sharing
+        value: Enabled
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\Windows\TabletPC
+        registry_key: PreventHandwritingDataSharing
+        registry_action: DWORD:1
+    references:
+      cis:
+        id: 18.8.22.1.3
+        category: L2
+        value: Enabled
+      stig:
+        id: ""
+        category: ""
+        value: ""
+    notes: ""
+  - cid: C-W-GP-ADM-SYS-24
+    operating_systems:
+      - Windows
+    category: ""
+    policy: '"Turn off handwriting recognition error reporting" is set to "Enabled".'
+    fix:
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Administrative Templates\System\Internet Communication
+          Management\Internet Communications settings
+        name: Turn off handwriting recognition error reporting
+        value: Enabled
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\Windows\HandwritingErrorReports
+        registry_key: PreventHandwritingErrorReports
+        registry_action: DWORD:1
+    references:
+      cis:
+        id: 18.8.22.1.4
+        category: L2
+        value: Enabled
+      stig:
+        id: ""
+        category: ""
+        value: ""
+    notes: ""
+  - cid: C-W-GP-ADM-SYS-25
+    operating_systems:
+      - Windows
+    category: ""
+    policy:
+      '"Turn off Internet Connection Wizard if URL connection is referring to
+      Microsoft.com" is set to "Enabled".'
+    fix:
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Administrative Templates\System\Internet Communication
+          Management\Internet Communications settings
+        name: Turn off Internet Connection Wizard if URL connection is referring to Microsoft.com
+        value: Enabled
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\Windows\Internet Connection Wizard
+        registry_key: ExitOnMSICW
+        registry_action: DWORD:1
+    references:
+      cis:
+        id: 18.8.22.1.5
+        category: L2
+        value: Enabled
+      stig:
+        id: ""
+        category: ""
+        value: ""
+    notes: ""
+  - cid: C-W-GP-ADM-SYS-26
+    operating_systems:
+      - Windows
+    category: ""
+    policy:
+      '"Turn off Internet download for Web publishing and online ordering wizards"
+      is set to "Enabled".'
+    fix:
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Administrative Templates\System\Internet Communication
+          Management\Internet Communications settings
+        name: Turn off Internet download for Web publishing and online ordering wizards
+        value: Enabled
+        registry_hive: Computer
+        registry_path: Software\Microsoft\Windows\CurrentVersion\Policies\Explorer
+        registry_key: NoWebServices
+        registry_action: DWORD:1
+    references:
+      cis:
+        id: 18.8.22.1.6
+        category: L1
+        value: Enabled
+      stig:
+        id: V-220816
+        category: CAT II
+        value: Enabled
+    notes: ""
+  - cid: C-W-GP-ADM-SYS-27
+    operating_systems:
+      - Windows
+    category: ""
+    policy: '"Turn off printing over HTTP" is set to "Enabled".'
+    fix:
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Administrative Templates\System\Internet Communication
+          Management\Internet Communications settings
+        name: Turn off printing over HTTP
+        value: Enabled
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\Windows NT\Printers
+        registry_key: DisableHTTPPrinting
+        registry_action: DWORD:1
+    references:
+      cis:
+        id: 18.8.22.1.7
+        category: L2
+        value: Enabled
+      stig:
+        id: V-220817
+        category: CAT II
+        value: Enabled
+    notes: ""
+  - cid: C-W-GP-ADM-SYS-28
+    operating_systems:
+      - Windows
+    category: ""
+    policy:
+      '"Turn off Registration if URL connection is referring to Microsoft.com"
+      is set to "Enabled".'
+    fix:
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Administrative Templates\System\Internet Communication
+          Management\Internet Communications settings
+        name: Turn off Registration if URL connection is referring to Microsoft.com
+        value: Enabled
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\Windows\Registration Wizard Control
+        registry_key: NoRegistration
+        registry_action: DWORD:1
+    references:
+      cis:
+        id: 18.8.22.1.8
+        category: L2
+        value: Enabled
+      stig:
+        id: ""
+        category: ""
+        value: ""
+    notes: ""
+  - cid: C-W-GP-ADM-SYS-29
+    operating_systems:
+      - Windows
+    category: ""
+    policy: '"Turn off Search Companion content file updates" is set to "Enabled".'
+    fix:
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Administrative Templates\System\Internet Communication
+          Management\Internet Communications settings
+        name: Turn off Search Companion content file updates
+        value: Enabled
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\SearchCompanion
+        registry_key: DisableContentFileUpdates
+        registry_action: DWORD:1
+    references:
+      cis:
+        id: 18.8.22.1.9
+        category: L2
+        value: Enabled
+      stig:
+        id: ""
+        category: ""
+        value: ""
+    notes: ""
+  - cid: C-W-GP-ADM-SYS-30
+    operating_systems:
+      - Windows
+    category: ""
+    policy: '"Turn off the "Order Prints" picture task" is set to "Enabled".'
+    fix:
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Administrative Templates\System\Internet Communication
+          Management\Internet Communications settings
+        name: Turn off the "Order Prints" picture task
+        value: Enabled
+        registry_hive: Computer
+        registry_path: Software\Microsoft\Windows\CurrentVersion\Policies\Explorer
+        registry_key: NoOnlinePrintsWizard
+        registry_action: DWORD:1
+    references:
+      cis:
+        id: 18.8.22.1.10
+        category: L2
+        value: Enabled
+      stig:
+        id: ""
+        category: ""
+        value: ""
+    notes: ""
+  - cid: C-W-GP-ADM-SYS-31
+    operating_systems:
+      - Windows
+    category: ""
+    policy: '"Turn off the "Publish to Web" task for files and folders" is set to "Enabled".'
+    fix:
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Administrative Templates\System\Internet Communication
+          Management\Internet Communications settings
+        name: Turn off the "Publish to Web" task for files and folders
+        value: Enabled
+        registry_hive: Computer
+        registry_path: Software\Microsoft\Windows\CurrentVersion\Policies\Explorer
+        registry_key: NoPublishingWizard
+        registry_action: DWORD:1
+    references:
+      cis:
+        id: 18.8.22.1.11
+        category: L2
+        value: Enabled
+      stig:
+        id: ""
+        category: ""
+        value: ""
+    notes: ""
+  - cid: C-W-GP-ADM-SYS-32
+    operating_systems:
+      - Windows
+    category: ""
+    policy:
+      '"Turn off the Windows Messenger Customer Experience Improvement Program"
+      is set to "Enabled".'
+    fix:
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Administrative Templates\System\Internet Communication
+          Management\Internet Communications settings
+        name: Turn off the Windows Messenger Customer Experience Improvement Program
+        value: Enabled
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\Messenger\Client
+        registry_key: CEIP
+        registry_action: DWORD:2
+    references:
+      cis:
+        id: 18.8.22.1.12
+        category: L2
+        value: Enabled
+      stig:
+        id: ""
+        category: ""
+        value: ""
+    notes: ""
+  - cid: C-W-GP-ADM-SYS-33
+    operating_systems:
+      - Windows
+    category: ""
+    policy: '"Turn off Windows Customer Experience Improvement Program" is set to "Enabled".'
+    fix:
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Administrative Templates\System\Internet Communication
+          Management\Internet Communications settings
+        name: Turn off Windows Customer Experience Improvement Program
+        value: Enabled
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\SQMClient\Windows
+        registry_key: CEIPEnable
+        registry_action: DWORD:0
+    references:
+      cis:
+        id: 18.8.22.1.13
+        category: L2
+        value: Enabled
+      stig:
+        id: ""
+        category: ""
+        value: ""
+    notes: ""
+  - cid: C-W-GP-ADM-SYS-34
+    operating_systems:
+      - Windows
+    category: ""
+    policy: '"Turn off Windows Error Reporting" is set to "Enabled".'
+    fix:
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Administrative Templates\System\Internet Communication
+          Management\Internet Communications settings
+        name: Turn off Windows Error Reporting
+        value: Enabled
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\PCHealth\ErrorReporting
+        registry_key: DoReport
+        registry_action: DWORD:0
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Administrative Templates\System\Internet Communication
+          Management\Internet Communications settings
+        name: Turn off Windows Error Reporting
+        value: Enabled
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\Windows\Windows Error Reporting
+        registry_key: Disabled
+        registry_action: DWORD:1
+    references:
+      cis:
+        id: 18.8.22.1.14
+        category: L2
+        value: Enabled
+      stig:
+        id: ""
+        category: ""
+        value: ""
+    notes: ""
+  - cid: C-W-GP-ADM-SYS-35
+    operating_systems:
+      - Windows
+    category: ""
+    policy: '"Support device authentication using certificate" is set to "Enabled".'
+    fix:
+      - fix_type: group_policy
+        path: Computer Configuration\Administrative Templates\System\Kerberos
+        name: Support device authentication using certificate
+        value: "Enabled: Automatic"
+        registry_hive: Computer
+        registry_path: Software\Microsoft\Windows\CurrentVersion\Policies\System\Kerberos\Parameters
+        registry_key: DevicePKInitEnabled
+        registry_action: DWORD:1
+    references:
+      cis:
+        id: 18.8.25.1
+        category: L2
+        value: "Enabled"
+      stig:
+        id: V-220818
+        category: CAT II
+        value: Not Configured or Enabled
+    notes: ""
+  - cid: C-W-GP-ADM-SYS-35a
+    operating_systems:
+      - Windows
+    category: ""
+    policy: '"Support device authentication using certificate" is set to "Enabled: Automatic".'
+    fix:
+      - fix_type: group_policy
+        path: Computer Configuration\Administrative Templates\System\Kerberos
+        name: Support device authentication using certificate
+        value: "Enabled: Automatic"
+        registry_hive: Computer
+        registry_path: Software\Microsoft\Windows\CurrentVersion\Policies\System\Kerberos\Parameters
+        registry_key: DevicePKInitBehavior
+        registry_action: DWORD:0
+    references:
+      cis:
+        id: 18.8.25.1
+        category: L2
+        value: "Enabled: Automatic"
+      stig:
+        id: V-220818
+        category: CAT II
+        value: Not Configured or Enabled
+    notes: ""
+  - cid: C-W-GP-ADM-SYS-36
+    operating_systems:
+      - Windows
+    category: ""
+    policy:
+      '"Enumeration policy for external devices incompatible with Kernel DMA Protection"
+      is set to "Enabled: Block All".'
+    fix:
+      - fix_type: group_policy
+        path: Computer Configuration\Administrative Templates\System\Kernel DMA Protection
+        name: Enumeration policy for external devices incompatible with Kernel DMA Protection
+        value: "Enabled: Block All"
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\Windows\Kernel DMA Protection
+        registry_key: DeviceEnumerationPolicy
+        registry_action: DWORD:0
+    references:
+      cis:
+        id: 18.8.26.1
+        category: BL
+        value: "Enabled: Block All"
+      stig:
+        id: ""
+        category: ""
+        value: ""
+    notes: ""
+  - cid: C-W-GP-ADM-SYS-37
+    operating_systems:
+      - Windows
+    category: ""
+    policy:
+      '"Disallow copying of user input methods to the system account for sign-in"
+      is set to "Enabled".'
+    fix:
+      - fix_type: group_policy
+        path: Computer Configuration\Administrative Templates\System\Locale Services
+        name: Disallow copying of user input methods to the system account for sign-in
+        value: Enabled
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\Control Panel\International
+        registry_key: BlockUserInputMethodsForSignIn
+        registry_action: DWORD:1
+    references:
+      cis:
+        id: 18.8.27.1
+        category: L2
+        value: Enabled
+      stig:
+        id: V-220902
+        category: CAT II
+        value: "Enabled: Block All"
+    notes: ""
+  - cid: C-W-GP-ADM-SYS-38
+    operating_systems:
+      - Windows
+    category: ""
+    policy: '"Block user from showing account details on sign- in" is set to "Enabled".'
+    fix:
+      - fix_type: group_policy
+        path: Computer Configuration\Administrative Templates\System\Logon
+        name: Block user from showing account details on sign- in
+        value: Enabled
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\Windows\System
+        registry_key: BlockUserFromShowingAccountDetailsOnSignin
+        registry_action: DWORD:1
+    references:
+      cis:
+        id: 18.8.28.1
+        category: L1
+        value: Enabled
+      stig:
+        id: ""
+        category: ""
+        value: ""
+    notes: ""
+  - cid: C-W-GP-ADM-SYS-39
+    operating_systems:
+      - Windows
+    category: ""
+    policy: '"Do not display network selection UI" is set to "Enabled".'
+    fix:
+      - fix_type: group_policy
+        path: Computer Configuration\Administrative Templates\System\Logon
+        name: Do not display network selection UI
+        value: Enabled
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\Windows\System
+        registry_key: DontDisplayNetworkSelectionUI
+        registry_action: DWORD:1
+    references:
+      cis:
+        id: 18.8.28.2
+        category: L1
+        value: Enabled
+      stig:
+        id: V-220819
+        category: CAT II
+        value: Enabled
+    notes: ""
+  - cid: C-W-GP-ADM-SYS-40
+    operating_systems:
+      - Windows
+    category: ""
+    policy:
+      '"Do not enumerate connected users on domain-joined computers" is set to
+      "Enabled".'
+    fix:
+      - fix_type: group_policy
+        path: Computer Configuration\Administrative Templates\System\Logon
+        name: Do not enumerate connected users on domain-joined computers
+        value: Enabled
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\Windows\System
+        registry_key: DontEnumerateConnectedUsers
+        registry_action: DWORD:1
+    references:
+      cis:
+        id: 18.8.28.3
+        category: L1
+        value: Enabled
+      stig:
+        id: ""
+        category: ""
+        value: ""
+    notes: ""
+  - cid: C-W-GP-ADM-SYS-41
+    operating_systems:
+      - Windows
+    category: ""
+    policy: '"Enumerate local users on domain-joined computers" is set to "Disabled".'
+    fix:
+      - fix_type: group_policy
+        path: Computer Configuration\Administrative Templates\System\Logon
+        name: Enumerate local users on domain-joined computers
+        value: Disabled
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\Windows\System
+        registry_key: EnumerateLocalUsers
+        registry_action: DWORD:0
+    references:
+      cis:
+        id: 18.8.28.4
+        category: L1
+        value: Disabled
+      stig:
+        id: V-220820
+        category: CAT II
+        value: Disabled
+    notes: ""
+  - cid: C-W-GP-ADM-SYS-42
+    operating_systems:
+      - Windows
+    category: ""
+    policy: '"Turn off app notifications on the lock screen" is set to "Enabled".'
+    fix:
+      - fix_type: group_policy
+        path: Computer Configuration\Administrative Templates\System\Logon
+        name: Turn off app notifications on the lock screen
+        value: Enabled
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\Windows\System
+        registry_key: DisableLockScreenAppNotifications
+        registry_action: DWORD:1
+    references:
+      cis:
+        id: 18.8.28.5
+        category: L1
+        value: Enabled
+      stig:
+        id: ""
+        category: ""
+        value: ""
+    notes: ""
+  - cid: C-W-GP-ADM-SYS-43
+    operating_systems:
+      - Windows
+    category: ""
+    policy: '"Turn off picture password sign-in" is set to "Enabled".'
+    fix:
+      - fix_type: group_policy
+        path: Computer Configuration\Administrative Templates\System\Logon
+        name: Turn off picture password sign-in
+        value: Enabled
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\Windows\System
+        registry_key: BlockDomainPicturePassword
+        registry_action: DWORD:1
+    references:
+      cis:
+        id: 18.8.28.6
+        category: L1
+        value: Enabled
+      stig:
+        id: ""
+        category: ""
+        value: ""
+    notes: ""
+  - cid: C-W-GP-ADM-SYS-44
+    operating_systems:
+      - Windows
+    category: ""
+    policy: '"Turn on convenience PIN sign-in" is set to "Disabled".'
+    fix:
+      - fix_type: group_policy
+        path: Computer Configuration\Administrative Templates\System\Logon
+        name: Turn on convenience PIN sign-in
+        value: Disabled
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\Windows\System
+        registry_key: AllowDomainPINLogon
+        registry_action: DWORD:0
+    references:
+      cis:
+        id: 18.8.28.7
+        category: L1
+        value: Disabled
+      stig:
+        id: V-220870
+        category: CAT II
+        value: Disabled
+    notes: ""
+  - cid: C-W-GP-ADM-SYS-45
+    operating_systems:
+      - Windows
+    category: ""
+    policy: '"Allow Clipboard synchronization across devices" is set to "Disabled".'
+    fix:
+      - fix_type: group_policy
+        path: Computer Configuration\Administrative Templates\System\OS Policies
+        name: Allow Clipboard synchronization across devices
+        value: Disabled
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\Windows\System
+        registry_key: AllowDomainPINLogon
+        registry_action: DWORD:0
+    references:
+      cis:
+        id: 18.8.31.1
+        category: L2
+        value: Disabled
+      stig:
+        id: ""
+        category: ""
+        value: ""
+    notes: ""
+  - cid: C-W-GP-ADM-SYS-46
+    operating_systems:
+      - Windows
+    category: ""
+    policy: '"Allow upload of User Activities" is set to "Disabled".'
+    fix:
+      - fix_type: group_policy
+        path: Computer Configuration\Administrative Templates\System\OS Policies
+        name: Allow upload of User Activities
+        value: Disabled
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\Windows\System
+        registry_key: UploadUserActivities
+        registry_action: DWORD:0
+    references:
+      cis:
+        id: 18.8.31.2
+        category: L2
+        value: Disabled
+      stig:
+        id: ""
+        category: ""
+        value: ""
+    notes: ""
+  - cid: C-W-GP-ADM-SYS-47
+    operating_systems:
+      - Windows
+    category: ""
+    policy: '"Minimum PIN length" is set to "6".'
+    fix:
+      - fix_type: group_policy
+        path: Computer Configuration\Administrative Templates\System\PIN Complexity
+        name: Minimum PIN length
+        value: "6"
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\PassportForWork\PINComplexity
+        registry_key: MinimumPINLength
+        registry_action: DWORD:6
+    references:
+      cis:
+        id: ""
+        category: ""
+        value: ""
+      stig:
+        id: V-220847
+        category: CAT II
+        value: 6 or greater
+    notes: ""
+  - cid: C-W-GP-ADM-SYS-48
+    operating_systems:
+      - Windows
+    category: ""
+    policy:
+      '"Allow network connectivity during connected-standby (on battery)" is set
+      to "Disabled".'
+    fix:
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Administrative Templates\System\Power Management\Sleep
+          Settings
+        name: Allow network connectivity during connected-standby (on battery)
+        value: Disabled
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\Power\PowerSettings\f15576e8-98b7-4186-b944-eafa664402d9
+        registry_key: DCSettingIndex
+        registry_action: DWORD:0
+    references:
+      cis:
+        id: 18.8.34.6.1
+        category: L1
+        value: Disabled
+      stig:
+        id: ""
+        category: ""
+        value: ""
+    notes: ""
+  - cid: C-W-GP-ADM-SYS-49
+    operating_systems:
+      - Windows
+    category: ""
+    policy:
+      '"Allow network connectivity during connected-standby (plugged in)" is set
+      to "Disabled".'
+    fix:
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Administrative Templates\System\Power Management\Sleep
+          Settings
+        name: Allow network connectivity during connected-standby (plugged in)
+        value: Disabled
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\Power\PowerSettings\f15576e8-98b7-4186-b944-eafa664402d9
+        registry_key: ACSettingIndex
+        registry_action: DWORD:0
+    references:
+      cis:
+        id: 18.8.34.6.2
+        category: L1
+        value: Disabled
+      stig:
+        id: ""
+        category: ""
+        value: ""
+    notes: ""
+  - cid: C-W-GP-ADM-SYS-50
+    operating_systems:
+      - Windows
+    category: ""
+    policy: '"Allow standby states (S1-S3) when sleeping (on battery)" is set to "Disabled".'
+    fix:
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Administrative Templates\System\Power Management\Sleep
+          Settings
+        name: Allow standby states (S1-S3) when sleeping (on battery)
+        value: Disabled
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\Power\PowerSettings\abfc2519-3608-4c2a-94ea-171b0ed546ab
+        registry_key: DCSettingIndex
+        registry_action: DWORD:0
+    references:
+      cis:
+        id: 18.8.34.6.3
+        category: BL
+        value: Disabled
+      stig:
+        id: ""
+        category: ""
+        value: ""
+    notes: ""
+  - cid: C-W-GP-ADM-SYS-51
+    operating_systems:
+      - Windows
+    category: ""
+    policy: '"Allow standby states (S1-S3) when sleeping (plugged in)" is set to "Disabled".'
+    fix:
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Administrative Templates\System\Power Management\Sleep
+          Settings
+        name: Allow standby states (S1-S3) when sleeping (plugged in)
+        value: Disabled
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\Power\PowerSettings\abfc2519-3608-4c2a-94ea-171b0ed546ab
+        registry_key: ACSettingIndex
+        registry_action: DWORD:0
+    references:
+      cis:
+        id: 18.8.34.6.4
+        category: BL
+        value: Disabled
+      stig:
+        id: ""
+        category: ""
+        value: ""
+    notes: ""
+  - cid: C-W-GP-ADM-SYS-52
+    operating_systems:
+      - Windows
+    category: ""
+    policy: '"Require a password when a computer wakes (on battery)" is set to "Enabled".'
+    fix:
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Administrative Templates\System\Power Management\Sleep
+          Settings
+        name: Require a password when a computer wakes (on battery)
+        value: Enabled
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\Power\PowerSettings\0e796bdb-100d-47d6-a2d5-f7d2daa51f51
+        registry_key: DCSettingIndex
+        registry_action: DWORD:1
+    references:
+      cis:
+        id: 18.8.34.6.5
+        category: L1
+        value: Enabled
+      stig:
+        id: V-220821
+        category: CAT II
+        value: Enabled
+    notes: ""
+  - cid: C-W-GP-ADM-SYS-53
+    operating_systems:
+      - Windows
+    category: ""
+    policy: '"Require a password when a computer wakes (plugged in)" is set to "Enabled".'
+    fix:
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Administrative Templates\System\Power Management\Sleep
+          Settings
+        name: Require a password when a computer wakes (plugged in)
+        value: Enabled
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\Power\PowerSettings\0e796bdb-100d-47d6-a2d5-f7d2daa51f51
+        registry_key: ACSettingIndex
+        registry_action: DWORD:1
+    references:
+      cis:
+        id: 18.8.34.6.6
+        category: L1
+        value: Enabled
+      stig:
+        id: V-220822
+        category: CAT II
+        value: Enabled
+    notes: ""
+  - cid: C-W-GP-ADM-SYS-54
+    operating_systems:
+      - Windows
+    category: ""
+    policy: '"Configure Offer Remote Assistance" is set to "Disabled".'
+    fix:
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Administrative Templates\System\Power Management\Remote
+          Assistance
+        name: Configure Offer Remote Assistance
+        value: Disabled
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\Windows NT\Terminal Services
+        registry_key: fAllowUnsolicited
+        registry_action: DWORD:0
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Administrative Templates\System\Power Management\Remote
+          Assistance
+        name: Configure Offer Remote Assistance
+        value: Disabled
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\Windows NT\Terminal Services\RAUnsolicit
+        registry_key: "*"
+        registry_action: DELETEALLVALUES
+    references:
+      cis:
+        id: 18.8.36.1
+        category: L1
+        value: Disabled
+      stig:
+        id: ""
+        category: ""
+        value: ""
+    notes: ""
+  - cid: C-W-GP-ADM-SYS-55
+    operating_systems:
+      - Windows
+    category: ""
+    policy: '"Configure Solicited Remote Assistance" is set to "Disabled".'
+    fix:
+      - fix_type: group_policy
+        path: Computer Configuration\Administrative Templates\System\Remote Assistance
+        name: Configure Solicited Remote Assistance
+        value: Disabled
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\Windows NT\Terminal Services
+        registry_key: fAllowToGetHelp
+        registry_action: DWORD:0
+      - fix_type: group_policy
+        path: Computer Configuration\Administrative Templates\System\Remote Assistance
+        name: Configure Solicited Remote Assistance
+        value: Disabled
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\Windows NT\Terminal Services
+        registry_key: fAllowFullControl
+        registry_action: DELETE
+      - fix_type: group_policy
+        path: Computer Configuration\Administrative Templates\System\Remote Assistance
+        name: Configure Solicited Remote Assistance
+        value: Disabled
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\Windows NT\Terminal Services
+        registry_key: MaxTicketExpiry
+        registry_action: DELETE
+      - fix_type: group_policy
+        path: Computer Configuration\Administrative Templates\System\Remote Assistance
+        name: Configure Solicited Remote Assistance
+        value: Disabled
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\Windows NT\Terminal Services
+        registry_key: fUseMailto
+        registry_action: DELETE
+    references:
+      cis:
+        id: 18.8.36.2
+        category: L1
+        value: Disabled
+      stig:
+        id: V-220823
+        category: CAT I
+        value: Disabled
+    notes: ""
+  - cid: C-W-GP-ADM-SYS-56
+    operating_systems:
+      - Windows
+    category: ""
+    policy: '"Enable RPC Endpoint Mapper Client Authentication" is set to "Enabled".'
+    fix:
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Administrative Templates\System\Power Management\Remote
+          Procedure Call
+        name: Enable RPC Endpoint Mapper Client Authentication
+        value: Enabled
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\Windows NT\Rpc
+        registry_key: EnableAuthEpResolution
+        registry_action: DWORD:1
+    references:
+      cis:
+        id: 18.8.37.1
+        category: L1
+        value: Enabled
+      stig:
+        id: ""
+        category: ""
+        value: ""
+    notes: ""
+  - cid: C-W-GP-ADM-SYS-57
+    operating_systems:
+      - Windows
+    category: ""
+    policy: '"Restrict Unauthenticated RPC clients" is set to "Enabled: Authenticated".'
+    fix:
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Administrative Templates\System\Power Management\Remote
+          Procedure Call
+        name: Restrict Unauthenticated RPC clients
+        value: "Enabled: Authenticated"
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\Windows NT\Rpc
+        registry_key: RestrictRemoteClients
+        registry_action: DWORD:1
+    references:
+      cis:
+        id: 18.8.37.2
+        category: L1
+        value: "Enabled: Authenticated"
+      stig:
+        id: V-220824
+        category: CAT II
+        value: "Enabled: Authenticated"
+    notes: ""
+  - cid: C-W-GP-ADM-SYS-58
+    operating_systems:
+      - Windows
+    category: ""
+    policy:
+      '"Microsoft Support Diagnostic Tool: Turn on MSDT interactive communication
+      with support provider" is set to "Disabled".'
+    fix:
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Administrative Templates\System\Troubleshooting and
+          Diagnostics\Microsoft Support Diagnostic Tool
+        name:
+          "Microsoft Support Diagnostic Tool: Turn on MSDT interactive communication
+          with support provider"
+        value: Disabled
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\Windows\ScriptedDiagnosticsProvider\Policy
+        registry_key: DisableQueryRemoteServer
+        registry_action: DWORD:0
+    references:
+      cis:
+        id: 18.8.47.5.1
+        category: L2
+        value: Disabled
+      stig:
+        id: ""
+        category: ""
+        value: ""
+    notes: ""
+  - cid: C-W-GP-ADM-SYS-59
+    operating_systems:
+      - Windows
+    category: ""
+    policy: '"Enable/Disable PerfTrack" is set to "Disabled".'
+    fix:
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Administrative Templates\System\Troubleshooting and
+          Diagnostics\Windows Performance PerfTrack
+        name: Enable/Disable PerfTrack
+        value: Disabled
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\Windows\WDI\{9c5a40da-b965-4fc3-8781-88dd50a6299d}
+        registry_key: ScenarioExecutionEnabled
+        registry_action: DWORD:0
+    references:
+      cis:
+        id: 18.8.47.11.1
+        category: L2
+        value: Disabled
+      stig:
+        id: ""
+        category: ""
+        value: ""
+    notes: ""
+  - cid: C-W-GP-ADM-SYS-60
+    operating_systems:
+      - Windows
+    category: ""
+    policy: '"Turn off the advertising ID" is set to "Enabled".'
+    fix:
+      - fix_type: group_policy
+        path: Computer Configuration\Administrative Templates\System\User Profiles
+        name: Turn off the advertising ID
+        value: Enabled
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\Windows\AdvertisingInfo
+        registry_key: DisabledByGroupPolicy
+        registry_action: DWORD:1
+    references:
+      cis:
+        id: 18.8.49.1
+        category: L2
+        value: Enabled
+      stig:
+        id: ""
+        category: ""
+        value: ""
+    notes: ""
+  - cid: C-W-GP-ADM-SYS-61
+    operating_systems:
+      - Windows
+    category: ""
+    policy: '"Enable Windows NTP Client" is set to "Enabled".'
+    fix:
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Administrative Templates\System\Windows Time Service\Time
+          Providers
+        name: Enable Windows NTP Client
+        value: Enabled
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\W32time\TimeProviders\NtpClient
+        registry_key: Enabled
+        registry_action: DWORD:1
+    references:
+      cis:
+        id: 18.8.52.1.1
+        category: L2
+        value: Enabled
+      stig:
+        id: ""
+        category: ""
+        value: ""
+    notes: ""
+  - cid: C-W-GP-ADM-SYS-62
+    operating_systems:
+      - Windows
+    category: ""
+    policy: '"Enable Windows NTP Server" is set to "Disabled".'
+    fix:
+      - fix_type: group_policy
+        path:
+          Computer Configuration\Administrative Templates\System\Windows Time Service\Time
+          Providers
+        name: Enable Windows NTP Server
+        value: Disabled
+        registry_hive: Computer
+        registry_path: Software\Policies\Microsoft\W32time\TimeProviders\NtpServer
+        registry_key: Enabled
+        registry_action: DWORD:0
+    references:
+      cis:
+        id: 18.8.52.1.2
+        category: L2
+        value: Disabled
+      stig:
+        id: ""
+        category: ""
+        value: ""
+    notes: ""

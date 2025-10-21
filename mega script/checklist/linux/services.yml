@@ -1,0 +1,387 @@
+version: 1.0
+name: Services
+vulnerabilities:
+  - cid: C-UD-SRVC-01
+    operating_systems:
+      - Ubuntu
+      - Debian
+    category: Servers
+    policy: Avahi Server is not installed.
+    fix:
+      - fix_type: command
+        command: apt-get purge -y avahi-daemon
+    references:
+      cis:
+        id: 2.2.2
+        category: L1
+    notes: ""
+  - cid: C-UD-SRVC-02
+    operating_systems:
+      - Ubuntu
+      - Debian
+    category: Servers
+    policy: CUPS is not installed.
+    fix:
+      - fix_type: command
+        command: apt-get purge -y cups
+    references:
+      cis:
+        id: 2.2.3
+        category: L1
+    notes: ""
+  - cid: C-UD-SRVC-03
+    operating_systems:
+      - Ubuntu
+      - Debian
+    category: Servers
+    policy: DHCP Server is not installed.
+    fix:
+      - fix_type: command
+        command: apt-get purge -y isc-dhcp-server
+    references:
+      cis:
+        id: 2.2.4
+        category: L1
+    notes: ""
+  - cid: C-UD-SRVC-04
+    operating_systems:
+      - Ubuntu
+      - Debian
+    category: Servers
+    policy: LDAP Server is not installed.
+    fix:
+      - fix_type: command
+        command: apt-get purge -y slapd
+    references:
+      cis:
+        id: 2.2.5
+        category: L1
+    notes: ""
+  - cid: C-UD-SRVC-05
+    operating_systems:
+      - Ubuntu
+      - Debian
+    category: Servers
+    policy: NFS is not installed.
+    fix:
+      - fix_type: command
+        command: apt-get purge -y nfs-kernel-server
+    references:
+      cis:
+        id: 2.2.6
+        category: L1
+    notes: ""
+  - cid: C-UD-SRVC-06
+    operating_systems:
+      - Ubuntu
+      - Debian
+    category: Servers
+    policy: DNS Server is not installed.
+    fix:
+      - fix_type: command
+        command: apt-get purge -y bind9
+    references:
+      cis:
+        id: 2.2.7
+        category: L1
+    notes: ""
+  - cid: C-UD-SRVC-07
+    operating_systems:
+      - Ubuntu
+      - Debian
+    applies_to:
+      - Not FTP
+    category: Servers
+    policy: FTP Server is not installed.
+    fix:
+      - fix_type: command
+        command: apt-get purge -y *ftp*
+    references:
+      cis:
+        id: 2.2.8
+        category: L1
+    notes: ""
+  - cid: C-UD-SRVC-08
+    operating_systems:
+      - Ubuntu
+      - Debian
+    applies_to:
+      - Not apache2
+    category: Servers
+    policy: HTTP Server is not installed.
+    fix:
+      - fix_type: command
+        command: apt-get purge -y apache2
+    references:
+      cis:
+        id: 2.2.9
+        category: L1
+    notes: ""
+  - cid: C-UD-SRVC-09
+    operating_systems:
+      - Ubuntu
+      - Debian
+    category: Servers
+    policy: IMAP and POP3 server are not installed.
+    fix:
+      - fix_type: command
+        command: apt-get purge -y dovecot-imapd dovecot-pop3d
+    references:
+      cis:
+        id: 2.2.10
+        category: L1
+    notes: ""
+  - cid: C-UD-SRVC-10
+    operating_systems:
+      - Ubuntu
+      - Debian
+    applies_to:
+      - Not Samba
+    category: Servers
+    policy: Samba is not installed.
+    fix:
+      - fix_type: command
+        command: apt-get purge -y samba
+    references:
+      cis:
+        id: 2.2.11
+        category: L1
+    notes: ""
+  - cid: C-UD-SRVC-11
+    operating_systems:
+      - Ubuntu
+      - Debian
+    category: Servers
+    policy: HTTP Proxy Server is not installed.
+    fix:
+      - fix_type: command
+        command: apt-get purge -y squid
+    references:
+      cis:
+        id: 2.2.12
+        category: L1
+    notes: ""
+  - cid: C-UD-SRVC-12
+    operating_systems:
+      - Ubuntu
+      - Debian
+    category: Servers
+    policy: SNMP Server is not installed.
+    fix:
+      - fix_type: command
+        command: apt-get purge -y snmp
+    references:
+      cis:
+        id: 2.2.13
+        category: L1
+    notes: ""
+  - cid: C-UD-SRVC-13
+    operating_systems:
+      - Ubuntu
+      - Debian
+    category: Servers
+    policy: NIS Server is not installed.
+    fix:
+      - fix_type: command
+        command: apt-get purge -y nis
+    references:
+      cis:
+        id: 2.2.13
+        category: L1
+    notes: ""
+  - cid: C-UD-SRVC-14
+    operating_systems:
+      - Ubuntu
+      - Debian
+    applies_to:
+      - Not Mail
+    category: Servers
+    policy: Postfix server is not running.
+    fix:
+      - fix_type: command
+        command: systemctl stop postfix; systemctl disable postfix; apt purge -y postfix
+    references:
+      cis:
+        id: 2.2.14
+        category: L1
+    notes: ""
+  - cid: C-UD-SRVC-15
+    operating_systems:
+      - Ubuntu
+      - Debian
+    category: Servers
+    policy: Rsync is removed.
+    fix:
+      - fix_type: command
+        command: apt purge -y rsync
+    references:
+      cis:
+        id: 2.2.14
+        category: L1
+    notes: ""
+  - cid: C-UD-SRVC-15
+    operating_systems:
+      - Ubuntu
+      - Debian
+    category: Servers
+    policy: rsh-server is removed.
+    fix:
+      - fix_type: command
+        command: apt purge -y rsh-server
+    references:
+      stig:
+        id: V-238327
+        category: CAT I
+    notes: ""
+  - cid: C-UD-SRVC-16
+    operating_systems:
+      - Ubuntu
+      - Debian
+    category: Clients
+    policy: NIS Client is removed.
+    fix:
+      - fix_type: command
+        command: apt purge -y nis
+    references:
+      cis:
+        id: 2.3.1
+        category: L1
+    notes: ""
+  - cid: C-UD-SRVC-17
+    operating_systems:
+      - Ubuntu
+      - Debian
+    category: Clients
+    policy: Rsh client is removed.
+    fix:
+      - fix_type: command
+        command: apt purge -y rsh-client
+    references:
+      cis:
+        id: 2.3.2
+        category: L1
+    notes: ""
+  - cid: C-UD-SRVC-18
+    operating_systems:
+      - Ubuntu
+      - Debian
+    category: Clients
+    policy: Talk client is removed.
+    fix:
+      - fix_type: command
+        command: apt purge -y talk
+    references:
+      cis:
+        id: 2.3.3
+        category: L1
+    notes: ""
+  - cid: C-UD-SRVC-19
+    operating_systems:
+      - Ubuntu
+      - Debian
+    category: Clients
+    policy: Telnet client is removed.
+    fix:
+      - fix_type: command
+        command: apt purge -y telnet*
+    references:
+      cis:
+        id: 2.3.4
+        category: L1
+      stig:
+        id: V-238236
+        category: CAT I
+    notes: ""
+  - cid: C-UD-SRVC-20
+    operating_systems:
+      - Ubuntu
+      - Debian
+    category: Clients
+    policy: LDAP client is removed.
+    fix:
+      - fix_type: command
+        command: apt purge -y ldap-utils
+    references:
+      cis:
+        id: 2.3.5
+        category: L1
+    notes: ""
+  - cid: C-UD-SRVC-21
+    operating_systems:
+      - Ubuntu
+      - Debian
+    category: Clients
+    policy: RPC is removed.
+    fix:
+      - fix_type: command
+        command: apt purge -y rpcbind
+    references:
+      cis:
+        id: 2.3.6
+        category: L1
+    notes: ""
+  - cid: C-UD-SRVC-22
+    operating_systems:
+      - Ubuntu
+      - Debian
+    category: Clients
+    policy: sssd is removed.
+    fix:
+      - fix_type: command
+        command: apt purge -y sssd
+    references:
+      cis:
+        id: 2.3.6
+        category: L1
+    notes: ""
+
+  - cid: C-UD-SRVC-23
+    operating_systems:
+      - Ubuntu
+      - Debian
+    category: Clients
+    policy: Check for remaining nonessential services.
+    fix:
+      - fix_type: manual
+        steps: |
+          Run command: `lsof -i -P -n | grep -v "(ESTABLISHED)"``
+          This will show services that are currently listening on a network port.
+          In addition, run `systemctl --type=service`.
+          Run `apt purge <service>` or `systemctl stop <service>; systemctl disable <service>` to remove it.
+    references:
+      cis:
+        id: "2.4"
+        category: L1
+    notes: ""
+  - cid: C-F-SRVC-23
+    operating_systems:
+      - Fedora
+    category: Clients
+    policy: Check for remaining nonessential services.
+    fix:
+      - fix_type: manual
+        steps: |
+          Run command: `lsof -i -P -n | grep -v "(ESTABLISHED)"``
+          This will show services that are currently listening on a network port.
+          In addition, run `systemctl --type=service`.
+          Run `dnf remove <service>` or `systemctl stop <service>; systemctl disable <service>` to remove it.
+    references:
+      cis:
+        id: "2.4"
+        category: L1
+    notes: ""
+  - cid: C-UDF-SRVC-24
+    operating_systems:
+      - Ubuntu
+      - Debian
+      - Fedora
+    category: Built-In
+    policy: Systemd-timesyncd is enabled and running.
+    fix:
+      - fix_type: command
+        command: systemctl unmask systemd-timesyncd.service; systemctl --now enable systemd-timesyncd.service
+    references:
+      cis:
+        id: 2.1.3.2
+        category: L1
+    notes: ""

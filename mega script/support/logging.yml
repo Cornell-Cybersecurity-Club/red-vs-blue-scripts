@@ -1,0 +1,29 @@
+version: 1
+formatters:
+  console:
+    (): poochbot.utils.ConsoleLogFormatter
+  file:
+    format: "[%(asctime)s] [%(name)s] [%(levelname)s] : %(message)s"
+handlers:
+  console:
+    class: logging.StreamHandler
+    formatter: console
+    level: INFO
+    stream: ext://sys.stdout
+  file:
+    class: logging.FileHandler
+    formatter: file
+    level: INFO
+    filename: poochbot.log
+  file_verbose:
+    class: logging.FileHandler
+    formatter: file
+    level: DEBUG
+    filename: poochbot_verbose.log
+root:
+  level: DEBUG
+  handlers:
+    - console
+    - file
+    - file_verbose
+disable_existing_loggers: false

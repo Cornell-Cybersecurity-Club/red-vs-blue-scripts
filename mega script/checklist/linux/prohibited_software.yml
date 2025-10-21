@@ -1,0 +1,311 @@
+version: 1.0
+name: misc
+vulnerabilities:
+  - cid: C-UD-PHBS-HT-01
+    operating_systems:
+      - Ubuntu
+      - Debian
+    category: "Prohibited Software: Hacking Tools"
+    policy: John the Ripper is removed.
+    fix:
+      - fix_type: command
+        command: apt-get purge -y john*
+  - cid: C-UD-PHBS-HT-02
+    operating_systems:
+      - Ubuntu
+      - Debian
+    category: "Prohibited Software: Hacking Tools"
+    policy: Hydra is removed.
+    fix:
+      - fix_type: command
+        command: apt-get purge -y hydra*
+  - cid: C-UD-PHBS-HT-03
+    operating_systems:
+      - Ubuntu
+      - Debian
+    category: "Prohibited Software: Hacking Tools"
+    policy: Nikto is removed.
+    fix:
+      - fix_type: command
+        command: apt-get purge -y nikto*
+  - cid: C-UD-PHBS-HT-04
+    operating_systems:
+      - Ubuntu
+      - Debian
+    category: "Prohibited Software: Hacking Tools"
+    policy: Netcat is removed.
+    fix:
+      - fix_type: command
+        command: apt-get purge -y netcat*
+  - cid: C-UD-PHBS-HT-05
+    operating_systems:
+      - Ubuntu
+      - Debian
+    category: "Prohibited Software: Hacking Tools"
+    policy: Nginx is removed.
+    fix:
+      - fix_type: command
+        command: apt-get purge -y nginx*
+  - cid: C-UD-PHBS-HT-06
+    operating_systems:
+      - Ubuntu
+      - Debian
+    category: "Prohibited Software: Hacking Tools"
+    policy: Wireshark is removed.
+    fix:
+      - fix_type: command
+        command: apt-get purge -y wireshark*
+  - cid: C-UD-PHBS-HT-07
+    operating_systems:
+      - Ubuntu
+      - Debian
+    category: "Prohibited Software: Hacking Tools"
+    policy: Abyss is removed.
+    fix:
+      - fix_type: command
+        command: apt-get purge -y abyss*
+
+  - cid: C-UD-PHBS-HT-08
+    operating_systems:
+      - Ubuntu
+      - Debian
+    category: "Prohibited Software: Hacking Tools"
+    policy: Ophcrack is removed.
+    fix:
+      - fix_type: command
+        command: apt-get purge -y ophcrack*
+  - cid: C-UD-PHBS-HT-09
+    operating_systems:
+      - Ubuntu
+      - Debian
+    category: "Prohibited Software: Hacking Tools"
+    policy: Rainbowcrack is removed.
+    fix:
+      - fix_type: command
+        command: apt-get purge -y rainbowcrack*
+  - cid: C-UD-PHBS-HT-10
+    operating_systems:
+      - Ubuntu
+      - Debian
+    category: "Prohibited Software: Hacking Tools"
+    policy: Radmin is removed.
+    fix:
+      - fix_type: command
+        command: apt-get purge -y radmin*
+  - cid: C-UD-PHBS-HT-11
+    operating_systems:
+      - Ubuntu
+      - Debian
+    category: "Prohibited Software: Hacking Tools"
+    policy: Nmap is removed.
+    fix:
+      - fix_type: command
+        command: apt-get purge -y nmap*
+  - cid: C-UD-PHBS-HT-12
+    operating_systems:
+      - Ubuntu
+      - Debian
+    category: "Prohibited Software: Hacking Tools"
+    policy: Zenmap is removed.
+    fix:
+      - fix_type: command
+        command: apt-get purge -y zenmap*
+  - cid: C-UD-PHBS-HT-13
+    operating_systems:
+      - Ubuntu
+      - Debian
+    category: "Prohibited Software: Hacking Tools"
+    policy: Telnet is removed.
+    fix:
+      - fix_type: command
+        command: apt-get purge -y *telnet*
+  - cid: C-UD-PHBS-HT-14
+    operating_systems:
+      - Ubuntu
+      - Debian
+    category: "Prohibited Software: Hacking Tools"
+    policy: Deluge is removed.
+    fix:
+      - fix_type: command
+        command: apt-get purge -y deluge*
+  - cid: C-UD-PHBS-HT-15
+    operating_systems:
+      - Ubuntu
+      - Debian
+    category: "Prohibited Software: Hacking Tools"
+    policy: Yersenia is removed.
+    fix:
+      - fix_type: command
+        command: apt-get purge -y yersenia*
+  - cid: C-UD-PHBS-HT-16
+    operating_systems:
+      - Ubuntu
+      - Debian
+    category: "Prohibited Software: Hacking Tools"
+    policy: Kismet is removed.
+    fix:
+      - fix_type: command
+        command: apt-get purge -y kismet*
+  - cid: C-UD-SOFT-01
+    operating_systems:
+      - Ubuntu
+      - Debian
+    category: Unnecessary Software
+    policy: apport* is removed.
+    fix:
+      - fix_type: command
+        command: apt-get purge -y apport*
+    references:
+      other: https://github.com/konstruktoid/hardening/blob/master/scripts/packages
+  - cid: C-UD-SOFT-02
+    operating_systems:
+      - Ubuntu
+      - Debian
+    category: Unnecessary Software
+    policy: autofs is removed.
+    fix:
+      - fix_type: command
+        command: apt-get purge -y autofs
+    references:
+      other: https://github.com/konstruktoid/hardening/blob/master/scripts/packages
+  - cid: C-UD-SOFT-03
+    operating_systems:
+      - Ubuntu
+      - Debian
+    category: Unnecessary Software
+    policy: avahi* is removed.
+    fix:
+      - fix_type: command
+        command: apt-get purge -y avahi*
+    references:
+      other: https://github.com/konstruktoid/hardening/blob/master/scripts/packages
+  - cid: C-UD-SOFT-04
+    operating_systems:
+      - Ubuntu
+      - Debian
+    category: Unnecessary Software
+    policy: beep is removed.
+    fix:
+      - fix_type: command
+        command: apt-get purge -y beep
+    references:
+      other: https://github.com/konstruktoid/hardening/blob/master/scripts/packages
+  - cid: C-UD-SOFT-05
+    operating_systems:
+      - Ubuntu
+      - Debian
+    category: Unnecessary Software
+    policy: git is removed.
+    fix:
+      - fix_type: command
+        command: apt-get purge -y git
+    references:
+      other: https://github.com/konstruktoid/hardening/blob/master/scripts/packages
+  - cid: C-UD-SOFT-06
+    operating_systems:
+      - Ubuntu
+      - Debian
+    category: Unnecessary Software
+    policy: pastebinit is removed.
+    fix:
+      - fix_type: command
+        command: apt-get purge -y pastebinit
+    references:
+      other: https://github.com/konstruktoid/hardening/blob/master/scripts/packages
+  - cid: C-UD-SOFT-07
+    operating_systems:
+      - Ubuntu
+      - Debian
+    category: Unnecessary Software
+    policy: popularity-contest is removed.
+    fix:
+      - fix_type: command
+        command: apt-get purge -y popularity-contest
+    references:
+      other: https://github.com/konstruktoid/hardening/blob/master/scripts/packages
+  - cid: C-UD-SOFT-08
+    operating_systems:
+      - Ubuntu
+      - Debian
+    category: Unnecessary Software
+    policy: rsh* is removed.
+    fix:
+      - fix_type: command
+        command: apt-get purge -y rsh*
+    references:
+      other: https://github.com/konstruktoid/hardening/blob/master/scripts/packages
+  - cid: C-UD-SOFT-09
+    operating_systems:
+      - Ubuntu
+      - Debian
+    category: Unnecessary Software
+    policy: rsync is removed.
+    fix:
+      - fix_type: command
+        command: apt-get purge -y rsync
+    references:
+      other: https://github.com/konstruktoid/hardening/blob/master/scripts/packages
+  - cid: C-UD-SOFT-10
+    operating_systems:
+      - Ubuntu
+      - Debian
+    category: Unnecessary Software
+    policy: talk* is removed.
+    fix:
+      - fix_type: command
+        command: apt-get purge -y talk*
+    references:
+      other: https://github.com/konstruktoid/hardening/blob/master/scripts/packages
+  - cid: C-UD-SOFT-11
+    operating_systems:
+      - Ubuntu
+      - Debian
+    category: Unnecessary Software
+    policy: whoopsie is removed.
+    fix:
+      - fix_type: command
+        command: apt-get purge -y whoopsie
+    references:
+      other: https://github.com/konstruktoid/hardening/blob/master/scripts/packages
+  - cid: C-UD-SOFT-12
+    operating_systems:
+      - Ubuntu
+      - Debian
+    category: Unnecessary Software
+    policy: xinetd is removed.
+    fix:
+      - fix_type: command
+        command: apt-get purge -y xinetd
+    references:
+      other: https://github.com/konstruktoid/hardening/blob/master/scripts/packages
+  - cid: C-UD-SOFT-13
+    operating_systems:
+      - Ubuntu
+      - Debian
+    category: Unnecessary Software
+    policy: yp-tools is removed.
+    fix:
+      - fix_type: command
+        command: apt-get purge -y yp-tools
+    references:
+      other: https://github.com/konstruktoid/hardening/blob/master/scripts/packages
+  - cid: C-UD-SOFT-14
+    operating_systems:
+      - Ubuntu
+      - Debian
+    category: Unnecessary Software
+    policy: ypbind is removed.
+    fix:
+      - fix_type: command
+        command: apt-get purge -y ypbind
+    references:
+      other: https://github.com/konstruktoid/hardening/blob/master/scripts/packages
+  - cid: C-UD-SOFT-15
+    operating_systems:
+      - Ubuntu
+      - Debian
+    category: Unnecessary Software
+    policy: Zangband is removed.
+    fix:
+      - fix_type: command
+        command: apt-get purge -y zangband

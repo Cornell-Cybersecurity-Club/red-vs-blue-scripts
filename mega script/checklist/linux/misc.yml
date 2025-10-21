@@ -1,0 +1,878 @@
+version: 1.0
+name: misc
+vulnerabilities:
+  - cid: C-UDF-FS-08
+    operating_systems:
+      - Ubuntu
+      - Debian
+      - Fedora
+    category: File Systems
+    policy: Automounting is disabled.
+    fix:
+      - fix_type: command
+        command: systemctl --now disable autofs
+    references:
+      cis:
+        id: 1.1.9
+        category: L2
+  #- cid: C-UD-PROC-07
+  #  operating_systems:
+  #    - Ubuntu
+  #    - Debian
+  #  category: Process Hardening
+  #  policy: Prelink is not installed.
+  #  fix:
+  #    - fix_type: command
+  #      command: prelink -ua
+  #    - fix_type: command
+  #      command: apt-get purge -y prelink
+  #  references:
+  #    cis:
+  #      id: 1.5.2
+  #      category: L1
+  #    other: https://github.com/konstruktoid/hardening/blob/master/scripts/prelink
+  #- cid: C-UD-PROC-08
+  #  operating_systems:
+  #    - Ubuntu
+  #    - Debian
+  #  category: Process Hardening
+  #  policy: Automatic Error Reporting is disabled.
+  #  fix:
+  #    - fix_type: command
+  #      command: apt purge -y apport
+  #  references:
+  #    cis:
+  #      id: 1.5.3
+  #      category: L1
+  #- cid: C-UD-PROC-08
+  #  operating_systems:
+  #    - Ubuntu
+  #    - Debian
+  #  category: Process Hardening
+  #  policy: Ubuntu-report is removed.
+  #  fix:
+  #    - fix_type: command
+  #      command: apt purge -y ubuntu-report
+  #  references:
+  #    other: https://github.com/konstruktoid/hardening/blob/master/scripts/apport
+  #- cid: C-UD-PROC-08
+  #  operating_systems:
+  #    - Ubuntu
+  #    - Debian
+  #  category: Process Hardening
+  #  policy: Popularity-contest is removed.
+  #  fix:
+  #    - fix_type: command
+  #      command: apt purge -y popularity-contest
+  #  references:
+  #    other: https://github.com/konstruktoid/hardening/blob/master/scripts/apport
+  - cid: C-UD-PROC-09
+    operating_systems:
+      - Ubuntu
+      - Debian
+    category: Process Hardening
+    policy: Core dumps are restricted.
+    fix:
+      - fix_type: config_file
+        file: /etc/security/limits.conf
+        text: "* hard core 0"
+      - fix_type: config_file
+        file: /etc/sysctl.conf
+        text: "fs.suid_dumpable = 0"
+      #- fix_type: command
+      #  command: apt purge -y systemd-coredump
+      #- fix_type: command
+      #  command: systemctl disable kdump.service
+    references:
+      cis:
+        id: 1.5.4
+        category: L1
+      stig:
+        id: V-238334
+        category: CAT II
+      other: https://github.com/konstruktoid/hardening/blob/master/scripts/coredump
+  - cid: C-UDF-NP-01
+    operating_systems:
+      - Ubuntu
+      - Debian
+      - Fedora
+    category: Uncommon Network Protocols
+    policy: DCCP is disabled.
+    fix:
+      - fix_type: config_file
+        file: /etc/modprobe.d/modprobe.conf
+        text: install dccp /bin/false
+      - fix_type: config_file
+        file: /etc/modprobe.d/modprobe.conf
+        text: blacklist dccp
+    references:
+      cis:
+        id: 3.4.1
+        category: L2
+  - cid: C-UDF-NP-02
+    operating_systems:
+      - Ubuntu
+      - Debian
+      - Fedora
+    category: Uncommon Network Protocols
+    policy: SCTP is disabled.
+    fix:
+      - fix_type: config_file
+        file: /etc/modprobe.d/modprobe.conf
+        text: install sctp /bin/false
+      - fix_type: config_file
+        file: /etc/modprobe.d/modprobe.conf
+        text: blacklist sctp
+    references:
+      cis:
+        id: 3.4.2
+        category: L2
+  - cid: C-UDF-NP-03
+    operating_systems:
+      - Ubuntu
+      - Debian
+      - Fedora
+    category: Uncommon Network Protocols
+    policy: RDS is disabled.
+    fix:
+      - fix_type: config_file
+        file: /etc/modprobe.d/modprobe.conf
+        text: install rds /bin/false
+      - fix_type: config_file
+        file: /etc/modprobe.d/modprobe.conf
+        text: blacklist rds
+    references:
+      cis:
+        id: 3.4.3
+        category: L2
+  - cid: C-UDF-NP-03
+    operating_systems:
+      - Ubuntu
+      - Debian
+      - Fedora
+    category: Uncommon Network Protocols
+    policy: TIPC is disabled.
+    fix:
+      - fix_type: config_file
+        file: /etc/modprobe.d/modprobe.conf
+        text: install tipc /bin/false
+      - fix_type: config_file
+        file: /etc/modprobe.d/modprobe.conf
+        text: blacklist tipc
+    references:
+      cis:
+        id: 3.4.4
+        category: L2
+  - cid: C-UDF-CRON-01
+    operating_systems:
+      - Ubuntu
+      - Debian
+      - Fedora
+    category: Cron Configuration
+    policy: Cron daemon is running.
+    fix:
+      - fix_type: command
+        command: systemctl --now enable cron
+    references:
+      cis:
+        id: 5.1.1
+        category: L1
+  - cid: C-UDF-CRON-02
+    operating_systems:
+      - Ubuntu
+      - Debian
+      - Fedora
+    category: Cron Configuration
+    policy: Permissions on cron files are configured.
+    fix:
+      - fix_type: linux_permissions
+        target: /etc/cron*
+        owner: root
+        group: root
+        mode: og-rwx
+    references:
+      cis:
+        id: 5.1.2 to 5.1.7
+        category: L1
+      other: https://github.com/konstruktoid/hardening/blob/master/scripts/cron
+  - cid: C-UDF-CRON-02
+    operating_systems:
+      - Ubuntu
+      - Debian
+      - Fedora
+    category: Cron Configuration
+    policy: Permissions on at files are configured.
+    fix:
+      - fix_type: linux_permissions
+        target: /etc/at*
+        owner: root
+        group: root
+        mode: og-rwx
+    references:
+      cis:
+        id: 5.1.2 to 5.1.7
+        category: L1
+      other: https://github.com/konstruktoid/hardening/blob/master/scripts/cron
+  - cid: C-UDF-CRON-03
+    operating_systems:
+      - Ubuntu
+      - Debian
+      - Fedora
+    category: Cron Configuration
+    policy: Cron is restricted to authorized users.
+    fix:
+      - fix_type: command
+        command: rm /etc/cron.deny
+      - fix_type: config_file_mknew_inlinetext
+        file: /etc/cron.allow
+        text: root
+    references:
+      cis:
+        id: 5.1.1
+        category: L1
+      other: https://github.com/konstruktoid/hardening/blob/master/scripts/cron
+  - cid: C-UDF-CRON-04
+    operating_systems:
+      - Ubuntu
+      - Debian
+      - Fedora
+    category: Cron Configuration
+    policy: At is restricted to authorized users.
+    fix:
+      - fix_type: command
+        command: rm /etc/at.deny
+      - fix_type: config_file_mknew_inlinetext
+        file: /etc/at.allow
+        text: root
+    references:
+      cis:
+        id: 5.1.8
+        category: L1
+      other: https://github.com/konstruktoid/hardening/blob/master/scripts/cron
+  - cid: C-UDF-CRON-04
+    operating_systems:
+      - Ubuntu
+      - Debian
+      - Fedora
+    category: Cron Configuration
+    policy: At is restricted to authorized users.
+    fix:
+      - fix_type: command
+        command: rm /etc/at.deny
+      - fix_type: config_file_mknew_inlinetext
+        file: /etc/at.allow
+        text: root
+      - fix_type: linux_permissions
+        target: /etc/at.allow
+        owner: root
+        group: root
+        mode: g-wx,o-rwx
+    references:
+      cis:
+        id: 5.1.8
+        category: L1
+      other: https://github.com/konstruktoid/hardening/blob/master/scripts/cron
+  - cid: C-UDF-CRON-04
+    operating_systems:
+      - Ubuntu
+      - Debian
+      - Fedora
+    category: Cron Configuration
+    policy: At service is masked and stopped.
+    fix:
+      - fix_type: command
+        command: |
+          systemctl mask atd.service
+          systemctl stop atd.service
+          systemctl daemon-reload
+    references:
+      other: https://github.com/konstruktoid/hardening/blob/master/scripts/cron
+  - cid: C-UD-ARM-01
+    operating_systems:
+      - Ubuntu
+      - Debian
+    category: AppArmor
+    policy: AppArmor is installed.
+    fix:
+      - fix_type: command
+        command: |
+          apt-get install -y apparmor
+          systemctl enable apparmor.service
+          systemctl start apparmor.
+    references:
+      cis:
+        id: 1.6.1.1
+        category: L1
+      stig:
+        id: V-238360
+        category: CAT II
+  - cid: C-UD-ARM-02
+    operating_systems:
+      - Ubuntu
+      - Debian
+    category: AppArmor
+    policy: All AppArmor profiles are in enforce mode.
+    fix:
+      - fix_type: command
+        command: aa-enforce /etc/apparmor.d/*
+    references:
+      cis:
+        id: 1.6.1.4
+        category: L2
+  - cid: C-UD-ARM-03
+    operating_systems:
+      - Ubuntu
+      - Debian
+    category: AppArmor
+    policy: PAM AppArmor configuration is set.
+    fix:
+      - fix_type: config_file_mknew_inlinetext
+        file: /etc/pam.d/apparmor
+        text: session optional pam_apparmor.so order=user,group,default
+    references:
+      other: https://github.com/konstruktoid/hardening/blob/master/scripts/apparmor
+  - cid: C-UDF-ISS-01
+    operating_systems:
+      - Ubuntu
+      - Debian
+      - Fedora
+    category: issue.net
+    policy: The system displays a notice when logging in.
+    fix:
+      - fix_type: config_file_mknew_inlinetext
+        file: /etc/issue.net /etc/issue /etc/motd
+        text: "This system is for authorized use only. PoochBot will monitor all of your activities. Do not lose points. Also pls dont hack me"
+    references:
+      stig:
+        id: V-238214
+        category: CAT II
+  - cid: C-UDF-ISS-02
+    operating_systems:
+      - Ubuntu
+      - Debian
+      - Fedora
+    category: issue.net
+    policy: Scripts in /etc/update-motd.d/* are not executable.
+    fix:
+      - fix_type: linux_permissions
+        target: /etc/update-motd.d/*
+        mode: a-x
+    references:
+      other: https://github.com/konstruktoid/hardening/blob/master/scripts/issue
+  #- cid: C-UD-PSAD-01
+  #  operating_systems:
+  #    - Ubuntu
+  #    - Debian
+  #  category: PSAD
+  #  policy: PSAD is installed.
+  #  fix:
+  #    - fix_type: command
+  #      command: apt-get install -y psad
+  #  references:
+  #    other: https://github.com/konstruktoid/hardening/blob/master/scripts/psad
+  #- cid: C-UD-PSAD-02
+  #  operating_systems:
+  #    - Ubuntu
+  #    - Debian
+  #  category: PSAD
+  #  policy: PSAD is configured.
+  #  fix:
+  #    - fix_type: config_file
+  #      file: /etc/psad/psad.conf
+  #      text: EMAIL_ADDRESSES root@localhost;
+  #    - fix_type: config_file
+  #      file: /etc/psad/psad.conf
+  #      text: ENABLE_AUTO_IDS Y;
+  #    - fix_type: config_file
+  #      file: /etc/psad/psad.conf
+  #      text: DANGER_LEVEL2 15;
+  #    - fix_type: config_file
+  #      file: /etc/psad/psad.conf
+  #      text: DANGER_LEVEL3 150;
+  #    - fix_type: config_file
+  #      file: /etc/psad/psad.conf
+  #      text: DANGER_LEVEL4 1500;
+  #    - fix_type: config_file
+  #      file: /etc/psad/psad.conf
+  #      text: DANGER_LEVEL5 10000;
+  #    - fix_type: config_file
+  #      file: /etc/psad/psad.conf
+  #      text: EMAIL_ALERT_DANGER_LEVEL 5;
+  #    - fix_type: config_file
+  #      file: /etc/psad/psad.conf
+  #      text: EMAIL_LIMIT 5;
+  #    - fix_type: config_file
+  #      file: /etc/psad/psad.conf
+  #      text: EXPECT_TCP_OPTIONS Y;
+  #    - fix_type: config_file
+  #      file: /etc/psad/psad.conf
+  #      text: ENABLE_MAC_ADDR_REPORTING Y;
+  #    - fix_type: config_file
+  #      file: /etc/psad/psad.conf
+  #      text: AUTO_IDS_DANGER_LEVEL 1;
+  #    - fix_type: config_file
+  #      file: /etc/psad/psad.conf
+  #      text: ENABLE_AUTO_IDS_EMAILS Y;
+  #    - fix_type: config_file
+  #      file: /etc/psad/psad.conf
+  #      text: IGNORE_PORTS NONE;
+  #    - fix_type: config_file
+  #      file: /etc/psad/psad.conf
+  #      text: IPT_SYSLOG_FILE /var/log/syslog;
+  #    - fix_type: config_file
+  #      file: /etc/psad/psad.conf
+  #      text: SIG_UPDATE_URL https://www.cipherdyne.org/psad/signatures;
+  #  references:
+  #    other: https://github.com/konstruktoid/hardening/blob/master/scripts/psad
+  - cid: C-UDF-LIMITS-01
+    operating_systems:
+      - Ubuntu
+      - Debian
+      - Fedora
+    category: limits.conf
+    policy: The operating system limits the number of concurrent sessions to 10 for all accounts.
+    fix:
+      - fix_type: config_file
+        file: /etc/security/limits.conf
+        text: "* hard maxlogins 10"
+    references:
+      stig:
+        id: V-238214
+        category: CAT II
+  - cid: C-UDF-LIMITS-02
+    operating_systems:
+      - Ubuntu
+      - Debian
+      - Fedora
+    category: limits.conf
+    policy: The core file size is limited to zero (disables core dumps)
+    fix:
+      - fix_type: config_file
+        file: /etc/security/limits.conf
+        text: "* hard core 0"
+    references:
+      other: https://github.com/konstruktoid/hardening/blob/master/scripts/limits
+  - cid: C-UDF-LIMITS-03
+    operating_systems:
+      - Ubuntu
+      - Debian
+      - Fedora
+    category: limits.conf
+    policy: The soft maximum number of processes is 512, and the hard maximum number of processes is 1024.
+    fix:
+      - fix_type: config_file
+        file: /etc/security/limits.conf
+        text: "* soft nproc 512"
+      - fix_type: config_file
+        file: /etc/security/limits.conf
+        text: "* hard nproc 1024"
+    references:
+      other: https://github.com/konstruktoid/hardening/blob/master/scripts/limits
+  - cid: C-UD-AIDE-01
+    operating_systems:
+      - Ubuntu
+      - Debian
+    category: AIDE
+    policy: AIDE is installed.
+    fix:
+      - fix_type: command
+        command: apt-get install -y aide
+    references:
+      stig:
+        id: V-238371
+        category: CAT II
+  - cid: C-F -AIDE-01
+    operating_systems:
+      - Fedora
+    category: AIDE
+    policy: AIDE is installed.
+    fix:
+      - fix_type: command
+        command: dnf install -y aide
+    references:
+      cis:
+        id: 1.4.1
+        category: L1
+  #- cid: C-UD-AIDE-02
+  #  operating_systems:
+  #    - Ubuntu
+  #    - Debian
+  #  category: AIDE
+  #  policy: The default AIDE script is unchanged.
+  #  fix:
+  #    - fix_type: command
+  #      command: |
+  #        cd /tmp; apt download aide-common
+  #        dpkg-deb --fsys-tarfile /tmp/aide-common_*.deb | sudo tar -x ./usr/share/aide/config/cron.daily/aide -C / 
+  #        cp -f /usr/share/aide/config/cron.daily/aide /etc/cron.daily/aide
+  #  references:
+  #    stig:
+  #      id: V-238236
+  #      category: CAT II
+  - cid: C-UDF-AIDE-03
+    operating_systems:
+      - Ubuntu
+      - Debian
+      - Fedora
+    category: AIDE
+    policy: AIDE check runs daily.
+    fix:
+      - fix_type: command
+        command: |
+          cp ./support/linux/config_files/aidecheck.* /etc/systemd/system
+          chown root:root /etc/systemd/system/aidecheck.* 
+          chmod 0644 /etc/systemd/system/aidecheck.* 
+
+          systemctl enable aidecheck.service 
+          systemctl --now enable aidecheck.timer
+          systemctl daemon-reload
+    references:
+      other: https://github.com/konstruktoid/hardening/blob/master/scripts/aide
+  - cid: C-UDF-AIDE-04
+    operating_systems:
+      - Ubuntu
+      - Debian
+      - Fedora
+    category: AIDE
+    policy: AIDE notifies the administrator if baseline configurations are changed.
+    fix:
+      - fix_type: config_file
+        file: /etc/default/aide
+        text: SILENTREPORTS=no
+    references:
+      stig:
+        id: V-238358
+        category: CAT II
+    notes: TODO reevaluate this later
+  - cid: C-UDF-ADDUSR-01
+    operating_systems:
+      - Ubuntu
+      - Debian
+      - Fedora
+    category: adduser.conf
+    policy: New user directories are created with 0750 permissions.
+    fix:
+      - fix_type: config_file
+        file: /etc/adduser.conf
+        text: DIR_MODE=0750
+  - cid: C-UDF-ADDUSR-02
+    operating_systems:
+      - Ubuntu
+      - Debian
+      - Fedora
+    category: adduser.conf
+    policy: New users have a default shell of /bin/false.
+    fix:
+      - fix_type: config_file
+        file: /etc/adduser.conf
+        text: DSHELL=/bin/false
+  - cid: C-UDF-ADDUSR-03
+    operating_systems:
+      - Ubuntu
+      - Debian
+      - Fedora
+    category: adduser.conf
+    policy: Each user will be given their own group when created.
+    fix:
+      - fix_type: config_file
+        file: /etc/adduser.conf
+        text: USERGROUPS=yes
+  - cid: C-UDF-ADDUSR-04
+    operating_systems:
+      - Ubuntu
+      - Debian
+      - Fedora
+    category: useradd
+    policy: New users have a default shell of /bin/false.
+    fix:
+      - fix_type: config_file
+        file: /etc/default/useradd
+        text: SHELL=/bin/false
+  - cid: C-UDF-ADDUSR-05
+    operating_systems:
+      - Ubuntu
+      - Debian
+      - Fedora
+    category: useradd
+    policy: useradd is set to disable user accounts after 30 days of inactivity.
+    fix:
+      - fix_type: config_file
+        file: /etc/default/useradd
+        text: INACTIVE=30
+    references:
+      stig:
+        id: V-238330
+        category: CAT II
+  - cid: C-UDF-COMP-01
+    operating_systems:
+      - Ubuntu
+      - Debian
+      - Fedora
+    category: Compilers
+    policy: AS compiler binary is set to 0750.
+    fix:
+      - fix_type: command
+        command: chmod 0750 "$(readlink -eq $(command -v as))"
+  - cid: C-UD-COMP-02
+    operating_systems:
+      - Ubuntu
+      - Debian
+    category: Compilers
+    policy: All compiler binaries are set to 0750.
+    fix:
+      - fix_type: command
+        command: |
+          while read -r x; do
+            if [ -f "$x" ] && [ -x "$x" ]; then
+              if ! test -L "$x"; then
+                chmod 0750 "$x"
+                echo "$x"
+              fi
+            fi
+          done <<< "$(dpkg-query -L $(dpkg -l | grep compil | awk '{print $2}'))"
+    references:
+      other: https://github.com/konstruktoid/hardening/blob/master/scripts/compilers
+    notes: This script is in here because it would be really difficult to replicate it in yaml.
+  - cid: C-UDF-MISC-01
+    operating_systems:
+      - Ubuntu
+      - Debian
+      - Fedora
+    category: "Miscellaneous: Polkit"
+    policy: Polkit is mitigated.
+    fix:
+      - fix_type: command
+        command: chmod 0755 /usr/bin/pkexec
+    references:
+      other: https://www.qualys.com/2022/01/25/cve-2021-4034/pwnkit.txt
+  - cid: C-UDF-MISC-02
+    operating_systems:
+      - Ubuntu
+      - Debian
+      - Fedora
+    category: "Miscellaneous: /etc/hosts"
+    policy: hosts.allow and hosts.deny are set to block all external connections.
+    fix:
+      - fix_type: config_file_mknew_inlinetext
+        file: /etc/hosts.allow
+        text: |
+          sshd : ALL : ALLOW
+          ALL: LOCAL, 127.0.0.1
+      - fix_type: config_file_mknew_inlinetext
+        file: /etc/hosts.deny
+        text: |
+          sshd : ALL : ALLOW
+          ALL: LOCAL, 127.0.0.1
+      - fix_type: linux_permissions
+        target: /etc/hosts.*
+        permissions: 644
+    references:
+      other: https://github.com/konstruktoid/hardening/blob/master/scripts/hosts
+  - cid: C-UDF-MISC-02
+    operating_systems:
+      - Ubuntu
+      - Debian
+      - Fedora
+    category: "Miscellaneous: motd-news"
+    policy: motd-news is disabled.
+    fix:
+      - fix_type: config_file
+        file: /etc/default/motd-news
+        text: ENABLED=0
+      - fix_type: command
+        command: |
+          systemctl stop motd-news.timer
+          systemctl mask motd-news.timer
+    references:
+      other: https://github.com/konstruktoid/hardening/blob/master/scripts/motdnews
+  - cid: C-UDF-MISC-03
+    operating_systems:
+      - Ubuntu
+      - Debian
+      - Fedora
+    category: "Miscellaneous: Path"
+    policy: The default PATH for shells is secure.
+    fix:
+      - fix_type: config_file_mknew_inlinetext
+        file: /etc/environment
+        text: PATH="/usr/local/bin:/usr/sbin:/usr/bin:/bin:/snap/bin"
+      - fix_type: config_file_mknew_inlinetext
+        file: /etc/profile.d/initpath.sh
+        text: |
+          #!/bin/bash
+          if [[ $EUID -eq 0 ]]; then
+            export PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin
+          else
+            export PATH=/usr/local/bin:/usr/sbin:/usr/bin:/bin:/snap/bin
+          fi
+      - fix_type: linux_permissions
+        target: /etc/profile.d/initpath.sh
+        owner: root
+        group: root
+        permissions: 644
+    references:
+      other: https://github.com/konstruktoid/hardening/blob/master/scripts/motdnews
+  # - cid: C-UDF-MISC-04
+  #   operating_systems:
+  #     - Ubuntu
+  #     - Debian
+  #     - Fedora
+  #   category: "Miscellaneous: Rhosts"
+  #   policy: Remove all rhosts files.
+  #   fix:
+  #     - fix_type: command
+  #       command: |
+  #         while read -r hostpasswd; do
+  #           find "$hostpasswd" \( -name "hosts.equiv" -o -name ".rhosts" \) -exec rm -f {} \; 2> /dev/null
+  #         done <<< "$(awk -F ":" '{print $6}' /etc/passwd)"
+  #   notes: .rhosts files allow users to log in remotely without supplying passwords. This is a security risk.
+  - cid: C-UDF-MISC-05
+    operating_systems:
+      - Ubuntu
+      - Debian
+      - Fedora
+    category: "Miscellaneous: Root Access"
+    policy: The root account is only allowed to log in to the local console.
+    fix:
+      - fix_type: config_file_mknew_inlinetext
+        file: /etc/securetty
+        text: console
+    references:
+      other: https://github.com/konstruktoid/hardening/blob/master/scripts/rootaccess
+    notes: check for securetty in pam login
+  - cid: C-UDF-MISC-06
+    operating_systems:
+      - Ubuntu
+      - Debian
+      - Fedora
+    category: "Miscellaneous: Root Access"
+    policy: Debug-shell is disabled.
+    fix:
+      - fix_type: command
+        command: |
+          systemctl mask debug-shell.service
+          systemctl stop debug-shell.service
+    references:
+      other: https://github.com/konstruktoid/hardening/blob/master/scripts/rootaccess
+  - cid: C-UDF-MISC-07
+    operating_systems:
+      - Ubuntu
+      - Debian
+      - Fedora
+    category: "Miscellaneous: Root Access"
+    policy: Debug-shell is disabled.
+    fix:
+      - fix_type: command
+        command: |
+          systemctl mask debug-shell.service
+          systemctl stop debug-shell.service
+    references:
+      other: https://github.com/konstruktoid/hardening/blob/master/scripts/rootaccess
+  - cid: C-UD-MISC-08
+    operating_systems:
+      - Ubuntu
+      - Debian
+    category: "Miscellaneous: rc"
+    policy: rc is removed.
+    fix:
+      - fix_type: command
+        command: apt-get purge -y rc
+    references:
+      other: https://github.com/konstruktoid/hardening/blob/master/scripts/umask
+  - cid: C-UDF-MISC-09
+    operating_systems:
+      - Ubuntu
+      - Debian
+      - Fedora
+    category: "Miscellaenous: umask"
+    policy: Shell profile umask is set to 077.
+    fix:
+      - fix_type: config_file
+        file: /etc/profile
+        text: umask 077
+      - fix_type: config_file
+        file: /etc/bash.bashrc
+        text: umask 077
+    references:
+      other: https://github.com/konstruktoid/hardening/blob/master/scripts/umask
+  - cid: C-UD-MISC-10
+    operating_systems:
+      - Ubuntu
+      - Debian
+    category: "Miscellaneous: USBGuard"
+    policy: usbguard is installed and enabled.
+    fix:
+      - fix_type: command
+        command: |
+          apt-get install -y usbguard
+          systemctl enable usbguard.service
+          systemctl start usbguard.service
+    references:
+      other: https://github.com/konstruktoid/hardening/blob/master/scripts/usbguard
+  - cid: C-F-MISC-11
+    operating_systems:
+      - Fedora
+    category: "Miscellaneous: USBGuard"
+    policy: usbguard is installed and enabled.
+    fix:
+      - fix_type: command
+        command: |
+          dnf install -y usbguard
+          systemctl enable usbguard.service
+          systemctl start usbguard.service
+    references:
+      other: https://github.com/konstruktoid/hardening/blob/master/scripts/usbguard
+  - cid: C-UD-MISC-12
+    operating_systems:
+      - Ubuntu
+      - Debian
+    category: "Miscellaenous: DNS"
+    policy: DNS nameservers are set correctly.
+    fix:
+      - fix_type: command
+        command: apt-get install -y systemd-resolved
+      - fix_type: config_file_mknew_inlinetext
+        file: /etc/resolv.conf
+        text: |
+          nameserver 1.1.1.1
+          nameserver 1.0.0.1
+    references:
+      other: https://github.com/konstruktoid/hardening/blob/master/scripts/resolvedconf
+  - cid: C-F-MISC-13
+    operating_systems:
+      - Fedora
+    category: "Miscellaenous: DNS"
+    policy: DNS nameservers are set correctly.
+    fix:
+      - fix_type: command
+        command: dnf install -y systemd-resolved
+      - fix_type: config_file_mknew_inlinetext
+        file: /etc/resolv.conf
+        text: |
+          nameserver 1.1.1.1
+          nameserver 1.0.0.1
+    references:
+      other: https://github.com/konstruktoid/hardening/blob/master/scripts/resolvedconf
+  - cid: C-UD-MISC-14
+    operating_systems:
+      - Ubuntu
+      - Debian
+    category: "Miscellaenous: rc.local"
+    policy: Any startup scripts have been removed. 
+    fix:
+      - fix_type: command
+        command: echo 'exit 0' >> /etc/rc.local
+  - cid: C-UDF-MISC-15
+    operating_systems:
+      - Ubuntu
+      - Debian
+      - Fedora
+    category: "Miscellaenous: Ctrl-Alt-Del"
+    policy: Reboot using Ctrl-Alt-Delete has been disabled.
+    fix:
+      - fix_type: command
+        command: |
+          chmod 777 /usr/lib/systemd/system/ctrl-alt-del.target
+          cp /usr/lib/systemd/system/ctrl-alt-del.target ~/Desktop/ctrl-alt-del.target
+          echo > /usr/lib/systemd/system/ctrl-alt-del.target
+          chmod 644 /usr/lib/systemd/system/ctrl-alt-del.target
