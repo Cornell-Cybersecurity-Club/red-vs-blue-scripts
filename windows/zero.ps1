@@ -353,6 +353,7 @@ netsh a f a r n=MONGO dir=out a=allow prot=TCP remoteport=27017 remoteip=$locals
 netsh a f a r n=MYSQL dir=in a=allow prot=TCP localport=3306 remoteip=$localsubnet
 netsh a f a r n=POSTGRES dir=in a=allow prot=TCP localport=5432 remoteip=$localsubnet
 netsh a f a r n=MONGO dir=in a=allow prot=TCP localport=27017 remoteip=$localsubnet
+# TODO: change depending on service
 
 netsh a f s r group="Active Directory Domain Services" new enable=yes
 $localsubnet = ($localsubnet.Split(',')).Trim()
