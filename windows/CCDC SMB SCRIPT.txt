@@ -1,0 +1,80 @@
+# CCDC SMB SCRIPT
+
+# Save previous ExecutionPolicy to restore later
+$PreviousPolicy = Get-ExecutionPolicy
+
+Set-ExecutionPolicy -ExecutionPolicy Unrestricted -Scope Process -Force
+
+Write-Output "[+] Starting SMB Hardening Procedure"
+
+# ------------------------------------------------------
+# SMB PROTOCOL HARDENING
+# ------------------------------------------------------
+Write-Output "[+] Disabling SMB1, enforcing SMB2/3 only..."
+Set-SmbServerConfiguration -EnableSMB1Protocol $false -Force
+Set-SmbServerConfiguration -MinProtocol SMB2 -MaxProtocol SMB3 -Force
+
+# ------------------------------------------------------
+# SMB SIGNING + ENCRYPTION
+# ------------------------------------------------------
+Write-Output "[+] Enforcing SMB signing and encryption..."
+Set-SmbServerConfiguration -EnableSecuritySignature $true -RequireSecuritySignature $true -EncryptData $true -Force
+Set-SmbClientConfiguration -EnableSecuritySignature $true -RequireSecuritySignature $true -Force
+
+# ------------------------------------------------------
+# AUTHENTICATION HARDENING
+# ------------------------------------------------------
+Write-Output "[+] Disabling Guest, Anonymous logons, and Null Sessions..."
+Get-LocalUser -Name "Guest" | Disable-LocalUser
+
+Set-ItemProperty "HKLM:\SYSTEM\CurrentControlSet\Control\Lsa" -Name "RestrictAnonymous" -Value 1 -Force
+Set-ItemProperty "HKLM:\SYSTEM\CurrentControlSet\Control\Lsa" -Name "RestrictAnonymousSAM" -Value 1 -Force
+Set-SmbServerConfiguration -NullSessionShares @() -NullSessionPipes @() -Force
+
+# ------------------------------------------------------
+# NAME RESOLUTION HARDENING (LLMNR/NBTNS)
+# ------------------------------------------------------
+Write-Output "[+] Disabling LLMNR and NetBIOS to prevent Responder attacks..."
+Set-ItemProperty "HKLM:\Software\Policies\Microsoft\Windows NT\DNSClient" -Name "EnableMulticast" -Value 0 -Force
+Set-ItemProperty "HKLM:\SYSTEM\CurrentControlSet\Services\NetBT\Parameters\Interfaces\Tcpip*" -Name "NetbiosOptions" -Value 2
+
+# ------------------------------------------------------
+# SHARE HARDENING
+# ------------------------------------------------------
+Write-Output "[+] Enforcing Access-Based Enumeration and reviewing shares..."
+Get-SmbShare | ForEach-Object {
+    Set-SmbShare -Name $_.Name -FolderEnumerationMode AccessBased -Force
+}
+
+Get-SmbShare | Format-Table
+
+# ------------------------------------------------------
+# SESSION / CONNECTION MONITORING
+# ------------------------------------------------------
+Write-Output "[+] Active SMB sessions:"
+Get-SmbSession | Format-Table ClientComputerName, UserName, SessionId
+
+Write-Output "[+] Active SMB connections:"
+Get-SmbConnection | Format-Table ServerName, ShareName, UserName
+
+# ------------------------------------------------------
+# LOGGING & AUDIT
+# ------------------------------------------------------
+Write-Output "[+] Enabling SMB and Object Access auditing..."
+auditpol /set /subcategory:"File Share" /success:enable /failure:enable
+auditpol /set /subcategory:"Object Access" /success:enable /failure:enable
+
+# ------------------------------------------------------
+# FIREWALL HARDENING
+# ------------------------------------------------------
+Write-Output "[+] Restricting SMB to internal subnets only..."
+Set-NetFirewallRule -DisplayGroup "File and Printer Sharing" -Enabled True -Profile Domain `
+    -RemoteAddress 10.0.0.0/8,192.168.0.0/16,172.16.0.0/12
+
+# ------------------------------------------------------
+# RESTORE EXECUTION POLICY
+# ------------------------------------------------------
+Set-ExecutionPolicy -ExecutionPolicy $PreviousPolicy -Scope Process -Force
+Write-Output "[+] Execution policy restored to $PreviousPolicy"
+
+Write-Output "[√] SMB Hardening Complete."
