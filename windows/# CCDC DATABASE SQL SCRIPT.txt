@@ -1,0 +1,156 @@
+#DATABASE SQL SCRIPT
+
+param(
+    [Parameter(Mandatory=$true)][string]$Instance,   # The SQL Server instance name (e.g. "localhost\SQLEXPRESS")
+    [string]$AuditFolder = "C:\SQL_Audit",           # Folder where audit logs will be written
+    [string]$RenameSa = "disabled_sa",               # New name for the 'sa' login (or disable if rename fails)
+    [bool]$DisableBrowser = $true,                   # Whether to disable the SQL Browser service
+    [bool]$DisableClr = $true,                       # Whether to disable CLR integration (reduces attack surface)
+    [bool]$ForceTLSOnly = $false                     # Whether to enforce TLS encryption (requires cert + restart)
+)
+
+function Invoke-TSql {
+    param(
+        [string]$ServerInstance,                     # Target SQL Server instance
+        [string]$Query,                              # T-SQL query to run
+        [int]$TimeoutSeconds = 60                    # Timeout for query execution
+    )
+    # Prefer Invoke-Sqlcmd if available; otherwise fall back to sqlcmd CLI
+    if (Get-Command Invoke-Sqlcmd -ErrorAction SilentlyContinue) {
+        Invoke-Sqlcmd -ServerInstance $ServerInstance -Query $Query -QueryTimeout $TimeoutSeconds -ErrorAction Stop
+    } else {
+        $temp = New-TemporaryFile                     # Create a temp file to hold the query
+        Set-Content -Path $temp -Value $Query -Encoding UTF8
+        & sqlcmd -S $ServerInstance -b -l $TimeoutSeconds -i $temp.FullName   # Run sqlcmd with the temp file
+        Remove-Item $temp -Force                      # Clean up temp file
+    }
+}
+
+# === 1) Create server audit ===
+New-Item -ItemType Directory -Force -Path $AuditFolder | Out-Null   # Ensure audit folder exists
+
+$tsqlAudit = @"
+IF NOT EXISTS (SELECT 1 FROM sys.server_audits WHERE name = N'CCDC_ServerAudit')
+BEGIN
+    CREATE SERVER AUDIT [CCDC_ServerAudit]            -- Create a new audit object
+    TO FILE (FILEPATH = N'$AuditFolder', MAXSIZE = 100 MB, MAX_ROLLOVER_FILES = 20)
+    WITH (QUEUE_DELAY = 1000, ON_FAILURE = CONTINUE); -- Configure audit file rollover and behavior
+END;
+ALTER SERVER AUDIT [CCDC_ServerAudit] WITH (STATE = ON); -- Turn audit ON
+
+IF NOT EXISTS (SELECT 1 FROM sys.server_audit_specifications WHERE name = N'CCDC_ServerAuditSpec')
+BEGIN
+    CREATE SERVER AUDIT SPECIFICATION [CCDC_ServerAuditSpec] -- Create audit spec linked to audit
+        FOR SERVER AUDIT [CCDC_ServerAudit]
+        ADD (FAILED_LOGIN_GROUP),                          -- Log failed logins
+        ADD (SUCCESSFUL_LOGIN_GROUP),                      -- Log successful logins
+        ADD (SERVER_ROLE_MEMBER_CHANGE_GROUP),             -- Log role membership changes
+        ADD (SERVER_OBJECT_PERMISSION_CHANGE_GROUP);       -- Log permission changes
+END;
+ALTER SERVER AUDIT SPECIFICATION [CCDC_ServerAuditSpec] WITH (STATE = ON); -- Enable spec
+"@
+Invoke-TSql -ServerInstance $Instance -Query $tsqlAudit   # Run the audit creation query
+
+# === 2) Disable dangerous features ===
+$tsqlConfig = @"
+EXEC sp_configure 'show advanced options', 1; RECONFIGURE;   -- Allow advanced options to be changed
+EXEC sp_configure 'xp_cmdshell', 0; RECONFIGURE;             -- Disable xp_cmdshell (OS command execution)
+EXEC sp_configure 'Ad Hoc Distributed Queries', 0; RECONFIGURE; -- Disable ad hoc queries (OPENROWSET/OPENDATASOURCE)
+EXEC sp_configure 'Ole Automation Procedures', 0; RECONFIGURE; -- Disable OLE automation (COM object access)
+EXEC sp_configure 'remote access', 0; RECONFIGURE;           -- Disable remote access to server
+EXEC sp_configure 'clr enabled', $(if ($DisableClr) {0} else {1}); RECONFIGURE; -- Disable CLR integration if chosen
+EXEC sp_configure 'cross db ownership chaining', 0; RECONFIGURE; -- Prevent cross-database privilege escalation
+EXEC sp_configure 'contained database authentication', 0; RECONFIGURE; -- Disable contained DB auth
+EXEC sp_configure 'default trace enabled', 1; RECONFIGURE;   -- Ensure default trace is ON (for investigations)
+
+EXEC xp_instance_regwrite N'HKEY_LOCAL_MACHINE', 
+    N'SOFTWARE\Microsoft\MSSQLServer\MSSQLServer', N'AuditLevel', REG_DWORD, 2; -- Audit failed logins
+
+-- Ensure TCP endpoint exists and is started (port 1433)
+IF NOT EXISTS (SELECT 1 FROM sys.endpoints WHERE name = 'TSQL Default TCP')
+BEGIN
+    CREATE ENDPOINT [TSQL Default TCP] STATE = STARTED AS TCP (LISTENER_PORT = 1433) FOR TSQL();
+END
+ELSE
+    ALTER ENDPOINT [TSQL Default TCP] STATE = STARTED;
+
+-- Disable TRUSTWORTHY on all user databases (prevents privilege escalation)
+DECLARE @sql NVARCHAR(MAX) = N'';
+SELECT @sql = STRING_AGG('ALTER DATABASE [' + name + '] SET TRUSTWORTHY OFF;', CHAR(10))
+FROM sys.databases WHERE database_id > 4;
+EXEC (@sql);
+"@
+Invoke-TSql -ServerInstance $Instance -Query $tsqlConfig
+
+# === 3) Harden logins ===
+$tsqlLogins = @"
+IF EXISTS (SELECT 1 FROM sys.sql_logins WHERE name = N'sa')
+BEGIN
+    BEGIN TRY
+        ALTER LOGIN [sa] WITH NAME = [$RenameSa];     -- Try to rename 'sa' login
+    END TRY
+    BEGIN CATCH
+        ALTER LOGIN [sa] DISABLE;                     -- If rename fails, disable 'sa'
+    END CATCH
+END;
+
+-- Report sysadmin members (for manual review/removal)
+SELECT 'SYSADMIN_MEMBER' AS tag, p.name
+FROM sys.server_role_members rm
+JOIN sys.server_principals p ON p.principal_id = rm.member_principal_id
+JOIN sys.server_principals r ON r.principal_id = rm.role_principal_id
+WHERE r.name = N'sysadmin';
+
+-- Enforce password policy and expiration for all SQL logins
+DECLARE @cmd NVARCHAR(MAX) = N'';
+SELECT @cmd = STRING_AGG('ALTER LOGIN [' + name + '] WITH CHECK_POLICY = ON, CHECK_EXPIRATION = ON;', CHAR(10))
+FROM sys.sql_logins WHERE name NOT LIKE '##%';
+EXEC (@cmd);
+
+-- Disable risky demo accounts (guest, test, demo)
+EXEC sp_msforeachdb 'USE [?]; IF EXISTS (SELECT 1 FROM sys.database_principals WHERE name = N''guest'') BEGIN REVOKE CONNECT FROM [guest]; END';
+"@
+Invoke-TSql -ServerInstance $Instance -Query $tsqlLogins
+
+# === 4) Report role memberships ===
+$tsqlRolesReport = @"
+SELECT r.name AS role_name, p.name AS member_name
+FROM sys.server_role_members rm
+JOIN sys.server_principals r ON r.principal_id = rm.role_principal_id
+JOIN sys.server_principals p ON p.principal_id = rm.member_principal_id
+ORDER BY r.name, p.name;
+"@
+Invoke-TSql -ServerInstance $Instance -Query $tsqlRolesReport | Format-Table -AutoSize   # Show who is in each server role
+
+# === 5) Disable SQL Browser service ===
+if ($DisableBrowser) {
+    sc.exe config SQLBrowser start= disabled   # Set SQL Browser service to disabled
+    sc.exe stop SQLBrowser                     # Stop SQL Browser service immediately
+}
+
+# === 6) Optional TLS enforcement ===
+if ($ForceTLSOnly) {
+    # Locate registry path for instance and set ForceEncryption=1
+    $sqlRegRoot = "HKLM:\SOFTWARE\Microsoft\Microsoft SQL Server\Instance Names\SQL"
+    $instKey = Get-ItemProperty -Path $sqlRegRoot -ErrorAction Stop
+    if ($instKey.$($Instance.Split('\')[-1])) {
+        $instanceId = $instKey.$($Instance.Split('\')[-1])
+        $netlibPath = "HKLM:\SOFTWARE\Microsoft\Microsoft SQL Server\$instanceId\MSSQLServer\SuperSocketNetLib"
+        Set-ItemProperty -Path $netlibPath -Name ForceEncryption -Value 1 -Type DWord
+    }
+}
+
+# === 7) Verification snapshot ===
+$tsqlVerify = @"
+SELECT name, value, value_in_use FROM sys.configurations
+WHERE name IN ('xp_cmdshell','Ad Hoc Distributed Queries','Ole Automation Procedures',
+               'remote access','clr enabled','cross db ownership chaining',
+               'contained database authentication','default trace enabled');
+
+SELECT name, state_desc, type_desc, protocol_desc FROM sys.endpoints;
+
+SELECT name, is_disabled, is_policy_checked, is_expiration_checked FROM sys.sql_logins WHERE name NOT LIKE '##%';
+
+SELECT a.name, a.status_desc, s.name AS spec_name, s.is_state_enabled
+FROM sys.server_audits a
+LEFT JOIN sys.server_audit_specifications s ON s.audit
