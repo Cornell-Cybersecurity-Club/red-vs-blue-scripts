@@ -59,7 +59,7 @@ if [ -f "/etc/sudoers.d" ]; then
     cat /etc/sudoers.d/*
     sep
     empty_line
-fi
+fiPaul Willis (Learning to Labor): Use Willis to discuss the role of Education. In China (Rocca), education is the only ladder up. In Willis, education reproduces class. Compare the two systems.
 
 grep NOPASSWD /etc/sudoers /etc/sudoers.d/*
 grep "\!authenticate" /etc/sudoers /etc/sudoers.d/*
