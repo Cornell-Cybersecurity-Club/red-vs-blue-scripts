@@ -2,9 +2,11 @@
 cat configs/login.defs >/etc/login.defs
 cat configs/common-password >/etc/pam.d/common-password
 cat configs/common-auth >/etc/pam.d/common-auth
+cat configs/common-account >/etc/pam.d/common-account
 cat configs/pwquality.conf >/etc/security/pwquality.conf
 cat configs/limits.conf >/etc/security/limits.conf
 cat configs/sudo.conf >/etc/sudo.conf
+cat configs/sudoers >/etc/sudoers
 
 while IFS= read -r user; do
   useradd "${user}"

@@ -1,0 +1,33 @@
+# /etc/pam.d/common-auth
+
+# 1. PRE-AUTH CHECK
+# Check if the user is already locked out before asking for a password.
+# 'silent' = Don't print "Account locked" (prevents username enumeration).
+# 'audit' = Log the attempt to syslog.
+# 'deny=3' = Lock after 3 failures.
+# 'unlock_time=900' = Unlock automatically after 900 seconds (15 mins).
+auth    required                        pam_faillock.so preauth silent audit deny=3 unlock_time=900
+
+# 2. STANDARD AUTHENTICATION
+# 'nullok' has been REMOVED to prevent accounts with empty passwords from logging in.
+# 'try_first_pass' = Try the password already provided by a previous module (like sudo).
+# '[success=1 ...]' = If this succeeds, skip the next line (the authfail line).
+auth    [success=1 default=ignore]      pam_unix.so try_first_pass
+
+# 3. AUTH FAILURE RECORDING
+# If the above step (pam_unix) failed, this line executes.
+# It increments the failure counter.
+# '[default=die]' = If we get here (auth failed), terminate the auth stack immediately.
+auth    [default=die]                   pam_faillock.so authfail audit deny=3 unlock_time=900
+
+# 4. FALLBACK DENY
+# Failsafe catch-all.
+auth    requisite                       pam_deny.so
+
+# 5. PERMIT
+# Allows the stack to complete successfully if step 2 passed and jumped over step 3.
+auth    required                        pam_permit.so
+
+# 6. OPTIONAL MODULES
+# (Keep existing optional modules like pam_cap.so if they were there originally)
+auth    optional                        pam_cap.so
