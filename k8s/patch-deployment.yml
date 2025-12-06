@@ -1,0 +1,12 @@
+# Use with kubectl patch deployment --patch-file patch.yml
+
+spec:
+  template:
+    spec:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        readOnlyRootFilesystem: true
+        allowPrivilegeEscalation: false
+        capabilities:
+        drop: ["ALL"]
