@@ -1,0 +1,30 @@
+# /etc/pam.d/common-account
+
+# 1. FAILLOCK RESET (Critical for Hardening)
+# This corresponds to the 'pam_faillock' setup in common-auth.
+# If authentication succeeded (common-auth) and we reach this line,
+# this module resets the failure counter to 0.
+account required    pam_faillock.so
+
+# 2. TIME RESTRICTIONS
+# Checks /etc/security/time.conf.
+# Allows you to restrict logins to specific times of day.
+# (e.g., No logins allowed between 2 AM and 5 AM).
+account required    pam_time.so
+
+# 3. UNIX ACCOUNT CHECKS (Standard)
+# Checks the /etc/shadow file for:
+# - Expired passwords (forces a change).
+# - Expired accounts (prevents login).
+account required    pam_unix.so
+
+# 4. ACCESS CONTROL (Hardening)
+# Checks /etc/security/access.conf.
+# Allows you to restrict WHO can login from WHERE.
+# (e.g., "root" can only login from "local").
+account required    pam_access.so
+
+# 5. FALLBACK PERMIT
+# Required by PAM standards to ensure the stack ends successfully
+# if all previous 'required' modules passed.
+account required    pam_permit.so

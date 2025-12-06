@@ -1,0 +1,12 @@
+export EDITOR=${EDITOR:-/bin/nano}
+export PAGER=${PAGER:-/usr/bin/less}
+
+unset ROOTPATH
+
+TMOUT=300
+readonly TMOUT
+export TMOUT
+
+export HISTTIMEFORMAT="%F %T "
+
+PS1="${USER:-$(whoami 2>/dev/null)}@$(uname -n 2>/dev/null) \$ "

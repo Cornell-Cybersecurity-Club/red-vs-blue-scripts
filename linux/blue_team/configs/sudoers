@@ -1,0 +1,16 @@
+Defaults env_reset
+
+Defaults use_pty
+
+Defaults secure_path="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+
+Defaults logfile="/var/log/sudo.log"
+
+root ALL=(ALL:ALL) ALL
+
+%wheel ALL=(ALL:ALL) ALL
+
+## Uncomment to allow members of group sudo to execute any command
+# %sudo	ALL=(ALL:ALL) ALL
+
+
