@@ -2,7 +2,7 @@ PermitRootLogin no
 
 StrictModes yes
 
-PasswordAuthentication no
+PasswordAuthentication yes
 
 PermitEmptyPasswords no
 
