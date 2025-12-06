@@ -8,10 +8,6 @@ PermitEmptyPasswords no
 
 PubkeyAuthentication yes
 
-MaxAuthTries 3
-
-LoginGraceTime 30
-
 LogLevel VERBOSE
 
 ClientAliveInterval 300

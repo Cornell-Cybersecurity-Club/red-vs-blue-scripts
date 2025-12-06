@@ -16,9 +16,6 @@ while IFS= read -r user; do
   gpasswd -d "${user}" sudo
   gpasswd -d "${user}" adm
   gpasswd -d "${user}" wheel
-  PASS=$(tr -dc '[:alnum:]' </dev/urandom | dd bs=1 count=14 2>/dev/null)
-  echo "${user}":"${PASS}" | chpasswd
-  echo "PASSWORD CHANGED: ${user}:${PASS}"
   chage -M 15 -m 6 -W 7 -I 5 "${user}"
   cat configs/.bashrc >/home/"${user}".bashrc
 done <configs/users.txt
@@ -26,9 +23,6 @@ done <configs/users.txt
 while IFS= read -r admin; do
   useradd -G adm,sudo "${admin}"
   usermod -s /bin/bash "${admin}"
-  PASS=$(tr -dc '[:alnum:]' </dev/urandom | dd bs=1 count=14 2>/dev/null)
-  echo "${user}":"${PASS}" | chpasswd
-  echo "PASSWORD CHANGED: ${user}:${PASS}"
   chage -M 15 -m 6 -W 7 -I 5 "${admin}"
   cat configs/.bashrc >/home/"${user}".bashrc
 done <configs/admins.txt
@@ -46,6 +40,3 @@ done <"$(grep -E "sh$" /etc/passwd | cut -d ":" -f 1)"
 echo "unalias -a" >>/root/.bashrc
 
 userdel -f "$(awk -F':' '$3 == 0 { if (dup++) print } END { exit(dup > 1) }' /etc/passwd | cut -d ":" -f1 || true)"
-
-passwd -d root
-passwd -l root

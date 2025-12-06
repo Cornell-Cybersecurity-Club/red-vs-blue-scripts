@@ -12,9 +12,8 @@ fi
 ./kernel.sh
 ./fstab.sh
 ./apparmor.sh
-./firewall.sh
-./dconf.sh
-./nuke_ssh.sh
+#./firewall.sh
+#./dconf.sh
+#./nuke_ssh.sh
 ./ssh.sh
 ./remove_bad_files.sh
-./lock_perms.sh
