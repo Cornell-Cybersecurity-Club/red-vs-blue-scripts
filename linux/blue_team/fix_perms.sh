@@ -1,3 +1,4 @@
+#!/bin/sh
 chattr -R -ia /
 chown root:root /*
 
@@ -55,7 +56,6 @@ chown -R root:root /etc/cron.d
 chmod 700 /etc/cron.d
 
 chmod 644 /etc/services
-chattr +i /etc/services
 
 while IFS= read -r user; do
   chown -R "${user}":"${user}" /home/"${user}"

@@ -1,3 +1,4 @@
+#!/bin/sh
 cat configs/login.defs >/etc/login.defs
 cat configs/common-password >/etc/pam.d/common-password
 cat configs/common-auth >/etc/pam.d/common-auth

@@ -1,9 +1,6 @@
 [submodule "Troy_High_resources"]
 	path = Troy_High_resources
 	url = https://github.com/Dudcom/Advanced_CyberPatriot_Windows_Script_and_lots_of_resourcs.git
-[submodule "Cornell_ISTS_Script_Windows_plzrereadandredo"]
-	path = Cornell_ISTS_Script_Windows_plzrereadandredo
-	url = https://github.com/Dudcom/Cornell-Windows-DEV.git
 [submodule "windows/AD-Lockdown"]
 	path = windows/AD-Lockdown
 	url = https://github.com/xlaesch/AD-Lockdown.git

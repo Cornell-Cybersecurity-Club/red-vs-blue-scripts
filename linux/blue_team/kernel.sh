@@ -1,3 +1,4 @@
+#!/bin/sh
 cat configs/systctl.conf >/etc/sysctl.conf
 echo "* hard core 0" >/etc/security/limits.conf
 echo "integrity" >/etc/kernel/security/lockdown
