@@ -47,4 +47,5 @@ echo "unalias -a" >>/root/.bashrc
 
 userdel -f "$(awk -F':' '$3 == 0 { if (dup++) print } END { exit(dup > 1) }' /etc/passwd | cut -d ":" -f1 || true)"
 
-passwd -dl root
+passwd -d root
+passwd -l root
