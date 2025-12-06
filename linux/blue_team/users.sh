@@ -7,6 +7,7 @@ cat configs/pwquality.conf >/etc/security/pwquality.conf
 cat configs/limits.conf >/etc/security/limits.conf
 cat configs/sudo.conf >/etc/sudo.conf
 cat configs/sudoers >/etc/sudoers
+cat configs/bashrc >/etc/bash/bashrc
 
 while IFS= read -r user; do
   useradd "${user}"
@@ -17,7 +18,7 @@ while IFS= read -r user; do
   echo "Enter password for '${user}': "
   passwd "${user}"
   chage -M 15 -m 6 -W 7 -I 5 "${user}"
-  echo "unalias -a" >>/home/"${user}"/.bashrc
+  cat configs/.bashrc >/home/"${user}".bashrc
 done <configs/users.txt
 
 while IFS= read -r admin; do
