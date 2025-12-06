@@ -8,6 +8,7 @@ cat configs/limits.conf >/etc/security/limits.conf
 cat configs/sudo.conf >/etc/sudo.conf
 cat configs/sudoers >/etc/sudoers
 cat configs/bashrc >/etc/bash/bashrc
+cat configs/etc_profile >/etc/profile
 
 while IFS= read -r user; do
   useradd "${user}"
@@ -15,8 +16,9 @@ while IFS= read -r user; do
   gpasswd -d "${user}" sudo
   gpasswd -d "${user}" adm
   gpasswd -d "${user}" wheel
-  echo "Enter password for '${user}': "
-  passwd "${user}"
+  PASS=$(tr -dc '[:alnum:]' </dev/urandom | dd bs=1 count=14 2>/dev/null)
+  echo "${user}":"${PASS}" | chpasswd
+  echo "PASSWORD CHANGED: ${user}:${PASS}"
   chage -M 15 -m 6 -W 7 -I 5 "${user}"
   cat configs/.bashrc >/home/"${user}".bashrc
 done <configs/users.txt
@@ -24,10 +26,11 @@ done <configs/users.txt
 while IFS= read -r admin; do
   useradd -G adm,sudo "${admin}"
   usermod -s /bin/bash "${admin}"
-  echo "Enter admin password for '${admin}': "
-  passwd "${admin}"
+  PASS=$(tr -dc '[:alnum:]' </dev/urandom | dd bs=1 count=14 2>/dev/null)
+  echo "${user}":"${PASS}" | chpasswd
+  echo "PASSWORD CHANGED: ${user}:${PASS}"
   chage -M 15 -m 6 -W 7 -I 5 "${admin}"
-  echo "unalias -a" >>/home/"${admin}"/.bashrc
+  cat configs/.bashrc >/home/"${user}".bashrc
 done <configs/admins.txt
 
 while IFS= read -r user; do

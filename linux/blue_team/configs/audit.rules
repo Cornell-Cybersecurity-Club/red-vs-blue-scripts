@@ -1,0 +1,125 @@
+# /etc/audit/audit.rules
+# Hardened by System Administrator
+# Based on CIS Benchmarks / DISA STIG
+
+# =======================================================
+# 1. BASIC CONFIGURATION
+# =======================================================
+
+# Delete all currently loaded rules
+-D
+
+# Set buffer size.
+# If buffers are full, the kernel will drop audit events.
+# Increase this if you see "audit: backlog limit exceeded" in dmesg.
+-b 8192
+
+# Failure Mode
+# 0=Silent, 1=Log to Syslog, 2=Panic (Halt System)
+# We use 1. Use 2 only for ultra-secure military systems.
+-f 1
+
+# =======================================================
+# 2. SELF AUDITING
+# =======================================================
+# Log attempts to modify the audit configuration itself
+-w /etc/audit/ -p wa -k audit_config
+-w /etc/libaudit.conf -p wa -k audit_config
+-w /etc/audit/auditd.conf -p wa -k audit_config
+
+# Log attempts to access the audit logs
+-w /var/log/audit/ -p wa -k audit_log_access
+
+# =======================================================
+# 3. TIME STOMPING
+# =======================================================
+# Log changes to system time (often used to hide attack timelines)
+-a always,exit -F arch=b64 -S adjtimex -S settimeofday -k time-change
+-a always,exit -F arch=b32 -S adjtimex -S settimeofday -k time-change
+-a always,exit -F arch=b64 -S clock_settime -k time-change
+-a always,exit -F arch=b32 -S clock_settime -k time-change
+-w /etc/localtime -p wa -k time-change
+
+# =======================================================
+# 4. USER IDENTITY & GROUPS
+# =======================================================
+# Monitor changes to user/group databases
+-w /etc/group -p wa -k identity
+-w /etc/passwd -p wa -k identity
+-w /etc/gshadow -p wa -k identity
+-w /etc/shadow -p wa -k identity
+-w /etc/security/opasswd -p wa -k identity
+
+# =======================================================
+# 5. NETWORK CONFIGURATION
+# =======================================================
+# Monitor changes to hostname and network environment
+-a always,exit -F arch=b64 -S sethostname -S setdomainname -k system-locale
+-a always,exit -F arch=b32 -S sethostname -S setdomainname -k system-locale
+-w /etc/issue -p wa -k system-locale
+-w /etc/issue.net -p wa -k system-locale
+-w /etc/hosts -p wa -k system-locale
+-w /etc/network/ -p wa -k system-locale
+
+# =======================================================
+# 6. PERMISSIONS (DAC)
+# =======================================================
+# Log changes to file attributes (chmod, chown, etc.)
+# Note: "auid>=1000" limits this to real humans (ignoring system daemons)
+# to reduce log noise.
+
+-a always,exit -F arch=b64 -S chmod -S fchmod -S fchmodat -F auid>=1000 -F auid!=4294967295 -k perm_mod
+-a always,exit -F arch=b32 -S chmod -S fchmod -S fchmodat -F auid>=1000 -F auid!=4294967295 -k perm_mod
+
+-a always,exit -F arch=b64 -S chown -S fchown -S fchownat -S lchown -F auid>=1000 -F auid!=4294967295 -k perm_mod
+-a always,exit -F arch=b32 -S chown -S fchown -S fchownat -S lchown -F auid>=1000 -F auid!=4294967295 -k perm_mod
+
+-a always,exit -F arch=b64 -S setxattr -S lsetxattr -S fsetxattr -S removexattr -S lremovexattr -S fremovexattr -F auid>=1000 -F auid!=4294967295 -k perm_mod
+-a always,exit -F arch=b32 -S setxattr -S lsetxattr -S fsetxattr -S removexattr -S lremovexattr -S fremovexattr -F auid>=1000 -F auid!=4294967295 -k perm_mod
+
+# =======================================================
+# 7. UNAUTHORIZED FILE ACCESS
+# =======================================================
+# Log failed attempts to open files (Permission Denied / EACCES)
+-a always,exit -F arch=b64 -S creat -S open -S openat -S truncate -S ftruncate -F exit=-EACCES -F auid>=1000 -F auid!=4294967295 -k access
+-a always,exit -F arch=b64 -S creat -S open -S openat -S truncate -S ftruncate -F exit=-EPERM -F auid>=1000 -F auid!=4294967295 -k access
+
+# =======================================================
+# 8. PRIVILEGE ESCALATION & SUDO
+# =======================================================
+# Monitor changes to sudoers
+-w /etc/sudoers -p wa -k scope
+-w /etc/sudoers.d/ -p wa -k scope
+
+# Monitor execution of sudo and su
+-w /usr/bin/sudo -p x -k priv_esc
+-w /usr/bin/su -p x -k priv_esc
+
+# =======================================================
+# 9. KERNEL MODULES (ROOTKITS)
+# =======================================================
+# Log loading/unloading of kernel modules
+-w /usr/sbin/insmod -p x -k modules
+-w /usr/sbin/rmmod -p x -k modules
+-w /usr/sbin/modprobe -p x -k modules
+-a always,exit -F arch=b64 -S init_module -S delete_module -k modules
+
+# =======================================================
+# 10. MOUNTS
+# =======================================================
+-a always,exit -F arch=b64 -S mount -F auid>=1000 -F auid!=4294967295 -k mounts
+-a always,exit -F arch=b32 -S mount -F auid>=1000 -F auid!=4294967295 -k mounts
+
+# =======================================================
+# 11. FILE DELETION
+# =======================================================
+# Log when a user renames or deletes a file (Forensics)
+-a always,exit -F arch=b64 -S unlink -S unlinkat -S rename -S renameat -F auid>=1000 -F auid!=4294967295 -k delete
+-a always,exit -F arch=b32 -S unlink -S unlinkat -S rename -S renameat -F auid>=1000 -F auid!=4294967295 -k delete
+
+# =======================================================
+# 12. FINALIZE
+# =======================================================
+# Make the configuration immutable.
+# Once this runs, rules cannot be changed without a reboot.
+-e 2
