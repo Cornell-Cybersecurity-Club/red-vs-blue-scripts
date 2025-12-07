@@ -1,63 +1,45 @@
 #!/bin/sh
-chattr -R -ia /
-chown root:root /*
 
-chown -R root:root /root/
+maybe_chmod() { [ -e "$2" ] && chmod "$1" "$2"; }
+maybe_chown() { [ -e "$2" ] && chown "$1" "$2"; }
 
-chmod 600 /swapfile
+chmod 700 /root
+chown root:root /root
 
-chmod 700 /boot /usr/src
-chmod 700 /lib/modules /usr/lib/modules
-chmod 600 /boot/grub/grub.cfg /boot/grub2/grub.cfg
-chmod og-rwx /etc/grub/grub.cfg /etc/grub2/grub.cfg
+chmod 700 /boot /usr/src /lib/modules /usr/lib/modules
+maybe_chmod 600 /boot/grub/grub.cfg /boot/grub2/grub.cfg
+maybe_chmod og-rwx /etc/grub.d/* /etc/grub2.d/*
 
-chown root:root -R /bin/
-chmod u-s,g-s,755 /bin/*
+chown root:adm /var/log || chown root:root /var/log
+chmod 755 /var/log
 
-chown root:root -R /var/log/
-chgrp adm /var/log/syslog
-chmod 0750 /var/log
-
-chmod 1777 /tmp
+chmod 1777 /tmp /var/tmp
 chown root:root /var/tmp
-chmod 1777 /var/tmp
 
-chown root:root /etc/sudoers
-chmod 640 /etc/sudoers
+maybe_chown root:root /etc/sudoers /etc/sudoers.d/*
+maybe_chmod 440 /etc/sudoers /etc/sudoers.d/*
 
-chown root:root /etc/login.defs
-chmod 644 /etc/login.defs
-
+maybe_chown root:root /etc/shadow /etc/gshadow
+maybe_chmod 600 /etc/shadow /etc/gshadow
 chmod 644 /etc/passwd /etc/group
-chown root:root /etc/shadow /etc/passwd /etc/group
-chmod 755 /etc/security
-chmod go-w /etc/security
-chmod 600 /etc/security/pwquality.conf
-chmod 600 /etc/shadow /etc/gshadow
-chown -R root:root /etc/security
 
-chown -R root:root /etc/*cron*
-chmod -R 600 /etc/*cron*
-chown -R root:root /var/spool/cron
-chmod -R 600 /var/spool/cron
-chown root:root /etc/anacrontab
-chmod 640 /etc/anacrontab
-chown root:root /etc/crontab
-chmod 600 /etc/crontab
-chown -R root:root /etc/cron.hourly
-chmod 700 /etc/cron.hourly
-chown -R root:root /etc/cron.daily
-chmod 700 /etc/cron.daily
-chown -R root:root /etc/cron.weekly
-chmod 700 /etc/cron.weekly
-chown -R root:root /etc/cron.monthly
-chmod 700 /etc/cron.monthly
-chown -R root:root /etc/cron.d
-chmod 700 /etc/cron.d
+maybe_chown root:root /etc/ssh/sshd_config
+maybe_chmod 600 /etc/ssh/sshd_config
+
+chmod 600 /etc/ssh/ssh_host_*_key
+chmod 644 /etc/ssh/ssh_host_*_key.pub
+
+maybe_chown root:root /etc/crontab /etc/anacrontab
+maybe_chmod 600 /etc/crontab
+maybe_chmod 640 /etc/anacrontab
+chmod 700 /etc/cron.d /etc/cron.hourly /etc/cron.daily /etc/cron.weekly /etc/cron.monthly
+
+maybe_chmod 644 /etc/login.defs /etc/securetty
+maybe_chmod 600 /etc/security/pwquality.conf
 
 chmod 644 /etc/services
 
 while IFS= read -r user; do
   chown -R "${user}":"${user}" /home/"${user}"
-  chmod 700 /home/"${user}"
+  chmod 750 /home/"${user}"
 done <"$(cat configs/users.txt configs/admins.txt)"

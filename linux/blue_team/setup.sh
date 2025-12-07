@@ -6,14 +6,14 @@ if [ "$(id -u || true)" -ne 0 ]; then
 fi
 
 ./backup.sh
-#./fix_perms.sh
+./fix_perms.sh
 ./auditd.sh
 ./users.sh
 ./kernel.sh
 ./fstab.sh
 ./apparmor.sh
-#./firewall.sh
-#./dconf.sh
-#./nuke_ssh.sh
+./firewall.sh
+./dconf.sh
+./nuke_ssh.sh
 ./ssh.sh
 ./remove_bad_files.sh
