@@ -1,4 +1,8 @@
 #!/bin/sh
+if [ "$(id -u || true)" -ne 0 ]; then
+  echo "This script must be run as root."
+  exit 1
+fi
 
 while IFS=: read -r user _ _ _ _ _ shell; do
   if [ "$user" = "root" ]; then

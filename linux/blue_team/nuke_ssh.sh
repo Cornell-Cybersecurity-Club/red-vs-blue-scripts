@@ -1,22 +1,23 @@
 #!/bin/sh
+if [ "$(id -u || true)" -ne 0 ]; then
+  echo "This script must be run as root."
+  exit 1
+fi
 
 for dir in /home/* /root; do
   if [ -d "$dir" ]; then
     sshdir="$dir/.ssh"
     if [ -d "$sshdir" ]; then
       rm -rf "$sshdir"
-      echo "Deleted $sshdir"
     fi
   fi
 done
 
-if command -v getent >/dev/null 2>&1; then
-  getent passwd | cut -d: -f6 | sort -u | while read -r homedir; do
-    if [ -n "$homedir" ] && [ -d "$homedir/.ssh" ]; then
-      rm -rf "$homedir/.ssh"
-    fi
-  done
-fi
+command -v getent && getent passwd | cut -d: -f6 | sort -u | while read -r homedir; do
+  if [ -n "$homedir" ] && [ -d "$homedir/.ssh" ]; then
+    rm -rf "$homedir/.ssh"
+  fi
+done
 
 rm -f /etc/ssh/ssh_host_*_key /etc/ssh/ssh_host_*.pub
 

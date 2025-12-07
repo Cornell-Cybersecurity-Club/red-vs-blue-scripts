@@ -1,4 +1,13 @@
 #!/bin/sh
+if [ "$(id -u || true)" -ne 0 ]; then
+  echo "This script must be run as root."
+  exit 1
+fi
+
+mkdir -p /etc/pam.d
+mkdir -p /etc/security
+mkdir -p /etc/bash
+
 cat configs/login.defs >/etc/login.defs
 cat configs/common-password >/etc/pam.d/common-password
 cat configs/common-auth >/etc/pam.d/common-auth
@@ -37,6 +46,6 @@ while IFS= read -r user; do
   fi
 done <"$(grep -E "sh$" /etc/passwd | cut -d ":" -f 1)"
 
-echo "unalias -a" >>/root/.bashrc
+cat configs/.bashrc >/root/.bashrc
 
 userdel -f "$(awk -F':' '$3 == 0 { if (dup++) print } END { exit(dup > 1) }' /etc/passwd | cut -d ":" -f1 || true)"
