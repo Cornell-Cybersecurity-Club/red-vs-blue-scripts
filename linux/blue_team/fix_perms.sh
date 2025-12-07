@@ -4,6 +4,8 @@ if [ "$(id -u || true)" -ne 0 ]; then
   exit 1
 fi
 
+chattr -Ria /
+
 maybe_chmod() { [ -e "$2" ] && chmod "$1" "$2"; }
 maybe_chown() { [ -e "$2" ] && chown "$1" "$2"; }
 
