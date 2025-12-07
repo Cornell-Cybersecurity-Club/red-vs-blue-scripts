@@ -16,7 +16,7 @@ echo 1 >/sys/kernel/security/evm
 echo "" >/etc/updatedb.conf
 echo "blacklist usb-storage" >>/etc/modprobe.d/blacklist.conf
 echo "install usb-storage /bin/false" >/etc/modprobe.d/usb-storage.conf
-echo "tty1" >/etc/securetty
+echo >/etc/securetty
 
 command -v prelink && prelink -ua
 sysctl -ep
