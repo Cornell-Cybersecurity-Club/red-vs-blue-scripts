@@ -2,6 +2,9 @@ PermitRootLogin no
 
 StrictModes yes
 
+MaxAuthTries 5
+MaxSessions 10
+
 PasswordAuthentication yes
 
 PermitEmptyPasswords no
@@ -11,7 +14,7 @@ PubkeyAuthentication yes
 LogLevel VERBOSE
 
 ClientAliveInterval 300
-ClientAliveCountMax 0
+ClientAliveCountMax 2
 
 AllowAgentForwarding no
 AllowTcpForwarding no

@@ -11,7 +11,7 @@ while IFS=: read -r user _ _ _ _ _ shell; do
 
   case "$shell" in
   *sh)
-    PASS=$(tr -dc 'a-zA-Z0-9' </dev/urandom | dd bs=1 count=14 2>/dev/null)
+    PASS=$(dd if=/dev/urandom bs=1 count=500 2>/dev/null | tr -dc 'A-Za-z0-9!@#$%^&*' | cut -c 1-14)
 
     echo "${user}:${PASS}" | chpasswd
 
