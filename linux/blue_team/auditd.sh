@@ -8,4 +8,4 @@ mkdir -p /etc/audit
 cat configs/auditd.conf >/etc/audit/auditd.conf
 cat configs/audit.rules >/etc/audit/audit.rules
 
-command -v auditctl && auditctl -e 1
+command -v auditctl >/dev/null 2>&1 && auditctl -e 1

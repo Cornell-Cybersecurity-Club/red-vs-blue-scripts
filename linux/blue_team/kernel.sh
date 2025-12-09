@@ -18,5 +18,5 @@ echo "blacklist usb-storage" >>/etc/modprobe.d/blacklist.conf
 echo "install usb-storage /bin/false" >/etc/modprobe.d/usb-storage.conf
 echo >/etc/securetty
 
-command -v prelink && prelink -ua
+command -v prelink >/dev/null 2>&1 && prelink -ua
 sysctl -ep

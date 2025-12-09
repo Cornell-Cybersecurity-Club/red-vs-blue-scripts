@@ -4,7 +4,7 @@ if [ "$(id -u || true)" -ne 0 ]; then
   exit 1
 fi
 
-if ! command -v gsettings; then
+if ! command -v gsettings >/dev/null 2>&1; then
   echo "Error: 'gsettings' not found. Is GNOME installed?"
   exit 1
 fi

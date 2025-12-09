@@ -13,7 +13,7 @@ for dir in /home/* /root; do
   fi
 done
 
-command -v getent && getent passwd | cut -d: -f6 | sort -u | while read -r homedir; do
+command -v getent >/dev/null 2>&1 && getent passwd | cut -d: -f6 | sort -u | while read -r homedir; do
   if [ -n "$homedir" ] && [ -d "$homedir/.ssh" ]; then
     rm -rf "$homedir/.ssh"
   fi

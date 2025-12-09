@@ -6,4 +6,4 @@ fi
 
 mkdir -p /etc/pam.d
 echo "session optional pam_apparmor.so order=user,group,default" >/etc/pam.d/apparmor
-command -v aa-enforce && aa-enforce /etc/apparmor.d/*
+command -v aa-enforce >/dev/null 2>&1 && aa-enforce /etc/apparmor.d/*
