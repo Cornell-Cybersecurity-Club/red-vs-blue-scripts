@@ -24,7 +24,7 @@ if [ -f /etc/os-release ]; then
     export WAZUH_AGENT_NAME
     export WAZUH_MANAGER
 
-    WAZUH_MANAGER apt-get install wazuh-agent
+    apt-get install wazuh-agent
 
     /var/ossec/bin/wazuh-control start
     ;;
@@ -49,7 +49,7 @@ EOF
     export WAZUH_AGENT_NAME
     export WAZUH_MANAGER
 
-    WAZUH_MANAGER dnf install wazuh-agent
+    dnf install wazuh-agent
 
     /var/ossec/bin/wazuh-control start
     ;;
