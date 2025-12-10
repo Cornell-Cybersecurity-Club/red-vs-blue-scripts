@@ -109,10 +109,31 @@ pg_subtrans
 pg_log
 .s.PGSQL.*
 
-/var/lib/containerd
-/var/lib/docker
+/var/lib/docker/overlay2
+/var/lib/docker/containers
+/var/lib/docker/image
+/var/lib/docker/tmp
+/var/lib/docker/fuse-overlayfs
+/var/lib/containerd/io.containerd.content.v1.content
+/var/lib/containerd/io.containerd.snapshotter.v1.overlayfs
 docker.sock
 .docker
+
+/var/lib/kubelet/pods
+/var/lib/etcd/member/wal
+
+/var/lib/jenkins/workspace
+/var/lib/jenkins/builds
+/var/lib/jenkins/caches
+/var/lib/jenkins/analytics
+
+/var/lib/teleport/log
+/var/lib/teleport/proc
+
+/var/lib/influxdb/data
+/var/lib/influxdb/wal
+/var/lib/elasticsearch/nodes
+/var/lib/graylog-server/journal
 
 /var/ossec/logs/archives
 /var/ossec/logs/alerts
@@ -137,7 +158,7 @@ if command -v find >/dev/null 2>&1; then
 fi
 
 DIRS_TO_BACKUP=""
-CANDIDATES="/etc /opt /root /var/www /var/ossec /var/named /var/lib/bind /var/spool/cron /var/spool/anacron /var/lib/mysql /var/lib/pgsql /srv /usr/local"
+CANDIDATES="/etc /opt /var/www /var/ossec /var/named /var/lib/bind /var/spool/cron /var/spool/anacron /var/lib/mysql /var/lib/pgsql /srv /usr/local /var/lib/jenkins /var/lib/gitea /var/lib/samba /var/lib/teleport /etc/kubernetes /var/lib/docker/swarm"
 
 for d in $CANDIDATES; do
   if [ -d "$d" ]; then
