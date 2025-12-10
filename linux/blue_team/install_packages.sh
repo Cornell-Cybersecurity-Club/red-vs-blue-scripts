@@ -26,7 +26,9 @@ if [ -f /etc/os-release ]; then
       wget \
       git \
       vim \
-      nano
+      nano \
+      zstd \
+      pigz
     ;;
   *rocky*)
     dnf install -y epel-release
@@ -50,7 +52,9 @@ if [ -f /etc/os-release ]; then
       wget \
       git \
       vim \
-      nano
+      nano \
+      zstd \
+      pigz
     ;;
   *alpine*)
     apk update
@@ -71,7 +75,9 @@ if [ -f /etc/os-release ]; then
       wget \
       git \
       vim \
-      nano
+      nano \
+      zstd \
+      pigz
     ;;
   *)
     FAMILY="$ID"
