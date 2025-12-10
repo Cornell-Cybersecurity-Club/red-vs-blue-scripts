@@ -1,10 +1,12 @@
 #!/bin/sh
+#!/bin/sh
+if [ "$(id -u || true)" -ne 0 ]; then
+  echo "This script must be run as root."
+  exit 1
+fi
 
 if [ -f /etc/os-release ]; then
   . /etc/os-release
-
-  echo "Detected Distro: $ID"
-  echo "Detected Version: $VERSION_ID"
 
   case $ID in
   ubuntu | debian)
