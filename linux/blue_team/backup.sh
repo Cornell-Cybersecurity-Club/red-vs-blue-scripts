@@ -23,13 +23,31 @@ cat <<EOF >"${EXCLUDE_FILE}"
 *.gz
 *.tar
 *.zip
+*.7z
+*.rar
 *.iso
+*.qcow2
+*.vmdk
+*.vdi
+*.mp4
+*.mp3
+*.avi
+*.mov
+*.wav
 *.swp
 *.tmp
+*.bak
 .cache
 __pycache__
 node_modules
+bower_components
 .git
+.svn
+.terraform
+*.pyc
+*.class
+*.o
+*.obj
 /proc/*
 /sys/*
 /dev/*
@@ -41,10 +59,27 @@ node_modules
 /var/lib/docker
 /var/cache
 /var/tmp
+/usr/share/doc
+/usr/share/man
+/usr/share/info
+/etc/ld.so.cache
+Thumbs.db
+.DS_Store
+core
+core.*
+sess_*
+*.session
+mysql-bin.*
+relay-log.*
+*.err
+pg_stat_tmp
+pg_replslot
+pg_notify
+pg_subtrans
 EOF
 
 DIRS_TO_BACKUP=""
-CANDIDATES="/etc /home /root /opt /var/www /var/spool/cron /usr/local /srv"
+CANDIDATES="/etc /var/www /var/spool/cron /var/spool/anacron /var/lib/mysql /var/lib/pgsql /srv"
 
 for d in $CANDIDATES; do
   if [ -d "$d" ]; then
