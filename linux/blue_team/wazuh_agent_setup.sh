@@ -16,8 +16,12 @@ if [ -f /etc/os-release ]; then
 
     apt-get update
 
+    echo "Enter wazuh manager IP: "
     read -r WAZUH_MANAGER
 
+    WAZUH_AGENT_NAME="$(uname -n)"
+
+    export WAZUH_AGENT_NAME
     export WAZUH_MANAGER
 
     WAZUH_MANAGER apt-get install wazuh-agent
@@ -37,8 +41,12 @@ baseurl=https://packages.wazuh.com/4.x/yum/
 priority=1
 EOF
 
+    echo "Enter wazuh manager IP: "
     read -r WAZUH_MANAGER
 
+    WAZUH_AGENT_NAME="$(uname -n)"
+
+    export WAZUH_AGENT_NAME
     export WAZUH_MANAGER
 
     WAZUH_MANAGER dnf install wazuh-agent
