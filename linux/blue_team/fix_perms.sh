@@ -11,7 +11,7 @@ if [ -f /etc/redhat-release ]; then
   IS_RHEL=1
 fi
 
-for dir in /bin /dev /etc /home /lib /lib64 /media /mnt /opt /proc /run /sbin /srv /sys /usr /var /var/lib /var/spool /var/cache /usr/lib /usr/local; do
+for dir in /dev /etc /home /media /mnt /opt /run /srv /usr /var /var/lib /var/spool /var/cache /usr/lib /usr/local; do
   if [ -d "$dir" ]; then
     chown root:root "$dir"
     chmod 755 "$dir"
@@ -47,13 +47,6 @@ if [ -f /etc/passwd ]; then
             find "$home/.ssh" -type f ! -name "*.pub" -exec chmod 600 {} \; 2>/dev/null
             find "$home/.ssh" -type f -exec chown "$uid:$gid" {} \; 2>/dev/null
           fi
-
-          for rcfile in .bashrc .profile .bash_profile .zshrc .bash_logout; do
-            if [ -f "$home/$rcfile" ]; then
-              chown "$uid:$gid" "$home/$rcfile"
-              chmod 644 "$home/$rcfile"
-            fi
-          done
         fi
         ;;
       esac
@@ -176,12 +169,6 @@ if [ -d /lib/modules ]; then
   find /lib/modules -type f -exec chown root:root {} \;
 fi
 
-if [ -d /etc/pam.d ]; then
-  chown root:root /etc/pam.d
-  chmod 755 /etc/pam.d
-  find /etc/pam.d -type f -exec chmod 644 {} \;
-  find /etc/pam.d -type f -exec chown root:root {} \;
-fi
 for libdir in /lib/security /lib64/security /usr/lib/security /usr/lib64/security; do
   if [ -d "$libdir" ]; then
     chown root:root "$libdir"
@@ -227,13 +214,6 @@ if [ -d /root ]; then
     chmod 700 /root
   fi
 fi
-
-for binary in /usr/bin/sudo /usr/bin/passwd /usr/bin/newgrp /usr/bin/gpasswd /bin/su; do
-  if [ -f "$binary" ]; then
-    chown root:root "$binary"
-    chmod u+s "$binary"
-  fi
-done
 
 if command -v rpm >/dev/null 2>&1; then
   rpm -a --setperms --setugids >/dev/null 2>&1
