@@ -162,6 +162,8 @@ EOF
     apk update
 
     apk info -q | xargs apk fix --reinstall
+
+    mkinitfs
     ;;
   *)
     FAMILY="$ID"
