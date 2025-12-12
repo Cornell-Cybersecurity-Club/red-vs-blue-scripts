@@ -10,25 +10,28 @@ if [ -f /etc/os-release ]; then
   case "${ID_LIKE:-$ID}" in
   *debian* | *ubuntu*)
     apt-get install -y \
-      tcpdump \
-      nmap \
-      net-tools \
-      auditd \
       apparmor \
       apparmor-utils \
-      iptabels \
-      fail2ban \
-      libpam-pwquality \
-      htop \
-      lsof \
-      gnupg \
+      auditd \
+      chrootkit \
       curl \
-      wget \
+      fail2ban \
       git \
-      vim \
+      gnupg \
+      htop \
+      iptables \
+      libpam-pwquality \
+      lsof \
       nano \
-      zstd \
-      pigz
+      net-tools \
+      nmap \
+      pigz \
+      rkhunter \
+      tcpdump \
+      unhide \
+      vim \
+      wget \
+      zstd
     ;;
   *rocky*)
     dnf install -y epel-release
@@ -36,48 +39,51 @@ if [ -f /etc/os-release ]; then
     dnf makecache
 
     dnf install -y \
-      tcpdump \
-      nmap \
-      net-tools \
-      fail2ban \
       audit \
-      iptabels \
-      policycoreutils \
-      libpwquality \
-      htop \
-      lsof \
-      openssl \
-      gnupg2 \
+      chrootkit \
       curl \
-      wget \
+      fail2ban \
       git \
-      vim \
+      gnupg2 \
+      htop \
+      iptables \
+      libpwquality \
+      lsof \
       nano \
-      zstd \
-      pigz
+      net-tools \
+      nmap \
+      openssl \
+      pigz \
+      policycoreutils \
+      rkhunter \
+      tcpdump \
+      unhide \
+      vim \
+      wget \
+      zstd
     ;;
   *alpine*)
     apk update
 
     apk add \
-      tcpdump \
-      nmap \
-      net-tools \
       audit \
-      fail2ban \
-      sysstat \
-      iptables \
-      htop \
-      openssl \
-      rsyslog \
-      gnupg \
       curl \
-      wget \
+      fail2ban \
       git \
-      vim \
+      gnupg \
+      htop \
+      iptables \
       nano \
-      zstd \
-      pigz
+      net-tools \
+      nmap \
+      openssl \
+      pigz \
+      rsyslog \
+      sysstat \
+      tcpdump \
+      vim \
+      wget \
+      zstd
     ;;
   *)
     FAMILY="$ID"

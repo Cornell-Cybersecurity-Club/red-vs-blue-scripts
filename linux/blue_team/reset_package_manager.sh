@@ -57,6 +57,8 @@ EOF
 
     dpkg --get-selections | grep -v deinstall | awk '{print $1}' |
       xargs apt-get install --reinstall -y -o Dpkg::Options::="--force-confmiss"
+
+    update-initramfs -u -k all
     ;;
   *centos*)
     CENTOS_VERSION="${VERSION_ID%%.*}"
@@ -134,6 +136,8 @@ EOF
     $PKG_MGR makecache
 
     rpm -qa --qf '%{NAME}\n' | xargs $PKG_MGR reinstall -y
+
+    dracut -f
     ;;
   *alpine*)
 
