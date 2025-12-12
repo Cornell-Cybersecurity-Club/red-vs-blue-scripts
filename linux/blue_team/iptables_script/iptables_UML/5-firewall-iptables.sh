@@ -7,8 +7,8 @@
 # Check if the scrip is ran as root.
 # $EUID is a env variable that contains the users UID
 # -ne 0 is not equal zero
-if [ "$EUID" -ne 0 ]
-  then echo "Please run as root"
+if [ "$EUID" -ne 0 ]; then
+  echo "Please run as root"
   exit
 fi
 
@@ -48,16 +48,16 @@ ip6tables -t mangle -N INVALID-LOG
 ## IPv4
 # Use the limit module to limit the number of logs made
 # Prefix with IPTables-SSH-INITIAL:
-# Give it a log level of 5 (Notification) 
+# Give it a log level of 5 (Notification)
 iptables -A SSH-INITIAL-LOG -m limit --limit 4/sec -j LOG --log-prefix "IPTables-SSH-INITIAL: " --log-level 5
-iptables -A SSH-INITIAL-LOG -j RETURN 
+iptables -A SSH-INITIAL-LOG -j RETURN
 
 ## IPv6
 # Use the limit module to limit the number of logs made
 # Prefix with IPTables-SSH-INITIAL:
-# Give it a log level of 5 (Notification) 
+# Give it a log level of 5 (Notification)
 ip6tables -A SSH-INITIAL-LOG -m limit --limit 4/sec -j LOG --log-prefix "IP6Tables-SSH-INITIAL: " --log-level 5
-ip6tables -A SSH-INITIAL-LOG -j RETURN 
+ip6tables -A SSH-INITIAL-LOG -j RETURN
 # ----------------------------------------------------------------------------------------------------------------------------
 
 # ------------------------------------------------ INVALID-LOG chain ---------------------------------------------------------
@@ -100,8 +100,8 @@ ip6tables -N ICMP-FLOOD
 ## IPv4
 # Use recent module, add the source address to the list (ICMP-FLOOD)
 iptables -A ICMP-FLOOD -m recent --set --name ICMP-FLOOD --rsource
-# If the source addr is in the ICMP-FLOOD list, and has sent packets in the last second, 6 or more times we will log this. 
-# rttl narrows down the matches to those packets in the list for the address with the TTL of the packet that hit the set rule 
+# If the source addr is in the ICMP-FLOOD list, and has sent packets in the last second, 6 or more times we will log this.
+# rttl narrows down the matches to those packets in the list for the address with the TTL of the packet that hit the set rule
 # The logging uses the limit module to 1 log a second with the prefix"IPTables-ICMP-FLOOD:"
 iptables -A ICMP-FLOOD -m recent --update --seconds 1 --hitcount 6 --name ICMP-FLOOD --rsource --rttl -m limit --limit 1/sec --limit-burst 1 -j LOG --log-prefix "IPTables-ICMP-FLOOD: " --log-level 4
 # If the conditions above are true, drop
@@ -109,12 +109,11 @@ iptables -A ICMP-FLOOD -m recent --update --seconds 1 --hitcount 6 --name ICMP-F
 # Otherwise Accept
 iptables -A ICMP-FLOOD -j ACCEPT
 
-
 ## IPv6
 # Use recent module, add the source address to the list (ICMP-FLOOD)
 ip6tables -A ICMP-FLOOD -m recent --set --name ICMP-FLOOD --rsource
-# If the source addr is in the ICMP-FLOOD list, and has sent packets in the last second, 6 or more times we will log this. 
-# rttl narrows down the matches to those packets in the list for the address with the TTL of the packet that hit the set rule 
+# If the source addr is in the ICMP-FLOOD list, and has sent packets in the last second, 6 or more times we will log this.
+# rttl narrows down the matches to those packets in the list for the address with the TTL of the packet that hit the set rule
 # The logging uses the limit module to 1 log a second with the prefix"IPTables-ICMP-FLOOD:"
 ip6tables -A ICMP-FLOOD -m recent --update --seconds 1 --hitcount 6 --name ICMP-FLOOD --rsource --rttl -m limit --limit 1/sec --limit-burst 1 -j LOG --log-prefix "IPTables-ICMP-FLOOD: " --log-level 4
 # If the conditions above are true, drop
@@ -143,7 +142,6 @@ ip6tables -A ICMP-FLOOD -j ACCEPT
 # iptables -A GLUSTER-OUT -p tcp -m multiport --dport 49152:49251 -j ACCEPT
 # # iptables -A GLUSTER -p udp -m multiport --dport 49152:49162 -m conntrack --ctstate NEW -j ACCEPT # UDP is not mentioned, we will see if it works without
 
-
 # ## IPv6
 # ### IN
 # # Gluster Management Ports -- they mention TCP and UDP
@@ -164,7 +162,6 @@ ip6tables -A ICMP-FLOOD -j ACCEPT
 # ip6tables -A GLUSTER-OUT -p tcp -m multiport --dport 49152:49162 -j ACCEPT
 # # ip6tables -A GLUSTER -p udp -m multiport --dport 49152:49162 -m conntrack --ctstate NEW -j ACCEPT # UDP is not mentioned, we will see if it works without
 # # -------------------------------------------------------------------------------------------------------------------
-
 
 # ------------------------------------------------ MANGLE tb, PREROUTING chain -----------------------------------------------
 ## IPv4
@@ -217,7 +214,7 @@ ip6tables -A INPUT -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
 iptables -A INPUT -p udp --dport 53 -j ACCEPT
 
 #### IPv4
-# Zone Transfer 
+# Zone Transfer
 # ip6tables -A INPUT -p tcp --dport 53 -j ACCEPT
 # Name Resolution
 ip6tables -A INPUT -p udp --dport 53 -j ACCEPT
@@ -228,7 +225,7 @@ iptables -A INPUT -i lo -j ACCEPT
 #### IPv6
 ip6tables -A INPUT -i lo -j ACCEPT
 
-####### HTTPS -- needed for all? --- 
+####### HTTPS -- needed for all? ---
 #### IPv4
 iptables -A INPUT -p tcp --dport 443 -j ACCEPT
 #### IPv6
@@ -302,9 +299,7 @@ ip6tables -A INPUT -p icmpv6 --icmpv6-type 152 -j ACCEPT
 # Accept ICMPv6 Type 153 - Inverse Neighbor Discovery Advertisement
 ip6tables -A INPUT -p icmpv6 --icmpv6-type 153 -j ACCEPT
 
-
 # ----------------------------------------------------------------------------------------------------------------------------
-
 
 # ----------------------------------------------- OUTPUT chain ---------------------------------------------------------------
 ###### SSH
@@ -325,7 +320,7 @@ ip6tables -A OUTPUT -p tcp --sport 22 -j ACCEPT
 # Allow Outbound DNS
 iptables -A OUTPUT -p tcp --dport 53 -j ACCEPT
 iptables -A OUTPUT -p udp --dport 53 -j ACCEPT
-# Allow DNS responces 
+# Allow DNS responces
 iptables -A OUTPUT -p tcp --sport 53 -j ACCEPT
 iptables -A OUTPUT -p tcp --sport 53 -j ACCEPT
 
@@ -333,7 +328,7 @@ iptables -A OUTPUT -p tcp --sport 53 -j ACCEPT
 # Allow Outbound DNS
 ip6tables -A OUTPUT -p tcp --dport 53 -j ACCEPT
 ip6tables -A OUTPUT -p udp --dport 53 -j ACCEPT
-# Allow DNS responces 
+# Allow DNS responces
 ip6tables -A OUTPUT -p tcp --sport 53 -j ACCEPT
 ip6tables -A OUTPUT -p tcp --sport 53 -j ACCEPT
 
@@ -342,7 +337,6 @@ ip6tables -A OUTPUT -p tcp --sport 53 -j ACCEPT
 iptables -A OUTPUT -o lo -j ACCEPT
 ## IPv6
 ip6tables -A OUTPUT -o lo -j ACCEPT
-
 
 ###### HTTP/ HTTPS
 ## IPv4
@@ -455,17 +449,16 @@ ip6tables -P FORWARD DROP
 
 # ----------------------------------------------- Docker Specific IPTables rules  --------------------------------------------
 if ! [[ -x "$(command -v docker)" ]]; then
-    echo "Docker is not installed, exiting script!"
-    echo "Saving Firewall Rules"
-    if [ -f "/etc/debian_version" ];
-      then
-        iptables-save > /etc/iptables/rules.v4
-        ip6tables-save > /etc/iptables/rules.v6
-      else
-        iptables-save > /etc/sysconfig/iptables
-        ip6tables-save > /etc/sysconfig/iptables
-    fi
-    exit
+  echo "Docker is not installed, exiting script!"
+  echo "Saving Firewall Rules"
+  if [ -f "/etc/debian_version" ]; then
+    iptables-save >/etc/iptables/rules.v4
+    ip6tables-save >/etc/iptables/rules.v6
+  else
+    iptables-save >/etc/sysconfig/iptables
+    ip6tables-save >/etc/sysconfig/iptables
+  fi
+  exit
 fi
 # Create Docker Chain
 iptables -N DOCKER-LOG
@@ -478,21 +471,19 @@ iptables -I DOCKER-LOG -m limit --limit 3/sec -j LOG --log-prefix "IPTables-DOCK
 # Return
 iptables -A DOCKER-LOG -j RETURN
 
-
 # Create rule to log (traffic to container)
 # only logs traffic being forwarded to the container
 # To limit the amount of logs generated we can limit it to new connections
-iptables -I DOCKER-USER  -o docker0 -j DOCKER-LOG
+iptables -I DOCKER-USER -o docker0 -j DOCKER-LOG
 # ----------------------------------------------------------------------------------------------------------------------------
 
 # ------------------------------------------- Save Firewall Rules ------------------------------------------------------------
 echo "Saving Firewall Rules"
-if [ -f "/etc/debian_version" ];
-    then
-      iptables-save > /etc/iptables/rules.v4
-      ip6tables-save > /etc/iptables/rules.v6
-    else
-      iptables-save > /etc/sysconfig/iptables
-      ip6tables-save > /etc/sysconfig/iptables
+if [ -f "/etc/debian_version" ]; then
+  iptables-save >/etc/iptables/rules.v4
+  ip6tables-save >/etc/iptables/rules.v6
+else
+  iptables-save >/etc/sysconfig/iptables
+  ip6tables-save >/etc/sysconfig/iptables
 fi
 # ----------------------------------------------------------------------------------------------------------------------------
