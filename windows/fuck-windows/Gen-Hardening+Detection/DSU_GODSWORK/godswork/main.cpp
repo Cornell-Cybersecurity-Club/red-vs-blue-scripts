@@ -544,78 +544,6 @@ cleanup:
     return (status == 0);
 }
 
-struct PassgenOptions {
-    int rounds = 1000;
-    int words = 2;
-    int wordLength = 5;
-    int numbers = 2;
-    int numberLength = 4;
-};
-
-const std::vector<std::string> consonants = {
-    "b","c","d","f","g","h","j","k","l","m","n","p","q","r","s","t","v","w","x","z",
-    "bl","cl","fl","gl","pl","sl","br","cr","dr","fr","gr","pr","tr","sc","sk","sm",
-    "sn","sp","st","sw","tw"
-};
-const std::vector<std::string> vowels = {
-    "a","e","i","o","u","ai","ay","ea","ey","ee","ey","ei","ie","oa","oe","ue","eu",
-    "oi","oy","ou","au","oo"
-};
-const std::vector<std::string> symbols = {
-    "@","#","$","%","&","!","?",":","*","^","_","-","+","=", "<"
-};
-
-class PasswordGenerator {
-private:
-    std::vector<unsigned char> state;
-    const unsigned char* secret;
-    size_t secretLen;
-
-    uint32_t advance() {
-        std::vector<unsigned char> hash;
-        if (!HmacSha256_BCrypt(secret, secretLen, state.data(), state.size(), hash)) {
-            throw std::runtime_error("HmacSha256_BCrypt failed");
-        }
-        state = hash;
-        int o = state[0] % (static_cast<int>(state.size()) - 4);
-        uint32_t value = 0;
-        memcpy(&value, &state[o], 4);
-        return value;
-    }
-
-public:
-    PasswordGenerator(const unsigned char* secretKey, size_t secretLength)
-        : secret(secretKey), secretLen(secretLength)
-    {
-        state.resize(32, 0);
-    }
-
-    std::string generatePassword(const PassgenOptions& options) {
-        for (int i = 0; i < options.rounds; i++) {
-            advance();
-        }
-        std::stringstream ret;
-        for (int i = 0; i < options.words; i++) {
-            for (int j = 0; j < options.wordLength; j++) {
-                if (j % 2 == 0) {
-                    ret << vowels[advance() % vowels.size()];
-                }
-                else {
-                    ret << consonants[advance() % consonants.size()];
-                }
-            }
-            ret << symbols[advance() % symbols.size()];
-        }
-        for (int i = 0; i < options.numbers; i++) {
-            for (int j = 0; j < options.numberLength; j++) {
-                ret << char('0' + (advance() % 10));
-            }
-            ret << symbols[advance() % symbols.size()];
-        }
-        return ret.str();
-    }
-};
-
 static std::string ResolveDNSNameToIP(const std::wstring& machineW)
 {
     std::string machine = WStringToString(machineW);
@@ -787,22 +715,6 @@ std::wstring HardenSMB(const std::wstring& machine)
     return ss.str();
 }
 
-static std::wstring GeneratePasswordFromSecret(const std::string& secret)
-{
-    PassgenOptions options;
-    options.rounds = 1000;
-    options.words = 2;
-    options.wordLength = 5;
-    options.numbers = 2;
-    options.numberLength = 4;
-    PasswordGenerator generator(
-        reinterpret_cast<const unsigned char*>(secret.data()),
-        secret.size()
-    );
-    std::string passwordStr = generator.generatePassword(options);
-    return StringToWString(passwordStr);
-}
-
 // ====================
 // Modified: ProcessMachineHarden (removed psExec call)
 // ====================
@@ -811,7 +723,7 @@ std::wstring ProcessMachineHarden(const std::wstring& machine, const std::wstrin
     std::wstringstream ss;
     ss << L"\n[INFO] Processing machine for firewall/registry hardening: " << machine << std::endl;
     std::wstring uncPath = L"\\\\" + machine + L"\\IPC$";
-    NETRESOURCE nr;
+    NETRESOURCEW nr;
     ZeroMemory(&nr, sizeof(nr));
     nr.dwType = RESOURCETYPE_ANY;
     nr.lpLocalName = NULL;
@@ -842,7 +754,7 @@ MachinePasswordChangeResult ProcessMachineChangePasswords(const std::wstring& ma
     std::wstringstream ss;
     ss << L"\n[INFO] Changing local user passwords on machine: " << machine << std::endl;
     std::wstring uncPath = L"\\\\" + machine + L"\\IPC$";
-    NETRESOURCE nr;
+    NETRESOURCEW nr;
     ZeroMemory(&nr, sizeof(nr));
     nr.dwType = RESOURCETYPE_ANY;
     nr.lpLocalName = NULL;
@@ -875,37 +787,8 @@ MachinePasswordChangeResult ProcessMachineChangePasswords(const std::wstring& ma
         std::string ipStr = ResolveDNSNameToIP(machine);
         for (DWORD i = 0; i < dwEntriesRead; i++) {
             std::wstring username = pUser0[i].usri0_name;
-            std::string secret = "LocalUserSecret_" + ipStr + "_" + WStringToString(username);
-            std::wstring newPassword = GeneratePasswordFromSecret(secret);
-            if (newPassword.empty()) {
-                newPassword = L"Fallback123!";
-            }
-            ss << L"[INFO] Setting password for local user: " << username
-                << L" => [" << newPassword << L"]" << std::endl;
-            USER_INFO_1003 ui;
-            ZeroMemory(&ui, sizeof(ui));
-            ui.usri1003_password = const_cast<LPWSTR>(newPassword.c_str());
-            DWORD dwParamErr = 0;
-            NET_API_STATUS setInfoStatus = NetUserSetInfo(
-                (LPWSTR)serverName.c_str(),
-                (LPWSTR)username.c_str(),
-                1003,
-                (LPBYTE)&ui,
-                &dwParamErr
-            );
-            if (setInfoStatus != NERR_Success) {
-                ss << L"[ERROR] NetUserSetInfo failed for user "
-                    << username << L" on machine " << machine
-                    << L". Error: " << setInfoStatus << std::endl;
-            }
-            else {
-                ss << L"[INFO] Password set successfully for user "
-                    << username << L" on machine " << machine << std::endl;
-            }
-            // Capture the new password for the Administrator account
-            if (_wcsicmp(username.c_str(), L"Administrator") == 0) {
-                adminNewPassword = newPassword;
-            }
+            // Password generation removed
+            ss << L"[INFO] Skipping password change for local user: " << username << std::endl;
         }
         NetApiBufferFree(pUser0);
     }
@@ -938,48 +821,8 @@ std::wstring ProcessADUserChangePassword(const std::wstring& userDN)
     HRESULT hrCo = CoInitializeEx(NULL, COINIT_MULTITHREADED);
     std::wstringstream ss;
     ss << L"\n[INFO] Processing AD user: " << userDN << std::endl;
-    std::string secret = "ADUserSecret_" + WStringToString(userDN);
-    std::wstring newPassword = GeneratePasswordFromSecret(secret);
-    ss << L"[INFO] Generated new password for user: " << newPassword << std::endl;
-    std::wstring userPath = L"LDAP://" + userDN;
-    IADsUser* pADsUser = NULL;
-    hrCo = ADsOpenObject(
-        userPath.c_str(),
-        NULL,
-        NULL,
-        ADS_SECURE_AUTHENTICATION,
-        IID_IADsUser,
-        (void**)&pADsUser
-    );
-    if (SUCCEEDED(hrCo) && pADsUser) {
-        BSTR bstrPassword = SysAllocString(newPassword.c_str());
-        if (bstrPassword) {
-            HRESULT hrSetPwd = pADsUser->SetPassword(bstrPassword);
-            SysFreeString(bstrPassword);
-            if (FAILED(hrSetPwd)) {
-                ss << L"[ERROR] SetPassword failed for user " << userDN
-                    << L". HRESULT=0x" << std::hex << hrSetPwd << std::dec << std::endl;
-            }
-            else {
-                HRESULT hrSetInfo = pADsUser->SetInfo();
-                if (FAILED(hrSetInfo)) {
-                    ss << L"[ERROR] SetInfo failed for user " << userDN
-                        << L". HRESULT=0x" << std::hex << hrSetInfo << std::dec << std::endl;
-                }
-                else {
-                    ss << L"[INFO] Password successfully changed for AD user " << userDN << std::endl;
-                }
-            }
-        }
-        else {
-            ss << L"[ERROR] SysAllocString failed for user " << userDN << std::endl;
-        }
-        pADsUser->Release();
-    }
-    else {
-        ss << L"[ERROR] Failed binding to AD user " << userDN
-            << L". HRESULT=0x" << std::hex << hrCo << std::dec << std::endl;
-    }
+    // Password generation removed
+    ss << L"[INFO] Skipping password change for AD user" << std::endl;
     CoUninitialize();
     return ss.str();
 }
@@ -1014,7 +857,7 @@ int wmain(int argc, wchar_t* argv[])
     std::wstring dn;
     PDOMAIN_CONTROLLER_INFO pDCInfo = NULL;
     if (DsGetDcName(NULL, NULL, NULL, NULL, 0, &pDCInfo) == ERROR_SUCCESS) {
-        std::wstring domainName = pDCInfo->DomainName;
+        std::wstring domainName = StringToWString(std::string(pDCInfo->DomainName ? pDCInfo->DomainName : ""));
         dn = ConvertDomainNameToDN(domainName);
         NetApiBufferFree(pDCInfo);
     }
