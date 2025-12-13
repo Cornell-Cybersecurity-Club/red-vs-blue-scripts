@@ -857,7 +857,7 @@ int wmain(int argc, wchar_t* argv[])
     std::wstring dn;
     PDOMAIN_CONTROLLER_INFO pDCInfo = NULL;
     if (DsGetDcName(NULL, NULL, NULL, NULL, 0, &pDCInfo) == ERROR_SUCCESS) {
-        std::wstring domainName = StringToWString(std::string(pDCInfo->DomainName ? pDCInfo->DomainName : ""));
+        std::wstring domainName = pDCInfo->DomainName ? pDCInfo->DomainName : L"";
         dn = ConvertDomainNameToDN(domainName);
         NetApiBufferFree(pDCInfo);
     }
