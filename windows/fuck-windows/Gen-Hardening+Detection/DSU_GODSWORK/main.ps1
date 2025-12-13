@@ -157,12 +157,12 @@
 
 
     Get-Service -Name RemoteRegistry | Stop-Service -Force
-    Set-Service -Name RemoteRegistry -StartupType Disabled -Status Stopped -Confirm $false
+    Set-Service -Name RemoteRegistry -StartupType Disabled -Confirm:$false
 
 
     Disable-PSRemoting -Force
     Get-Service -Name WinRM | Stop-Service -Force
-    Set-Service -Name WinRM -StartupType Disabled -Status Stopped -Confirm $false
+    Set-Service -Name WinRM -StartupType Disabled -Confirm:$false
 
     Remove-Item -Path WSMan:\Localhost\listener\listener* -Recurse
     Set-ItemProperty -Path HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\policies\system -Name LocalAccountTokenFilterPolicy -Value 0
