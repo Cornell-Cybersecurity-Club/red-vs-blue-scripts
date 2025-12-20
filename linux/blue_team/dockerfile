@@ -1,0 +1,12 @@
+FROM alpine:latest
+
+# Copy the security script
+COPY docker_setup.sh /usr/local/bin/docker_setup.sh
+RUN chmod +x /usr/local/bin/docker_setup.sh
+
+# Copy your application files
+# COPY main.sh /app/main.sh
+# RUN chmod +x /app/main.sh
+
+# Set as entrypoint
+ENTRYPOINT ["/usr/local/bin/docker_setup.sh"]
