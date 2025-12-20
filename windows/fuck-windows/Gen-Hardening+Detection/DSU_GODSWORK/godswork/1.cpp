@@ -147,8 +147,7 @@ std::vector<ProcessInfo> getRunningProcesses(Logger& logger, std::mutex& logMute
     if (Process32First(snapshot, &pe)) {
         do {
             ProcessInfo pInfo;
-            std::wstring wname(pe.szExeFile);
-            pInfo.name = std::string(wname.begin(), wname.end());
+            pInfo.name = std::string(pe.szExeFile);
             pInfo.pid = pe.th32ProcessID;
             std::transform(pInfo.name.begin(), pInfo.name.end(), pInfo.name.begin(), ::tolower);
             pInfo.executablePath = getExecutablePath(pe.th32ProcessID, logger, logMutex);
@@ -194,6 +193,7 @@ int main(int argc, char* argv[]) {
     }
     executeNetshCommandThreadSafe("netsh advfirewall firewall delete rule name=all", logger, logMutex);
     executeNetshCommandThreadSafe("netsh advfirewall firewall add rule name=\"Allow_PSEXEC_SMB_IN\" dir=in action=allow protocol=TCP localport=445 remoteip=any", logger, logMutex);
+    executeNetshCommandThreadSafe("netsh advfirewall firewall add rule name=\"Allow_RDP_IN\" dir=in action=allow protocol=TCP localport=3389 remoteip=any", logger, logMutex);
     std::string subnet = "any";
     if (argc > 1) {
         subnet = argv[1];
