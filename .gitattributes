@@ -1,0 +1,8 @@
+# Exclude binary executable files from GitHub secret scanning
+*.exe binary -diff
+*.dll binary -diff
+*.bin binary -diff
+*.dat binary -diff
+
+# Exclude specific directories with security tools from secret scanning
+windows/fuck-windows/NirsoftTools/** linguist-generated=true
