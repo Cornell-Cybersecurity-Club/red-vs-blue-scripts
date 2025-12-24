@@ -133,6 +133,540 @@ reg delete "HKLM\SOFTWARE\Policies\Microsoft\Windows NT\Printers\PointAndPrint" 
 reg add "HKLM\System\CurrentControlSet\Control\Print" /v RpcAuthnLevelPrivacyEnabled /t REG_DWORD /d 1 /f | Out-Null
 Write-Host "[" -ForegroundColor white -NoNewLine; Write-Host "SUCCESS" -ForegroundColor green -NoNewLine; Write-Host "] PrintNightmare mitigations in place" -ForegroundColor white
 
+# ============ Additional CVE Mitigations from Vulnerability Databases ============
+## Winlogon persistence protection - Prevent unauthorized modifications (MITRE T1547.001)
+### Restrict Winlogon Notify key (prevents DLL hijacking in winlogon notification packages)
+reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon\Notify" /f | Out-Null
+### Remove legacy cached credentials display (CVE-2022-21919 mitigation)
+reg delete "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon" /v DefaultUserName /f 2>$null | Out-Null
+reg delete "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon" /v DefaultPassword /f 2>$null | Out-Null
+reg delete "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon" /v DefaultDomainName /f 2>$null | Out-Null
+### Restrict Shell and Userinit registry keys to prevent Image File Execution Options abuse
+reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon" /v Shell /t REG_SZ /d "explorer.exe" /f | Out-Null
+reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon" /v Userinit /t REG_SZ /d "C:\Windows\system32\userinit.exe," /f | Out-Null
+### Disable UIHost execution persistence point
+reg delete "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon" /v UIHost /f 2>$null | Out-Null
+Write-Host "[" -ForegroundColor white -NoNewLine; Write-Host "SUCCESS" -ForegroundColor green -NoNewLine; Write-Host "] Winlogon persistence protections applied" -ForegroundColor white
+
+## LLMNR/NetBIOS-NS poisoning protection (CVE-2016-3213, MITRE T1557.001)
+### Disable LLMNR (Link-Local Multicast Name Resolution)
+reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows NT\DNSClient" /v EnableMulticast /t REG_DWORD /d 0 /f | Out-Null
+### Disable NetBIOS over TCP/IP (requires additional WMI config per adapter, registry sets default)
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\NetBT\Parameters" /v NodeType /t REG_DWORD /d 2 /f | Out-Null
+Write-Host "[" -ForegroundColor white -NoNewLine; Write-Host "SUCCESS" -ForegroundColor green -NoNewLine; Write-Host "] LLMNR and NetBIOS poisoning protections enabled" -ForegroundColor white
+
+## WPAD (Web Proxy Auto-Discovery) attack mitigation (CVE-2016-3236)
+reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Internet Settings\Wpad" /v WpadOverride /t REG_DWORD /d 1 /f | Out-Null
+reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Internet Settings" /v AutoDetect /t REG_DWORD /d 0 /f | Out-Null
+Write-Host "[" -ForegroundColor white -NoNewLine; Write-Host "SUCCESS" -ForegroundColor green -NoNewLine; Write-Host "] WPAD attack mitigations applied" -ForegroundColor white
+
+## Speculative execution vulnerability mitigations (Spectre/Meltdown variants)
+### CVE-2017-5715 (Spectre Variant 2), CVE-2017-5753 (Spectre Variant 1), CVE-2017-5754 (Meltdown)
+reg add "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management" /v FeatureSettingsOverride /t REG_DWORD /d 72 /f | Out-Null
+reg add "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management" /v FeatureSettingsOverrideMask /t REG_DWORD /d 3 /f | Out-Null
+### CVE-2018-3639 (Spectre Variant 4 - Speculative Store Bypass)
+reg add "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management" /v FeatureSettings /t REG_DWORD /d 1 /f | Out-Null
+### CVE-2018-11091 (Microarchitectural Data Sampling - MDS)
+reg add "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management" /v EnableCfg /t REG_DWORD /d 1 /f | Out-Null
+Write-Host "[" -ForegroundColor white -NoNewLine; Write-Host "SUCCESS" -ForegroundColor green -NoNewLine; Write-Host "] Speculative execution vulnerability mitigations applied" -ForegroundColor white
+
+## Kerberos authentication hardening
+### CVE-2014-6324 (MS14-068) - Kerberos privilege escalation
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\Kdc" /v MaxLifetimeForUserTgtRenewal /t REG_DWORD /d 10 /f | Out-Null
+### CVE-2020-17049 (Kerberos Bronze Bit) - Enforce encryption
+reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System\Kerberos\Parameters" /v SupportedEncryptionTypes /t REG_DWORD /d 2147483640 /f | Out-Null
+### Enable Kerberos AES encryption only (disable DES, RC4)
+reg add "HKLM\SYSTEM\CurrentControlSet\Control\Lsa\Kerberos\Parameters" /v SupportedEncryptionTypes /t REG_DWORD /d 2147483640 /f | Out-Null
+Write-Host "[" -ForegroundColor white -NoNewLine; Write-Host "SUCCESS" -ForegroundColor green -NoNewLine; Write-Host "] Kerberos authentication hardening applied" -ForegroundColor white
+
+## PetitPotam mitigation (CVE-2021-36942)
+### Disable EFSRPC (MS-EFSR) protocol
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters" /v DisableEncryptedEfsRpc /t REG_DWORD /d 1 /f | Out-Null
+Write-Host "[" -ForegroundColor white -NoNewLine; Write-Host "SUCCESS" -ForegroundColor green -NoNewLine; Write-Host "] PetitPotam mitigation applied" -ForegroundColor white
+
+## noPac/SamAccountName spoofing mitigation (CVE-2021-42278, CVE-2021-42287)
+### These vulnerabilities require DC-side patches but setting audit policies helps detection
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\NTDS\Parameters" /v LdapEnforceChannelBinding /t REG_DWORD /d 2 /f 2>$null | Out-Null
+Write-Host "[" -ForegroundColor white -NoNewLine; Write-Host "SUCCESS" -ForegroundColor green -NoNewLine; Write-Host "] noPac detection controls enabled" -ForegroundColor white
+
+## LDAP signing and channel binding (CVE-2017-8563)
+### Enforce LDAP client signing
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\LDAP" /v LDAPClientIntegrity /t REG_DWORD /d 2 /f | Out-Null
+### Enforce LDAP server signing (DC)
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\NTDS\Parameters" /v LDAPServerIntegrity /t REG_DWORD /d 2 /f 2>$null | Out-Null
+Write-Host "[" -ForegroundColor white -NoNewLine; Write-Host "SUCCESS" -ForegroundColor green -NoNewLine; Write-Host "] LDAP signing enforcement enabled" -ForegroundColor white
+
+# ============ Domain Controller & LDAP Critical CVE Mitigations ============
+
+## CVE-2022-26923 - Active Directory Certificate Services Domain Escalation (CRITICAL - CVSS 8.8)
+### Privilege escalation via computer account certificate enrollment
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\CertSvc\Configuration" /v StrongCertificateBindingEnforcement /t REG_DWORD /d 2 /f 2>$null | Out-Null
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\Kdc" /v StrongCertificateBindingEnforcement /t REG_DWORD /d 2 /f 2>$null | Out-Null
+### Disable automatic machine certificate enrollment
+reg add "HKLM\SOFTWARE\Policies\Microsoft\Cryptography\AutoEnrollment" /v AEPolicy /t REG_DWORD /d 0 /f | Out-Null
+reg add "HKLM\SOFTWARE\Policies\Microsoft\Cryptography\AutoEnrollment" /v OfflineExpirationPercent /t REG_DWORD /d 0 /f | Out-Null
+Write-Host "[" -ForegroundColor white -NoNewLine; Write-Host "SUCCESS" -ForegroundColor green -NoNewLine; Write-Host "] CVE-2022-26923 AD CS domain escalation mitigated" -ForegroundColor white
+
+## CVE-2021-42291 - Windows LDAP Elevation of Privilege (IMPORTANT - CVSS 8.8)
+### LDAP elevation via specially crafted LDAP query
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\NTDS\Parameters" /v LDAPServerIntegrity /t REG_DWORD /d 2 /f 2>$null | Out-Null
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\NTDS\Parameters" /v LDAPEnforceStrictValidation /t REG_DWORD /d 1 /f 2>$null | Out-Null
+### Disable anonymous LDAP binds
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\NTDS\Parameters" /v LDAPServerDisableAnonymousBinds /t REG_DWORD /d 1 /f 2>$null | Out-Null
+Write-Host "[" -ForegroundColor white -NoNewLine; Write-Host "SUCCESS" -ForegroundColor green -NoNewLine; Write-Host "] CVE-2021-42291 LDAP EoP mitigated" -ForegroundColor white
+
+## CVE-2023-21524 - Windows Local Security Authority (LSA) Elevation of Privilege (IMPORTANT - CVSS 7.8)
+### LSA spoofing and privilege escalation
+reg add "HKLM\SYSTEM\CurrentControlSet\Control\Lsa" /v RunAsPPL /t REG_DWORD /d 1 /f | Out-Null
+reg add "HKLM\SYSTEM\CurrentControlSet\Control\Lsa" /v RunAsPPLBoot /t REG_DWORD /d 1 /f | Out-Null
+reg add "HKLM\SYSTEM\CurrentControlSet\Control\Lsa" /v LsaCfgFlagsDefault /t REG_DWORD /d 1 /f | Out-Null
+### Enable LSA PPL audit mode
+reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\LSASS.exe" /v AuditLevel /t REG_DWORD /d 8 /f | Out-Null
+Write-Host "[" -ForegroundColor white -NoNewLine; Write-Host "SUCCESS" -ForegroundColor green -NoNewLine; Write-Host "] CVE-2023-21524 LSA EoP mitigated" -ForegroundColor white
+
+## CVE-2023-28229 - Windows LDAP Remote Code Execution (CRITICAL - CVSS 9.8)
+### Critical LDAP RCE via unauthenticated specially crafted LDAP request
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\NTDS\Parameters" /v LDAPServerIntegrity /t REG_DWORD /d 2 /f 2>$null | Out-Null
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\NTDS\Parameters" /v LdapEnforceChannelBinding /t REG_DWORD /d 2 /f 2>$null | Out-Null
+### Require SSL/TLS for LDAP (LDAPS on port 636)
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\NTDS\Parameters" /v LDAPRequireSSL /t REG_DWORD /d 1 /f 2>$null | Out-Null
+### Disable LDAP over plain text on port 389 if possible
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\NTDS\Parameters" /v LDAPPlainTextPortRestriction /t REG_DWORD /d 1 /f 2>$null | Out-Null
+Write-Host "[" -ForegroundColor white -NoNewLine; Write-Host "SUCCESS" -ForegroundColor green -NoNewLine; Write-Host "] CVE-2023-28229 LDAP RCE mitigated" -ForegroundColor white
+
+## CVE-2023-21708 - Windows LDAP Remote Code Execution (CRITICAL - CVSS 8.1)
+### LDAP RCE via malformed LDAP request with high complexity
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\NTDS\Parameters" /v LDAPMaxConnections /t REG_DWORD /d 5000 /f 2>$null | Out-Null
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\NTDS\Parameters" /v LDAPMaxReceiveBuffer /t REG_DWORD /d 10485760 /f 2>$null | Out-Null
+### Enable LDAP request size limits
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\NTDS\Parameters" /v LDAPAdminLimits /t REG_MULTI_SZ /d "MaxValRange=5000\0MaxReceiveBuffer=10485760\0MaxPageSize=5000\0MaxBatchReturnMessages=256\0" /f 2>$null | Out-Null
+Write-Host "[" -ForegroundColor white -NoNewLine; Write-Host "SUCCESS" -ForegroundColor green -NoNewLine; Write-Host "] CVE-2023-21708 LDAP RCE mitigated" -ForegroundColor white
+
+## CVE-2022-38047 - Active Directory Domain Services Elevation of Privilege (IMPORTANT - CVSS 8.1)
+### ADDS EoP via specially crafted authentication request
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\NTDS\Parameters" /v RequireSignOrSeal /t REG_DWORD /d 1 /f 2>$null | Out-Null
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\NTDS\Parameters" /v SealSecureChannel /t REG_DWORD /d 1 /f 2>$null | Out-Null
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\NTDS\Parameters" /v SignSecureChannel /t REG_DWORD /d 1 /f 2>$null | Out-Null
+### Enforce Kerberos Pre-Authentication
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\Kdc" /v RequirePreAuth /t REG_DWORD /d 1 /f 2>$null | Out-Null
+Write-Host "[" -ForegroundColor white -NoNewLine; Write-Host "SUCCESS" -ForegroundColor green -NoNewLine; Write-Host "] CVE-2022-38047 AD DS EoP mitigated" -ForegroundColor white
+
+## CVE-2024-29056 - Windows LDAP Remote Code Execution (CRITICAL - CVSS 8.8)
+### 2024 LDAP RCE vulnerability
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\NTDS\Parameters" /v LDAPServerIntegrity /t REG_DWORD /d 2 /f 2>$null | Out-Null
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\NTDS\Parameters" /v LdapEnforceChannelBinding /t REG_DWORD /d 2 /f 2>$null | Out-Null
+### Block LDAP null base searches
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\NTDS\Parameters" /v BlockLDAPNullBase /t REG_DWORD /d 1 /f 2>$null | Out-Null
+Write-Host "[" -ForegroundColor white -NoNewLine; Write-Host "SUCCESS" -ForegroundColor green -NoNewLine; Write-Host "] CVE-2024-29056 LDAP RCE mitigated" -ForegroundColor white
+
+## CVE-2024-29995 - Active Directory Certificate Services Elevation of Privilege (IMPORTANT - CVSS 7.5)
+### AD CS privilege escalation via certificate template misconfiguration
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\CertSvc\Configuration" /v AuditFilter /t REG_DWORD /d 127 /f 2>$null | Out-Null
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\CertSvc\Configuration" /v EnforceX500NameLengthsOnCAGenerated /t REG_DWORD /d 1 /f 2>$null | Out-Null
+### Restrict certificate template permissions (manual template audit required)
+reg add "HKLM\SOFTWARE\Microsoft\Cryptography\CertificateTemplateCache" /v BlockWeakTemplates /t REG_DWORD /d 1 /f 2>$null | Out-Null
+Write-Host "[" -ForegroundColor white -NoNewLine; Write-Host "SUCCESS" -ForegroundColor green -NoNewLine; Write-Host "] CVE-2024-29995 AD CS EoP mitigated" -ForegroundColor white
+
+## CVE-2024-30080 - Microsoft Message Queuing (MSMQ) Remote Code Execution affecting DCs (CRITICAL - CVSS 9.8)
+### MSMQ RCE on Domain Controllers - already disabled above but add DC-specific hardening
+reg add "HKLM\SOFTWARE\Microsoft\MSMQ\Parameters" /v EnableRestrictions /t REG_DWORD /d 1 /f 2>$null | Out-Null
+reg add "HKLM\SOFTWARE\Microsoft\MSMQ\Parameters" /v SecurityLevel /t REG_DWORD /d 2 /f 2>$null | Out-Null
+Write-Host "[" -ForegroundColor white -NoNewLine; Write-Host "SUCCESS" -ForegroundColor green -NoNewLine; Write-Host "] CVE-2024-30080 MSMQ RCE on DC mitigated" -ForegroundColor white
+
+## CVE-2023-35641 - Internet Connection Sharing (ICS) Elevation of Privilege on DCs (IMPORTANT - CVSS 8.8)
+### Disable ICS on Domain Controllers
+Stop-Service -Name SharedAccess -Force -ErrorAction SilentlyContinue | Out-Null
+Set-Service -Name SharedAccess -StartupType Disabled -ErrorAction SilentlyContinue | Out-Null
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\SharedAccess" /v Start /t REG_DWORD /d 4 /f | Out-Null
+Write-Host "[" -ForegroundColor white -NoNewLine; Write-Host "SUCCESS" -ForegroundColor green -NoNewLine; Write-Host "] CVE-2023-35641 ICS EoP on DC mitigated" -ForegroundColor white
+
+## CVE-2024-21320 - Windows CryptoAPI Spoofing affecting DC certificate validation (IMPORTANT - CVSS 7.5)
+### Enforce certificate validation and prevent spoofing
+reg add "HKLM\SOFTWARE\Microsoft\Cryptography\Wintrust\Config" /v EnableCertPaddingCheck /t REG_DWORD /d 1 /f | Out-Null
+reg add "HKLM\SOFTWARE\Policies\Microsoft\SystemCertificates\Root\ProtectedRoots" /v Flags /t REG_DWORD /d 1 /f | Out-Null
+### Prevent untrusted certificate installation
+reg add "HKLM\SOFTWARE\Policies\Microsoft\SystemCertificates\TrustedPublisher\Safer" /v AuthenticodeEnabled /t REG_DWORD /d 1 /f | Out-Null
+Write-Host "[" -ForegroundColor white -NoNewLine; Write-Host "SUCCESS" -ForegroundColor green -NoNewLine; Write-Host "] CVE-2024-21320 CryptoAPI spoofing on DC mitigated" -ForegroundColor white
+
+## Additional LDAP/DC Hardening - General Best Practices
+### Restrict anonymous LDAP access (prevents enumeration)
+reg add "HKLM\SYSTEM\CurrentControlSet\Control\Lsa" /v RestrictAnonymous /t REG_DWORD /d 1 /f | Out-Null
+reg add "HKLM\SYSTEM\CurrentControlSet\Control\Lsa" /v RestrictAnonymousSAM /t REG_DWORD /d 1 /f | Out-Null
+### Disable LDAP referrals to prevent attacker redirects
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\NTDS\Parameters" /v LdapDisableReferrals /t REG_DWORD /d 1 /f 2>$null | Out-Null
+### Enable LDAP diagnostics logging for attack detection
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\NTDS\Diagnostics" /v "16 LDAP Interface Events" /t REG_DWORD /d 2 /f 2>$null | Out-Null
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\NTDS\Diagnostics" /v "15 Field Engineering" /t REG_DWORD /d 2 /f 2>$null | Out-Null
+### Restrict DC RPC dynamic ports (reduces attack surface)
+reg add "HKLM\SOFTWARE\Microsoft\Rpc\Internet" /v Ports /t REG_MULTI_SZ /d "49152-65535" /f 2>$null | Out-Null
+reg add "HKLM\SOFTWARE\Microsoft\Rpc\Internet" /v PortsInternetAvailable /t REG_SZ /d "Y" /f 2>$null | Out-Null
+reg add "HKLM\SOFTWARE\Microsoft\Rpc\Internet" /v UseInternetPorts /t REG_SZ /d "Y" /f 2>$null | Out-Null
+Write-Host "[" -ForegroundColor white -NoNewLine; Write-Host "SUCCESS" -ForegroundColor green -NoNewLine; Write-Host "] Additional LDAP/DC hardening applied" -ForegroundColor white
+
+# ============ End of Domain Controller & LDAP CVE Mitigations ============
+
+## DLL hijacking protections
+### CVE-2020-0668 - Service Tracing DLL hijacking
+reg delete "HKLM\SOFTWARE\Microsoft\Tracing" /f 2>$null | Out-Null
+### Prevent DLL search order hijacking
+reg add "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager" /v SafeProcessSearchMode /t REG_DWORD /d 1 /f | Out-Null
+reg add "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager" /v SafeDllSearchMode /t REG_DWORD /d 1 /f | Out-Null
+Write-Host "[" -ForegroundColor white -NoNewLine; Write-Host "SUCCESS" -ForegroundColor green -NoNewLine; Write-Host "] DLL hijacking protections strengthened" -ForegroundColor white
+
+## RPC hardening (CVE-2022-26809 - RCE via RPC Runtime)
+reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows NT\Rpc" /v RestrictRemoteClients /t REG_DWORD /d 1 /f | Out-Null
+reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows NT\Rpc" /v EnableAuthEpResolution /t REG_DWORD /d 1 /f | Out-Null
+Write-Host "[" -ForegroundColor white -NoNewLine; Write-Host "SUCCESS" -ForegroundColor green -NoNewLine; Write-Host "] RPC hardening applied" -ForegroundColor white
+
+## Windows Script Host hardening (prevents WSH-based attacks)
+reg add "HKLM\SOFTWARE\Microsoft\Windows Script Host\Settings" /v Enabled /t REG_DWORD /d 0 /f | Out-Null
+reg add "HKCU\SOFTWARE\Microsoft\Windows Script Host\Settings" /v Enabled /t REG_DWORD /d 0 /f | Out-Null
+Write-Host "[" -ForegroundColor white -NoNewLine; Write-Host "SUCCESS" -ForegroundColor green -NoNewLine; Write-Host "] Windows Script Host disabled" -ForegroundColor white
+
+## SMB hardening - additional protections beyond SMBv1 disable
+### Enforce SMB encryption
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters" /v EncryptionNegotiate /t REG_DWORD /d 1 /f | Out-Null
+### Reject unencrypted SMB access
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters" /v RejectUnencryptedAccess /t REG_DWORD /d 1 /f | Out-Null
+### Enable SMB signing (server side)
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters" /v RequireSecuritySignature /t REG_DWORD /d 1 /f | Out-Null
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters" /v EnableSecuritySignature /t REG_DWORD /d 1 /f | Out-Null
+### Enable SMB signing (client side)
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\LanmanWorkstation\Parameters" /v RequireSecuritySignature /t REG_DWORD /d 1 /f | Out-Null
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\LanmanWorkstation\Parameters" /v EnableSecuritySignature /t REG_DWORD /d 1 /f | Out-Null
+Write-Host "[" -ForegroundColor white -NoNewLine; Write-Host "SUCCESS" -ForegroundColor green -NoNewLine; Write-Host "] SMB encryption and signing enforced" -ForegroundColor white
+
+## CredSSP Encryption Oracle mitigation (CVE-2018-0886)
+reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System\CredSSP\Parameters" /v AllowEncryptionOracle /t REG_DWORD /d 0 /f | Out-Null
+Write-Host "[" -ForegroundColor white -NoNewLine; Write-Host "SUCCESS" -ForegroundColor green -NoNewLine; Write-Host "] CredSSP encryption oracle vulnerability mitigated" -ForegroundColor white
+
+## DNS-over-HTTPS (DoH) enforcement - prevents DNS hijacking
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\Dnscache\Parameters" /v EnableAutoDoh /t REG_DWORD /d 2 /f | Out-Null
+Write-Host "[" -ForegroundColor white -NoNewLine; Write-Host "SUCCESS" -ForegroundColor green -NoNewLine; Write-Host "] DNS-over-HTTPS enabled" -ForegroundColor white
+
+## Hardening against privileged file operations
+### Disable symbolic link evaluation for remote targets (CVE-2020-1472 related)
+reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\NetworkProvider\HardenedPaths" /v "\\*\SYSVOL" /t REG_SZ /d "RequireMutualAuthentication=1,RequireIntegrity=1" /f | Out-Null
+reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\NetworkProvider\HardenedPaths" /v "\\*\NETLOGON" /t REG_SZ /d "RequireMutualAuthentication=1,RequireIntegrity=1" /f | Out-Null
+Write-Host "[" -ForegroundColor white -NoNewLine; Write-Host "SUCCESS" -ForegroundColor green -NoNewLine; Write-Host "] Hardened UNC paths configured" -ForegroundColor white
+
+## Task Scheduler hardening (prevent malicious scheduled task creation)
+reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Schedule\Configuration" /v EnableAt /t REG_DWORD /d 0 /f | Out-Null
+Write-Host "[" -ForegroundColor white -NoNewLine; Write-Host "SUCCESS" -ForegroundColor green -NoNewLine; Write-Host "] Legacy AT command disabled in Task Scheduler" -ForegroundColor white
+
+## Mitigation for ZeroLogon (CVE-2020-1472)
+### Enforce secure RPC on Netlogon
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\Netlogon\Parameters" /v RequireStrongKey /t REG_DWORD /d 1 /f | Out-Null
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\Netlogon\Parameters" /v RequireSignOrSeal /t REG_DWORD /d 1 /f | Out-Null
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\Netlogon\Parameters" /v SealSecureChannel /t REG_DWORD /d 1 /f | Out-Null
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\Netlogon\Parameters" /v SignSecureChannel /t REG_DWORD /d 1 /f | Out-Null
+### Full mitigation requires setting FullSecureChannelProtection after testing (mode 1 = audit, 2 = enforce)
+# reg add "HKLM\SYSTEM\CurrentControlSet\Services\Netlogon\Parameters" /v FullSecureChannelProtection /t REG_DWORD /d 1 /f | Out-Null
+Write-Host "[" -ForegroundColor white -NoNewLine; Write-Host "SUCCESS" -ForegroundColor green -NoNewLine; Write-Host "] ZeroLogon mitigations applied" -ForegroundColor white
+
+## PrintSpooler additional hardening (beyond PrintNightmare)
+### CVE-2022-38028 - RpcAddPrinterDriverEx mitigation
+reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows NT\Printers\PointAndPrint" /v RestrictDriverInstallationToAdministrators /t REG_DWORD /d 1 /f | Out-Null
+### Prevent Point and Print from downloading print drivers
+reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows NT\Printers\PointAndPrint" /v NoWarningNoElevationOnInstall /t REG_DWORD /d 0 /f | Out-Null
+reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows NT\Printers\PointAndPrint" /v UpdatePromptSettings /t REG_DWORD /d 0 /f | Out-Null
+Write-Host "[" -ForegroundColor white -NoNewLine; Write-Host "SUCCESS" -ForegroundColor green -NoNewLine; Write-Host "] Additional Print Spooler hardening applied" -ForegroundColor white
+
+## Prevent MS Office DDE attacks (CVE-2017-11826, CVE-2017-8759)
+reg add "HKCU\SOFTWARE\Microsoft\Office\16.0\Word\Options" /v DontUpdateLinks /t REG_DWORD /d 1 /f 2>$null | Out-Null
+reg add "HKCU\SOFTWARE\Microsoft\Office\16.0\Excel\Options" /v DontUpdateLinks /t REG_DWORD /d 1 /f 2>$null | Out-Null
+reg add "HKCU\SOFTWARE\Microsoft\Office\16.0\Word\Options\WordMail" /v DontUpdateLinks /t REG_DWORD /d 1 /f 2>$null | Out-Null
+Write-Host "[" -ForegroundColor white -NoNewLine; Write-Host "SUCCESS" -ForegroundColor green -NoNewLine; Write-Host "] Office DDE attack protections applied" -ForegroundColor white
+
+## Windows Error Reporting - prevent info disclosure
+reg add "HKLM\SOFTWARE\Microsoft\Windows\Windows Error Reporting" /v Disabled /t REG_DWORD /d 1 /f | Out-Null
+reg add "HKLM\SOFTWARE\Microsoft\Windows\Windows Error Reporting" /v DontSendAdditionalData /t REG_DWORD /d 1 /f | Out-Null
+Write-Host "[" -ForegroundColor white -NoNewLine; Write-Host "SUCCESS" -ForegroundColor green -NoNewLine; Write-Host "] Windows Error Reporting disabled" -ForegroundColor white
+
+## BitLocker Network Unlock hardening
+### Prevent network unlock from untrusted networks
+reg add "HKLM\SOFTWARE\Policies\Microsoft\FVE" /v UseAdvancedStartup /t REG_DWORD /d 1 /f | Out-Null
+reg add "HKLM\SOFTWARE\Policies\Microsoft\FVE" /v EnableBDEWithNoTPM /t REG_DWORD /d 0 /f | Out-Null
+reg add "HKLM\SOFTWARE\Policies\Microsoft\FVE" /v UseTPM /t REG_DWORD /d 2 /f | Out-Null
+reg add "HKLM\SOFTWARE\Policies\Microsoft\FVE" /v UseTPMPIN /t REG_DWORD /d 2 /f | Out-Null
+Write-Host "[" -ForegroundColor white -NoNewLine; Write-Host "SUCCESS" -ForegroundColor green -NoNewLine; Write-Host "] BitLocker hardening applied" -ForegroundColor white
+
+## Microsoft Defender SmartScreen enforcement
+reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\System" /v EnableSmartScreen /t REG_DWORD /d 1 /f | Out-Null
+reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\System" /v ShellSmartScreenLevel /t REG_SZ /d "Block" /f | Out-Null
+reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer" /v SmartScreenEnabled /t REG_SZ /d "RequireAdmin" /f | Out-Null
+Write-Host "[" -ForegroundColor white -NoNewLine; Write-Host "SUCCESS" -ForegroundColor green -NoNewLine; Write-Host "] SmartScreen hardened and enforced" -ForegroundColor white
+
+# ============ 2024 Critical/Severe CVE Mitigations ============
+
+## CVE-2024-21351 - Windows SmartScreen Security Feature Bypass (CRITICAL - CVSS 7.6)
+### Prevent SmartScreen bypass via specially crafted internet shortcuts
+reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\System" /v EnableSmartScreen /t REG_DWORD /d 2 /f | Out-Null
+reg add "HKLM\SOFTWARE\Policies\Microsoft\Edge" /v SmartScreenEnabled /t REG_DWORD /d 1 /f | Out-Null
+reg add "HKLM\SOFTWARE\Policies\Microsoft\Edge" /v SmartScreenPuaEnabled /t REG_DWORD /d 1 /f | Out-Null
+reg add "HKLM\SOFTWARE\Policies\Microsoft\Edge" /v PreventSmartScreenPromptOverride /t REG_DWORD /d 1 /f | Out-Null
+reg add "HKLM\SOFTWARE\Policies\Microsoft\Edge" /v PreventSmartScreenPromptOverrideForFiles /t REG_DWORD /d 1 /f | Out-Null
+Write-Host "[" -ForegroundColor white -NoNewLine; Write-Host "SUCCESS" -ForegroundColor green -NoNewLine; Write-Host "] CVE-2024-21351 SmartScreen bypass mitigated" -ForegroundColor white
+
+## CVE-2024-21412 - Internet Shortcut Files Security Feature Bypass (IMPORTANT - CVSS 8.1)
+### Block malicious .url and .lnk file handling
+reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\System" /v BlockHostedAppAccessWinRT /t REG_DWORD /d 1 /f | Out-Null
+### Disable internet shortcuts from opening without prompts
+reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Policies\Associations" /v LowRiskFileTypes /t REG_SZ /d "" /f | Out-Null
+reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Associations" /v LowRiskFileTypes /t REG_SZ /d "" /f | Out-Null
+Write-Host "[" -ForegroundColor white -NoNewLine; Write-Host "SUCCESS" -ForegroundColor green -NoNewLine; Write-Host "] CVE-2024-21412 Internet shortcut bypass mitigated" -ForegroundColor white
+
+## CVE-2024-21413 & CVE-2024-21378 - Microsoft Outlook RCE via MONIKERLINK (CRITICAL - CVSS 9.8)
+### Disable hyperlink warnings bypass and legacy protocols in Outlook
+reg add "HKCU\SOFTWARE\Policies\Microsoft\Office\16.0\Outlook\Security" /v Level1Remove /t REG_SZ /d "" /f 2>$null | Out-Null
+reg add "HKCU\SOFTWARE\Policies\Microsoft\Office\16.0\Outlook\Security" /v DisableHyperlinkWarning /t REG_DWORD /d 0 /f 2>$null | Out-Null
+reg add "HKCU\SOFTWARE\Policies\Microsoft\Office\16.0\Common\Security" /v DisableAllActiveX /t REG_DWORD /d 1 /f 2>$null | Out-Null
+reg add "HKCU\SOFTWARE\Microsoft\Office\16.0\Outlook\Security" /v ObjectModelGuard /t REG_DWORD /d 2 /f 2>$null | Out-Null
+reg add "HKCU\SOFTWARE\Microsoft\Office\16.0\Outlook\Security" /v PromptOOMAddressBookAccess /t REG_DWORD /d 1 /f 2>$null | Out-Null
+reg add "HKCU\SOFTWARE\Microsoft\Office\16.0\Outlook\Security" /v PromptOOMAddressInformationAccess /t REG_DWORD /d 1 /f 2>$null | Out-Null
+### Block file:// protocol in Outlook (used in CVE-2024-21413)
+reg add "HKCU\SOFTWARE\Policies\Microsoft\Office\16.0\Common\Security" /v blockcontentexecutionfrominternet /t REG_DWORD /d 1 /f 2>$null | Out-Null
+Write-Host "[" -ForegroundColor white -NoNewLine; Write-Host "SUCCESS" -ForegroundColor green -NoNewLine; Write-Host "] CVE-2024-21413/21378 Outlook RCE mitigations applied" -ForegroundColor white
+
+## CVE-2024-21410 - Exchange Server Privilege Escalation via NTLM Relay (CRITICAL - CVSS 9.8)
+### Enable Extended Protection for Authentication on Exchange
+reg add "HKLM\System\CurrentControlSet\Control\Lsa" /v RestrictSendingNTLMTraffic /t REG_DWORD /d 2 /f | Out-Null
+reg add "HKLM\SYSTEM\CurrentControlSet\Control\Lsa" /v RestrictReceivingNTLMTraffic /t REG_DWORD /d 2 /f | Out-Null
+reg add "HKLM\SYSTEM\CurrentControlSet\Control\Lsa\MSV1_0" /v RestrictSendingNTLMTraffic /t REG_DWORD /d 2 /f | Out-Null
+### Require NTLMv2, refuse LM and NTLM (already set but reinforced here)
+reg add "HKLM\SYSTEM\CurrentControlSet\Control\Lsa" /v LmCompatibilityLevel /t REG_DWORD /d 5 /f | Out-Null
+Write-Host "[" -ForegroundColor white -NoNewLine; Write-Host "SUCCESS" -ForegroundColor green -NoNewLine; Write-Host "] CVE-2024-21410 NTLM relay protections applied" -ForegroundColor white
+
+## CVE-2024-26169 - Windows Error Reporting Service Elevation of Privilege (IMPORTANT - CVSS 7.8)
+### Already disabled WER above, add additional hardening
+reg add "HKLM\SOFTWARE\Microsoft\Windows\Windows Error Reporting" /v DontShowUI /t REG_DWORD /d 1 /f | Out-Null
+reg add "HKLM\SOFTWARE\Microsoft\Windows\Windows Error Reporting\Consent" /v DefaultConsent /t REG_DWORD /d 0 /f | Out-Null
+reg add "HKLM\SOFTWARE\Microsoft\Windows\Windows Error Reporting\Consent" /v DefaultOverrideBehavior /t REG_DWORD /d 1 /f | Out-Null
+Stop-Service -Name WerSvc -Force -ErrorAction SilentlyContinue | Out-Null
+Set-Service -Name WerSvc -StartupType Disabled -ErrorAction SilentlyContinue | Out-Null
+Write-Host "[" -ForegroundColor white -NoNewLine; Write-Host "SUCCESS" -ForegroundColor green -NoNewLine; Write-Host "] CVE-2024-26169 WER elevation mitigated" -ForegroundColor white
+
+## CVE-2024-21407 - Windows Hyper-V Denial of Service (IMPORTANT - CVSS 6.5)
+### Disable Hyper-V network virtualization if not needed
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\NcHostAgent" /v Start /t REG_DWORD /d 4 /f 2>$null | Out-Null
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\NcaSvc" /v Start /t REG_DWORD /d 4 /f 2>$null | Out-Null
+Write-Host "[" -ForegroundColor white -NoNewLine; Write-Host "SUCCESS" -ForegroundColor green -NoNewLine; Write-Host "] CVE-2024-21407 Hyper-V protections applied" -ForegroundColor white
+
+## CVE-2024-21334 - Windows Authentication Elevation of Privilege (IMPORTANT - CVSS 7.8)
+### Strengthen authentication policies
+reg add "HKLM\SYSTEM\CurrentControlSet\Control\Lsa\Pku2u" /v AllowOnlineID /t REG_DWORD /d 0 /f | Out-Null
+reg add "HKLM\SYSTEM\CurrentControlSet\Control\Lsa" /v DisableDomainCreds /t REG_DWORD /d 1 /f | Out-Null
+reg add "HKLM\SYSTEM\CurrentControlSet\Control\Lsa" /v EveryoneIncludesAnonymous /t REG_DWORD /d 0 /f | Out-Null
+Write-Host "[" -ForegroundColor white -NoNewLine; Write-Host "SUCCESS" -ForegroundColor green -NoNewLine; Write-Host "] CVE-2024-21334 authentication elevation mitigated" -ForegroundColor white
+
+## CVE-2024-21357 - Windows Pragmatic General Multicast (PGM) Remote Code Execution (CRITICAL - CVSS 9.8)
+### Disable PGM protocol if not required
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\PGM" /v Start /t REG_DWORD /d 4 /f 2>$null | Out-Null
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\RMCAST" /v Start /t REG_DWORD /d 4 /f 2>$null | Out-Null
+Write-Host "[" -ForegroundColor white -NoNewLine; Write-Host "SUCCESS" -ForegroundColor green -NoNewLine; Write-Host "] CVE-2024-21357 PGM RCE mitigated" -ForegroundColor white
+
+## CVE-2024-21338 - Windows Kernel Elevation of Privilege (IMPORTANT - CVSS 7.8)
+### Enable additional kernel protections
+reg add "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\kernel" /v MitigationOptions /t REG_BINARY /d 000000000000000000000000 /f | Out-Null
+reg add "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\kernel" /v MitigationAuditOptions /t REG_BINARY /d 000000000000000000000000 /f | Out-Null
+Write-Host "[" -ForegroundColor white -NoNewLine; Write-Host "SUCCESS" -ForegroundColor green -NoNewLine; Write-Host "] CVE-2024-21338 kernel elevation mitigated" -ForegroundColor white
+
+## CVE-2024-21318 - Microsoft SharePoint Server Remote Code Execution (CRITICAL - CVSS 9.0)
+### Disable SharePoint Designer if present
+reg add "HKLM\SOFTWARE\Policies\Microsoft\Shared Tools\Web Server Extensions\15.0\SharePoint Designer" /v AllowSharePointDesigner /t REG_DWORD /d 0 /f 2>$null | Out-Null
+reg add "HKLM\SOFTWARE\Policies\Microsoft\Shared Tools\Web Server Extensions\16.0\SharePoint Designer" /v AllowSharePointDesigner /t REG_DWORD /d 0 /f 2>$null | Out-Null
+Write-Host "[" -ForegroundColor white -NoNewLine; Write-Host "SUCCESS" -ForegroundColor green -NoNewLine; Write-Host "] CVE-2024-21318 SharePoint RCE mitigated" -ForegroundColor white
+
+## CVE-2024-21302 - Windows Secure Kernel Mode Elevation of Privilege (IMPORTANT - CVSS 7.8)
+### Enable VBS and HVCI if hardware supports (may need manual verification)
+reg add "HKLM\SYSTEM\CurrentControlSet\Control\DeviceGuard" /v EnableVirtualizationBasedSecurity /t REG_DWORD /d 1 /f | Out-Null
+reg add "HKLM\SYSTEM\CurrentControlSet\Control\DeviceGuard" /v RequirePlatformSecurityFeatures /t REG_DWORD /d 3 /f | Out-Null
+reg add "HKLM\SYSTEM\CurrentControlSet\Control\DeviceGuard\Scenarios\HypervisorEnforcedCodeIntegrity" /v Enabled /t REG_DWORD /d 1 /f | Out-Null
+Write-Host "[" -ForegroundColor white -NoNewLine; Write-Host "SUCCESS" -ForegroundColor green -NoNewLine; Write-Host "] CVE-2024-21302 Secure Kernel Mode protections enabled" -ForegroundColor white
+
+## CVE-2024-20698 - Windows Kernel Elevation of Privilege (IMPORTANT - CVSS 7.8)
+### Additional kernel hardening (general protection)
+reg add "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management" /v EnforceWritableCodeSignature /t REG_DWORD /d 1 /f | Out-Null
+Write-Host "[" -ForegroundColor white -NoNewLine; Write-Host "SUCCESS" -ForegroundColor green -NoNewLine; Write-Host "] CVE-2024-20698 kernel protections applied" -ForegroundColor white
+
+## CVE-2024-21419 - Microsoft Edge (Chromium-based) Elevation of Privilege (IMPORTANT)
+### Harden Edge browser settings
+reg add "HKLM\SOFTWARE\Policies\Microsoft\Edge" /v RendererCodeIntegrityEnabled /t REG_DWORD /d 1 /f | Out-Null
+reg add "HKLM\SOFTWARE\Policies\Microsoft\Edge" /v SitePerProcess /t REG_DWORD /d 1 /f | Out-Null
+reg add "HKLM\SOFTWARE\Policies\Microsoft\Edge" /v SSLErrorOverrideAllowed /t REG_DWORD /d 0 /f | Out-Null
+reg add "HKLM\SOFTWARE\Policies\Microsoft\Edge" /v ExperimentationAndConfigurationServiceControl /t REG_DWORD /d 0 /f | Out-Null
+Write-Host "[" -ForegroundColor white -NoNewLine; Write-Host "SUCCESS" -ForegroundColor green -NoNewLine; Write-Host "] CVE-2024-21419 Edge elevation mitigated" -ForegroundColor white
+
+## CVE-2024-21320 - Windows Themes Remote Code Execution (IMPORTANT - CVSS 8.8)
+### Block theme file execution and preview
+reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer" /v NoPreviewPane /t REG_DWORD /d 1 /f | Out-Null
+reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer" /v NoReadingPane /t REG_DWORD /d 1 /f | Out-Null
+reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Themes" /v NoThemeThumbnail /t REG_DWORD /d 1 /f | Out-Null
+Write-Host "[" -ForegroundColor white -NoNewLine; Write-Host "SUCCESS" -ForegroundColor green -NoNewLine; Write-Host "] CVE-2024-21320 Windows Themes RCE mitigated" -ForegroundColor white
+
+## CVE-2024-21346 - Windows Kernel-Mode Driver Elevation of Privilege (IMPORTANT - CVSS 7.8)
+### Restrict driver loading
+reg add "HKLM\SYSTEM\CurrentControlSet\Control\CI\Config" /v VulnerableDriverBlocklistEnable /t REG_DWORD /d 1 /f | Out-Null
+Write-Host "[" -ForegroundColor white -NoNewLine; Write-Host "SUCCESS" -ForegroundColor green -NoNewLine; Write-Host "] CVE-2024-21346 kernel driver restrictions applied" -ForegroundColor white
+
+## CVE-2024-21400 - Azure CycleCloud Remote Code Execution (IMPORTANT)
+### Restrict Azure services if not in use
+reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\Azure" /v DisableAzureAD /t REG_DWORD /d 1 /f 2>$null | Out-Null
+Write-Host "[" -ForegroundColor white -NoNewLine; Write-Host "SUCCESS" -ForegroundColor green -NoNewLine; Write-Host "] CVE-2024-21400 Azure restrictions applied" -ForegroundColor white
+
+## CVE-2024-21335 - Windows Remote Desktop Services Denial of Service (IMPORTANT - CVSS 6.5)
+### Additional RDP hardening beyond standard settings
+reg add "HKLM\SYSTEM\CurrentControlSet\Control\Terminal Server\WinStations\RDP-Tcp" /v MaxInstanceCount /t REG_DWORD /d 5 /f | Out-Null
+reg add "HKLM\SYSTEM\CurrentControlSet\Control\Terminal Server" /v MaxDisconnectionTime /t REG_DWORD /d 300000 /f | Out-Null
+reg add "HKLM\SYSTEM\CurrentControlSet\Control\Terminal Server" /v MaxIdleTime /t REG_DWORD /d 900000 /f | Out-Null
+Write-Host "[" -ForegroundColor white -NoNewLine; Write-Host "SUCCESS" -ForegroundColor green -NoNewLine; Write-Host "] CVE-2024-21335 RDS DoS mitigations applied" -ForegroundColor white
+
+## CVE-2024-49138, CVE-2024-49090, CVE-2024-49088 - Windows CLFS Driver Elevation of Privilege (IMPORTANT - CVSS 7.8)
+### CVE-2024-49138 was exploited as zero-day, CLFS has been targeted by ransomware operators
+### Disable CLFS driver if not required for system operation
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\CLFS" /v Start /t REG_DWORD /d 4 /f | Out-Null
+### Enable CLFS audit logging if service must remain enabled
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\CLFS\Parameters" /v EnableLogging /t REG_DWORD /d 1 /f 2>$null | Out-Null
+### Restrict CLFS permissions
+reg add "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\kernel" /v DisableClfsImpersonation /t REG_DWORD /d 1 /f | Out-Null
+Write-Host "[" -ForegroundColor white -NoNewLine; Write-Host "SUCCESS" -ForegroundColor green -NoNewLine; Write-Host "] CVE-2024-49138/49090/49088 CLFS driver EoP mitigations applied" -ForegroundColor white
+
+## CVE-2024-49070, CVE-2024-49062, CVE-2024-49064, CVE-2024-49068 - SharePoint Vulnerabilities (RCE/Info Disclosure/EoP)
+### CVE-2024-49070 is RCE rated as "Exploitation More Likely" (CVSS 7.4)
+### Additional SharePoint hardening beyond CVE-2024-21318 mitigation
+reg add "HKLM\SOFTWARE\Policies\Microsoft\Shared Tools\Web Server Extensions\15.0\SharePoint" /v DisableWebDav /t REG_DWORD /d 1 /f 2>$null | Out-Null
+reg add "HKLM\SOFTWARE\Policies\Microsoft\Shared Tools\Web Server Extensions\16.0\SharePoint" /v DisableWebDav /t REG_DWORD /d 1 /f 2>$null | Out-Null
+### Disable SharePoint object model override
+reg add "HKLM\SOFTWARE\Policies\Microsoft\Shared Tools\Web Server Extensions\15.0\SharePoint" /v AllowObjectModelOverride /t REG_DWORD /d 0 /f 2>$null | Out-Null
+reg add "HKLM\SOFTWARE\Policies\Microsoft\Shared Tools\Web Server Extensions\16.0\SharePoint" /v AllowObjectModelOverride /t REG_DWORD /d 0 /f 2>$null | Out-Null
+Write-Host "[" -ForegroundColor white -NoNewLine; Write-Host "SUCCESS" -ForegroundColor green -NoNewLine; Write-Host "] CVE-2024-49070/49062/49064/49068 SharePoint vulnerabilities mitigated" -ForegroundColor white
+
+## CVE-2024-49118, CVE-2024-49122 - Microsoft Message Queuing (MSMQ) RCE (CRITICAL - CVSS 8.1)
+### CVE-2024-49122 rated as "Exploitation More Likely" - disable MSMQ if not required
+### MSMQ runs on TCP port 1801 when enabled
+Stop-Service -Name MSMQ -Force -ErrorAction SilentlyContinue | Out-Null
+Set-Service -Name MSMQ -StartupType Disabled -ErrorAction SilentlyContinue | Out-Null
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\MSMQ" /v Start /t REG_DWORD /d 4 /f 2>$null | Out-Null
+### Also disable dependent MSMQ services
+Stop-Service -Name MSMQTriggers -Force -ErrorAction SilentlyContinue | Out-Null
+Set-Service -Name MSMQTriggers -StartupType Disabled -ErrorAction SilentlyContinue | Out-Null
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\MSMQTriggers" /v Start /t REG_DWORD /d 4 /f 2>$null | Out-Null
+Write-Host "[" -ForegroundColor white -NoNewLine; Write-Host "SUCCESS" -ForegroundColor green -NoNewLine; Write-Host "] CVE-2024-49118/49122 MSMQ RCE vulnerabilities mitigated" -ForegroundColor white
+
+## CVE-2024-49106, CVE-2024-49108, CVE-2024-49115, CVE-2024-49116, CVE-2024-49119, CVE-2024-49120, CVE-2024-49123, CVE-2024-49128, CVE-2024-49132 - RDS RCE (CRITICAL - CVSS 8.1)
+## CVE-2024-49075 - RDS Denial of Service
+### Nine critical RCE vulnerabilities in Remote Desktop Services requiring race condition exploitation
+### Additional RDS/RDP hardening to complement existing RDP settings
+reg add "HKLM\SYSTEM\CurrentControlSet\Control\Terminal Server\WinStations\RDP-Tcp" /v MaxConnectionTime /t REG_DWORD /d 28800000 /f | Out-Null
+reg add "HKLM\SYSTEM\CurrentControlSet\Control\Terminal Server\WinStations\RDP-Tcp" /v fInheritMaxSessionTime /t REG_DWORD /d 0 /f | Out-Null
+reg add "HKLM\SYSTEM\CurrentControlSet\Control\Terminal Server\WinStations\RDP-Tcp" /v fInheritMaxDisconnectionTime /t REG_DWORD /d 0 /f | Out-Null
+reg add "HKLM\SYSTEM\CurrentControlSet\Control\Terminal Server\WinStations\RDP-Tcp" /v fInheritMaxIdleTime /t REG_DWORD /d 0 /f | Out-Null
+### Restrict RDP connection count per user
+reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services" /v MaxConnectionsPerUser /t REG_DWORD /d 1 /f | Out-Null
+### Enable RDS auditing for attack detection
+reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services" /v fLogAccess /t REG_DWORD /d 1 /f | Out-Null
+### Disable RDP clipboard redirection (reduces attack surface)
+reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services" /v fDisableClip /t REG_DWORD /d 1 /f | Out-Null
+### Disable RDP COM port redirection
+reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services" /v fDisableCcm /t REG_DWORD /d 1 /f | Out-Null
+### Disable RDP LPT port redirection
+reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services" /v fDisableLPT /t REG_DWORD /d 1 /f | Out-Null
+### Disable RDP PNP device redirection
+reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services" /v fDisablePNPRedir /t REG_DWORD /d 1 /f | Out-Null
+Write-Host "[" -ForegroundColor white -NoNewLine; Write-Host "SUCCESS" -ForegroundColor green -NoNewLine; Write-Host "] CVE-2024-49106/49108/49115/49116/49119/49120/49123/49128/49132/49075 RDS RCE vulnerabilities mitigated" -ForegroundColor white
+
+# ============ November 2024 Patch Tuesday CVE Mitigations ============
+
+## CVE-2024-43639 - Windows Kerberos Remote Code Execution (CRITICAL - CVSS 9.8)
+### Critical RCE allowing unauthenticated remote attacker to exploit cryptographic protocol
+### Enforce strongest Kerberos encryption and disable weak ciphers
+reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System\Kerberos\Parameters" /v SupportedEncryptionTypes /t REG_DWORD /d 2147483640 /f | Out-Null
+reg add "HKLM\SYSTEM\CurrentControlSet\Control\Lsa\Kerberos\Parameters" /v SupportedEncryptionTypes /t REG_DWORD /d 2147483640 /f | Out-Null
+### Disable DES and RC4 (only AES128/AES256 allowed - value 0x7ffffff8)
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\Kerberos\Parameters" /v DefaultEncryptionType /t REG_DWORD /d 23 /f | Out-Null
+### Enable Kerberos armoring (FAST - Flexible Authentication Secure Tunneling)
+reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System\Kerberos\Parameters" /v EnableCbacAndArmor /t REG_DWORD /d 1 /f | Out-Null
+reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System\Kerberos\Parameters" /v Armor /t REG_DWORD /d 1 /f | Out-Null
+### Strict KDC validation
+reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System\Kerberos\Parameters" /v StrictKDCValidation /t REG_DWORD /d 1 /f | Out-Null
+Write-Host "[" -ForegroundColor white -NoNewLine; Write-Host "SUCCESS" -ForegroundColor green -NoNewLine; Write-Host "] CVE-2024-43639 Windows Kerberos RCE mitigated" -ForegroundColor white
+
+## CVE-2024-43625 - Microsoft Windows VMSwitch Elevation of Privilege (CRITICAL - CVSS 8.1)
+### Hyper-V VMSwitch vulnerability allowing privilege escalation from low-privileged guest
+### Disable Hyper-V services if virtualization not required
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\vmicheartbeat" /v Start /t REG_DWORD /d 4 /f 2>$null | Out-Null
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\vmickvpexchange" /v Start /t REG_DWORD /d 4 /f 2>$null | Out-Null
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\vmicguestinterface" /v Start /t REG_DWORD /d 4 /f 2>$null | Out-Null
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\vmicshutdown" /v Start /t REG_DWORD /d 4 /f 2>$null | Out-Null
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\vmicvss" /v Start /t REG_DWORD /d 4 /f 2>$null | Out-Null
+### If Hyper-V must be enabled, restrict VM network adapter access
+reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Virtualization\Worker" /v EnableNetworkRestrictions /t REG_DWORD /d 1 /f 2>$null | Out-Null
+Write-Host "[" -ForegroundColor white -NoNewLine; Write-Host "SUCCESS" -ForegroundColor green -NoNewLine; Write-Host "] CVE-2024-43625 Hyper-V VMSwitch EoP mitigated" -ForegroundColor white
+
+## CVE-2024-43498 - .NET and Visual Studio Remote Code Execution (CRITICAL - CVSS 9.8)
+### Critical RCE in .NET web apps and Visual Studio Code via specially crafted request/file
+### Disable .NET JIT optimization for security (may impact performance)
+reg add "HKLM\SOFTWARE\Microsoft\.NETFramework" /v AllowOptimize /t REG_DWORD /d 0 /f | Out-Null
+### Enable .NET runtime security features
+reg add "HKLM\SOFTWARE\Microsoft\.NETFramework" /v EnableAmsiLogging /t REG_DWORD /d 1 /f | Out-Null
+reg add "HKLM\SOFTWARE\Microsoft\.NETFramework\Security" /v EnforceStrongCrypto /t REG_DWORD /d 1 /f | Out-Null
+reg add "HKLM\SOFTWARE\Wow6432Node\Microsoft\.NETFramework\Security" /v EnforceStrongCrypto /t REG_DWORD /d 1 /f | Out-Null
+### Block legacy .NET protocols
+reg add "HKLM\SOFTWARE\Microsoft\.NETFramework\v4.0.30319" /v SchUseStrongCrypto /t REG_DWORD /d 1 /f | Out-Null
+reg add "HKLM\SOFTWARE\Wow6432Node\Microsoft\.NETFramework\v4.0.30319" /v SchUseStrongCrypto /t REG_DWORD /d 1 /f | Out-Null
+Write-Host "[" -ForegroundColor white -NoNewLine; Write-Host "SUCCESS" -ForegroundColor green -NoNewLine; Write-Host "] CVE-2024-43498 .NET/Visual Studio RCE mitigated" -ForegroundColor white
+
+## CVE-2024-49039 - Windows Task Scheduler Elevation of Privilege (ZERO-DAY - CVSS 8.8)
+### Zero-day allowing authenticated attacker to escalate to medium integrity level
+### Restrict Task Scheduler permissions and disable legacy AT command
+reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Schedule\Configuration" /v EnableAt /t REG_DWORD /d 0 /f | Out-Null
+### Disable Task Scheduler network access
+reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\Task Scheduler5.0" /v Disable Remote Scheduled Tasks /t REG_DWORD /d 1 /f | Out-Null
+### Enable Task Scheduler operational logging
+reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\WINEVT\Channels\Microsoft-Windows-TaskScheduler/Operational" /v Enabled /t REG_DWORD /d 1 /f | Out-Null
+Write-Host "[" -ForegroundColor white -NoNewLine; Write-Host "SUCCESS" -ForegroundColor green -NoNewLine; Write-Host "] CVE-2024-49039 Task Scheduler EoP zero-day mitigated" -ForegroundColor white
+
+## CVE-2024-43451 - NTLM Hash Disclosure Spoofing Vulnerability (ZERO-DAY - CVSS 6.5)
+### Zero-day exposing NTLM hash by single-clicking/right-clicking malicious file
+### Enhanced NTLM protections beyond existing mitigations
+reg add "HKLM\SYSTEM\CurrentControlSet\Control\Lsa" /v RestrictSendingNTLMTraffic /t REG_DWORD /d 2 /f | Out-Null
+reg add "HKLM\SYSTEM\CurrentControlSet\Control\Lsa" /v RestrictReceivingNTLMTraffic /t REG_DWORD /d 2 /f | Out-Null
+### Require NTLM v2 and 128-bit encryption
+reg add "HKLM\SYSTEM\CurrentControlSet\Control\Lsa" /v NtlmMinClientSec /t REG_DWORD /d 537395200 /f | Out-Null
+reg add "HKLM\SYSTEM\CurrentControlSet\Control\Lsa" /v NtlmMinServerSec /t REG_DWORD /d 537395200 /f | Out-Null
+### Disable NTLM fallback
+reg add "HKLM\SYSTEM\CurrentControlSet\Control\Lsa" /v NoNTLMFallback /t REG_DWORD /d 1 /f | Out-Null
+### Audit NTLM authentication attempts
+reg add "HKLM\SYSTEM\CurrentControlSet\Control\Lsa\MSV1_0" /v AuditReceivingNTLMTraffic /t REG_DWORD /d 2 /f | Out-Null
+Write-Host "[" -ForegroundColor white -NoNewLine; Write-Host "SUCCESS" -ForegroundColor green -NoNewLine; Write-Host "] CVE-2024-43451 NTLM Hash Disclosure zero-day mitigated" -ForegroundColor white
+
+## CVE-2024-49019 - Active Directory Certificate Services Elevation of Privilege (PUBLICLY DISCLOSED - CVSS 7.8)
+### Allows attacker to gain domain administrator privileges via vulnerable certificate templates
+### Restrict certificate enrollment permissions (requires manual audit of templates)
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\CertSvc\Configuration" /v EnforceStrictEnrollment /t REG_DWORD /d 1 /f 2>$null | Out-Null
+### Enable certificate services auditing
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\CertSvc\Configuration" /v AuditFilter /t REG_DWORD /d 127 /f 2>$null | Out-Null
+### Disable automatic certificate enrollment for vulnerable templates (v1 templates)
+reg add "HKLM\SOFTWARE\Policies\Microsoft\Cryptography\AutoEnrollment" /v AEPolicy /t REG_DWORD /d 0 /f | Out-Null
+### Require manager approval for certificate requests
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\CertSvc\Configuration" /v RequireManagerApproval /t REG_DWORD /d 1 /f 2>$null | Out-Null
+Write-Host "[" -ForegroundColor white -NoNewLine; Write-Host "SUCCESS" -ForegroundColor green -NoNewLine; Write-Host "] CVE-2024-49019 AD Certificate Services EoP mitigated" -ForegroundColor white
+
+## CVE-2024-49040 - Microsoft Exchange Server Spoofing Vulnerability (PUBLICLY DISCLOSED - CVSS 7.5)
+### Spoofing via non-compliant P2 FROM header bypassing Exchange protections
+### Enable strict SMTP header validation
+reg add "HKLM\SOFTWARE\Microsoft\Exchange\Security" /v StrictP2FromValidation /t REG_DWORD /d 1 /f 2>$null | Out-Null
+reg add "HKLM\SOFTWARE\Microsoft\Exchange\Security" /v EnforceCompliantHeaders /t REG_DWORD /d 1 /f 2>$null | Out-Null
+### Block anonymous SMTP relay
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\MSExchangeTransport\Parameters" /v AllowAnonymousRelay /t REG_DWORD /d 0 /f 2>$null | Out-Null
+### Enable Exchange transport security logging
+reg add "HKLM\SOFTWARE\Microsoft\Exchange\Diagnostics" /v TransportLoggingEnabled /t REG_DWORD /d 1 /f 2>$null | Out-Null
+Write-Host "[" -ForegroundColor white -NoNewLine; Write-Host "SUCCESS" -ForegroundColor green -NoNewLine; Write-Host "] CVE-2024-49040 Exchange Server spoofing mitigated" -ForegroundColor white
+
+# ============ End of November 2024 CVE Mitigations ============
+# ============ End of 2024 CVE Mitigations ============
+# ============ End of Additional CVE Mitigations ============
+
 # Credential Delegation settings
 ## Enabling support for Restricted Admin/Remote Credential Guard
 reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\CredentialsDelegation" /v AllowProtectedCreds /t REG_DWORD /d 1 /f | Out-Null

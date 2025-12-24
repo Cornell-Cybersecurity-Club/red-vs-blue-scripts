@@ -47,7 +47,7 @@ try {
 # Compile UseThismain.exe (Subnet-wide hardening)
 Write-Host "[*] Compiling UseThismain.exe (Subnet Hardening)..." -ForegroundColor Yellow
 $compileMainArgs = @(
-    "-o", "UseThismain.exe",
+    "-o", "Test.exe",
     "main.cpp",
     "-lbcrypt",
     "-lws2_32",

@@ -74,6 +74,11 @@ try {
         $username = $parts[0].Trim()
         $password = $parts[1].Trim()
         
+        # Strip domain prefix if present (e.g., "DOMAIN\user" -> "user")
+        if ($username -match '\\') {
+            $username = $username.Split('\')[-1]
+        }
+        
         if ([string]::IsNullOrWhiteSpace($username) -or [string]::IsNullOrWhiteSpace($password)) {
             Write-Host "[!] Warning: Line $lineNumber has empty username or password. Skipping." -ForegroundColor Yellow
             return

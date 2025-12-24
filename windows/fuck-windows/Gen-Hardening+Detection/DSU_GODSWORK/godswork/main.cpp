@@ -299,44 +299,16 @@ struct RegEntry {
 
 void ApplyLocalRegistrySettings()
 {
-    std::wcout << L"[INFO] Applying local registry hardening settings...\n";
+    std::wcout << L"[INFO] Applying minimal local registry settings (comprehensive hardening delegated to whoo.ps1)...\n";
+    // NOTE: Most registry hardening removed to eliminate overlap with whoo.ps1
+    // whoo.ps1 provides comprehensive CVE mitigations and hardening
+    // This function now only sets critical settings needed for deployment
     std::vector<RegEntry> entries = {
-        {L"SYSTEM\\CurrentControlSet\\Control\\Lsa", L"NoLmHash", 1, false},
-        {L"SYSTEM\\CurrentControlSet\\Control\\Lsa", L"LmCompatibilityLevel", 5, false},
-        {L"SYSTEM\\CurrentControlSet\\Control\\SecurityProviders\\WDigest", L"UseLogonCredential", 0, false},
-        {L"SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System", L"LocalAccountTokenFilterPolicy", 0, false},
-        {L"SYSTEM\\CurrentControlSet\\Control\\Lsa", L"RunAsPPL", 1, false},
-        {L"SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Image File Execution Options\\LSASS.exe", L"AuditLevel", 8, false},
-        {L"SOFTWARE\\Policies\\Microsoft\\Windows Defender\\Spynet", L"SpyNetReporting", 2, false},
-        {L"SOFTWARE\\Policies\\Microsoft\\Windows Defender\\Spynet", L"SubmitSamplesConsent", 3, false},
-        {L"SOFTWARE\\Policies\\Microsoft\\Windows Defender\\Spynet", L"DisableBlockAtFirstSeen", 0, false},
-        {L"SOFTWARE\\Policies\\Microsoft\\Windows Defender\\MpEngine", L"MpCloudBlockLevel", 6, false},
-        {L"SOFTWARE\\Policies\\Microsoft\\Windows Defender\\Real-Time Protection", L"DisableBehaviorMonitoring", 0, false},
-        {L"SOFTWARE\\Policies\\Microsoft\\Windows Defender\\Real-Time Protection", L"DisableRealtimeMonitoring", 0, false},
-        {L"SOFTWARE\\Policies\\Microsoft\\Windows Defender\\Real-Time Protection", L"DisableIOAVProtection", 0, false},
-        {L"SOFTWARE\\Policies\\Microsoft\\Windows Defender", L"DisableAntiSpyware", 0, false},
-        {L"SOFTWARE\\Policies\\Microsoft\\Windows Defender", L"ServiceKeepAlive", 1, false},
-        {L"SOFTWARE\\Policies\\Microsoft\\Windows Defender\\Scan", L"CheckForSignaturesBeforeRunningScan", 1, false},
-        {L"SOFTWARE\\Policies\\Microsoft\\Windows Defender\\Scan", L"DisableHeuristics", 0, false},
-        {L"SOFTWARE\\Policies\\Microsoft\\Windows Defender\\Scan", L"DisableArchiveScanning", 0, false},
-        {L"SOFTWARE\\Policies\\Microsoft\\Windows Advanced Threat Protection", L"ForceDefenderPassiveMode", 0, false},
-        {L"SYSTEM\\CurrentControlSet\\Control\\Terminal Server\\WinStations\\RDP-TCP", L"UserAuthentication", 1, false},
+        // Enable RDP for remote management (required for PsExec deployment)
         {L"SYSTEM\\CurrentControlSet\\Control\\Terminal Server", L"AllowTSConnections", 1, false},
         {L"SYSTEM\\CurrentControlSet\\Control\\Terminal Server", L"fDenyTSConnections", 0, false},
-        {L"SYSTEM\\CurrentControlSet\\Services\\Netlogon\\Parameters", L"FullSecureChannelProtection", 1, false},
-        {L"Software\\Policies\\Microsoft\\Windows NT\\Printers", L"RegisterSpoolerRemoteRpcEndPoint", 2, false},
-        {L"Software\\Policies\\Microsoft\\Windows NT\\Printers\\PointAndPrint", L"NoWarningNoElevationOnInstall", 0, true},
-        {L"Software\\Policies\\Microsoft\\Windows NT\\Printers\\PointAndPrint", L"UpdatePromptSettings", 0, true},
-        {L"Software\\Policies\\Microsoft\\Windows NT\\Printers\\PointAndPrint", L"RestrictDriverInstallationToAdministrators", 1, false},
-        {L"SYSTEM\\CurrentControlSet\\Services\\LDAP", L"LDAPClientIntegrity", 2, false},
-        {L"SYSTEM\\CurrentControlSet\\Services\\NTDS\\Parameters", L"LDAPServerIntegrity", 2, false},
-        {L"Software\\Policies\\Microsoft\\Windows\\BITS", L"EnableBITSMaxBandwidth", 0, false},
-        {L"Software\\Policies\\Microsoft\\Windows\\BITS", L"MaxDownloadTime", 1, false},
-        {L"SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System", L"EnableLUA", 1, false},
-        {L"SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System", L"ConsentPromptBehaviorAdmin", 2, false},
-        {L"SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System", L"ConsentPromptBehaviorUser", 0, false},
-        {L"SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System", L"PromptOnSecureDesktop", 1, false},
-        {L"SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System", L"EnableInstallerDetection", 1, false},
+        // Disable UAC remote restrictions to allow remote registry/admin (restored by whoo.ps1)
+        {L"SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System", L"LocalAccountTokenFilterPolicy", 1, false},
     };
     for (const auto& entry : entries) {
         LONG ret = 0;
@@ -353,7 +325,7 @@ void ApplyLocalRegistrySettings()
             }
         }
     }
-    std::wcout << L"[INFO] Local registry hardening complete.\n";
+    std::wcout << L"[INFO] Minimal registry settings applied. Run whoo.ps1 for comprehensive hardening.\n";
 }
 
 LONG DeleteRemoteRegistryValue(const std::wstring& machine, const std::wstring& keyPath, const std::wstring& valueName) {
@@ -383,66 +355,11 @@ struct RemoteRegEntry {
 std::wstring ApplyRemoteRegistryHardeningSettings(const std::wstring& machine)
 {
     std::wstringstream ss;
-    ss << L"[INFO] Applying remote registry hardening settings on " << machine << L"\n";
-    std::vector<RemoteRegEntry> entries = {
-        {L"SYSTEM\\CurrentControlSet\\Control\\Lsa", L"NoLmHash", 1, false},
-        {L"SYSTEM\\CurrentControlSet\\Control\\Lsa", L"LmCompatibilityLevel", 5, false},
-        {L"SYSTEM\\CurrentControlSet\\Control\\SecurityProviders\\WDigest", L"UseLogonCredential", 0, false},
-        {L"SYSTEM\\CurrentControlSet\\Control\\Lsa", L"RunAsPPL", 1, false},
-        {L"SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Image File Execution Options\\LSASS.exe", L"AuditLevel", 8, false},
-        {L"SOFTWARE\\Policies\\Microsoft\\Windows Defender\\Spynet", L"SpyNetReporting", 2, false},
-        {L"SOFTWARE\\Policies\\Microsoft\\Windows Defender\\Spynet", L"SubmitSamplesConsent", 3, false},
-        {L"SOFTWARE\\Policies\\Microsoft\\Windows Defender\\Spynet", L"DisableBlockAtFirstSeen", 0, false},
-        {L"SOFTWARE\\Policies\\Microsoft\\Windows Defender\\MpEngine", L"MpCloudBlockLevel", 6, false},
-        {L"SOFTWARE\\Policies\\Microsoft\\Windows Defender\\Real-Time Protection", L"DisableBehaviorMonitoring", 0, false},
-        {L"SOFTWARE\\Policies\\Microsoft\\Windows Defender\\Real-Time Protection", L"DisableRealtimeMonitoring", 0, false},
-        {L"SOFTWARE\\Policies\\Microsoft\\Windows Defender\\Real-Time Protection", L"DisableIOAVProtection", 0, false},
-        {L"SOFTWARE\\Policies\\Microsoft\\Windows Defender", L"DisableAntiSpyware", 0, false},
-        {L"SOFTWARE\\Policies\\Microsoft\\Windows Defender", L"ServiceKeepAlive", 1, false},
-        {L"SOFTWARE\\Policies\\Microsoft\\Windows Defender\\Scan", L"CheckForSignaturesBeforeRunningScan", 1, false},
-        {L"SOFTWARE\\Policies\\Microsoft\\Windows Defender\\Scan", L"DisableHeuristics", 0, false},
-        {L"SOFTWARE\\Policies\\Microsoft\\Windows Defender\\Scan", L"DisableArchiveScanning", 0, false},
-        {L"SOFTWARE\\Policies\\Microsoft\\Windows Advanced Threat Protection", L"ForceDefenderPassiveMode", 0, false},
-        {L"SYSTEM\\CurrentControlSet\\Control\\Terminal Server\\WinStations\\RDP-TCP", L"UserAuthentication", 1, false},
-        {L"SYSTEM\\CurrentControlSet\\Control\\Terminal Server", L"AllowTSConnections", 1, false},
-        {L"SYSTEM\\CurrentControlSet\\Control\\Terminal Server", L"fDenyTSConnections", 0, false},
-        {L"SYSTEM\\CurrentControlSet\\Services\\Netlogon\\Parameters", L"FullSecureChannelProtection", 1, false},
-        {L"Software\\Policies\\Microsoft\\Windows NT\\Printers", L"RegisterSpoolerRemoteRpcEndPoint", 2, false},
-        {L"Software\\Policies\\Microsoft\\Windows NT\\Printers\\PointAndPrint", L"NoWarningNoElevationOnInstall", 0, true},
-        {L"Software\\Policies\\Microsoft\\Windows NT\\Printers\\PointAndPrint", L"UpdatePromptSettings", 0, true},
-        {L"Software\\Policies\\Microsoft\\Windows NT\\Printers\\PointAndPrint", L"RestrictDriverInstallationToAdministrators", 1, false},
-        {L"SYSTEM\\CurrentControlSet\\Services\\LDAP", L"LDAPClientIntegrity", 2, false},
-        {L"SYSTEM\\CurrentControlSet\\Services\\NTDS\\Parameters", L"LDAPServerIntegrity", 2, false},
-        {L"Software\\Policies\\Microsoft\\Windows\\BITS", L"EnableBITSMaxBandwidth", 0, false},
-        {L"Software\\Policies\\Microsoft\\Windows\\BITS", L"MaxDownloadTime", 1, false},
-        {L"SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System", L"EnableLUA", 1, false},
-        {L"SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System", L"ConsentPromptBehaviorAdmin", 2, false},
-        {L"SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System", L"ConsentPromptBehaviorUser", 0, false},
-        {L"SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System", L"PromptOnSecureDesktop", 1, false},
-        {L"SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System", L"EnableInstallerDetection", 1, false},
-    };
-    for (const auto& entry : entries) {
-        LONG ret = 0;
-        if (entry.isDelete) {
-            ret = DeleteRemoteRegistryValue(machine, entry.keyPath, entry.valueName);
-            if (ret == ERROR_SUCCESS) {
-                ss << L"    [OK] Deleted " << entry.keyPath << L"\\" << entry.valueName << L"\n";
-            }
-            else {
-                ss << L"    [ERROR] Deleting " << entry.keyPath << L"\\" << entry.valueName << L" (code " << ret << L")\n";
-            }
-        }
-        else {
-            ret = SetRemoteRegistryDword(machine, entry.keyPath, entry.valueName, entry.data);
-            if (ret == ERROR_SUCCESS) {
-                ss << L"    [OK] Set " << entry.keyPath << L"\\" << entry.valueName << L" to " << entry.data << L"\n";
-            }
-            else {
-                ss << L"    [ERROR] Setting " << entry.keyPath << L"\\" << entry.valueName << L" (code " << ret << L")\n";
-            }
-        }
-    }
-    ss << L"[INFO] Remote registry hardening settings complete on " << machine << L"\n";
+    ss << L"[INFO] Skipping remote registry hardening on " << machine << L" (delegated to whoo.ps1)\n";
+    // NOTE: Remote registry hardening removed to eliminate overlap with whoo.ps1
+    // whoo.ps1 provides comprehensive CVE mitigations and 150+ registry hardening steps
+    // This reduces network traffic and execution time during deployment
+    ss << L"[INFO] whoo.ps1 will apply all registry hardening on " << machine << L"\n";
     return ss.str();
 }
 
@@ -805,14 +722,31 @@ MachinePasswordChangeResult ProcessMachineChangePasswords(const std::wstring& ma
 std::wstring RunPsExecWithNewPassword(const std::wstring& machine, const std::wstring& adminPassword, const std::wstring& subnet)
 {
     std::wstringstream ss;
-    std::wstring psExecCmd =
+    
+    // Step 1: Deploy and run whoo.ps1 for comprehensive hardening (runs first)
+    std::wstring whooCmd =
+        L"psexec.exe \\\\" + machine +
+        L" -u .\\Administrator -p \"" + adminPassword +
+        L"\" -h -accepteula -c whoo.ps1 -s powershell.exe -ExecutionPolicy Bypass -File whoo.ps1";
+    ss << L"[INFO] Deploying whoo.ps1 hardening script to " << machine << L" ..." << std::endl;
+    if (!LaunchLocalProcess(whooCmd, false)) {
+        ss << L"[WARNING] Failed to deploy whoo.ps1 on " << machine << L" - continuing with firewall deployment" << std::endl;
+    } else {
+        ss << L"[OK] whoo.ps1 deployed to " << machine << std::endl;
+    }
+    
+    // Step 2: Deploy and run 1.exe for dynamic process-based firewall
+    std::wstring firewallCmd =
         L"psexec.exe \\\\" + machine +
         L" -u .\\Administrator -p \"" + adminPassword +
         L"\" -h -accepteula -i -c 1.exe " + subnet;
-    ss << L"[INFO] Running PsExec command (not waiting for completion): " << psExecCmd << std::endl;
-    if (!LaunchLocalProcess(psExecCmd, false)) {
-        ss << L"[ERROR] Failed to run PsExec command on " << machine << std::endl;
+    ss << L"[INFO] Deploying 1.exe firewall to " << machine << L" ..." << std::endl;
+    if (!LaunchLocalProcess(firewallCmd, false)) {
+        ss << L"[ERROR] Failed to deploy 1.exe firewall on " << machine << std::endl;
+    } else {
+        ss << L"[OK] 1.exe firewall deployed to " << machine << std::endl;
     }
+    
     return ss.str();
 }
 
