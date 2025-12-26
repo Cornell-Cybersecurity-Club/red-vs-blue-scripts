@@ -5,13 +5,16 @@ while ($true) {
 	$Cmp2 = Get-Service | Where-Object {$_.Status -eq "Running"}
 	$diff = Compare-Object -ReferenceObject $Cmp -DifferenceObject $Cmp2 -Property Name
 	if($diff -ne $null){
-		$tmp = Get-WmiObject win32_service | ?{$_.Name -like $diff.Name} | select Name, DisplayName, State, PathName
+		$tmp = Get-WmiObject win32_service | ?{$_.Name -like $diff.Name} | select Name, DisplayName, State, PathName, StartMode, ProcessId, Description
 		if(($tmp.State -eq "Stopped" )){break}
 	  	Write-Output '!!!!!!!!!!A SERVICE HAS STARTED!!!!!!!!!!'
 	  	Write-Output ('Display Name: ' + $tmp.DisplayName)
 	  	Write-Output ('Name: ' + $tmp.Name)
 	  	Write-Output ('State: '+ $tmp.State)
+	  	Write-Output ('Start Mode: ' + $tmp.StartMode)
+	  	Write-Output ('PID: ' + $tmp.ProcessId)
 	  	Write-Output ('Path: ' + $tmp.PathName)
+	  	Write-Output ('Description: ' + $tmp.Description)
 	  	Write-Output '!!!!!!!!!!A SERVICE HAS STARTED!!!!!!!!!!'
 	  	Write-Output 'Kill? y/n'
 	  	$Return = Read-Host

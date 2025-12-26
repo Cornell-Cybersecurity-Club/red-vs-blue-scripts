@@ -10,12 +10,19 @@ $buttonNo = 7
 $action = {
     $processName = $event.SourceEventArgs.NewEvent.ProcessName
     $processId = $event.SourceEventArgs.NewEvent.ProcessId
+    
+    # Get full process details including command line
+    $processDetails = Get-WmiObject Win32_Process -Filter "ProcessId = $processId" -ErrorAction SilentlyContinue
+    $commandLine = if ($processDetails) { $processDetails.CommandLine } else { "N/A" }
+    $executablePath = if ($processDetails) { $processDetails.ExecutablePath } else { "N/A" }
 
     if (-not $allowedProcesses.ContainsKey($processName)) {
         $popupMessage = @"
 ALARM! NEW PROCESS HAS STARTED!
 Name: $processName
 PID: $processId
+Path: $executablePath
+Command Line: $commandLine
 
 Allow this process?
 "@
@@ -31,9 +38,13 @@ Allow this process?
             $buttonYes {
                 $script:allowedProcesses[$processName] = $true
                 Write-Host "[ALLOWED] $processName (PID: $processId)"
+                Write-Host "  Path: $executablePath"
+                Write-Host "  Args: $commandLine"
             }
             default {
                 Write-Host "[TERMINATING] $processName (PID: $processId)"
+                Write-Host "  Path: $executablePath"
+                Write-Host "  Args: $commandLine"
                 Stop-Process -Id $processId -Force -ErrorAction SilentlyContinue
             }
         }
