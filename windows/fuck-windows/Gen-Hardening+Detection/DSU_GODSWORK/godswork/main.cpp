@@ -838,10 +838,18 @@ int wmain(int argc, wchar_t* argv[])
     std::wstring currentLocalAdminPassword = argv[1];
     std::wstring subnet = argv[2];
 
+    // Get current executable directory and build absolute path to Tools folder
+    wchar_t exePath[MAX_PATH];
+    GetModuleFileName(NULL, exePath, MAX_PATH);
+    std::wstring exeDir(exePath);
+    size_t pos = exeDir.find_last_of(L"\\/");
+    exeDir = exeDir.substr(0, pos);
+    std::wstring toolsPath = exeDir + L"\\..\\..\\..\\..\\Tools";
+    
     // Launch nmap in a new window with vulners script on the provided subnet
     STARTUPINFO si = { sizeof(si) };
     PROCESS_INFORMATION pi = { 0 };
-    std::wstring nmapCmd = L"cmd.exe /c start \"Nmap Scan\" ..\\..\\..\\..\\Tools\\nmap.exe -sV --script ..\\..\\..\\..\\Tools\\vulners.nse " + subnet;
+    std::wstring nmapCmd = L"cmd.exe /c \"cd /d \"" + toolsPath + L"\" && nmap.exe -sV --script vulners.nse " + subnet + L"\"";
     if (CreateProcess(NULL, &nmapCmd[0], NULL, NULL, FALSE, CREATE_NEW_CONSOLE, NULL, NULL, &si, &pi)) {
         CloseHandle(pi.hProcess);
         CloseHandle(pi.hThread);
