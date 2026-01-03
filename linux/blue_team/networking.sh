@@ -4,4 +4,9 @@ if [ "$(id -u || true)" -ne 0 ]; then
   exit 1
 fi
 
-echo "9.9.9.9" >/etc/resolv.conf
+{
+  echo "nameserver 9.9.9.11"
+  echo "nameserver 149.112.112.11"
+  echo "nameserver 2620:fe::11"
+  echo "nameserver 2620:fe::fe:11"
+} >/etc/resolv.conf
