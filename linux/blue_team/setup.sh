@@ -5,15 +5,21 @@ if [ "$(id -u || true)" -ne 0 ]; then
   exit 1
 fi
 
-./backup.sh
+./backup_create.sh
 ./fix_perms.sh
-./auditd.sh
 ./users.sh
+./password_rotate.sh
+./networking.sh
+./firewall.sh
+./package_manager_reset.sh
+./package_reinstall.sh
+./package_install.sh
+./ssh_remove_keys.sh
+./ssh.sh
+./auditd.sh
 ./kernel.sh
 ./fstab.sh
+./file_cleaner.sh
 ./apparmor.sh
-./firewall.sh
 ./dconf.sh
-./nuke_ssh.sh
-./ssh.sh
-./remove_bad_files.sh
+./misc.sh
