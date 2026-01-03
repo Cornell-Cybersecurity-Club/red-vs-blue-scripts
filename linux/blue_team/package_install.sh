@@ -9,57 +9,79 @@ if [ -f /etc/os-release ]; then
 
   case "${ID_LIKE:-$ID}" in
   *debian* | *ubuntu*)
+    apt-get update
+
     apt-get install -y \
       apparmor \
       apparmor-utils \
       auditd \
       chrootkit \
+      coreutils \
       curl \
-      fail2ban \
+      debsums \
       git \
       gnupg \
       htop \
       iptables \
+      iotop \
       libpam-pwquality \
+      libpam-tmpdir \
       lsof \
+      lynis \
       nano \
+      needrestart \
       net-tools \
       nmap \
+      openssh-server \
+      openssl \
       pigz \
       rkhunter \
+      sudo \
       tcpdump \
       unhide \
+      unzip \
       vim \
       wget \
       zstd
     ;;
-  *rocky*)
-    dnf install -y epel-release
+  *rocky* | *rhel* | *fedora* | *centos* | *alma*)
+    if command -v dnf >/dev/null 2>&1; then
+      PKG_MGR="dnf"
+    else
+      PKG_MGR="yum"
+    fi
 
-    dnf makecache
+    $PKG_MGR install -y epel-release
+    $PKG_MGR makecache
 
-    dnf install -y \
+    $PKG_MGR install -y \
       audit \
       chrootkit \
+      coreutils \
       curl \
-      fail2ban \
       git \
       gnupg2 \
       htop \
       iptables \
       libpwquality \
       lsof \
+      lynis \
       nano \
       net-tools \
       nmap \
+      openssh-server \
       openssl \
       pigz \
       policycoreutils \
       rkhunter \
+      setools-console \
+      sudo \
       tcpdump \
       unhide \
+      unzip \
       vim \
       wget \
+      yum-utils \
       zstd
     ;;
   *alpine*)
@@ -67,26 +89,35 @@ if [ -f /etc/os-release ]; then
 
     apk add \
       audit \
+      bash \
+      busybox-extras \
+      coreutils \
       curl \
-      fail2ban \
       git \
       gnupg \
       htop \
       iptables \
+      ip6tables \
+      lsof \
+      lynis \
       nano \
       net-tools \
       nmap \
+      openssh \
       openssl \
       pigz \
-      rsyslog \
-      sysstat \
+      rkhunter \
+      sudo \
       tcpdump \
+      unzip \
       vim \
       wget \
       zstd
     ;;
   *)
-    FAMILY="$ID"
+    echo "Distro not supported."
     ;;
   esac
+
+  echo "Finished installing packages."
 fi
