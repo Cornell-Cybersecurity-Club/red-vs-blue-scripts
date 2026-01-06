@@ -20,3 +20,5 @@ echo >/etc/securetty
 
 command -v prelink >/dev/null 2>&1 && prelink -ua
 sysctl -ep
+sysctl -w net.ipv4.route.flush=1
+sysctl -w net.ipv6.route.flush=1

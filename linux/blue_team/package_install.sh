@@ -14,16 +14,22 @@ if [ -f /etc/os-release ]; then
     apt-get install -y \
       apparmor \
       apparmor-utils \
+      apt \
       auditd \
+      bash \
+      busybox \
       chrootkit \
       coreutils \
       curl \
+      dash \
       debsums \
       git \
       gnupg \
       htop \
-      iptables \
       iotop \
+      iptables \
+      lib6c \
+      libpam-modules \
       libpam-pwquality \
       libpam-tmpdir \
       lsof \
@@ -34,12 +40,15 @@ if [ -f /etc/os-release ]; then
       nmap \
       openssh-server \
       openssl \
+      passwd \
       pigz \
+      polkitd \
       rkhunter \
       sudo \
       tcpdump \
       unhide \
       unzip \
+      util-linux \
       vim \
       wget \
       zstd
@@ -56,10 +65,15 @@ if [ -f /etc/os-release ]; then
 
     $PKG_MGR install -y \
       audit \
+      bash \
+      busybox \
       chrootkit \
       coreutils \
       curl \
+      dash \
+      dpkg \
       git \
+      glibc \
       gnupg2 \
       htop \
       iptables \
@@ -71,6 +85,7 @@ if [ -f /etc/os-release ]; then
       nmap \
       openssh-server \
       openssl \
+      passwd \
       pigz \
       policycoreutils \
       rkhunter \
@@ -79,8 +94,10 @@ if [ -f /etc/os-release ]; then
       tcpdump \
       unhide \
       unzip \
+      util-linux \
       vim \
       wget \
+      yum \
       yum-utils \
       zstd
     ;;
@@ -96,8 +113,8 @@ if [ -f /etc/os-release ]; then
       git \
       gnupg \
       htop \
-      iptables \
       ip6tables \
+      iptables \
       lsof \
       lynis \
       nano \
@@ -105,6 +122,7 @@ if [ -f /etc/os-release ]; then
       nmap \
       openssh \
       openssl \
+      passwd \
       pigz \
       rkhunter \
       sudo \

@@ -6,7 +6,7 @@ if [ "$(id -u || true)" -ne 0 ]; then
 fi
 
 ./backup_create.sh
-./fix_perms.sh
+./permission_fix.sh
 ./users.sh
 ./password_rotate.sh
 ./networking.sh

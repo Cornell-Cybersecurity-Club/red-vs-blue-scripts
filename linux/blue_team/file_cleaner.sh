@@ -13,6 +13,9 @@ rm -f /var/timemachine
 rm -f /bin/ex1t
 rm -f /var/oxygen.html
 
+rm -f /etc/at.deny
+rm -f /etc/cron.deny
+
 find / -iname 'users.csv' -delete
 find / -iname 'user.csv' -delete
 find / -iname '*password.txt' -delete
