@@ -48,6 +48,7 @@ if [ -f /etc/os-release ]; then
       pigz \
       polkitd \
       rkhunter \
+      rsyslog \
       sudo \
       tcpdump \
       unhide \
@@ -95,6 +96,7 @@ if [ -f /etc/os-release ]; then
       pigz \
       policycoreutils \
       rkhunter \
+      rsyslog \
       setools-console \
       sudo \
       tcpdump \
@@ -131,6 +133,7 @@ if [ -f /etc/os-release ]; then
       passwd \
       pigz \
       rkhunter \
+      rsyslog \
       sudo \
       tcpdump \
       unzip \
