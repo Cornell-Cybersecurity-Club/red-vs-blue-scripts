@@ -9,12 +9,15 @@ if [ -f /etc/os-release ]; then
 
   case "${ID_LIKE:-$ID}" in
   *debian* | *ubuntu*)
+    export DEBIAN_FRONTEND=noninteractive
+
     apt-get update
 
     apt-get install -y \
       apparmor \
       apparmor-utils \
       apt \
+      audispd-plugins \
       auditd \
       bash \
       busybox \
@@ -28,6 +31,7 @@ if [ -f /etc/os-release ]; then
       htop \
       iotop \
       iptables \
+      iptables-persistent \
       lib6c \
       libpam-modules \
       libpam-pwquality \
@@ -65,6 +69,7 @@ if [ -f /etc/os-release ]; then
 
     $PKG_MGR install -y \
       audit \
+      audit-libs \
       bash \
       busybox \
       chrootkit \
@@ -77,6 +82,7 @@ if [ -f /etc/os-release ]; then
       gnupg2 \
       htop \
       iptables \
+      iptables-services \
       libpwquality \
       lsof \
       lynis \
