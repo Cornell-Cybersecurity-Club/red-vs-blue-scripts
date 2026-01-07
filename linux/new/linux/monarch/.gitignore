@@ -1,8 +1,0 @@
-venv/
-monarch.log
-config/
-__pycache__
-.monarch_history
-conf.json
-passwords.db
-.env
