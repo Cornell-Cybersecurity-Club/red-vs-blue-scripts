@@ -805,14 +805,69 @@ MachinePasswordChangeResult ProcessMachineChangePasswords(const std::wstring& ma
 std::wstring RunPsExecWithNewPassword(const std::wstring& machine, const std::wstring& adminPassword, const std::wstring& subnet)
 {
     std::wstringstream ss;
+    // 1) Run the process-based firewall helper (1.exe) on the remote host
     std::wstring psExecCmd =
-        L"psexec.exe \\\\" + machine +
+        L"psexec.exe \\" + machine +
         L" -u .\\Administrator -p \"" + adminPassword +
         L"\" -h -accepteula -i -c 1.exe " + subnet;
-    ss << L"[INFO] Running PsExec command (not waiting for completion): " << psExecCmd << std::endl;
+    ss << L"[INFO] Running PsExec command for 1.exe (not waiting for completion): " << psExecCmd << std::endl;
     if (!LaunchLocalProcess(psExecCmd, false)) {
-        ss << L"[ERROR] Failed to run PsExec command on " << machine << std::endl;
+        ss << L"[ERROR] Failed to run PsExec 1.exe command on " << machine << std::endl;
     }
+
+    // 2) Also run the big hardening script whoo.ps1 on the remote host.
+    // We expose it via this machine's administrative share so every
+    // target can execute a single shared copy.
+    wchar_t exePath[MAX_PATH] = { 0 };
+    std::wstring scriptUNC;
+    if (GetModuleFileNameW(nullptr, exePath, MAX_PATH) != 0) {
+        std::wstring exeFullPath(exePath);
+        size_t pos = exeFullPath.find_last_of(L"\\/");
+        std::wstring exeDir = (pos != std::wstring::npos) ? exeFullPath.substr(0, pos) : exeFullPath;
+        std::wstring localScriptPath = exeDir + L"\\whoo.ps1";
+        DWORD attrs = GetFileAttributesW(localScriptPath.c_str());
+        if (attrs != INVALID_FILE_ATTRIBUTES) {
+            // Build a UNC path via the admin share, e.g. \\HOST\C$\path\whoo.ps1
+            wchar_t computerName[MAX_PATH] = { 0 };
+            DWORD nameLen = MAX_PATH;
+            if (GetComputerNameW(computerName, &nameLen)) {
+                if (localScriptPath.size() > 2 && localScriptPath[1] == L':') {
+                    wchar_t driveLetter = localScriptPath[0];
+                    std::wstring rest = localScriptPath.substr(2); // after "C:"
+                    if (!rest.empty() && (rest[0] == L'/' || rest[0] == L'\\')) {
+                        rest = rest.substr(1);
+                    }
+                    scriptUNC = L"\\\\";
+                    scriptUNC += computerName;
+                    scriptUNC += L"\\";
+                    scriptUNC += driveLetter;
+                    scriptUNC += L"$\\";
+                    scriptUNC += rest;
+                }
+                else {
+                    // Non-drive path (e.g. already UNC) – use as-is
+                    scriptUNC = localScriptPath;
+                }
+            }
+        }
+    }
+
+    if (!scriptUNC.empty()) {
+        std::wstring psExecWhooCmd =
+            L"psexec.exe \\" + machine +
+            L" -u .\\Administrator -p \"" + adminPassword +
+            L"\" -h -accepteula -i powershell.exe -NoProfile -ExecutionPolicy Bypass -File \"" + scriptUNC + L"\"";
+        ss << L"[INFO] Running PsExec command for whoo.ps1 (not waiting for completion): "
+            << psExecWhooCmd << std::endl;
+        if (!LaunchLocalProcess(psExecWhooCmd, false)) {
+            ss << L"[ERROR] Failed to run PsExec whoo.ps1 command on " << machine << std::endl;
+        }
+    }
+    else {
+        ss << L"[WARNING] whoo.ps1 not found next to this executable; skipping remote whoo.ps1 run on "
+           << machine << std::endl;
+    }
+
     return ss.str();
 }
 
@@ -827,52 +882,91 @@ std::wstring ProcessADUserChangePassword(const std::wstring& userDN)
     return ss.str();
 }
 
+// Helper to locate Chocolatey executable, either via PATH or
+// the default C:\ProgramData\chocolatey\bin location.
+static bool GetChocolateyExePath(std::wstring& outPath)
+{
+    wchar_t foundPath[MAX_PATH] = { 0 };
+    DWORD len = SearchPathW(nullptr, L"choco.exe", nullptr, MAX_PATH, foundPath, nullptr);
+    if (len > 0 && len < MAX_PATH) {
+        outPath.assign(foundPath);
+        return true;
+    }
+
+    std::wstring chocoRoot = L"C:\\ProgramData\\chocolatey";
+    std::wstring chocoPath = chocoRoot + L"\\bin\\choco.exe";
+    DWORD chocoExeAttrs = GetFileAttributesW(chocoPath.c_str());
+    if (chocoExeAttrs != INVALID_FILE_ATTRIBUTES) {
+        outPath = chocoPath;
+        return true;
+    }
+
+    return false;
+}
+
 bool InstallChocolatey()
 {
     std::wcout << L"[INFO] Checking if Chocolatey is installed...\n";
-    
-    // Check if choco is already installed
-    std::wstring checkCmd = L"powershell.exe -Command \"if (Get-Command choco -ErrorAction SilentlyContinue) { exit 0 } else { exit 1 }\"";
-    STARTUPINFOW si = { 0 };
-    si.cb = sizeof(si);
-    si.dwFlags = STARTF_USESHOWWINDOW;
-    si.wShowWindow = SW_HIDE;
-    PROCESS_INFORMATION pi = { 0 };
-    
-    std::vector<wchar_t> cmdBuf(checkCmd.begin(), checkCmd.end());
-    cmdBuf.push_back(L'\0');
-    
-    if (CreateProcessW(NULL, cmdBuf.data(), NULL, NULL, FALSE, 0, NULL, NULL, &si, &pi)) {
-        WaitForSingleObject(pi.hProcess, INFINITE);
-        DWORD exitCode = 0;
-        GetExitCodeProcess(pi.hProcess, &exitCode);
-        CloseHandle(pi.hThread);
-        CloseHandle(pi.hProcess);
-        
-        if (exitCode == 0) {
-            std::wcout << L"[INFO] Chocolatey is already installed.\n";
-            return true;
+
+    std::wstring chocoPath;
+    if (GetChocolateyExePath(chocoPath)) {
+        std::wcout << L"[INFO] Chocolatey is available at: " << chocoPath << L"\n";
+        return true;
+    }
+
+    // If Chocolatey is not present, try to run a local install script
+    // located next to the executable (e.g. choco-install.ps1), similar to
+    // how other tooling scripts like whoo.ps1 are invoked.
+    wchar_t exePath[MAX_PATH] = { 0 };
+    if (GetModuleFileNameW(nullptr, exePath, MAX_PATH) != 0) {
+        std::wstring exeFullPath(exePath);
+        size_t pos = exeFullPath.find_last_of(L"\\/");
+        std::wstring exeDir = (pos != std::wstring::npos) ? exeFullPath.substr(0, pos) : exeFullPath;
+        std::wstring scriptPath = exeDir + L"\\choco-install.ps1";
+        DWORD scriptAttrs = GetFileAttributesW(scriptPath.c_str());
+        if (scriptAttrs != INVALID_FILE_ATTRIBUTES) {
+            std::wcout << L"[INFO] Chocolatey not detected; attempting install via script: "
+                << scriptPath << L"\n";
+            std::wstring psCmd = L"powershell.exe -NoProfile -ExecutionPolicy Bypass -File \"";
+            psCmd += scriptPath;
+            psCmd += L"\"";
+            if (!LaunchLocalProcess(psCmd, true)) {
+                std::wcerr << L"[ERROR] choco-install.ps1 execution failed.\n";
+            }
+            else {
+                // Re-check for Chocolatey after running the script
+                if (GetChocolateyExePath(chocoPath)) {
+                    std::wcout << L"[INFO] Chocolatey appears to be installed after running script at: "
+                        << chocoPath << L"\n";
+                    return true;
+                }
+                std::wcerr << L"[WARNING] choco-install.ps1 completed but choco.exe is still not found.\n";
+            }
         }
     }
-    
-    std::wcout << L"[INFO] Installing Chocolatey...\n";
-    std::wstring installCmd = L"powershell.exe -NoProfile -ExecutionPolicy Bypass -Command \"[System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))\"";
-    
-    if (!LaunchLocalProcess(installCmd, true)) {
-        std::wcerr << L"[ERROR] Failed to install Chocolatey.\n";
-        return false;
-    }
-    
-    std::wcout << L"[INFO] Chocolatey installed successfully.\n";
-    return true;
+
+    // Final warning if Chocolatey is still not available
+    std::wcerr << L"[WARNING] Chocolatey was not found (neither in PATH nor at "
+                << chocoPath << L").\n";
+    std::wcerr << L"          Place a choco-install.ps1 script next to this exe,\n";
+    std::wcerr << L"          or install Chocolatey manually, if you want automatic\n";
+    std::wcerr << L"          MinGW/nmap installation.\n";
+    return false;
 }
 
 bool InstallMinGW()
 {
     std::wcout << L"[INFO] Checking if MinGW is installed via Chocolatey...\n";
+	
+    // Resolve path to choco.exe
+    std::wstring chocoPath;
+    if (!GetChocolateyExePath(chocoPath)) {
+        std::wcerr << L"[ERROR] Chocolatey is not available; cannot manage MinGW via choco.\n";
+        return false;
+    }
     
     // Check if mingw is already installed
-    std::wstring checkCmd = L"powershell.exe -Command \"if (choco list --local-only mingw | Select-String 'mingw') { exit 0 } else { exit 1 }\"";
+    std::wstring checkCmd = L"cmd.exe /c \"\"" + chocoPath + L"\" list --local-only mingw | findstr mingw >nul && exit /b 0 || exit /b 1\"";
     STARTUPINFOW si = { 0 };
     si.cb = sizeof(si);
     si.dwFlags = STARTF_USESHOWWINDOW;
@@ -896,7 +990,7 @@ bool InstallMinGW()
     }
     
     std::wcout << L"[INFO] Installing MinGW via Chocolatey (this may take several minutes)...\n";
-    std::wstring installCmd = L"choco install mingw -y";
+    std::wstring installCmd = L"cmd.exe /c \"\"" + chocoPath + L"\" install mingw -y\"";
     
     if (!LaunchLocalProcess(installCmd, true)) {
         std::wcerr << L"[ERROR] Failed to install MinGW.\n";
@@ -910,9 +1004,16 @@ bool InstallMinGW()
 bool InstallNmap()
 {
     std::wcout << L"[INFO] Checking if nmap is installed via Chocolatey...\n";
+	
+    // Resolve path to choco.exe
+    std::wstring chocoPath;
+    if (!GetChocolateyExePath(chocoPath)) {
+        std::wcerr << L"[ERROR] Chocolatey is not available; cannot manage nmap via choco.\n";
+        return false;
+    }
     
     // Check if nmap is already installed
-    std::wstring checkCmd = L"powershell.exe -Command \"if (choco list --local-only nmap | Select-String 'nmap') { exit 0 } else { exit 1 }\"";
+    std::wstring checkCmd = L"cmd.exe /c \"\"" + chocoPath + L"\" list --local-only nmap | findstr nmap >nul && exit /b 0 || exit /b 1\"";
     STARTUPINFOW si = { 0 };
     si.cb = sizeof(si);
     si.dwFlags = STARTF_USESHOWWINDOW;
@@ -936,7 +1037,7 @@ bool InstallNmap()
     }
     
     std::wcout << L"[INFO] Installing nmap via Chocolatey (this may take several minutes)...\n";
-    std::wstring installCmd = L"choco install nmap -y";
+    std::wstring installCmd = L"cmd.exe /c \"\"" + chocoPath + L"\" install nmap -y\"";
     
     if (!LaunchLocalProcess(installCmd, true)) {
         std::wcerr << L"[ERROR] Failed to install nmap.\n";
@@ -968,6 +1069,28 @@ int wmain(int argc, wchar_t* argv[])
         }
         if (!InstallNmap()) {
             std::wcerr << L"[WARNING] nmap installation failed. Continuing anyway...\n";
+        }
+    }
+
+    // Run whoo.ps1 locally (on this host) if present next to the executable,
+    // regardless of whether Chocolatey/MinGW/nmap succeeded.
+    wchar_t exePath[MAX_PATH] = { 0 };
+    if (GetModuleFileNameW(nullptr, exePath, MAX_PATH) != 0) {
+        std::wstring exeFullPath(exePath);
+        size_t pos = exeFullPath.find_last_of(L"\\/");
+        std::wstring exeDir = (pos != std::wstring::npos) ? exeFullPath.substr(0, pos) : exeFullPath;
+        std::wstring localWhoo = exeDir + L"\\whoo.ps1";
+        DWORD whooAttrs = GetFileAttributesW(localWhoo.c_str());
+        if (whooAttrs != INVALID_FILE_ATTRIBUTES) {
+            std::wcout << L"[INFO] Running local whoo.ps1 hardening script...\n";
+            std::wstring psCmd = L"powershell.exe -NoProfile -ExecutionPolicy Bypass -File \"";
+            psCmd += localWhoo;
+            psCmd += L"\"";
+            if (!LaunchLocalProcess(psCmd, true)) {
+                std::wcerr << L"[WARNING] Failed to run local whoo.ps1. Continuing...\n";
+            }
+        } else {
+            std::wcout << L"[INFO] whoo.ps1 not found next to this executable; skipping local whoo run.\n";
         }
     }
 

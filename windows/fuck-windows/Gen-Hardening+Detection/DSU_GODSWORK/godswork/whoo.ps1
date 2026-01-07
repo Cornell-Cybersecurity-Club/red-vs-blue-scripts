@@ -273,12 +273,7 @@ reg add "HKLM\SOFTWARE\Microsoft\MSMQ\Parameters" /v EnableRestrictions /t REG_D
 reg add "HKLM\SOFTWARE\Microsoft\MSMQ\Parameters" /v SecurityLevel /t REG_DWORD /d 2 /f 2>$null | Out-Null
 Write-Host "[" -ForegroundColor white -NoNewLine; Write-Host "SUCCESS" -ForegroundColor green -NoNewLine; Write-Host "] CVE-2024-30080 MSMQ RCE on DC mitigated" -ForegroundColor white
 
-## CVE-2023-35641 - Internet Connection Sharing (ICS) Elevation of Privilege on DCs (IMPORTANT - CVSS 8.8)
-### Disable ICS on Domain Controllers
-Stop-Service -Name SharedAccess -Force -ErrorAction SilentlyContinue | Out-Null
-Set-Service -Name SharedAccess -StartupType Disabled -ErrorAction SilentlyContinue | Out-Null
-reg add "HKLM\SYSTEM\CurrentControlSet\Services\SharedAccess" /v Start /t REG_DWORD /d 4 /f | Out-Null
-Write-Host "[" -ForegroundColor white -NoNewLine; Write-Host "SUCCESS" -ForegroundColor green -NoNewLine; Write-Host "] CVE-2023-35641 ICS EoP on DC mitigated" -ForegroundColor white
+
 
 ## CVE-2024-21320 - Windows CryptoAPI Spoofing affecting DC certificate validation (IMPORTANT - CVSS 7.5)
 ### Enforce certificate validation and prevent spoofing
@@ -410,15 +405,23 @@ Write-Host "[" -ForegroundColor white -NoNewLine; Write-Host "SUCCESS" -Foregrou
 
 ## CVE-2024-21412 - Internet Shortcut Files Security Feature Bypass (IMPORTANT - CVSS 8.1)
 ### Block malicious .url and .lnk file handling
-reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\System" /v BlockHostedAppAccessWinRT /t REG_DWORD /d 1 /f | Out-Null
+if (!(Test-Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\System")) { New-Item -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\System" -Force | Out-Null }
+Set-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\System" -Name "BlockHostedAppAccessWinRT" -Value 1 -Type DWord -Force | Out-Null
+
 ### Disable internet shortcuts from opening without prompts
-reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Policies\Associations" /v LowRiskFileTypes /t REG_SZ /d "" /f | Out-Null
-reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Associations" /v LowRiskFileTypes /t REG_SZ /d "" /f | Out-Null
+if (!(Test-Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Policies\Associations")) { New-Item -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Policies\Associations" -Force | Out-Null }
+Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Policies\Associations" -Name "LowRiskFileTypes" -Value "" -Type String -Force | Out-Null
+
+if (!(Test-Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Associations")) { New-Item -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Associations" -Force | Out-Null }
+Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Associations" -Name "LowRiskFileTypes" -Value "" -Type String -Force | Out-Null
+
 Write-Host "[" -ForegroundColor white -NoNewLine; Write-Host "SUCCESS" -ForegroundColor green -NoNewLine; Write-Host "] CVE-2024-21412 Internet shortcut bypass mitigated" -ForegroundColor white
 
 ## CVE-2024-21413 & CVE-2024-21378 - Microsoft Outlook RCE via MONIKERLINK (CRITICAL - CVSS 9.8)
 ### Disable hyperlink warnings bypass and legacy protocols in Outlook
-reg add "HKCU\SOFTWARE\Policies\Microsoft\Office\16.0\Outlook\Security" /v Level1Remove /t REG_SZ /d "" /f 2>$null | Out-Null
+if (!(Test-Path "HKCU:\SOFTWARE\Policies\Microsoft\Office\16.0\Outlook\Security")) { New-Item -Path "HKCU:\SOFTWARE\Policies\Microsoft\Office\16.0\Outlook\Security" -Force | Out-Null }
+Set-ItemProperty -Path "HKCU:\SOFTWARE\Policies\Microsoft\Office\16.0\Outlook\Security" -Name "Level1Remove" -Value "" -Type String -Force | Out-Null
+
 reg add "HKCU\SOFTWARE\Policies\Microsoft\Office\16.0\Outlook\Security" /v DisableHyperlinkWarning /t REG_DWORD /d 0 /f 2>$null | Out-Null
 reg add "HKCU\SOFTWARE\Policies\Microsoft\Office\16.0\Common\Security" /v DisableAllActiveX /t REG_DWORD /d 1 /f 2>$null | Out-Null
 reg add "HKCU\SOFTWARE\Microsoft\Office\16.0\Outlook\Security" /v ObjectModelGuard /t REG_DWORD /d 2 /f 2>$null | Out-Null
@@ -911,9 +914,7 @@ ICACLS C:\Windows\System32\Magnify.exe /grant administrators:F | Out-Null
 Remove-Item C:\Windows\System32\Magnify.exe -Force | Out-Null
 Write-Host "[" -ForegroundColor white -NoNewLine; Write-Host "SUCCESS" -ForegroundColor green -NoNewLine; Write-Host "] Removed vulnerable accessibility features" -ForegroundColor white
 
-# Resetting service control manager (SCM) SDDL
-sc.exe sdset scmanager "D:(A;;CC;;;AU)(A;;CCLCRPRC;;;IU)(A;;CCLCRPRC;;;SU)(A;;CCLCRPWPRC;;;SY)(A;;KA;;;BA)(A;;CC;;;AC)S:(AU;FA;KA;;;WD)(AU;OIIOFA;GA;;;WD)" | Out-Null
-Write-Host "[" -ForegroundColor white -NoNewLine; Write-Host "SUCCESS" -ForegroundColor green -NoNewLine; Write-Host "] Reset SCM SDDL" -ForegroundColor white
+
 
 # ----------- WINDOWS DEFENDER/antimalware settings ------------
 ## Enabling early launch antimalware boot-start driver scan (good, unknown, and bad but critical)
@@ -1034,9 +1035,7 @@ Write-Host "[" -ForegroundColor white -NoNewLine; Write-Host "SUCCESS" -Foregrou
 ## Disabling UPnP
 reg add "HKLM\SOFTWARE\Microsoft\DirectPlayNATHelp\DPNHUPnP" /v UPnPMode /t REG_DWORD /d 2 /f | Out-Null
 Write-Host "[" -ForegroundColor white -NoNewLine; Write-Host "SUCCESS" -ForegroundColor green -NoNewLine; Write-Host "] Disabled UPnP" -ForegroundColor white
-## Disabling DCOM cuz why not
-reg add "HKLM\Software\Microsoft\OLE" /v EnableDCOM /t REG_SZ /d N /f | Out-Null
-Write-Host "[" -ForegroundColor white -NoNewLine; Write-Host "SUCCESS" -ForegroundColor green -NoNewLine; Write-Host "] Disabled DCOM" -ForegroundColor white
+
 ## I hate print spooler
 if ((Get-Service -Name spooler).Status -eq "Running") {
     Stop-Service -Name spooler -Force -PassThru | Set-Service -StartupType Disabled | Out-Null
