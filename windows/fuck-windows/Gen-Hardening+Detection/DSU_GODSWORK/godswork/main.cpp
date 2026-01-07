@@ -827,6 +827,86 @@ std::wstring ProcessADUserChangePassword(const std::wstring& userDN)
     return ss.str();
 }
 
+bool InstallChocolatey()
+{
+    std::wcout << L"[INFO] Checking if Chocolatey is installed...\n";
+    
+    // Check if choco is already installed
+    std::wstring checkCmd = L"powershell.exe -Command \"if (Get-Command choco -ErrorAction SilentlyContinue) { exit 0 } else { exit 1 }\"";
+    STARTUPINFOW si = { 0 };
+    si.cb = sizeof(si);
+    si.dwFlags = STARTF_USESHOWWINDOW;
+    si.wShowWindow = SW_HIDE;
+    PROCESS_INFORMATION pi = { 0 };
+    
+    std::vector<wchar_t> cmdBuf(checkCmd.begin(), checkCmd.end());
+    cmdBuf.push_back(L'\0');
+    
+    if (CreateProcessW(NULL, cmdBuf.data(), NULL, NULL, FALSE, 0, NULL, NULL, &si, &pi)) {
+        WaitForSingleObject(pi.hProcess, INFINITE);
+        DWORD exitCode = 0;
+        GetExitCodeProcess(pi.hProcess, &exitCode);
+        CloseHandle(pi.hThread);
+        CloseHandle(pi.hProcess);
+        
+        if (exitCode == 0) {
+            std::wcout << L"[INFO] Chocolatey is already installed.\n";
+            return true;
+        }
+    }
+    
+    std::wcout << L"[INFO] Installing Chocolatey...\n";
+    std::wstring installCmd = L"powershell.exe -NoProfile -ExecutionPolicy Bypass -Command \"[System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))\"";
+    
+    if (!LaunchLocalProcess(installCmd, true)) {
+        std::wcerr << L"[ERROR] Failed to install Chocolatey.\n";
+        return false;
+    }
+    
+    std::wcout << L"[INFO] Chocolatey installed successfully.\n";
+    return true;
+}
+
+bool InstallMinGW()
+{
+    std::wcout << L"[INFO] Checking if MinGW is installed via Chocolatey...\n";
+    
+    // Check if mingw is already installed
+    std::wstring checkCmd = L"powershell.exe -Command \"if (choco list --local-only mingw | Select-String 'mingw') { exit 0 } else { exit 1 }\"";
+    STARTUPINFOW si = { 0 };
+    si.cb = sizeof(si);
+    si.dwFlags = STARTF_USESHOWWINDOW;
+    si.wShowWindow = SW_HIDE;
+    PROCESS_INFORMATION pi = { 0 };
+    
+    std::vector<wchar_t> cmdBuf(checkCmd.begin(), checkCmd.end());
+    cmdBuf.push_back(L'\0');
+    
+    if (CreateProcessW(NULL, cmdBuf.data(), NULL, NULL, FALSE, 0, NULL, NULL, &si, &pi)) {
+        WaitForSingleObject(pi.hProcess, INFINITE);
+        DWORD exitCode = 0;
+        GetExitCodeProcess(pi.hProcess, &exitCode);
+        CloseHandle(pi.hThread);
+        CloseHandle(pi.hProcess);
+        
+        if (exitCode == 0) {
+            std::wcout << L"[INFO] MinGW is already installed.\n";
+            return true;
+        }
+    }
+    
+    std::wcout << L"[INFO] Installing MinGW via Chocolatey (this may take several minutes)...\n";
+    std::wstring installCmd = L"choco install mingw -y";
+    
+    if (!LaunchLocalProcess(installCmd, true)) {
+        std::wcerr << L"[ERROR] Failed to install MinGW.\n";
+        return false;
+    }
+    
+    std::wcout << L"[INFO] MinGW installed successfully.\n";
+    return true;
+}
+
 static std::ofstream g_logFile;
 
 int wmain(int argc, wchar_t* argv[])
@@ -838,6 +918,16 @@ int wmain(int argc, wchar_t* argv[])
     std::wstring currentLocalAdminPassword = argv[1];
     std::wstring subnet = argv[2];
 
+    // Install Chocolatey and MinGW for compilation tools
+    std::wcout << L"[INFO] Ensuring build tools are installed...\n";
+    if (!InstallChocolatey()) {
+        std::wcerr << L"[WARNING] Chocolatey installation failed. Continuing anyway...\n";
+    } else {
+        if (!InstallMinGW()) {
+            std::wcerr << L"[WARNING] MinGW installation failed. Continuing anyway...\n";
+        }
+    }
+
     // Get current executable directory and build absolute path to Tools folder
     wchar_t exePath[MAX_PATH];
     GetModuleFileName(NULL, exePath, MAX_PATH);
@@ -845,17 +935,51 @@ int wmain(int argc, wchar_t* argv[])
     size_t pos = exeDir.find_last_of(L"\\/");
     exeDir = exeDir.substr(0, pos);
     std::wstring toolsPath = exeDir + L"\\..\\..\\..\\..\\Tools";
+    std::wstring nmapExtractDir = toolsPath + L"\\nmap-7.97";
     
-    // Launch nmap in a new window with vulners script on the provided subnet
-    STARTUPINFO si = { sizeof(si) };
-    PROCESS_INFORMATION pi = { 0 };
-    std::wstring nmapCmd = L"cmd.exe /c \"cd /d \"" + toolsPath + L"\" && nmap.exe -sV --script vulners.nse " + subnet + L"\"";
-    if (CreateProcess(NULL, &nmapCmd[0], NULL, NULL, FALSE, CREATE_NEW_CONSOLE, NULL, NULL, &si, &pi)) {
-        CloseHandle(pi.hProcess);
-        CloseHandle(pi.hThread);
-        std::wcout << L"[INFO] Launched nmap.exe with vulners script on subnet " << subnet << L" in new window.\n";
+    // Launch nmap vulnerability scan in a new window with vulners script
+    std::wcout << L"[INFO] Launching nmap vulnerability scan in separate window...\n";
+    std::wstring nmapExe = nmapExtractDir + L"\\nmap.exe";
+    std::wstring nmapScriptsDir = nmapExtractDir + L"\\scripts";
+    std::wstring vulnersScript = nmapScriptsDir + L"\\vulners.nse";
+    
+    // Build command: cmd.exe /k "nmap.exe -sV --script vulners.nse <subnet>"
+    // Using /k instead of /c to keep window open after scan completes
+    std::wstring nmapCmd = L"cmd.exe /k \"\"" + nmapExe + L"\" -sV --script \"" + vulnersScript + L"\" " + subnet + L" && echo. && echo Scan complete. Press any key to close... && pause > nul\"";
+    
+    STARTUPINFOW nmapSi = { 0 };
+    nmapSi.cb = sizeof(nmapSi);
+    nmapSi.dwFlags = STARTF_USESHOWWINDOW;
+    nmapSi.wShowWindow = SW_SHOW;
+    PROCESS_INFORMATION nmapPi = { 0 };
+    
+    std::vector<wchar_t> nmapCmdBuf(nmapCmd.begin(), nmapCmd.end());
+    nmapCmdBuf.push_back(L'\0');
+    
+    BOOL nmapResult = CreateProcessW(
+        NULL,
+        nmapCmdBuf.data(),
+        NULL,
+        NULL,
+        FALSE,
+        CREATE_NEW_CONSOLE,
+        NULL,
+        NULL,
+        &nmapSi,
+        &nmapPi
+    );
+    
+    if (nmapResult) {
+        CloseHandle(nmapPi.hThread);
+        CloseHandle(nmapPi.hProcess);
+        std::wcout << L"[OK] nmap vulnerability scan launched in new window on subnet " << subnet << L"\n";
+        std::wcout << L"[INFO] nmap executable: " << nmapExe << L"\n";
+        std::wcout << L"[INFO] vulners script: " << vulnersScript << L"\n";
     } else {
-        std::wcerr << L"[WARNING] Failed to launch nmap.exe.\n";
+        DWORD error = GetLastError();
+        std::wcerr << L"[WARNING] Failed to launch nmap scan (Error " << error << L").\n";
+        std::wcerr << L"[INFO] Make sure nmap is extracted at: " << nmapExtractDir << L"\n";
+        std::wcerr << L"[INFO] Or download Windows binary from https://nmap.org/download.html\n";
     }
 
     if (!AddDefenderExclusionForCurrentFolder()) {
