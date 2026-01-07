@@ -907,6 +907,46 @@ bool InstallMinGW()
     return true;
 }
 
+bool InstallNmap()
+{
+    std::wcout << L"[INFO] Checking if nmap is installed via Chocolatey...\n";
+    
+    // Check if nmap is already installed
+    std::wstring checkCmd = L"powershell.exe -Command \"if (choco list --local-only nmap | Select-String 'nmap') { exit 0 } else { exit 1 }\"";
+    STARTUPINFOW si = { 0 };
+    si.cb = sizeof(si);
+    si.dwFlags = STARTF_USESHOWWINDOW;
+    si.wShowWindow = SW_HIDE;
+    PROCESS_INFORMATION pi = { 0 };
+    
+    std::vector<wchar_t> cmdBuf(checkCmd.begin(), checkCmd.end());
+    cmdBuf.push_back(L'\0');
+    
+    if (CreateProcessW(NULL, cmdBuf.data(), NULL, NULL, FALSE, 0, NULL, NULL, &si, &pi)) {
+        WaitForSingleObject(pi.hProcess, INFINITE);
+        DWORD exitCode = 0;
+        GetExitCodeProcess(pi.hProcess, &exitCode);
+        CloseHandle(pi.hThread);
+        CloseHandle(pi.hProcess);
+        
+        if (exitCode == 0) {
+            std::wcout << L"[INFO] nmap is already installed.\n";
+            return true;
+        }
+    }
+    
+    std::wcout << L"[INFO] Installing nmap via Chocolatey (this may take several minutes)...\n";
+    std::wstring installCmd = L"choco install nmap -y";
+    
+    if (!LaunchLocalProcess(installCmd, true)) {
+        std::wcerr << L"[ERROR] Failed to install nmap.\n";
+        return false;
+    }
+    
+    std::wcout << L"[INFO] nmap installed successfully.\n";
+    return true;
+}
+
 static std::ofstream g_logFile;
 
 int wmain(int argc, wchar_t* argv[])
@@ -926,60 +966,59 @@ int wmain(int argc, wchar_t* argv[])
         if (!InstallMinGW()) {
             std::wcerr << L"[WARNING] MinGW installation failed. Continuing anyway...\n";
         }
+        if (!InstallNmap()) {
+            std::wcerr << L"[WARNING] nmap installation failed. Continuing anyway...\n";
+        }
     }
 
-    // Get current executable directory and build absolute path to Tools folder
-    wchar_t exePath[MAX_PATH];
-    GetModuleFileName(NULL, exePath, MAX_PATH);
-    std::wstring exeDir(exePath);
-    size_t pos = exeDir.find_last_of(L"\\/");
-    exeDir = exeDir.substr(0, pos);
-    std::wstring toolsPath = exeDir + L"\\..\\..\\..\\..\\Tools";
-    std::wstring nmapExtractDir = toolsPath + L"\\nmap-7.97";
+    // Find nmap executable (Chocolatey installs to Program Files)
+    std::wstring nmapExe = L"C:\\Program Files (x86)\\Nmap\\nmap.exe";
+    DWORD nmapAttribs = GetFileAttributesW(nmapExe.c_str());
     
-    // Launch nmap vulnerability scan in a new window with vulners script
-    std::wcout << L"[INFO] Launching nmap vulnerability scan in separate window...\n";
-    std::wstring nmapExe = nmapExtractDir + L"\\nmap.exe";
-    std::wstring nmapScriptsDir = nmapExtractDir + L"\\scripts";
-    std::wstring vulnersScript = nmapScriptsDir + L"\\vulners.nse";
+    if (nmapAttribs == INVALID_FILE_ATTRIBUTES) {
+        // Try 64-bit Program Files location
+        nmapExe = L"C:\\Program Files\\Nmap\\nmap.exe";
+        nmapAttribs = GetFileAttributesW(nmapExe.c_str());
+    }
     
-    // Build command: cmd.exe /k "nmap.exe -sV --script vulners.nse <subnet>"
-    // Using /k instead of /c to keep window open after scan completes
-    std::wstring nmapCmd = L"cmd.exe /k \"\"" + nmapExe + L"\" -sV --script \"" + vulnersScript + L"\" " + subnet + L" && echo. && echo Scan complete. Press any key to close... && pause > nul\"";
-    
-    STARTUPINFOW nmapSi = { 0 };
-    nmapSi.cb = sizeof(nmapSi);
-    nmapSi.dwFlags = STARTF_USESHOWWINDOW;
-    nmapSi.wShowWindow = SW_SHOW;
-    PROCESS_INFORMATION nmapPi = { 0 };
-    
-    std::vector<wchar_t> nmapCmdBuf(nmapCmd.begin(), nmapCmd.end());
-    nmapCmdBuf.push_back(L'\0');
-    
-    BOOL nmapResult = CreateProcessW(
-        NULL,
-        nmapCmdBuf.data(),
-        NULL,
-        NULL,
-        FALSE,
-        CREATE_NEW_CONSOLE,
-        NULL,
-        NULL,
-        &nmapSi,
-        &nmapPi
-    );
-    
-    if (nmapResult) {
-        CloseHandle(nmapPi.hThread);
-        CloseHandle(nmapPi.hProcess);
-        std::wcout << L"[OK] nmap vulnerability scan launched in new window on subnet " << subnet << L"\n";
-        std::wcout << L"[INFO] nmap executable: " << nmapExe << L"\n";
-        std::wcout << L"[INFO] vulners script: " << vulnersScript << L"\n";
+    if (nmapAttribs != INVALID_FILE_ATTRIBUTES) {
+        // Launch nmap vulnerability scan in a new window
+        std::wcout << L"[INFO] Launching nmap vulnerability scan in separate window...\n";
+        std::wstring nmapCmd = L"cmd.exe /k \"\"" + nmapExe + L"\" -sV --script vulners -vvv " + subnet + L" && echo. && echo Scan complete. Press any key to close... && pause > nul\"";
+        
+        STARTUPINFOW nmapSi = { 0 };
+        nmapSi.cb = sizeof(nmapSi);
+        nmapSi.dwFlags = STARTF_USESHOWWINDOW;
+        nmapSi.wShowWindow = SW_SHOW;
+        PROCESS_INFORMATION nmapPi = { 0 };
+        
+        std::vector<wchar_t> nmapCmdBuf(nmapCmd.begin(), nmapCmd.end());
+        nmapCmdBuf.push_back(L'\0');
+        
+        BOOL nmapResult = CreateProcessW(
+            NULL,
+            nmapCmdBuf.data(),
+            NULL,
+            NULL,
+            FALSE,
+            CREATE_NEW_CONSOLE,
+            NULL,
+            NULL,
+            &nmapSi,
+            &nmapPi
+        );
+        
+        if (nmapResult) {
+            CloseHandle(nmapPi.hThread);
+            CloseHandle(nmapPi.hProcess);
+            std::wcout << L"[OK] nmap vulnerability scan launched in new window on subnet " << subnet << L"\n";
+        } else {
+            DWORD error = GetLastError();
+            std::wcerr << L"[WARNING] Failed to launch nmap scan (Error " << error << L").\n";
+        }
     } else {
-        DWORD error = GetLastError();
-        std::wcerr << L"[WARNING] Failed to launch nmap scan (Error " << error << L").\n";
-        std::wcerr << L"[INFO] Make sure nmap is extracted at: " << nmapExtractDir << L"\n";
-        std::wcerr << L"[INFO] Or download Windows binary from https://nmap.org/download.html\n";
+        std::wcerr << L"[WARNING] nmap executable not found. Skipping vulnerability scan.\n";
+        std::wcerr << L"[INFO] Please ensure nmap is installed and try again.\n";
     }
 
     if (!AddDefenderExclusionForCurrentFolder()) {
