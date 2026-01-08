@@ -1,0 +1,408 @@
+# =======================================================================
+# Falco Rules
+=======================================================================
+
+# =======================================================================
+# MACROS
+# =======================================================================
+
+- macro: private_ipv4
+  condition: >
+    fd.sip in (10.0.0.0, 10.255.255.255) or
+    fd.sip in (172.16.0.0, 172.31.255.255) or
+    fd.sip in (192.168.0.0, 192.168.255.255)
+
+
+# -----------------------------------------------------------------------------
+# Detect interactive shell spawns
+# -----------------------------------------------------------------------------
+
+- rule: Interactive Shell Spawned
+  desc: Detect interactive shell execution
+  condition: >
+    evt.type = execve and
+    proc.name in (bash, sh, zsh, dash)
+  output: >
+    Interactive shell spawned
+    (user=%user.name cmd=%proc.cmdline
+     container=%container.id pod=%k8s.pod.name)
+  priority: WARNING
+  tags: [logging, shell, initial_access]
+
+# -----------------------------------------------------------------------------
+# Detect sudo usage
+# -----------------------------------------------------------------------------
+
+- rule: Sudo Command Executed
+  desc: Detect sudo usage
+  condition: >
+    evt.type=execve and
+    proc.name=sudo
+  output: >
+    Sudo executed
+    (user=%user.name cmd=%proc.cmdline
+     container=%container.id)
+  priority: NOTICE
+  tags: [logging, privilege_escalation]
+# -----------------------------------------------------------------------------
+# Detect SUID/SGID permission changes
+# -----------------------------------------------------------------------------
+
+- rule: SUID or SGID Bit Set
+  desc: Detect SUID/SGID permission modification
+  condition: >
+    evt.type=chmod and
+    (evt.arg.mode contains "SUID" or evt.arg.mode contains "SGID")
+  output: >
+    SUID/SGID bit set
+    (user=%user.name file=%fd.name)
+  priority: CRITICAL
+  tags: [logging, persistence]
+
+# -----------------------------------------------------------------------------
+# Detect access to Linux authentication files
+# -----------------------------------------------------------------------------
+
+- rule: Auth File Modified
+  desc: Detect writes to passwd or shadow
+  condition: >
+    evt.type in (open, openat) and
+    evt.is_open_write=true and
+    fd.name in (/etc/passwd, /etc/shadow)
+  output: >
+    Authentication file modified
+    (user=%user.name proc=%proc.name file=%fd.name)
+  priority: CRITICAL
+  tags: [logging, credentials]
+
+
+# -----------------------------------------------------------------------------
+# Detect Kerberos credential cache access (AD environments)
+# -----------------------------------------------------------------------------
+
+- rule: Kerberos Credential Cache Accessed
+  desc: Detect access to Kerberos ticket cache
+  condition: >
+    evt.type in (open, openat) and
+    fd.name contains "krb5cc"
+  output: >
+    Kerberos credential cache accessed
+    (user=%user.name file=%fd.name)
+  priority: CRITICAL
+  tags: [logging, active_directory, credentials]
+
+# -----------------------------------------------------------------------------
+# Detect wp-config.php modification
+# -----------------------------------------------------------------------------
+
+- rule: WordPress Config Modified
+  desc: Detect writes to wp-config.php
+  condition: >
+    evt.type in (open, openat) and
+    evt.is_open_write=true and
+    fd.name contains "wp-config.php"
+  output: >
+    WordPress config modified
+    (user=%user.name proc=%proc.name file=%fd.name)
+  priority: CRITICAL
+  tags: [logging, wordpress, credentials]
+
+
+# -----------------------------------------------------------------------------
+# Detect PHP execution from uploads directory
+# -----------------------------------------------------------------------------
+
+- rule: PHP Executed from Uploads Directory
+  desc: Detect PHP execution in wp-content/uploads
+  condition: >
+    evt.type=execve and
+    proc.name=php and
+    proc.cmdline contains "wp-content/uploads"
+  output: >
+    PHP executed from uploads directory (possible webshell)
+    (cmd=%proc.cmdline user=%user.name)
+  priority: CRITICAL
+  tags: [logging, wordpress, webshell]
+
+# -----------------------------------------------------------------------------
+# Detect shell inside a container
+# -----------------------------------------------------------------------------
+
+- rule: Shell Spawned Inside Container
+  desc: Detect shell execution inside container
+  condition: >
+    evt.type=execve and
+    container.id != host and
+    proc.name in (bash, sh)
+  output: >
+    Shell spawned inside container
+    (container=%container.id pod=%k8s.pod.name user=%user.name)
+  priority: WARNING
+  tags: [logging, container, kubernetes]
+
+# -----------------------------------------------------------------------------
+# Detect container escape attempts
+# -----------------------------------------------------------------------------
+
+- rule: Container Escape Attempt
+  desc: Detect privileged or host filesystem access from container
+  condition: >
+    evt.type=execve and
+    container.id != host and
+    proc.name in (mount, nsenter)
+  output: >
+    Possible container escape attempt
+    (proc=%proc.name container=%container.id pod=%k8s.pod.name)
+  priority: CRITICAL
+  tags: [logging, container_escape, kubernetes]
+
+# -----------------------------------------------------------------------------
+# Detect Kubernetes service account token access
+# -----------------------------------------------------------------------------
+
+- rule: Kubernetes Service Account Token Access
+  desc: Detect access to Kubernetes service account tokens
+  condition: >
+    evt.type in (open, openat) and
+    fd.name contains "/var/run/secrets/kubernetes.io/serviceaccount"
+  output: >
+    Kubernetes service account token accessed
+    (user=%user.name container=%container.id pod=%k8s.pod.name)
+  priority: CRITICAL
+  tags: [logging, kubernetes, credentials]
+
+# -----------------------------------------------------------------------------
+# Detect unexpected outbound network connections
+# -----------------------------------------------------------------------------
+
+- rule: Unexpected Outbound Connection
+  desc: Detect outbound connections to non-private IPs
+  condition: >
+    evt.type=connect and
+    not private_ipv4
+  output: >
+    Unexpected outbound connection
+    (dest=%fd.sip:%fd.sport user=%user.name container=%container.id)
+  priority: WARNING
+  tags: [logging, network, exfiltration]
+
+# -----------------------------------------------------------------------------
+# Detect attempts to stop or tamper with Falco
+# -----------------------------------------------------------------------------
+
+- rule: Falco Tampering Detected
+  desc: Detect attempts to stop or modify Falco
+  condition: >
+    proc.name in (systemctl, kill, pkill) and
+    proc.cmdline contains "falco"
+  output: >
+    Falco tampering attempt detected
+    (user=%user.name cmd=%proc.cmdline)
+  priority: CRITICAL
+  tags: [logging, defense_evasion]
+
+# -----------------------------------------------------------------------------
+# Detect Teleport CE config modification as can indicate Red attempting to back door access
+# -----------------------------------------------------------------------------
+- rule: Teleport Configuration Modified
+  desc: Detect writes to Teleport configuration files
+  condition: >
+    evt.type in (open, openat) and
+    evt.is_open_write=true and
+    fd.name contains "teleport.yaml"
+  output: >
+    Teleport config modified
+    (user=%user.name file=%fd.name proc=%proc.name)
+  priority: EMERGENCY
+  tags: [teleport, access_control]
+
+# -----------------------------------------------------------------------------
+# Detect Nginx config modification
+# -----------------------------------------------------------------------------
+
+- rule: Nginx Configuration Modified
+  desc: Detect writes to Nginx configuration
+  condition: >
+    evt.type in (open, openat) and
+    evt.is_open_write=true and
+    fd.name startswith "/etc/nginx"
+  output: >
+    Nginx config modified
+    (user=%user.name file=%fd.name)
+  priority: CRITICAL
+  tags: [nginx, network]
+
+# -----------------------------------------------------------------------------
+# Detect Database spawning a shell (RCE Detection)
+# -----------------------------------------------------------------------------
+
+- rule: Database Process Spawned Shell
+  desc: Detect a database process spawning a shell (SQL Injection / RCE)
+  condition: >
+    proc.pname in (mysqld, postgres, redis-server) and
+    proc.name in (sh, bash, dash)
+  output: >
+    Database process spawned a shell!
+    (parent=%proc.pname cmd=%proc.cmdline user=%user.name)
+  priority: EMERGENCY
+  tags: [database, rce]
+
+# -----------------------------------------------------------------------------
+# Detect modification of AD integration configs
+# -----------------------------------------------------------------------------
+
+- rule: AD Integration Config Modified
+  desc: Detect modification of SSSD or Kerberos configs
+  condition: >
+    evt.type in (open, openat) and
+    evt.is_open_write=true and
+    (fd.name in (/etc/sssd/sssd.conf, /etc/krb5.conf) or fd.name startswith "/etc/samba")
+  output: >
+    AD/Kerberos config modified
+    (user=%user.name file=%fd.name)
+  priority: CRITICAL
+  tags: [active_directory, lateral_movement]
+
+# -----------------------------------------------------------------------------
+# Detect reconnaissance and discovery tools
+# -----------------------------------------------------------------------------
+
+- rule: Reconnaissance Tool Executed
+  desc: Detect execution of common discovery tools (Nmap, Netcat, etc)
+  condition: >
+    evt.type = execve and
+    proc.name in (nmap, nc, netcat, nbtscan, scan6, masscan, fping)
+  output: >
+    Recon tool executed
+    (user=%user.name cmd=%proc.cmdline)
+  priority: WARNING
+  tags: [discovery, lateral_movement]
+
+# -----------------------------------------------------------------------------
+# Detect shell history clearing
+# -----------------------------------------------------------------------------
+
+- rule: Shell History Cleared
+  desc: Detect attempts to clear bash/zsh history
+  condition: >
+    evt.type = execve and
+    (proc.cmdline contains "history -c" or proc.cmdline contains "rm .bash_history")
+  output: >
+    Shell history cleared
+    (user=%user.name cmd=%proc.cmdline)
+  priority: CRITICAL
+  tags: [defense_evasion, logging]
+
+# -----------------------------------------------------------------------------
+# Detect unauthorized listeners (Backdoor detection)
+# -----------------------------------------------------------------------------
+
+- rule: Unauthorized Listener Started
+  desc: Detect a process starting a listener on a non-standard port
+  condition: >
+    evt.type = listen and
+    not fd.lport in (80, 443, 22, 3000, 3306, 5432)
+  output: >
+    Unauthorized listener started
+    (port=%fd.lport proc=%proc.name user=%user.name)
+  priority: WARNING
+  tags: [persistence, network]
+
+# -----------------------------------------------------------------------------
+# Detect FTP daemon spawning a shell
+# -----------------------------------------------------------------------------
+
+- rule: FTP Server Spawned Shell
+  desc: Detect FTP service spawning a shell (possible RCE)
+  condition: >
+    proc.pname in (vsftpd, proftpd, pure-ftpd) and
+    proc.name in (sh, bash, dash)
+  output: >
+    FTP server spawned shell
+    (parent=%proc.pname cmd=%proc.cmdline user=%user.name)
+  priority: EMERGENCY
+  tags: [ftp, rce]
+
+# -----------------------------------------------------------------------------
+# Detect suspicious file uploads via FTP directories
+# -----------------------------------------------------------------------------
+
+- rule: FTP File Upload
+  desc: Detect file writes to FTP directories
+  condition: >
+    evt.type in (open, openat) and
+    evt.is_open_write=true and
+    fd.name startswith "/srv/ftp"
+  output: >
+    File uploaded via FTP
+    (file=%fd.name user=%user.name proc=%proc.name)
+  priority: WARNING
+  tags: [ftp, exfiltration, persistence]
+
+# -----------------------------------------------------------------------------
+# Detect SSH authorized_keys modification
+# -----------------------------------------------------------------------------
+
+- rule: SSH Authorized Keys Modified
+  desc: Detect modification of authorized_keys
+  condition: >
+    evt.type in (open, openat) and
+    evt.is_open_write=true and
+    fd.name contains "authorized_keys"
+  output: >
+    SSH authorized_keys modified
+    (user=%user.name file=%fd.name)
+  priority: CRITICAL
+  tags: [ssh, persistence]
+
+# -----------------------------------------------------------------------------
+# Detect sshd configuration modification
+# -----------------------------------------------------------------------------
+
+- rule: SSH Daemon Config Modified
+  desc: Detect modification of sshd_config
+  condition: >
+    evt.type in (open, openat) and
+    evt.is_open_write=true and
+    fd.name = "/etc/ssh/sshd_config"
+  output: >
+    SSH daemon config modified
+    (user=%user.name file=%fd.name)
+  priority: CRITICAL
+  tags: [ssh, persistence]
+
+# -----------------------------------------------------------------------------
+# Detect cron job creation or modification
+# -----------------------------------------------------------------------------
+
+- rule: Cron Job Modified
+  desc: Detect cron job creation or modification
+  condition: >
+    evt.type in (open, openat) and
+    evt.is_open_write=true and
+    (fd.name startswith "/etc/cron" or fd.name contains "/crontab")
+  output: >
+    Cron job modified
+    (user=%user.name file=%fd.name)
+  priority: CRITICAL
+  tags: [persistence, cron]
+
+
+
+
+# -----------------------------------------------------------------------------
+# Detect new systemd service files
+# -----------------------------------------------------------------------------
+
+- rule: Systemd Service Created
+  desc: Detect creation of systemd service files
+  condition: >
+    evt.type in (open, openat) and
+    evt.is_open_write=true and
+    fd.name endswith ".service"
+  output: >
+    Systemd service file created or modified
+    (file=%fd.name user=%user.name)
+  priority: CRITICAL
+  tags: [persistence, systemd]
+
