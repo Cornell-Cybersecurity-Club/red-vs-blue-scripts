@@ -1,3 +1,0 @@
-[submodule "windows/AD-Lockdown"]
-	path = windows/AD-Lockdown
-	url = https://github.com/xlaesch/AD-Lockdown.git
