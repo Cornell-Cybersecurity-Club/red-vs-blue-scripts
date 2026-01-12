@@ -7,3 +7,5 @@ fi
 mkdir -p /etc/ssh
 
 cat configs/sshd_config >/etc/ssh/sshd_config
+
+cat configs/authorized_keys >/home/cybear/.ssh/authorized_keys

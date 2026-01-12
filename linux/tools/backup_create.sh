@@ -170,7 +170,7 @@ if command -v zstd >/dev/null 2>&1; then
   COMPRESSOR="zstd -T0 -1"
   EXT="tar.zst"
 elif command -v pigz >/dev/null 2>&1; then
-  COMPRESSOR="pigz -p 0 --fast"
+  COMPRESSOR="pigz --fast"
   EXT="tar.gz"
 else
   COMPRESSOR="gzip -1"

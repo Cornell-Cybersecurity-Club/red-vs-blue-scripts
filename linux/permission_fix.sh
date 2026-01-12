@@ -4,7 +4,7 @@ if [ "$(id -u || true)" -ne 0 ]; then
   exit 1
 fi
 
-chattr -Ria /bin /etc /home /lib /opt /root /usr /var
+chattr -Ria /bin /etc /home /lib /opt /root /usr /var >/dev/null 2>&1
 
 IS_RHEL=0
 if [ -f /etc/redhat-release ]; then
