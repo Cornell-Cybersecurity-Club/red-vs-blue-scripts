@@ -8,7 +8,6 @@ fi
 ./tools/backup_create.sh
 ./permission_fix.sh
 ./tools/users.sh
-./tools/password_rotate.sh
 ./permission_fix.sh
 ./networking.sh
 ./firewall.sh
@@ -28,3 +27,4 @@ fi
 ./misc.sh
 ./file_cleaner.sh
 ./dconf.sh
+./tools/password_rotate.sh
