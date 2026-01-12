@@ -9,6 +9,8 @@ if [ -f /etc/os-release ]; then
 
   case "${ID_LIKE:-$ID}" in
   *debian* | *ubuntu*)
+    export DEBIAN_FRONTEND=noninteractive
+
     apt-get update
 
     dpkg --get-selections | grep -v deinstall | awk '{print $1}' |
