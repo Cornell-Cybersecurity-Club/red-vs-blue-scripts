@@ -5,13 +5,6 @@
 #
 
 #
-# Delay in seconds before being allowed another attempt after a login failure
-# Note: When PAM is used, some modules may enforce a minimum delay (e.g.
-#       pam_unix(8) enforces a 2s delay)
-#
-FAIL_DELAY		3
-
-#
 # Enable logging and display of /var/log/faillog login(1) failure info.
 #
 # NOTE: This setting should be configured via /etc/pam.d/ and not in this file.
