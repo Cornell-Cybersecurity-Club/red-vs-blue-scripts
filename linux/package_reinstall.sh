@@ -8,10 +8,10 @@ if [ -f /etc/os-release ]; then
   . /etc/os-release
 
   case "${ID_LIKE:-$ID}" in
-  *debian* | *ubuntu*)
+  *debian* | *ubuntu* | *devuan* | *kali* | *raspbian* | *linuxmint* | *pop*)
     export DEBIAN_FRONTEND=noninteractive
 
-    apt-get update
+    apt-get update -qq
 
     dpkg --get-selections | grep -v deinstall | awk '{print $1}' |
       xargs apt-get install --reinstall -y -o Dpkg::Options::="--force-confmiss"
@@ -24,7 +24,8 @@ if [ -f /etc/os-release ]; then
 
     update-initramfs -u -k all
     ;;
-  *rocky* | *rhel* | *fedora* | *centos*)
+  *rocky* | *rhel* | *fedora* | *centos* | *alma* | *ol* | *amzn* | *cloudlinux*)
+
     if command -v dnf >/dev/null 2>&1; then
       PKG_MGR="dnf"
     else
