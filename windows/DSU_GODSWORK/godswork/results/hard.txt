@@ -1,0 +1,358 @@
+﻿Program 'vssadmin.exe' failed to run: Access is deniedAt 
+C:\Users\Administrator\Downloads\red-vs-blue-scripts\test\fuck-windows\Gen-Hardening+Detection\DSU_GODSWORK\godswork\whoo.ps1:1665 char:5
++     vssadmin.exe delete shadows /all /quiet
++     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~.
+At C:\Users\Administrator\Downloads\red-vs-blue-scripts\test\fuck-windows\Gen-Hardening+Detection\DSU_GODSWORK\godswork\whoo.ps1:1665 char:5
++     vssadmin.exe delete shadows /all /quiet
++     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : ResourceUnavailable: (:) [], ApplicationFailedException
+    + FullyQualifiedErrorId : NativeCommandFailed
+ 
+Set-ProcessMitigation : Failed to import.
+At C:\Users\Administrator\Downloads\red-vs-blue-scripts\test\fuck-windows\Gen-Hardening+Detection\DSU_GODSWORK\godswork\whoo.ps1:964 char:5
++     Set-ProcessMitigation -PolicyFilePath (Join-Path -Path $ConfPath  ...
++     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : InvalidOperation: (C:\Users\Admini...eg-settings.xml:String) [Set-ProcessMitigation], InvalidOperationException
+    + FullyQualifiedErrorId : Error importing: -2147024893,Microsoft.Samples.PowerShell.Commands.SetProcessMitigationsCommand
+ 
+Remove-Item : Cannot find path 'C:\Windows\System32\Magnify.exe' because it does not exist.
+At C:\Users\Administrator\Downloads\red-vs-blue-scripts\test\fuck-windows\Gen-Hardening+Detection\DSU_GODSWORK\godswork\whoo.ps1:914 char:1
++ Remove-Item C:\Windows\System32\Magnify.exe -Force | Out-Null
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : ObjectNotFound: (C:\Windows\System32\Magnify.exe:String) [Remove-Item], ItemNotFoundException
+    + FullyQualifiedErrorId : PathNotFound,Microsoft.PowerShell.Commands.RemoveItemCommand
+ 
+Remove-Item : Cannot find path 'C:\Windows\System32\Narrator.exe' because it does not exist.
+At C:\Users\Administrator\Downloads\red-vs-blue-scripts\test\fuck-windows\Gen-Hardening+Detection\DSU_GODSWORK\godswork\whoo.ps1:910 char:1
++ Remove-Item C:\Windows\System32\Narrator.exe -Force | Out-Null
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : ObjectNotFound: (C:\Windows\System32\Narrator.exe:String) [Remove-Item], ItemNotFoundException
+    + FullyQualifiedErrorId : PathNotFound,Microsoft.PowerShell.Commands.RemoveItemCommand
+ 
+Remove-Item : Cannot find path 'C:\Windows\System32\osk.exe' because it does not exist.
+At C:\Users\Administrator\Downloads\red-vs-blue-scripts\test\fuck-windows\Gen-Hardening+Detection\DSU_GODSWORK\godswork\whoo.ps1:906 char:1
++ Remove-Item C:\Windows\System32\osk.exe -Force | Out-Null
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : ObjectNotFound: (C:\Windows\System32\osk.exe:String) [Remove-Item], ItemNotFoundException
+    + FullyQualifiedErrorId : PathNotFound,Microsoft.PowerShell.Commands.RemoveItemCommand
+ 
+Remove-Item : Cannot find path 'C:\Windows\System32\Utilman.exe' because it does not exist.
+At C:\Users\Administrator\Downloads\red-vs-blue-scripts\test\fuck-windows\Gen-Hardening+Detection\DSU_GODSWORK\godswork\whoo.ps1:902 char:1
++ Remove-Item C:\Windows\System32\Utilman.exe -Force | Out-Null
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : ObjectNotFound: (C:\Windows\System32\Utilman.exe:String) [Remove-Item], ItemNotFoundException
+    + FullyQualifiedErrorId : PathNotFound,Microsoft.PowerShell.Commands.RemoveItemCommand
+ 
+Remove-Item : Cannot find path 'C:\Windows\System32\sethc.exe' because it does not exist.
+At C:\Users\Administrator\Downloads\red-vs-blue-scripts\test\fuck-windows\Gen-Hardening+Detection\DSU_GODSWORK\godswork\whoo.ps1:898 char:1
++ Remove-Item C:\Windows\System32\sethc.exe -Force | Out-Null
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : ObjectNotFound: (C:\Windows\System32\sethc.exe:String) [Remove-Item], ItemNotFoundException
+    + FullyQualifiedErrorId : PathNotFound,Microsoft.PowerShell.Commands.RemoveItemCommand
+ 
+Set-Service : Service MSMQTriggers was not found on computer '.'.
+At C:\Users\Administrator\Downloads\red-vs-blue-scripts\test\fuck-windows\Gen-Hardening+Detection\DSU_GODSWORK\godswork\whoo.ps1:555 char:1
++ Set-Service -Name MSMQTriggers -StartupType Disabled -ErrorAction Sil ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : ObjectNotFound: (.:String) [Set-Service], InvalidOperationException
+    + FullyQualifiedErrorId : InvalidOperationException,Microsoft.PowerShell.Commands.SetServiceCommand
+ 
+Stop-Service : Cannot find any service with service name 'MSMQTriggers'.
+At C:\Users\Administrator\Downloads\red-vs-blue-scripts\test\fuck-windows\Gen-Hardening+Detection\DSU_GODSWORK\godswork\whoo.ps1:554 char:1
++ Stop-Service -Name MSMQTriggers -Force -ErrorAction SilentlyContinue  ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : ObjectNotFound: (MSMQTriggers:String) [Stop-Service], ServiceCommandException
+    + FullyQualifiedErrorId : NoServiceFoundForGivenName,Microsoft.PowerShell.Commands.StopServiceCommand
+ 
+Set-Service : Service MSMQ was not found on computer '.'.
+At C:\Users\Administrator\Downloads\red-vs-blue-scripts\test\fuck-windows\Gen-Hardening+Detection\DSU_GODSWORK\godswork\whoo.ps1:551 char:1
++ Set-Service -Name MSMQ -StartupType Disabled -ErrorAction SilentlyCon ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : ObjectNotFound: (.:String) [Set-Service], InvalidOperationException
+    + FullyQualifiedErrorId : InvalidOperationException,Microsoft.PowerShell.Commands.SetServiceCommand
+ 
+Stop-Service : Cannot find any service with service name 'MSMQ'.
+At C:\Users\Administrator\Downloads\red-vs-blue-scripts\test\fuck-windows\Gen-Hardening+Detection\DSU_GODSWORK\godswork\whoo.ps1:550 char:1
++ Stop-Service -Name MSMQ -Force -ErrorAction SilentlyContinue | Out-Nu ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : ObjectNotFound: (MSMQ:String) [Stop-Service], ServiceCommandException
+    + FullyQualifiedErrorId : NoServiceFoundForGivenName,Microsoft.PowerShell.Commands.StopServiceCommand
+ 
+
+reg : ERROR: Access is denied.
+At C:\Users\Administrator\Downloads\red-vs-blue-scripts\test\fuck-windows\Gen-Hardening+Detection\DSU_GODSWORK\godswork\whoo.ps1:532 char:1
++ reg add "HKLM\SYSTEM\CurrentControlSet\Services\CLFS\Parameters" /v E ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (ERROR: Access is denied.:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+reg : ERROR: The system was unable to find the specified registry key or value.
+At C:\Users\Administrator\Downloads\red-vs-blue-scripts\test\fuck-windows\Gen-Hardening+Detection\DSU_GODSWORK\godswork\whoo.ps1:148 char:1
++ reg delete "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogo ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (ERROR: The syst...y key or value.:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+reg : ERROR: The system was unable to find the specified registry key or value.
+At C:\Users\Administrator\Downloads\red-vs-blue-scripts\test\fuck-windows\Gen-Hardening+Detection\DSU_GODSWORK\godswork\whoo.ps1:143 char:1
++ reg delete "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogo ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (ERROR: The syst...y key or value.:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+reg : ERROR: The system was unable to find the specified registry key or value.
+At C:\Users\Administrator\Downloads\red-vs-blue-scripts\test\fuck-windows\Gen-Hardening+Detection\DSU_GODSWORK\godswork\whoo.ps1:142 char:1
++ reg delete "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogo ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (ERROR: The syst...y key or value.:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+reg : ERROR: The system was unable to find the specified registry key or value.
+At C:\Users\Administrator\Downloads\red-vs-blue-scripts\test\fuck-windows\Gen-Hardening+Detection\DSU_GODSWORK\godswork\whoo.ps1:141 char:1
++ reg delete "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogo ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (ERROR: The syst...y key or value.:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+Remove-Item : Cannot find path 'WSMan:\localhost\Listener' because it does not exist.
+At C:\Users\Administrator\Downloads\red-vs-blue-scripts\test\fuck-windows\Gen-Hardening+Detection\DSU_GODSWORK\godswork\whoo.ps1:54 char:1
++ Remove-Item -Path WSMan:\Localhost\listener\listener* -Recurse
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : ObjectNotFound: (WSMan:\localhost\Listener:String) [Remove-Item], ItemNotFoundException
+    + FullyQualifiedErrorId : PathNotFound,Microsoft.PowerShell.Commands.RemoveItemCommand
+ 
+Restart : The term 'Restart' is not recognized as the name of a cmdlet, function, script file, or operable program. Check the spelling of the name, 
+or if a path was included, verify that the path is correct and try again.
+At line:22 char:13
++             Restart  WinRM -Force -Confirm:$false
++             ~~~~~~~
+    + CategoryInfo          : ObjectNotFound: (Restart:String) [], CommandNotFoundException
+    + FullyQualifiedErrorId : CommandNotFoundException
+ 
+Restart : The term 'Restart' is not recognized as the name of a cmdlet, function, script file, or operable program. Check the spelling of the name, 
+or if a path was included, verify that the path is correct and try again.
+At line:22 char:13
++             Restart  WinRM -Force -Confirm:$false
++             ~~~~~~~
+    + CategoryInfo          : ObjectNotFound: (Restart:String) [], CommandNotFoundException
+    + FullyQualifiedErrorId : CommandNotFoundException
+ 
+Get-ChildItem : The client cannot connect to the destination specified in the request. Verify that the service on the destination is running and is 
+accepting requests. Consult the logs and documentation for the WS-Management service running on the destination, most commonly IIS or WinRM. If the 
+destination is the WinRM service, run the following command on the destination to analyze and configure the WinRM service: "winrm quickconfig". 
+At line:98 char:3
++   Get-ChildItem 'WSMan:\localhost\Plugin\' -Force:$force | ? { $_.nam ...
++   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (:) [Get-ChildItem], InvalidOperationException
+    + FullyQualifiedErrorId : System.InvalidOperationException,Microsoft.PowerShell.Commands.GetChildItemCommand
+ 
+Restart : The term 'Restart' is not recognized as the name of a cmdlet, function, script file, or operable program. Check the spelling of the name, 
+or if a path was included, verify that the path is correct and try again.
+At line:22 char:13
++             Restart  WinRM -Force -Confirm:$false
++             ~~~~~~~
+    + CategoryInfo          : ObjectNotFound: (Restart:String) [], CommandNotFoundException
+    + FullyQualifiedErrorId : CommandNotFoundException
+ 
+Restart : The term 'Restart' is not recognized as the name of a cmdlet, function, script file, or operable program. Check the spelling of the name, 
+or if a path was included, verify that the path is correct and try again.
+At line:22 char:13
++             Restart  WinRM -Force -Confirm:$false
++             ~~~~~~~
+    + CategoryInfo          : ObjectNotFound: (Restart:String) [], CommandNotFoundException
+    + FullyQualifiedErrorId : CommandNotFoundException
+ 
+Restart-Service : Service 'Windows Remote Management (WS-Management) (winrm)' cannot be started due to the following error: Cannot start service 
+winrm on computer '.'.
+At line:30 char:17
++                 Restart-Service winrm -force -confirm:$false
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : OpenError: (System.ServiceProcess.ServiceController:ServiceController) [Restart-Service], ServiceCommandException
+    + FullyQualifiedErrorId : CouldNotStartService,Microsoft.PowerShell.Commands.RestartServiceCommand
+ 
+Get-Service : Cannot find any service with service name 'W3SVC'.
+At C:\Users\Administrator\Downloads\red-vs-blue-scripts\test\fuck-windows\Gen-Hardening+Detection\DSU_GODSWORK\godswork\whoo.ps1:20 char:5
++ if (Get-Service -Name W3SVC 2>$null) {
++     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : ObjectNotFound: (W3SVC:String) [Get-Service], ServiceCommandException
+    + FullyQualifiedErrorId : NoServiceFoundForGivenName,Microsoft.PowerShell.Commands.GetServiceCommand
+ 
+Program 'vssadmin.exe' failed to run: Access is deniedAt 
+C:\Users\Administrator\Downloads\red-vs-blue-scripts\windows\DSU_GODSWORK\godswork\whoo.ps1:1665 char:5
++     vssadmin.exe delete shadows /all /quiet
++     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~.
+At C:\Users\Administrator\Downloads\red-vs-blue-scripts\windows\DSU_GODSWORK\godswork\whoo.ps1:1665 char:5
++     vssadmin.exe delete shadows /all /quiet
++     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : ResourceUnavailable: (:) [], ApplicationFailedException
+    + FullyQualifiedErrorId : NativeCommandFailed
+ 
+Set-ProcessMitigation : Failed to import.
+At C:\Users\Administrator\Downloads\red-vs-blue-scripts\windows\DSU_GODSWORK\godswork\whoo.ps1:964 char:5
++     Set-ProcessMitigation -PolicyFilePath (Join-Path -Path $ConfPath  ...
++     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : InvalidOperation: (C:\Users\Admini...eg-settings.xml:String) [Set-ProcessMitigation], InvalidOperationException
+    + FullyQualifiedErrorId : Error importing: -2147024893,Microsoft.Samples.PowerShell.Commands.SetProcessMitigationsCommand
+ 
+Remove-Item : Cannot find path 'C:\Windows\System32\Magnify.exe' because it does not exist.
+At C:\Users\Administrator\Downloads\red-vs-blue-scripts\windows\DSU_GODSWORK\godswork\whoo.ps1:914 char:1
++ Remove-Item C:\Windows\System32\Magnify.exe -Force | Out-Null
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : ObjectNotFound: (C:\Windows\System32\Magnify.exe:String) [Remove-Item], ItemNotFoundException
+    + FullyQualifiedErrorId : PathNotFound,Microsoft.PowerShell.Commands.RemoveItemCommand
+ 
+Remove-Item : Cannot find path 'C:\Windows\System32\Narrator.exe' because it does not exist.
+At C:\Users\Administrator\Downloads\red-vs-blue-scripts\windows\DSU_GODSWORK\godswork\whoo.ps1:910 char:1
++ Remove-Item C:\Windows\System32\Narrator.exe -Force | Out-Null
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : ObjectNotFound: (C:\Windows\System32\Narrator.exe:String) [Remove-Item], ItemNotFoundException
+    + FullyQualifiedErrorId : PathNotFound,Microsoft.PowerShell.Commands.RemoveItemCommand
+ 
+Remove-Item : Cannot find path 'C:\Windows\System32\osk.exe' because it does not exist.
+At C:\Users\Administrator\Downloads\red-vs-blue-scripts\windows\DSU_GODSWORK\godswork\whoo.ps1:906 char:1
++ Remove-Item C:\Windows\System32\osk.exe -Force | Out-Null
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : ObjectNotFound: (C:\Windows\System32\osk.exe:String) [Remove-Item], ItemNotFoundException
+    + FullyQualifiedErrorId : PathNotFound,Microsoft.PowerShell.Commands.RemoveItemCommand
+ 
+Remove-Item : Cannot find path 'C:\Windows\System32\Utilman.exe' because it does not exist.
+At C:\Users\Administrator\Downloads\red-vs-blue-scripts\windows\DSU_GODSWORK\godswork\whoo.ps1:902 char:1
++ Remove-Item C:\Windows\System32\Utilman.exe -Force | Out-Null
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : ObjectNotFound: (C:\Windows\System32\Utilman.exe:String) [Remove-Item], ItemNotFoundException
+    + FullyQualifiedErrorId : PathNotFound,Microsoft.PowerShell.Commands.RemoveItemCommand
+ 
+Remove-Item : Cannot find path 'C:\Windows\System32\sethc.exe' because it does not exist.
+At C:\Users\Administrator\Downloads\red-vs-blue-scripts\windows\DSU_GODSWORK\godswork\whoo.ps1:898 char:1
++ Remove-Item C:\Windows\System32\sethc.exe -Force | Out-Null
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : ObjectNotFound: (C:\Windows\System32\sethc.exe:String) [Remove-Item], ItemNotFoundException
+    + FullyQualifiedErrorId : PathNotFound,Microsoft.PowerShell.Commands.RemoveItemCommand
+ 
+Set-Service : Service MSMQTriggers was not found on computer '.'.
+At C:\Users\Administrator\Downloads\red-vs-blue-scripts\windows\DSU_GODSWORK\godswork\whoo.ps1:555 char:1
++ Set-Service -Name MSMQTriggers -StartupType Disabled -ErrorAction Sil ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : ObjectNotFound: (.:String) [Set-Service], InvalidOperationException
+    + FullyQualifiedErrorId : InvalidOperationException,Microsoft.PowerShell.Commands.SetServiceCommand
+ 
+Stop-Service : Cannot find any service with service name 'MSMQTriggers'.
+At C:\Users\Administrator\Downloads\red-vs-blue-scripts\windows\DSU_GODSWORK\godswork\whoo.ps1:554 char:1
++ Stop-Service -Name MSMQTriggers -Force -ErrorAction SilentlyContinue  ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : ObjectNotFound: (MSMQTriggers:String) [Stop-Service], ServiceCommandException
+    + FullyQualifiedErrorId : NoServiceFoundForGivenName,Microsoft.PowerShell.Commands.StopServiceCommand
+ 
+Set-Service : Service MSMQ was not found on computer '.'.
+At C:\Users\Administrator\Downloads\red-vs-blue-scripts\windows\DSU_GODSWORK\godswork\whoo.ps1:551 char:1
++ Set-Service -Name MSMQ -StartupType Disabled -ErrorAction SilentlyCon ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : ObjectNotFound: (.:String) [Set-Service], InvalidOperationException
+    + FullyQualifiedErrorId : InvalidOperationException,Microsoft.PowerShell.Commands.SetServiceCommand
+ 
+Stop-Service : Cannot find any service with service name 'MSMQ'.
+At C:\Users\Administrator\Downloads\red-vs-blue-scripts\windows\DSU_GODSWORK\godswork\whoo.ps1:550 char:1
++ Stop-Service -Name MSMQ -Force -ErrorAction SilentlyContinue | Out-Nu ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : ObjectNotFound: (MSMQ:String) [Stop-Service], ServiceCommandException
+    + FullyQualifiedErrorId : NoServiceFoundForGivenName,Microsoft.PowerShell.Commands.StopServiceCommand
+ 
+
+reg : ERROR: Access is denied.
+At C:\Users\Administrator\Downloads\red-vs-blue-scripts\windows\DSU_GODSWORK\godswork\whoo.ps1:532 char:1
++ reg add "HKLM\SYSTEM\CurrentControlSet\Services\CLFS\Parameters" /v E ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (ERROR: Access is denied.:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+reg : ERROR: The system was unable to find the specified registry key or value.
+At C:\Users\Administrator\Downloads\red-vs-blue-scripts\windows\DSU_GODSWORK\godswork\whoo.ps1:148 char:1
++ reg delete "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogo ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (ERROR: The syst...y key or value.:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+reg : ERROR: The system was unable to find the specified registry key or value.
+At C:\Users\Administrator\Downloads\red-vs-blue-scripts\windows\DSU_GODSWORK\godswork\whoo.ps1:143 char:1
++ reg delete "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogo ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (ERROR: The syst...y key or value.:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+reg : ERROR: The system was unable to find the specified registry key or value.
+At C:\Users\Administrator\Downloads\red-vs-blue-scripts\windows\DSU_GODSWORK\godswork\whoo.ps1:142 char:1
++ reg delete "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogo ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (ERROR: The syst...y key or value.:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+reg : ERROR: The system was unable to find the specified registry key or value.
+At C:\Users\Administrator\Downloads\red-vs-blue-scripts\windows\DSU_GODSWORK\godswork\whoo.ps1:141 char:1
++ reg delete "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogo ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (ERROR: The syst...y key or value.:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+Remove-Item : Cannot find path 'WSMan:\localhost\Listener' because it does not exist.
+At C:\Users\Administrator\Downloads\red-vs-blue-scripts\windows\DSU_GODSWORK\godswork\whoo.ps1:54 char:1
++ Remove-Item -Path WSMan:\Localhost\listener\listener* -Recurse
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : ObjectNotFound: (WSMan:\localhost\Listener:String) [Remove-Item], ItemNotFoundException
+    + FullyQualifiedErrorId : PathNotFound,Microsoft.PowerShell.Commands.RemoveItemCommand
+ 
+Restart : The term 'Restart' is not recognized as the name of a cmdlet, function, script file, or operable program. Check the spelling of the name, 
+or if a path was included, verify that the path is correct and try again.
+At line:22 char:13
++             Restart  WinRM -Force -Confirm:$false
++             ~~~~~~~
+    + CategoryInfo          : ObjectNotFound: (Restart:String) [], CommandNotFoundException
+    + FullyQualifiedErrorId : CommandNotFoundException
+ 
+Restart : The term 'Restart' is not recognized as the name of a cmdlet, function, script file, or operable program. Check the spelling of the name, 
+or if a path was included, verify that the path is correct and try again.
+At line:22 char:13
++             Restart  WinRM -Force -Confirm:$false
++             ~~~~~~~
+    + CategoryInfo          : ObjectNotFound: (Restart:String) [], CommandNotFoundException
+    + FullyQualifiedErrorId : CommandNotFoundException
+ 
+Get-ChildItem : The client cannot connect to the destination specified in the request. Verify that the service on the destination is running and is 
+accepting requests. Consult the logs and documentation for the WS-Management service running on the destination, most commonly IIS or WinRM. If the 
+destination is the WinRM service, run the following command on the destination to analyze and configure the WinRM service: "winrm quickconfig". 
+At line:98 char:3
++   Get-ChildItem 'WSMan:\localhost\Plugin\' -Force:$force | ? { $_.nam ...
++   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (:) [Get-ChildItem], InvalidOperationException
+    + FullyQualifiedErrorId : System.InvalidOperationException,Microsoft.PowerShell.Commands.GetChildItemCommand
+ 
+Restart : The term 'Restart' is not recognized as the name of a cmdlet, function, script file, or operable program. Check the spelling of the name, 
+or if a path was included, verify that the path is correct and try again.
+At line:22 char:13
++             Restart  WinRM -Force -Confirm:$false
++             ~~~~~~~
+    + CategoryInfo          : ObjectNotFound: (Restart:String) [], CommandNotFoundException
+    + FullyQualifiedErrorId : CommandNotFoundException
+ 
+Restart : The term 'Restart' is not recognized as the name of a cmdlet, function, script file, or operable program. Check the spelling of the name, 
+or if a path was included, verify that the path is correct and try again.
+At line:22 char:13
++             Restart  WinRM -Force -Confirm:$false
++             ~~~~~~~
+    + CategoryInfo          : ObjectNotFound: (Restart:String) [], CommandNotFoundException
+    + FullyQualifiedErrorId : CommandNotFoundException
+ 
+Restart-Service : Service 'Windows Remote Management (WS-Management) (winrm)' cannot be started due to the following error: Cannot start service 
+winrm on computer '.'.
+At line:30 char:17
++                 Restart-Service winrm -force -confirm:$false
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : OpenError: (System.ServiceProcess.ServiceController:ServiceController) [Restart-Service], ServiceCommandException
+    + FullyQualifiedErrorId : CouldNotStartService,Microsoft.PowerShell.Commands.RestartServiceCommand
+ 
+Get-Service : Cannot find any service with service name 'W3SVC'.
+At C:\Users\Administrator\Downloads\red-vs-blue-scripts\windows\DSU_GODSWORK\godswork\whoo.ps1:20 char:5
++ if (Get-Service -Name W3SVC 2>$null) {
++     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : ObjectNotFound: (W3SVC:String) [Get-Service], ServiceCommandException
+    + FullyQualifiedErrorId : NoServiceFoundForGivenName,Microsoft.PowerShell.Commands.GetServiceCommand
+ 
