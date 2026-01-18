@@ -21,18 +21,21 @@ cat configs/etc_profile >/etc/profile
 cat configs/.bashrc >/root/.bashrc
 
 while IFS= read -r user; do
-  useradd "${user}"
+  useradd -m "${user}"
   usermod -s /bin/bash "${user}"
-  gpasswd -d "${user}" sudo
-  gpasswd -d "${user}" adm
-  gpasswd -d "${user}" wheel
+  usermod -rG adm "${user}"
+  usermod -rG sudo "${user}"
+  usermod -rG wheel "${user}"
   chage -M 15 -m 6 -W 7 -I 5 "${user}"
   cat configs/.bashrc >/home/"${user}".bashrc
 done <configs/users.txt
 
 while IFS= read -r admin; do
-  useradd -G adm,wheel,sudo "${admin}"
+  useradd -m "${admin}"
   usermod -s /bin/bash "${admin}"
+  usermod -aG adm "${admin}"
+  usermod -aG sudo "${admin}"
+  usermod -aG wheel "${admin}"
   chage -M 15 -m 6 -W 7 -I 5 "${admin}"
   cat configs/.bashrc >/home/"${user}".bashrc
 done <configs/admins.txt
