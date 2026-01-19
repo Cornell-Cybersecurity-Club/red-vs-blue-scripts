@@ -1,0 +1,15 @@
+# Create a systemd service file at /etc/systemd/system/snmp_exporter.service
+
+[Unit]
+Description=Prometheus SNMP Exporter
+After=network.target
+
+[Service]
+User=prometheus
+Group=prometheus
+Execstart=/etc/snmp_expoter/snmp_exporter --config.file=/etc/snmp_exporter/snmp.yml --web.listen-address=:9116
+Restart=always
+RestartSec=3
+
+[Install]
+WantedBy=multi-user.target

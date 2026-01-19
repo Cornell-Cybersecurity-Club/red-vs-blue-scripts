@@ -1,0 +1,206 @@
+# alert.rules.yml
+# CCDC Logging/Monitoring alert rules template (not real alerts just to guide alert creation during competition)
+groups:
+  # =========================
+  # Core availability alerts
+  # =========================
+  - name: ccdc-core-availability
+    rules:
+      # Any scrape target down
+      - alert: TargetDown
+        expr: up == 0
+        for: 2m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Target DOWN: job={{ $labels.job }} host={{ $labels.host }} instance={{ $labels.instance }}"
+          description: "Prometheus cannot scrape this target for >2 minutes."
+
+      # WordPress Linux host exporter down (node_exporter)
+      - alert: WordPressHostDown
+        expr: up{job="node",role="wordpress"} == 0
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: "WordPress host exporter DOWN: {{ $labels.host }}"
+          description: "node_exporter unreachable on WordPress host (role=wordpress)."
+
+      # AD exporter down (windows_exporter)
+      - alert: ActiveDirectoryExporterDown
+        expr: up{job="windows",role="active-directory"} == 0
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: "AD windows_exporter DOWN: {{ $labels.host }}"
+          description: "windows_exporter unreachable on AD host."
+
+      # Federation server exporter down (windows_exporter)
+      - alert: FederationExporterDown
+        expr: up{job="windows",role="federation-server"} == 0
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Federation windows_exporter DOWN: {{ $labels.host }}"
+          description: "windows_exporter unreachable on federation server."
+
+      # pfSense SNMP scrape down (via snmp_exporter)
+      - alert: PfSenseSnmpDown
+        expr: up{job="snmp_pfsense"} == 0
+        for: 2m
+        labels:
+          severity: critical
+        annotations:
+          summary: "pfSense SNMP DOWN"
+          description: "snmp_exporter cannot collect SNMP metrics from pfSense (check community, firewall UDP/161, allowed hosts)."
+
+      # snmp_exporter itself down
+      - alert: SnmpExporterDown
+        expr: up{job="snmp_exporter"} == 0
+        for: 2m
+        labels:
+          severity: warning
+        annotations:
+          summary: "snmp_exporter DOWN"
+          description: "snmp_exporter is not being scraped (or not running). pfSense metrics will stop."
+
+      # blackbox exporter down (if you deploy it)
+      - alert: BlackboxExporterDown
+        expr: up{job="blackbox_exporter"} == 0
+        for: 2m
+        labels:
+          severity: warning
+        annotations:
+          summary: "blackbox_exporter DOWN"
+          description: "blackbox_exporter is not being scraped (or not running). HTTP/TCP probes will stop."
+
+  # ======================================
+  # Service-level checks (Blackbox exporter)
+  # ======================================
+  - name: ccdc-service-health
+    rules:
+      # WordPress HTTP check failing (requires blackbox probe job)
+      - alert: WordPressHttpDown
+        expr: probe_success{job="blackbox_http",role="wordpress"} == 0
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: "WordPress HTTP check FAILING: {{ $labels.instance }}"
+          description: "Blackbox probe is failing (HTTP not 2xx, timeout, or TLS failure depending on module)."
+
+      # Optional: Teleport HTTPS check (adjust module/target/job/role)
+      - alert: TeleportHttpsDown
+        expr: probe_success{job="blackbox_http",role="access-control"} == 0
+        for: 2m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Teleport HTTPS check FAILING: {{ $labels.instance }}"
+          description: "Teleport web endpoint probe is failing."
+
+      # Optional: High HTTP latency (tune threshold; avoid noise)
+      - alert: WordPressHttpSlow
+        expr: probe_duration_seconds{job="blackbox_http",role="wordpress"} > 2
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "WordPress HTTP latency high: {{ $labels.instance }}"
+          description: "Probe duration >2s for 5m. Could indicate load, DB issues, or network congestion."
+
+  # =========================
+  # Linux resource pressure
+  # =========================
+  - name: ccdc-linux-resources
+    rules:
+      # Disk usage > 90% (per mountpoint)
+      - alert: LinuxDiskAlmostFull
+        expr: |
+          (1 - (node_filesystem_avail_bytes{job="node",fstype!~"tmpfs|overlay"} /
+                node_filesystem_size_bytes{job="node",fstype!~"tmpfs|overlay"})) > 0.90
+        for: 10m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Disk >90%: host={{ $labels.host }} mount={{ $labels.mountpoint }}"
+          description: "Disk filling up; investigate logs, uploads, DB, or runaway processes."
+
+      # Disk usage > 95% (critical)
+      - alert: LinuxDiskFullCritical
+        expr: |
+          (1 - (node_filesystem_avail_bytes{job="node",fstype!~"tmpfs|overlay"} /
+                node_filesystem_size_bytes{job="node",fstype!~"tmpfs|overlay"})) > 0.95
+        for: 5m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Disk >95% CRITICAL: host={{ $labels.host }} mount={{ $labels.mountpoint }}"
+          description: "Immediate action required to prevent service outages."
+
+      # Node exporter scrape missing samples (cheap signal for “it’s weird”)
+      - alert: LinuxExporterStale
+        expr: |
+          time() - node_time_seconds{job="node"} > 180
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Linux exporter appears stale: {{ $labels.host }}"
+          description: "node_time_seconds is not updating; exporter may be hung or time is skewed."
+
+  # =========================
+  # Windows resource pressure
+  # =========================
+  - name: ccdc-windows-resources
+    rules:
+      # Windows disk usage > 90% (warning)
+      - alert: WindowsDiskAlmostFull
+        expr: |
+          (1 - (windows_logical_disk_free_bytes{job="windows",volume!~"HarddiskVolume.*"} /
+                windows_logical_disk_size_bytes{job="windows",volume!~"HarddiskVolume.*"})) > 0.90
+        for: 10m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Windows disk >90%: host={{ $labels.host }} volume={{ $labels.volume }}"
+          description: "Disk pressure on Windows system volume or data volume."
+
+      # Windows disk usage > 95% (critical)
+      - alert: WindowsDiskFullCritical
+        expr: |
+          (1 - (windows_logical_disk_free_bytes{job="windows",volume!~"HarddiskVolume.*"} /
+                windows_logical_disk_size_bytes{job="windows",volume!~"HarddiskVolume.*"})) > 0.95
+        for: 5m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Windows disk >95% CRITICAL: host={{ $labels.host }} volume={{ $labels.volume }}"
+          description: "Immediate action required (logs, updates cache, DBs, etc.)."
+
+  # =========================
+  # Prometheus/Alerting health
+  # =========================
+  - name: ccdc-monitoring-stack
+    rules:
+      # Prometheus can’t deliver alerts to Alertmanager (very important)
+      - alert: AlertmanagerUnreachable
+        expr: alertmanager_notifications_failed_total > 0
+        for: 2m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Alert delivery failing to Alertmanager"
+          description: "Prometheus is failing to send notifications. Check alertmanager target/port and firewall."
+
+      # Prometheus target scraping slow (may indicate overload/network issues)
+      - alert: ScrapeSlow
+        expr: scrape_duration_seconds > 5
+        for: 10m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Scrape slow: job={{ $labels.job }} instance={{ $labels.instance }}"
+          description: "Scrapes taking >5s. Could lead to missed alerts under load."
