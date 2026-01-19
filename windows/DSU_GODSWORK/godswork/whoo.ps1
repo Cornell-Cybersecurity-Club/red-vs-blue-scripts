@@ -1725,4 +1725,6 @@ if ($choice -eq "yes" -or $choice -eq "y") {
 }
 else {
     Write-Host "The computer will not restart. Some changes will not take affect until you have done so."
+    Write-Host "Before reset, run this to stop network users scripts"
+    Write-Host 'Run FOR /F "usebackq tokens=2 delims=:" %a IN (`sc.exe sdshow scmanager`) DO  sc.exe sdset scmanager D:(D;;GA;;;NU)%a"'
 }
