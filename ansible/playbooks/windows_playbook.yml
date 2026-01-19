@@ -1,0 +1,110 @@
+---
+- name: "WIN - Minimal Facts"
+  hosts: windows
+  gather_facts: false
+
+  tasks:
+    - name: Gather minimal Windows facts
+      setup:
+        filter:
+          - ansible_hostname
+          - ansible_os_family
+
+- name: "WIN - Copy Core Scripts"
+  hosts: windows
+  gather_facts: false
+  roles:
+    - winCopyCoreScripts
+  tags:
+    - windows
+    - copy
+    - never
+
+- name: "WIN - Run Downloads Script"
+  hosts: windows
+  gather_facts: false
+  roles:
+    - winDownload
+  tags:
+    - windowsOld
+    - download
+    - never
+
+- name: "WIN - Run Core Scripts"
+  hosts: windows
+  gather_facts: false
+  roles:
+    - winRunCoreScripts
+  tags:
+    - windows
+    - windowsOld
+    - backup
+    - firewall
+    - never
+
+- name: "WIN - Distributed Backups"
+  hosts: windows
+  gather_facts: false
+  roles:
+    - winAdvBackup
+  tags:
+    - winAdvBackup
+    - windows
+    - windowsOld
+    - backup
+    - firewall
+    - never
+
+- name: "WIN - Copy Scripts and Tools"
+  hosts: windows
+  gather_facts: false
+  roles:
+    - winCopyOtherTools
+  tags:
+    - windows
+    - copy
+    - never
+
+- name: "WIN - Setup Password Manager Client"
+  hosts: windows
+  gather_facts: false
+  roles:
+    - winPasswordManager
+  tags:
+    - windows
+    - password
+    - password_manager
+    - never
+
+- name: "WIN - Logging"
+  hosts: windows
+  gather_facts: false
+  roles:
+    - winLogging
+  tags:
+    - windows
+    - windowsOld
+    - logging
+    - never
+
+- name: "WIN - Inventory"
+  hosts: windows
+  gather_facts: false
+  roles:
+    - winInventory
+  tags:
+    - windows
+    - windowsOld
+    - inventory
+    - never
+
+- name: "WIN - Audit"
+  hosts: windows  
+  gather_facts: false
+  roles:
+    - winAudit
+  tags:
+    - windows
+    - windowsOld
+    - audit
+    - never
