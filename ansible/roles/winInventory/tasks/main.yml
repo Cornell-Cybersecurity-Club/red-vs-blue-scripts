@@ -1,0 +1,8 @@
+- name: Run Script
+  win_shell: |
+    .\inventory.ps1
+  args:
+    chdir: "{{ scripts_path }}\\scripts"
+    no_profile: true
+
+

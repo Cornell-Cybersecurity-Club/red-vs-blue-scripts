@@ -1,0 +1,123 @@
+- name: Get IP Address of remote host
+  win_shell: |
+    Get-NetIPAddress -AddressFamily IPv4 |
+    Where-Object { $_.IPAddress -notlike '169.*' -and $_.IPAddress -ne '127.0.0.1' } |
+    Select-Object -ExpandProperty IPAddress
+  args:
+    no_profile: true
+  register: ip_output
+
+- name: Set IP address variable
+  set_fact:
+    ip_address: "{{ ip_output.stdout_lines[0] }}"
+
+- name: Get hostname of remote Windows host
+  win_shell: |
+    hostname
+  args:
+    no_profile: true
+  register: hostname_output
+
+- name: Set hostname variable
+  set_fact:
+    hostname: "{{ hostname_output.stdout_lines[0] }}"
+
+- name: Get list of timestamped backup folders under hostname
+  win_shell: |
+    Get-ChildItem -Path "{{ scripts_path }}\\backup\\{{ hostname }}" -Directory | Select-Object -ExpandProperty Name
+  args:
+    no_profile: true
+  register: backup_folders
+
+- name: Zip each timestamped backup folder
+  win_shell: |
+    Compress-Archive -Path "{{ scripts_path }}\\backup\\{{ hostname }}\\{{ item }}\\*" -DestinationPath "{{ scripts_path }}\\backup\\{{ item }}.zip"
+  args:
+    no_profile: true
+    creates: "{{ scripts_path }}\\backup\\{{ item }}.zip"
+  loop: "{{ backup_folders.stdout_lines }}"
+  loop_control:
+    label: "{{ item }}"
+
+- name: Create IP folder on Ansible Controller
+  delegate_to: localhost
+  file:
+    path: "{{ scripts_ansible_location }}/backups/{{ ip_address }}"
+    state: directory
+    mode: '0755'
+
+- name: Filter only timestamped backup folders
+  set_fact:
+    backup_folders_filtered: >-
+      {{ backup_folders.stdout_lines
+         | select('match', '^[0-9]{4}-[0-9]{2}-[0-9]{2}_[0-9]{2}-[0-9]{2}-[0-9]{2}$')
+         | list }}
+
+- name: Fetch zipped backups to Ansible Controller
+  fetch:
+    src: "{{ scripts_path }}\\backup\\{{ item }}.zip"
+    dest: "{{ scripts_ansible_location }}/backups/{{ ip_address }}/"
+    flat: yes
+  loop: "{{ backup_folders_filtered }}"
+  loop_control:
+    label: "{{ item }}"
+
+- name: Delete zipped backups from remote Windows host
+  win_file:
+    path: "{{ scripts_path }}\\backup\\{{ item }}.zip"
+    state: absent
+  loop: "{{ backup_folders.stdout_lines }}"
+  loop_control:
+    label: "{{ item }}"
+
+- name: Get list of IP folders on Ansible Controller
+  delegate_to: localhost
+  find:
+    paths: "{{ scripts_ansible_location }}/backups"
+    file_type: directory
+  register: ip_dirs
+
+- name: Collect just folder path names
+  set_fact:
+    backup_ip_paths: "{{ ip_dirs.files | map(attribute='path') | list }}"
+
+- name: Get list of timestamped backups for each IP
+  delegate_to: localhost
+  find:
+    paths: "{{ item }}"
+    file_type: file
+    patterns: ["*.zip"]
+    depth: 1
+  loop: "{{ backup_ip_paths }}"
+  register: timestamp_dirs
+  loop_control:
+    label: "{{ item | basename }}"
+
+- name: Collect just zipped folder path names
+  set_fact:
+    timestamp_paths: "{{ timestamp_dirs.results | map(attribute='files') | flatten | map(attribute='path') | list }}"
+
+- name: Create IP/timestamp folders on remote host (excluding self)
+  win_file:
+    path: "{{ scripts_path }}\\backup\\{{ ip_folder }}\\{{ timestamp_folder }}"
+    state: directory
+  loop: "{{ timestamp_paths }}"
+  vars:
+    ip_folder: "{{ item.split('/')[-2] }}"
+    timestamp_folder: "{{ item.split('/')[-1] | replace('.zip', '') }}"
+  when: ip_folder != inventory_hostname
+  loop_control:
+    label: "{{ item.split('/') }}/{{ item.split('/')[-1] | replace('.zip', '') }}"
+
+- name: Copy all timestamped backups to each remote host (excluding self)
+  win_copy:
+    src: "{{ scripts_ansible_location }}/backups/{{ ip_folder }}/{{ item.split('/')[-1] }}"
+    dest: "{{ scripts_path }}\\backup\\{{ ip_folder }}\\{{ item.split('/')[-1] | replace('.zip', '') }}\\{{ item.split('/')[-1] }}"
+    remote_src: false
+    force: true
+  loop: "{{ timestamp_paths }}"
+  vars:
+    ip_folder: "{{ item.split('/')[-2] }}"
+  when: ip_folder != inventory_hostname
+  loop_control:
+    label: "{{ item.split('/')[-2] }}/{{ item.split('/')[-1] }}"
