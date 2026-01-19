@@ -79,9 +79,21 @@ iptables -A INPUT -p tcp --dport $TELEPORT_PROXY_PORT -m state --state NEW -m re
 iptables -A INPUT -p tcp --dport $TELEPORT_PROXY_PORT -m state --state NEW -m recent --update --seconds 60 --hitcount 10 -j DROP
 
 # Save iptables rules
+echo -e "${YELLOW}[*] Saving iptables rules...${NC}"
 if [ -f /etc/debian_version ]; then
-    # Debian/Ubuntu
-    iptables-save > /etc/iptables/rules.v4
+    # Debian/Ubuntu - install iptables-persistent if not present
+    if ! dpkg -l | grep -q iptables-persistent; then
+        echo -e "${YELLOW}[*] Installing iptables-persistent...${NC}"
+        DEBIAN_FRONTEND=noninteractive apt-get install -y iptables-persistent
+    else
+        # Create directory if it doesn't exist
+        mkdir -p /etc/iptables
+        iptables-save > /etc/iptables/rules.v4
+        # Also use netfilter-persistent if available
+        if command -v netfilter-persistent &> /dev/null; then
+            netfilter-persistent save
+        fi
+    fi
 elif [ -f /etc/redhat-release ]; then
     # RHEL/CentOS
     service iptables save
