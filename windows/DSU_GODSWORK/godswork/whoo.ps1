@@ -23,6 +23,7 @@ if (Get-Service -Name W3SVC 2>$null) {
 
 $currentDir = (Get-Location).Path
 $rootDir = Split-Path -Parent $currentDir
+$RepoRoot = Split-Path -Parent $rootDir
 $ConfPath = Join-Path -Path $currentDir -ChildPath "conf"
 
 # Securing RDP
@@ -73,7 +74,9 @@ foreach ($feature in $features) {
         Write-Host "[" -ForegroundColor white -NoNewLine; Write-Host "SUCCESS" -ForegroundColor green -NoNewLine; Write-Host "] Uninstalled $feature" -ForegroundColor white
     }
 }
-
+Uninstall-WindowsFeature Windows-Defender
+Install-WindowsFeature Windows-Defender
+Write-Host "[" -ForegroundColor white -NoNewLine; Write-Host "SUCCESS" -ForegroundColor green -NoNewLine; Write-Host "] Uninstalled and Reinstalled Defender" -ForegroundColor white 
 # GPO stuff
 ## Resetting local group policy
 $gp = (Join-Path -Path $currentDir -ChildPath "results\gp")
@@ -84,6 +87,23 @@ Copy-Item C:\Windows\System32\GroupPolicy* $gp -Recurse | Out-Null
 Remove-Item C:\Windows\System32\GroupPolicy* -Recurse -Force | Out-Null
 gpupdate /force
 Write-Host "[" -ForegroundColor white -NoNewLine; Write-Host "SUCCESS" -ForegroundColor green -NoNewLine; Write-Host "] Local group policy reset" -ForegroundColor white
+
+# Apply localpolicy.PolicyRules using LGPO
+$LGPOPath = Join-Path -Path $RepoRoot -ChildPath "NirsoftTools\LGPO.exe"
+$GPOsDir = Join-Path -Path $currentDir -ChildPath "gpos"
+$PolicyPath = Join-Path -Path $GPOsDir -ChildPath "localpolicy.PolicyRules"
+
+if ((Test-Path -Path $LGPOPath) -and (Test-Path -Path $PolicyPath)) {
+    Write-Host "Applying Local Policy Rules..."
+    & $LGPOPath /p $PolicyPath
+    gpupdate /force
+    Write-Host "[" -ForegroundColor white -NoNewLine; Write-Host "SUCCESS" -ForegroundColor green -NoNewLine; Write-Host "] Local Policy Rules Applied" -ForegroundColor white
+} else {
+    Write-Host "LGPO or localpolicy.PolicyRules not found." -ForegroundColor Yellow
+    Write-Host "LGPO Path: $LGPOPath" -ForegroundColor Yellow
+    Write-Host "Policy Path: $PolicyPath" -ForegroundColor Yellow
+}
+
 ## Resetting domain GPOs
 if ($DC) {
     ## Reset/rebuild default GPOs
@@ -92,32 +112,32 @@ if ($DC) {
     $DomainGPO = Get-GPO -All
     foreach ($GPO in $DomainGPO) {
         ## Prompt user to decide which GPOs to disable
-        $Ans = Read-Host "Reset $($GPO.DisplayName) (y/N)?"
+        $Ans = Read-Host "Disable $($GPO.DisplayName) (y/N)?"
         if ($Ans.ToLower() -eq "y") {
             $GPO.gpostatus = "AllSettingsDisabled"
         }
     }
 
+    ## Applying DC security template (deprecated)
+    # secedit /configure /db $env:windir\security\local.sdb /cfg 'conf\dc-secpol.inf'
+
     ## Importing domain GPOs
-#    Import-GPO -BackupId "AFB8A9FB-461A-4432-8F89-3847DFBEA45F" -TargetName "common-domain-settings" -CreateIfNeeded -Path $ConfPath
-#    Import-GPO -BackupId "5A5FA47B-F8F6-4B0B-84DB-E46EF6C239C0" -TargetName "domain-controller-settings" -CreateIfNeeded -Path $ConfPath
-#    Import-GPO -BackupId "EBDE39CE-90F2-4119-AA69-E0E48F0FCCAA" -TargetName "member-server-client-settings" -CreateIfNeeded -Path $ConfPath
-#    Import-GPO -BackupId "BEAA6460-782B-4351-B17D-4DC8076633C9" -TargetName "defender-settings" -CreateIfNeeded -Path $ConfPath
-#
-#    $distinguishedName = (Get-ADDomain -Identity (Get-ADDomain -Current LocalComputer).DNSRoot).DistinguishedName
-#    New-GPLink -Name "common-domain-settings" -Target $distinguishedName -Order 1
-#    New-GPLink -Name "defender-settings" -Target $distinguishedName
-#    New-GPLink -Name "domain-controller-settings" -Target ("OU=Domain Controllers," + $distinguishedName) -Order 1
+    Import-GPO -BackupId "EE3B9E95-9783-474A-86A5-907E93E64F57" -TargetName "common-domain-settings" -CreateIfNeeded -Path $ConfPath
+    Import-GPO -BackupId "40E1EAFA-8121-4FFA-B6FE-BC348636AB83" -TargetName "domain-controller-settings" -CreateIfNeeded -Path $ConfPath
+    Import-GPO -BackupId "6136C3E1-B316-4C46-9B8B-8C1FC373F73C" -TargetName "member-server-client-settings" -CreateIfNeeded -Path $ConfPath
+    Import-GPO -BackupId "BEAA6460-782B-4351-B17D-4DC8076633C9" -TargetName "defender-settings" -CreateIfNeeded -Path $ConfPath
+    
+    $distinguishedName = (Get-ADDomain -Identity (Get-ADDomain -Current LocalComputer).DNSRoot).DistinguishedName
+    New-GPLink -Name "common-domain-settings" -Target $distinguishedName -Order 1
+    New-GPLink -Name "defender-settings" -Target $distinguishedName
+    New-GPLink -Name "domain-controller-settings" -Target ("OU=Domain Controllers," + $distinguishedName) -Order 1
 
     gpupdate /force
 } else {
-    ## Applying client machine/member server security template (deprecated)
-    # secedit /configure /db $env:windir\security\local.sdb /cfg 'conf\web-secpol.inf'
-
     # Importing client machine/member server GPO
-#    $LGPOPath = Join-Path -Path $rootDir -ChildPath "tools\LGPO_30\LGPO.exe"
-#    & $LGPOPath /p (Join-Path -Path $ConfPath -ChildPath "localpolicy.PolicyRules")
-
+    $LGPOPath = Join-Path -Path $rootDir -ChildPath "NirsoftTools\LGPO.exe"
+    & $LGPOPath /p (Join-Path -Path $ConfPath -ChildPath "localpolicy.PolicyRules") 
+    
     gpupdate /force
 }
 

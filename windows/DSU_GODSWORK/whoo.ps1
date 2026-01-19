@@ -86,19 +86,6 @@ gpupdate /force
 Write-Host "[" -ForegroundColor white -NoNewLine; Write-Host "SUCCESS" -ForegroundColor green -NoNewLine; Write-Host "] Local group policy reset" -ForegroundColor white
 
 # Apply localpolicy.PolicyRules using LGPO
-$LGPOPath = Join-Path -Path $rootDir -ChildPath "NirsoftTools\LGPO.exe"
-$PolicyPath = Join-Path -Path $currentDir -ChildPath "localpolicy.PolicyRules"
-
-if ((Test-Path -Path $LGPOPath) -and (Test-Path -Path $PolicyPath)) {
-    Write-Host "Applying Local Policy Rules..."
-    & $LGPOPath /p $PolicyPath
-    gpupdate /force
-    Write-Host "[" -ForegroundColor white -NoNewLine; Write-Host "SUCCESS" -ForegroundColor green -NoNewLine; Write-Host "] Local Policy Rules Applied" -ForegroundColor white
-} else {
-    Write-Host "LGPO or localpolicy.PolicyRules not found." -ForegroundColor Yellow
-    Write-Host "LGPO Path: $LGPOPath" -ForegroundColor Yellow
-    Write-Host "Policy Path: $PolicyPath" -ForegroundColor Yellow
-}
 
 ## Resetting domain GPOs
 if ($DC) {
@@ -118,7 +105,7 @@ if ($DC) {
 #    Import-GPO -BackupId "AFB8A9FB-461A-4432-8F89-3847DFBEA45F" -TargetName "common-domain-settings" -CreateIfNeeded -Path $ConfPath
 #    Import-GPO -BackupId "5A5FA47B-F8F6-4B0B-84DB-E46EF6C239C0" -TargetName "domain-controller-settings" -CreateIfNeeded -Path $ConfPath
 #    Import-GPO -BackupId "EBDE39CE-90F2-4119-AA69-E0E48F0FCCAA" -TargetName "member-server-client-settings" -CreateIfNeeded -Path $ConfPath
-#    Import-GPO -BackupId "BEAA6460-782B-4351-B17D-4DC8076633C9" -TargetName "defender-settings" -CreateIfNeeded -Path $ConfPath
+   Import-GPO -BackupId "BEAA6460-782B-4351-B17D-4DC8076633C9" -TargetName "defender-settings" -CreateIfNeeded -Path $ConfPath
 #
 #    $distinguishedName = (Get-ADDomain -Identity (Get-ADDomain -Current LocalComputer).DNSRoot).DistinguishedName
 #    New-GPLink -Name "common-domain-settings" -Target $distinguishedName -Order 1
