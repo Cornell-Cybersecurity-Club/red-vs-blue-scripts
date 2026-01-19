@@ -14,50 +14,18 @@ echo -e "${GREEN}[+] Starting Teleport Security Hardening${NC}"
 
 # Check if running as root
 if [[ $EUID -ne 0 ]]; then
-   echo -e "${RED}[!] This script must be run as root${NC}" 
-   exit 1
+  echo -e "${RED}[!] This script must be run as root${NC}"
+  exit 1
 fi
-
-# Backup existing configurations
-BACKUP_DIR="/root/teleport_backup_$(date +%Y%m%d_%H%M%S)"
-mkdir -p "$BACKUP_DIR"
-echo -e "${YELLOW}[*] Creating backups in $BACKUP_DIR${NC}"
-
-# Backup teleport config if exists
-if [ -f /etc/teleport.yaml ]; then
-    cp /etc/teleport.yaml "$BACKUP_DIR/"
-fi
-
-# Backup iptables rules
-iptables-save > "$BACKUP_DIR/iptables.rules"
 
 # Define Teleport ports
-TELEPORT_PROXY_PORT=3080      # Web UI and API
-TELEPORT_AUTH_PORT=3025       # Auth service
-TELEPORT_SSH_PORT=3022        # SSH proxy
-TELEPORT_TUNNEL_PORT=3024     # Reverse tunnel
-TELEPORT_K8S_PORT=3026        # Kubernetes proxy (if used)
+TELEPORT_PROXY_PORT=3080  # Web UI and API
+TELEPORT_AUTH_PORT=3025   # Auth service
+TELEPORT_SSH_PORT=3022    # SSH proxy
+TELEPORT_TUNNEL_PORT=3024 # Reverse tunnel
+TELEPORT_K8S_PORT=3026    # Kubernetes proxy (if used)
 
 echo -e "${GREEN}[+] Configuring iptables rules${NC}"
-
-# Flush existing rules (be careful in production!)
-# Comment out if you need to preserve existing rules
-# iptables -F
-# iptables -X
-
-# Set default policies
-iptables -P INPUT DROP
-iptables -P FORWARD DROP
-iptables -P OUTPUT ACCEPT
-
-# Allow loopback
-iptables -A INPUT -i lo -j ACCEPT
-
-# Allow established connections
-iptables -A INPUT -m state --state ESTABLISHED,RELATED -j ACCEPT
-
-# Allow SSH (standard port - adjust if needed)
-iptables -A INPUT -p tcp --dport 22 -m state --state NEW -j ACCEPT
 
 # Allow Teleport ports
 echo -e "${YELLOW}[*] Opening Teleport ports${NC}"
@@ -75,17 +43,17 @@ iptables -A INPUT -p tcp --dport $TELEPORT_PROXY_PORT -m state --state NEW -m re
 
 # Save iptables rules
 if [ -f /etc/debian_version ]; then
-    # Debian/Ubuntu
-    iptables-save > /etc/iptables/rules.v4
+  # Debian/Ubuntu
+  iptables-save >/etc/iptables/rules.v4
 elif [ -f /etc/redhat-release ]; then
-    # RHEL/CentOS
-    service iptables save
+  # RHEL/CentOS
+  service iptables save
 fi
 
 echo -e "${GREEN}[+] Hardening Teleport configuration${NC}"
 
 # Create secure teleport configuration
-cat > /etc/teleport.yaml << 'EOF'
+cat >/etc/teleport.yaml <<'EOF'
 version: v3
 teleport:
   nodename: teleport-node
@@ -176,29 +144,29 @@ chown -R root:root /etc/teleport.yaml
 chmod 600 /etc/teleport.yaml
 
 if [ -d /var/lib/teleport ]; then
-    chown -R teleport:teleport /var/lib/teleport
-    chmod 700 /var/lib/teleport
+  chown -R teleport:teleport /var/lib/teleport
+  chmod 700 /var/lib/teleport
 fi
 
 echo -e "${GREEN}[+] Configuring system security${NC}"
 
 # Disable teleport user login
 if id "teleport" &>/dev/null; then
-    usermod -s /usr/sbin/nologin teleport
+  usermod -s /usr/sbin/nologin teleport
 fi
 
 # Enable audit logging
 if [ ! -d /var/log/teleport ]; then
-    mkdir -p /var/log/teleport
-    chown teleport:teleport /var/log/teleport
-    chmod 750 /var/log/teleport
+  mkdir -p /var/log/teleport
+  chown teleport:teleport /var/log/teleport
+  chmod 750 /var/log/teleport
 fi
 
 # Configure fail2ban for Teleport (if fail2ban is installed)
-if command -v fail2ban-client &> /dev/null; then
-    echo -e "${YELLOW}[*] Configuring fail2ban${NC}"
-    
-    cat > /etc/fail2ban/filter.d/teleport.conf << 'EOF'
+if command -v fail2ban-client &>/dev/null; then
+  echo -e "${YELLOW}[*] Configuring fail2ban${NC}"
+
+  cat >/etc/fail2ban/filter.d/teleport.conf <<'EOF'
 [Definition]
 failregex = Authentication attempt failed.*client=<HOST>
             Invalid user.*from <HOST>
@@ -206,7 +174,7 @@ failregex = Authentication attempt failed.*client=<HOST>
 ignoreregex =
 EOF
 
-    cat > /etc/fail2ban/jail.d/teleport.conf << 'EOF'
+  cat >/etc/fail2ban/jail.d/teleport.conf <<'EOF'
 [teleport]
 enabled = true
 port = 3080,3022,3023,3025
@@ -217,7 +185,7 @@ bantime = 3600
 findtime = 600
 EOF
 
-    systemctl restart fail2ban
+  systemctl restart fail2ban
 fi
 
 echo -e "${GREEN}[+] Restarting Teleport service${NC}"
@@ -229,10 +197,10 @@ systemctl enable teleport
 
 # Verify service is running
 if systemctl is-active --quiet teleport; then
-    echo -e "${GREEN}[+] Teleport service is running${NC}"
+  echo -e "${GREEN}[+] Teleport service is running${NC}"
 else
-    echo -e "${RED}[!] Teleport service failed to start${NC}"
-    echo -e "${YELLOW}[*] Check logs: journalctl -u teleport -n 50${NC}"
+  echo -e "${RED}[!] Teleport service failed to start${NC}"
+  echo -e "${YELLOW}[*] Check logs: journalctl -u teleport -n 50${NC}"
 fi
 
 echo -e "${GREEN}[+] Security hardening complete!${NC}"

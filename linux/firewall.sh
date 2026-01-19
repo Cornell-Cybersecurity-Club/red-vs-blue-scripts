@@ -1,4 +1,7 @@
 # -------------------------------------- Reset Chains chain ---------------------------------------------------------
+iptables -F
+iptables -X
+
 # Flush the Input and Output chains of IPv4 Tables
 iptables -t filter -F INPUT
 iptables -t filter -F OUTPUT

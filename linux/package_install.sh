@@ -43,7 +43,7 @@ if [ -f /etc/os-release ]; then
 
     $PKG_MGR makecache >/dev/null 2>&1
 
-    RHEL_PKGS="audit audit-libs bash busybox chrootkit coreutils curl dash dpkg git glibc gnupg2 htop iptables iptables-services libpwquality lsof lynis nano net-tools nmap openssh-server openssl passwd pigz policycoreutils rkhunter rsyslog setools-console sudo tcpdump unhide unzip util-linux vim wget yum-utils zstd"
+    RHEL_PKGS="audit audit-libs bash busybox chrootkit coreutils curl dash dpkg git glibc gnupg2 htop iptables iptables-services libpwquality lsof lynis nano net-tools nmap openssh-server openssl passwd pigz policycoreutils python3 rkhunter rsyslog setools-console sudo tcpdump unhide unzip util-linux vim wget yum-utils zstd"
 
     install_one_by_one "$PKG_MGR install -y" $RHEL_PKGS
     ;;
@@ -51,7 +51,7 @@ if [ -f /etc/os-release ]; then
   *alpine*)
     apk update >/dev/null 2>&1
 
-    ALPINE_PKGS="audit bash busybox-extras coreutils curl git gnupg htop ip6tables iptables lsof lynis nano net-tools nmap openssh openssl passwd pigz rkhunter rsyslog sudo tcpdump unzip vim wget zstd"
+    ALPINE_PKGS="audit bash busybox-extras coreutils curl git gnupg htop ip6tables iptables lsof lynis nano net-tools nmap openssh openssl passwd pigz python3 rkhunter rsyslog sudo tcpdump unzip vim wget zstd"
 
     install_one_by_one "apk add" $ALPINE_PKGS
     ;;
@@ -67,7 +67,7 @@ if [ -f /etc/os-release ]; then
   *arch* | *manjaro*)
     pacman -Sy >/dev/null 2>&1
 
-    ARCH_PKGS="audit bash coreutils curl git gnupg htop iptables lsof lynis nano net-tools nmap openssh openssl pam pigz rkhunter rsyslog sudo tcpdump unzip util-linux vim wget zstd"
+    ARCH_PKGS="audit bash coreutils curl git gnupg htop iptables lsof lynis nano net-tools nmap openssh openssl pam pigz python rkhunter rsyslog sudo tcpdump unzip util-linux vim wget zstd"
 
     install_one_by_one "pacman -S --noconfirm --needed" $ARCH_PKGS
     ;;
