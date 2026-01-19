@@ -88,22 +88,6 @@ Remove-Item C:\Windows\System32\GroupPolicy* -Recurse -Force | Out-Null
 gpupdate /force
 Write-Host "[" -ForegroundColor white -NoNewLine; Write-Host "SUCCESS" -ForegroundColor green -NoNewLine; Write-Host "] Local group policy reset" -ForegroundColor white
 
-# Apply localpolicy.PolicyRules using LGPO
-$LGPOPath = Join-Path -Path $RepoRoot -ChildPath "NirsoftTools\LGPO.exe"
-$GPOsDir = Join-Path -Path $currentDir -ChildPath "gpos"
-$PolicyPath = Join-Path -Path $GPOsDir -ChildPath "localpolicy.PolicyRules"
-
-if ((Test-Path -Path $LGPOPath) -and (Test-Path -Path $PolicyPath)) {
-    Write-Host "Applying Local Policy Rules..."
-    & $LGPOPath /p $PolicyPath
-    gpupdate /force
-    Write-Host "[" -ForegroundColor white -NoNewLine; Write-Host "SUCCESS" -ForegroundColor green -NoNewLine; Write-Host "] Local Policy Rules Applied" -ForegroundColor white
-} else {
-    Write-Host "LGPO or localpolicy.PolicyRules not found." -ForegroundColor Yellow
-    Write-Host "LGPO Path: $LGPOPath" -ForegroundColor Yellow
-    Write-Host "Policy Path: $PolicyPath" -ForegroundColor Yellow
-}
-
 ## Resetting domain GPOs
 if ($DC) {
     ## Reset/rebuild default GPOs
@@ -118,14 +102,22 @@ if ($DC) {
         }
     }
 
-    ## Applying DC security template (deprecated)
-    # secedit /configure /db $env:windir\security\local.sdb /cfg 'conf\dc-secpol.inf'
+    ## Expanding GPOs for Import
+    $GPOsDir = Join-Path -Path $currentDir -ChildPath "gpos"
+    $GpoTempPath = Join-Path -Path $currentDir -ChildPath "gpos_extracted"
+    if (!(Test-Path -Path $GpoTempPath)) {
+        New-Item -Path $GpoTempPath -ItemType Directory -Force | Out-Null
+        Write-Host "Extracting GPOs..."
+        Get-ChildItem -Path $GPOsDir -Filter "*.zip" | ForEach-Object {
+            Expand-Archive -Path $_.FullName -DestinationPath $GpoTempPath -Force
+        }
+    }
 
     ## Importing domain GPOs
-    Import-GPO -BackupId "EE3B9E95-9783-474A-86A5-907E93E64F57" -TargetName "common-domain-settings" -CreateIfNeeded -Path $ConfPath
-    Import-GPO -BackupId "40E1EAFA-8121-4FFA-B6FE-BC348636AB83" -TargetName "domain-controller-settings" -CreateIfNeeded -Path $ConfPath
-    Import-GPO -BackupId "6136C3E1-B316-4C46-9B8B-8C1FC373F73C" -TargetName "member-server-client-settings" -CreateIfNeeded -Path $ConfPath
-    Import-GPO -BackupId "BEAA6460-782B-4351-B17D-4DC8076633C9" -TargetName "defender-settings" -CreateIfNeeded -Path $ConfPath
+    Import-GPO -BackupId "EE3B9E95-9783-474A-86A5-907E93E64F57" -TargetName "common-domain-settings" -CreateIfNeeded -Path $GpoTempPath
+    Import-GPO -BackupId "40E1EAFA-8121-4FFA-B6FE-BC348636AB83" -TargetName "domain-controller-settings" -CreateIfNeeded -Path $GpoTempPath
+    Import-GPO -BackupId "6136C3E1-B316-4C46-9B8B-8C1FC373F73C" -TargetName "member-server-client-settings" -CreateIfNeeded -Path $GpoTempPath
+    Import-GPO -BackupId "BEAA6460-782B-4351-B17D-4DC8076633C9" -TargetName "defender-settings" -CreateIfNeeded -Path $GpoTempPath
     
     $distinguishedName = (Get-ADDomain -Identity (Get-ADDomain -Current LocalComputer).DNSRoot).DistinguishedName
     New-GPLink -Name "common-domain-settings" -Target $distinguishedName -Order 1
@@ -134,11 +126,21 @@ if ($DC) {
 
     gpupdate /force
 } else {
-    # Importing client machine/member server GPO
-    $LGPOPath = Join-Path -Path $rootDir -ChildPath "NirsoftTools\LGPO.exe"
-    & $LGPOPath /p (Join-Path -Path $ConfPath -ChildPath "localpolicy.PolicyRules") 
-    
-    gpupdate /force
+    # Apply localpolicy.PolicyRules using LGPO
+    $LGPOPath = Join-Path -Path $RepoRoot -ChildPath "NirsoftTools\LGPO.exe"
+    $GPOsDir = Join-Path -Path $currentDir -ChildPath "gpos"
+    $PolicyPath = Join-Path -Path $GPOsDir -ChildPath "localpolicy.PolicyRules"
+
+    if ((Test-Path -Path $LGPOPath) -and (Test-Path -Path $PolicyPath)) {
+        Write-Host "Applying Local Policy Rules..."
+        & $LGPOPath /p $PolicyPath
+        gpupdate /force
+        Write-Host "[" -ForegroundColor white -NoNewLine; Write-Host "SUCCESS" -ForegroundColor green -NoNewLine; Write-Host "] Local Policy Rules Applied" -ForegroundColor white
+    } else {
+        Write-Host "LGPO or localpolicy.PolicyRules not found." -ForegroundColor Yellow
+        Write-Host "LGPO Path: $LGPOPath" -ForegroundColor Yellow
+        Write-Host "Policy Path: $PolicyPath" -ForegroundColor Yellow
+    }
 }
 
 # Mitigating CVEs
