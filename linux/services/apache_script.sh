@@ -138,11 +138,7 @@ fi
 
 case "$INIT_SYS" in
     systemd)
-        a2enmod headers
         sudo systemctl restart "$APACHE_NAME"
-        # Rename the config file
-        mv /etc/modsecurity/modsecurity.conf-recommended /etc/modsecurity/modsecurity.conf
-        sed -i '/SecRuleEngine/cSecRuleEngine On' /etc/modsecurity/modsecurity.conf
         ;;
     openrc)
         sudo rc-service "$APACHE_NAME" restart
