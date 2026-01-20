@@ -37,10 +37,10 @@ else
 fi
 
 # Unblock http(s)
-iptables -A INPUT -p tcp --dport 80 -j ACCEPT
-iptables -A INPUT -p tcp --dport 443 -j ACCEPT
-iptables -A OUTPUT -p tcp --sport 443 -j ACCEPT
-iptables -A OUTPUT -p tcp --sport 80 -j ACCEPT
+iptables -I INPUT -p tcp --dport 80 -j ACCEPT
+iptables -I INPUT -p tcp --dport 443 -j ACCEPT
+iptables -I OUTPUT -p tcp --sport 443 -j ACCEPT
+iptables -I OUTPUT -p tcp --sport 80 -j ACCEPT
 
 # Run apache as non root user
 groupadd -r www-data

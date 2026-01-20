@@ -29,17 +29,17 @@ echo -e "${GREEN}[+] Configuring iptables rules${NC}"
 
 # Allow Teleport ports
 echo -e "${YELLOW}[*] Opening Teleport ports${NC}"
-iptables -A INPUT -p tcp --dport $TELEPORT_PROXY_PORT -m state --state NEW -j ACCEPT
-iptables -A INPUT -p tcp --dport $TELEPORT_AUTH_PORT -m state --state NEW -j ACCEPT
-iptables -A INPUT -p tcp --dport $TELEPORT_SSH_PORT -m state --state NEW -j ACCEPT
-iptables -A INPUT -p tcp --dport $TELEPORT_TUNNEL_PORT -m state --state NEW -j ACCEPT
+iptables -I INPUT -p tcp --dport $TELEPORT_PROXY_PORT -m state --state NEW -j ACCEPT
+iptables -I INPUT -p tcp --dport $TELEPORT_AUTH_PORT -m state --state NEW -j ACCEPT
+iptables -I INPUT -p tcp --dport $TELEPORT_SSH_PORT -m state --state NEW -j ACCEPT
+iptables -I INPUT -p tcp --dport $TELEPORT_TUNNEL_PORT -m state --state NEW -j ACCEPT
 
 # Optional: Allow Kubernetes proxy port
-# iptables -A INPUT -p tcp --dport $TELEPORT_K8S_PORT -m state --state NEW -j ACCEPT
+# iptables -I INPUT -p tcp --dport $TELEPORT_K8S_PORT -m state --state NEW -j ACCEPT
 
 # Rate limiting for Teleport ports to prevent brute force
-iptables -A INPUT -p tcp --dport $TELEPORT_PROXY_PORT -m state --state NEW -m recent --set
-iptables -A INPUT -p tcp --dport $TELEPORT_PROXY_PORT -m state --state NEW -m recent --update --seconds 60 --hitcount 10 -j DROP
+iptables -I INPUT -p tcp --dport $TELEPORT_PROXY_PORT -m state --state NEW -m recent --set
+iptables -I INPUT -p tcp --dport $TELEPORT_PROXY_PORT -m state --state NEW -m recent --update --seconds 60 --hitcount 10 -j DROP
 
 # Save iptables rules
 if [ -f /etc/debian_version ]; then
