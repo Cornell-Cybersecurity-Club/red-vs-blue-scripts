@@ -1,6 +1,21 @@
 # -------------------------------------- Reset Chains chain ---------------------------------------------------------
+iptables -P INPUT ACCEPT
+iptables -P FORWARD ACCEPT
+iptables -P OUTPUT ACCEPT
+
+ip6tables -P INPUT ACCEPT
+ip6tables -P FORWARD ACCEPT
+ip6tables -P OUTPUT ACCEPT
+
 iptables -F
+iptables -t nat -F
+iptables -t mangle -F
+iptables -t raw -F
+
 iptables -X
+iptables -t nat -X
+iptables -t mangle -X
+iptables -t raw -X
 
 # Flush the Input and Output chains of IPv4 Tables
 iptables -t filter -F INPUT
@@ -393,16 +408,16 @@ ip6tables -A OUTPUT -p icmpv6 --icmpv6-type 153 -j ACCEPT
 # ----------------------------------------------------------------------------------------------------------------------------
 
 # ----------------------------------------------- POLICIES  ------------------------------------------------------------------
-# Set defualt policy of All FILTER chains to DROP
+# Set default policy of All FILTER chains to DROP
 # ## IPv4
-# iptables -P INPUT DROP
-# iptables -P FORWARD DROP
-# iptables -P OUTPUT DROP
+iptables -P INPUT DROP
+iptables -P FORWARD DROP
+#iptables -P OUTPUT DROP
 
 # ##IPv6
-# ip6tables -P INPUT DROP
-# ip6tables -P OUTPUT DROP
-# ip6tables -P FORWARD DROP
+ip6tables -P INPUT DROP
+#ip6tables -P OUTPUT DROP
+ip6tables -P FORWARD DROP
 #
 #
 if command -v docker >/dev/null 2>&1; then
