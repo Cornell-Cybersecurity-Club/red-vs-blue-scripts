@@ -74,7 +74,7 @@ if [ -f /etc/os-release ]; then
     echo "Step 2: Updating package lists..."
     apk update >/dev/null 2>>"$LOG_FILE"
 
-    ALPINE_PKGS="audit bash busybox-extras ca-certificates coreutils curl git gnupg htop ip6tables iptables lsof lynis nano net-tools nmap openssh openssl passwd pigz python3 rkhunter rsyslog sudo sysstat tcpdump unzip vim wget zstd"
+    ALPINE_PKGS="audit bash busybox-extras ca-certificates coreutils curl git gnupg htop ip6tables iptables lsof lynis nano net-tools nmap nmap-scripts openssh openssl passwd pigz python3 rkhunter rsyslog sudo sysstat tcpdump unzip vim wget zstd"
 
     echo "Step 3: Installing packages..."
     # apk add is generally non-interactive by default for known packages
