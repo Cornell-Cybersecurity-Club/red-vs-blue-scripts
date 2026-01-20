@@ -1,5 +1,5 @@
 #!/bin/sh
-echo "=====RESETTING PASSWORDS====="
+echo "Resetting passwords."
 
 if [ "$(id -u || true)" -ne 0 ]; then
   echo "This script must be run as root."
@@ -29,4 +29,4 @@ done </etc/passwd
 passwd -d root
 passwd -l root
 
-echo "=====PASSWORD RESET COMPLETE====="
+echo "Password reset complete."
