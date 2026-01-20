@@ -356,3 +356,404 @@ At C:\Users\Administrator\Downloads\red-vs-blue-scripts\windows\DSU_GODSWORK\god
     + CategoryInfo          : ObjectNotFound: (W3SVC:String) [Get-Service], ServiceCommandException
     + FullyQualifiedErrorId : NoServiceFoundForGivenName,Microsoft.PowerShell.Commands.GetServiceCommand
  
+Set-DnsServerResponseRateLimiting : No mapping between account names and security IDs was done. 
+At C:\Users\Administrator\Downloads\red-vs-blue-scripts\windows\DSU_GODSWORK\godswork\whoo.ps1:1701 char:5
++     Set-DnsServerResponseRateLimiting -ResetToDefault -Force | Out-Nu ...
++     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (PS_DnsServerResponseRateLimiting:root/Microsoft/...nseRateLimiting) [Set-DnsServerResponseRateLimiting 
+   ], CimException
+    + FullyQualifiedErrorId : HRESULT 0x80070534,Set-DnsServerResponseRateLimiting
+ 
+Set-DnsServerRRL : No mapping between account names and security IDs was done. 
+At C:\Users\Administrator\Downloads\red-vs-blue-scripts\windows\DSU_GODSWORK\godswork\whoo.ps1:1700 char:5
++     Set-DnsServerRRL -Mode Enable -Force | Out-Null
++     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (PS_DnsServerResponseRateLimiting:root/Microsoft/...nseRateLimiting) [Set-DnsServerResponseRateLimiting 
+   ], CimException
+    + FullyQualifiedErrorId : HRESULT 0x80070534,Set-DnsServerResponseRateLimiting
+ 
+Set-SmbServerConfiguration : No mapping between account names and security IDs was done. 
+At C:\Users\Administrator\Downloads\red-vs-blue-scripts\windows\DSU_GODSWORK\godswork\whoo.ps1:1181 char:1
++ Set-SmbServerConfiguration -AuditSmb1Access $true -Force | Out-Null
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (MSFT_SmbServerConfiguration:ROOT/Microsoft/...erConfiguration) [Set-SmbServerConfiguration], CimExcept 
+   ion
+    + FullyQualifiedErrorId : HRESULT 0x80070534,Set-SmbServerConfiguration
+ 
+Set-SmbServerConfiguration : No mapping between account names and security IDs was done. 
+At C:\Users\Administrator\Downloads\red-vs-blue-scripts\windows\DSU_GODSWORK\godswork\whoo.ps1:1151 char:1
++ Set-SmbServerConfiguration -EncryptData $true -Force | Out-Null
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (MSFT_SmbServerConfiguration:ROOT/Microsoft/...erConfiguration) [Set-SmbServerConfiguration], CimExcept 
+   ion
+    + FullyQualifiedErrorId : HRESULT 0x80070534,Set-SmbServerConfiguration
+ 
+Set-SmbServerConfiguration : No mapping between account names and security IDs was done. 
+At C:\Users\Administrator\Downloads\red-vs-blue-scripts\windows\DSU_GODSWORK\godswork\whoo.ps1:1150 char:1
++ Set-SmbServerConfiguration -EnableSMB2Protocol $true -Force | Out-Nul ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (MSFT_SmbServerConfiguration:ROOT/Microsoft/...erConfiguration) [Set-SmbServerConfiguration], CimExcept 
+   ion
+    + FullyQualifiedErrorId : HRESULT 0x80070534,Set-SmbServerConfiguration
+ 
+Get-MpPreference : No mapping between account names and security IDs was done. 
+At C:\Users\Administrator\Downloads\red-vs-blue-scripts\windows\DSU_GODSWORK\godswork\whoo.ps1:1042 char:21
++ ForEach ($ex_ip in (Get-MpPreference).ExclusionIpAddress) {
++                     ~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (MSFT_MpPreference:root\Microsoft\...FT_MpPreference) [Get-MpPreference], CimException
+    + FullyQualifiedErrorId : HRESULT 0x80070534,Get-MpPreference
+ 
+Get-MpPreference : No mapping between account names and security IDs was done. 
+At C:\Users\Administrator\Downloads\red-vs-blue-scripts\windows\DSU_GODSWORK\godswork\whoo.ps1:1039 char:23
++ ForEach ($ex_proc in (Get-MpPreference).ExclusionProcess) {
++                       ~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (MSFT_MpPreference:root\Microsoft\...FT_MpPreference) [Get-MpPreference], CimException
+    + FullyQualifiedErrorId : HRESULT 0x80070534,Get-MpPreference
+ 
+Get-MpPreference : No mapping between account names and security IDs was done. 
+At C:\Users\Administrator\Downloads\red-vs-blue-scripts\windows\DSU_GODSWORK\godswork\whoo.ps1:1036 char:22
++ ForEach ($ex_dir in (Get-MpPreference).ExclusionPath) {
++                      ~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (MSFT_MpPreference:root\Microsoft\...FT_MpPreference) [Get-MpPreference], CimException
+    + FullyQualifiedErrorId : HRESULT 0x80070534,Get-MpPreference
+ 
+Get-MpPreference : No mapping between account names and security IDs was done. 
+At C:\Users\Administrator\Downloads\red-vs-blue-scripts\windows\DSU_GODSWORK\godswork\whoo.ps1:1033 char:28
++ ForEach ($ex_extension in (Get-MpPreference).ExclusionExtension) {
++                            ~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (MSFT_MpPreference:root\Microsoft\...FT_MpPreference) [Get-MpPreference], CimException
+    + FullyQualifiedErrorId : HRESULT 0x80070534,Get-MpPreference
+ 
+Get-MpPreference : No mapping between account names and security IDs was done. 
+At C:\Users\Administrator\Downloads\red-vs-blue-scripts\windows\DSU_GODSWORK\godswork\whoo.ps1:1025 char:26
++     ForEach ($ex_asr in (Get-MpPreference).AttackSurfaceReductionOnly ...
++                          ~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (MSFT_MpPreference:root\Microsoft\...FT_MpPreference) [Get-MpPreference], CimException
+    + FullyQualifiedErrorId : HRESULT 0x80070534,Get-MpPreference
+ 
+Add-MpPreference : No mapping between account names and security IDs was done. 
+At C:\Users\Administrator\Downloads\red-vs-blue-scripts\windows\DSU_GODSWORK\godswork\whoo.ps1:1022 char:5
++     Add-MpPreference -AttackSurfaceReductionRules_Ids E6DB77E5-3DF2-4 ...
++     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (MSFT_MpPreference:root\Microsoft\...FT_MpPreference) [Add-MpPreference], CimException
+    + FullyQualifiedErrorId : HRESULT 0x80070534,Add-MpPreference
+ 
+Add-MpPreference : No mapping between account names and security IDs was done. 
+At C:\Users\Administrator\Downloads\red-vs-blue-scripts\windows\DSU_GODSWORK\godswork\whoo.ps1:1020 char:5
++     Add-MpPreference -AttackSurfaceReductionRules_Ids 7674BA52-37EB-4 ...
++     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (MSFT_MpPreference:root\Microsoft\...FT_MpPreference) [Add-MpPreference], CimException
+    + FullyQualifiedErrorId : HRESULT 0x80070534,Add-MpPreference
+ 
+Add-MpPreference : No mapping between account names and security IDs was done. 
+At C:\Users\Administrator\Downloads\red-vs-blue-scripts\windows\DSU_GODSWORK\godswork\whoo.ps1:1018 char:5
++     Add-MpPreference -AttackSurfaceReductionRules_Ids 26190899-1602-4 ...
++     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (MSFT_MpPreference:root\Microsoft\...FT_MpPreference) [Add-MpPreference], CimException
+    + FullyQualifiedErrorId : HRESULT 0x80070534,Add-MpPreference
+ 
+Add-MpPreference : No mapping between account names and security IDs was done. 
+At C:\Users\Administrator\Downloads\red-vs-blue-scripts\windows\DSU_GODSWORK\godswork\whoo.ps1:1016 char:5
++     Add-MpPreference -AttackSurfaceReductionRules_Ids 9E6C4E1F-7D60-4 ...
++     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (MSFT_MpPreference:root\Microsoft\...FT_MpPreference) [Add-MpPreference], CimException
+    + FullyQualifiedErrorId : HRESULT 0x80070534,Add-MpPreference
+ 
+Add-MpPreference : No mapping between account names and security IDs was done. 
+At C:\Users\Administrator\Downloads\red-vs-blue-scripts\windows\DSU_GODSWORK\godswork\whoo.ps1:1014 char:5
++     Add-MpPreference -AttackSurfaceReductionRules_Ids 01443614-CD74-4 ...
++     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (MSFT_MpPreference:root\Microsoft\...FT_MpPreference) [Add-MpPreference], CimException
+    + FullyQualifiedErrorId : HRESULT 0x80070534,Add-MpPreference
+ 
+Add-MpPreference : No mapping between account names and security IDs was done. 
+At C:\Users\Administrator\Downloads\red-vs-blue-scripts\windows\DSU_GODSWORK\godswork\whoo.ps1:1012 char:5
++     Add-MpPreference -AttackSurfaceReductionRules_Ids C1DB55AB-C21A-4 ...
++     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (MSFT_MpPreference:root\Microsoft\...FT_MpPreference) [Add-MpPreference], CimException
+    + FullyQualifiedErrorId : HRESULT 0x80070534,Add-MpPreference
+ 
+Add-MpPreference : No mapping between account names and security IDs was done. 
+At C:\Users\Administrator\Downloads\red-vs-blue-scripts\windows\DSU_GODSWORK\godswork\whoo.ps1:1010 char:5
++     Add-MpPreference -AttackSurfaceReductionRules_Ids B2B3F03D-6A65-4 ...
++     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (MSFT_MpPreference:root\Microsoft\...FT_MpPreference) [Add-MpPreference], CimException
+    + FullyQualifiedErrorId : HRESULT 0x80070534,Add-MpPreference
+ 
+Add-MpPreference : No mapping between account names and security IDs was done. 
+At C:\Users\Administrator\Downloads\red-vs-blue-scripts\windows\DSU_GODSWORK\godswork\whoo.ps1:1008 char:5
++     Add-MpPreference -AttackSurfaceReductionRules_Ids D1E49AAC-8F56-4 ...
++     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (MSFT_MpPreference:root\Microsoft\...FT_MpPreference) [Add-MpPreference], CimException
+    + FullyQualifiedErrorId : HRESULT 0x80070534,Add-MpPreference
+ 
+Add-MpPreference : No mapping between account names and security IDs was done. 
+At C:\Users\Administrator\Downloads\red-vs-blue-scripts\windows\DSU_GODSWORK\godswork\whoo.ps1:1006 char:5
++     Add-MpPreference -AttackSurfaceReductionRules_Ids 92E97FA1-2EDF-4 ...
++     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (MSFT_MpPreference:root\Microsoft\...FT_MpPreference) [Add-MpPreference], CimException
+    + FullyQualifiedErrorId : HRESULT 0x80070534,Add-MpPreference
+ 
+Add-MpPreference : No mapping between account names and security IDs was done. 
+At C:\Users\Administrator\Downloads\red-vs-blue-scripts\windows\DSU_GODSWORK\godswork\whoo.ps1:1004 char:5
++     Add-MpPreference -AttackSurfaceReductionRules_Ids BE9BA2D9-53EA-4 ...
++     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (MSFT_MpPreference:root\Microsoft\...FT_MpPreference) [Add-MpPreference], CimException
+    + FullyQualifiedErrorId : HRESULT 0x80070534,Add-MpPreference
+ 
+Add-MpPreference : No mapping between account names and security IDs was done. 
+At C:\Users\Administrator\Downloads\red-vs-blue-scripts\windows\DSU_GODSWORK\godswork\whoo.ps1:1002 char:5
++     Add-MpPreference -AttackSurfaceReductionRules_Ids 5BEB7EFE-FD9A-4 ...
++     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (MSFT_MpPreference:root\Microsoft\...FT_MpPreference) [Add-MpPreference], CimException
+    + FullyQualifiedErrorId : HRESULT 0x80070534,Add-MpPreference
+ 
+Add-MpPreference : No mapping between account names and security IDs was done. 
+At C:\Users\Administrator\Downloads\red-vs-blue-scripts\windows\DSU_GODSWORK\godswork\whoo.ps1:1000 char:5
++     Add-MpPreference -AttackSurfaceReductionRules_Ids D3E037E1-3EB8-4 ...
++     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (MSFT_MpPreference:root\Microsoft\...FT_MpPreference) [Add-MpPreference], CimException
+    + FullyQualifiedErrorId : HRESULT 0x80070534,Add-MpPreference
+ 
+Add-MpPreference : No mapping between account names and security IDs was done. 
+At C:\Users\Administrator\Downloads\red-vs-blue-scripts\windows\DSU_GODSWORK\godswork\whoo.ps1:998 char:5
++     Add-MpPreference -AttackSurfaceReductionRules_Ids D4F940AB-401B-4 ...
++     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (MSFT_MpPreference:root\Microsoft\...FT_MpPreference) [Add-MpPreference], CimException
+    + FullyQualifiedErrorId : HRESULT 0x80070534,Add-MpPreference
+ 
+Add-MpPreference : No mapping between account names and security IDs was done. 
+At C:\Users\Administrator\Downloads\red-vs-blue-scripts\windows\DSU_GODSWORK\godswork\whoo.ps1:996 char:5
++     Add-MpPreference -AttackSurfaceReductionRules_Ids 3B576869-A4EC-4 ...
++     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (MSFT_MpPreference:root\Microsoft\...FT_MpPreference) [Add-MpPreference], CimException
+    + FullyQualifiedErrorId : HRESULT 0x80070534,Add-MpPreference
+ 
+Add-MpPreference : No mapping between account names and security IDs was done. 
+At C:\Users\Administrator\Downloads\red-vs-blue-scripts\windows\DSU_GODSWORK\godswork\whoo.ps1:994 char:5
++     Add-MpPreference -AttackSurfaceReductionRules_Ids 75668C1F-73B5-4 ...
++     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (MSFT_MpPreference:root\Microsoft\...FT_MpPreference) [Add-MpPreference], CimException
+    + FullyQualifiedErrorId : HRESULT 0x80070534,Add-MpPreference
+ 
+Set-ProcessMitigation : Failed to import.
+At C:\Users\Administrator\Downloads\red-vs-blue-scripts\windows\DSU_GODSWORK\godswork\whoo.ps1:986 char:5
++     Set-ProcessMitigation -PolicyFilePath (Join-Path -Path $ConfPath  ...
++     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : InvalidOperation: (C:\Users\Admini...eg-settings.xml:String) [Set-ProcessMitigation], InvalidOperationException
+    + FullyQualifiedErrorId : Error importing: -2147024893,Microsoft.Samples.PowerShell.Commands.SetProcessMitigationsCommand
+ 
+Update-MpSignature : No mapping between account names and security IDs was done. 
+At C:\Users\Administrator\Downloads\red-vs-blue-scripts\windows\DSU_GODSWORK\godswork\whoo.ps1:982 char:1
++ Update-MpSignature
++ ~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (MSFT_MpSignature:ROOT\Microsoft\...SFT_MpSignature) [Update-MpSignature], CimException
+    + FullyQualifiedErrorId : HRESULT 0x80070534,Update-MpSignature
+ 
+Get-MpComputerStatus : No mapping between account names and security IDs was done. 
+At C:\Users\Administrator\Downloads\red-vs-blue-scripts\windows\DSU_GODSWORK\godswork\whoo.ps1:949 char:6
++ if(!(Get-MpComputerStatus | Select-Object AntivirusEnabled)) {
++      ~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (MSFT_MpComputerStatus:ROOT\Microsoft\...pComputerStatus) [Get-MpComputerStatus], CimException
+    + FullyQualifiedErrorId : HRESULT 0x80070534,Get-MpComputerStatus
+ 
+Remove-Item : Cannot find path 'C:\Windows\System32\Magnify.exe' because it does not exist.
+At C:\Users\Administrator\Downloads\red-vs-blue-scripts\windows\DSU_GODSWORK\godswork\whoo.ps1:936 char:1
++ Remove-Item C:\Windows\System32\Magnify.exe -Force | Out-Null
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : ObjectNotFound: (C:\Windows\System32\Magnify.exe:String) [Remove-Item], ItemNotFoundException
+    + FullyQualifiedErrorId : PathNotFound,Microsoft.PowerShell.Commands.RemoveItemCommand
+ 
+Remove-Item : Cannot find path 'C:\Windows\System32\Narrator.exe' because it does not exist.
+At C:\Users\Administrator\Downloads\red-vs-blue-scripts\windows\DSU_GODSWORK\godswork\whoo.ps1:932 char:1
++ Remove-Item C:\Windows\System32\Narrator.exe -Force | Out-Null
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : ObjectNotFound: (C:\Windows\System32\Narrator.exe:String) [Remove-Item], ItemNotFoundException
+    + FullyQualifiedErrorId : PathNotFound,Microsoft.PowerShell.Commands.RemoveItemCommand
+ 
+Remove-Item : Cannot find path 'C:\Windows\System32\osk.exe' because it does not exist.
+At C:\Users\Administrator\Downloads\red-vs-blue-scripts\windows\DSU_GODSWORK\godswork\whoo.ps1:928 char:1
++ Remove-Item C:\Windows\System32\osk.exe -Force | Out-Null
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : ObjectNotFound: (C:\Windows\System32\osk.exe:String) [Remove-Item], ItemNotFoundException
+    + FullyQualifiedErrorId : PathNotFound,Microsoft.PowerShell.Commands.RemoveItemCommand
+ 
+Remove-Item : Cannot find path 'C:\Windows\System32\Utilman.exe' because it does not exist.
+At C:\Users\Administrator\Downloads\red-vs-blue-scripts\windows\DSU_GODSWORK\godswork\whoo.ps1:924 char:1
++ Remove-Item C:\Windows\System32\Utilman.exe -Force | Out-Null
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : ObjectNotFound: (C:\Windows\System32\Utilman.exe:String) [Remove-Item], ItemNotFoundException
+    + FullyQualifiedErrorId : PathNotFound,Microsoft.PowerShell.Commands.RemoveItemCommand
+ 
+Remove-Item : Cannot find path 'C:\Windows\System32\sethc.exe' because it does not exist.
+At C:\Users\Administrator\Downloads\red-vs-blue-scripts\windows\DSU_GODSWORK\godswork\whoo.ps1:920 char:1
++ Remove-Item C:\Windows\System32\sethc.exe -Force | Out-Null
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : ObjectNotFound: (C:\Windows\System32\sethc.exe:String) [Remove-Item], ItemNotFoundException
+    + FullyQualifiedErrorId : PathNotFound,Microsoft.PowerShell.Commands.RemoveItemCommand
+ 
+Set-Service : Service MSMQTriggers was not found on computer '.'.
+At C:\Users\Administrator\Downloads\red-vs-blue-scripts\windows\DSU_GODSWORK\godswork\whoo.ps1:577 char:1
++ Set-Service -Name MSMQTriggers -StartupType Disabled -ErrorAction Sil ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : ObjectNotFound: (.:String) [Set-Service], InvalidOperationException
+    + FullyQualifiedErrorId : InvalidOperationException,Microsoft.PowerShell.Commands.SetServiceCommand
+ 
+Stop-Service : Cannot find any service with service name 'MSMQTriggers'.
+At C:\Users\Administrator\Downloads\red-vs-blue-scripts\windows\DSU_GODSWORK\godswork\whoo.ps1:576 char:1
++ Stop-Service -Name MSMQTriggers -Force -ErrorAction SilentlyContinue  ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : ObjectNotFound: (MSMQTriggers:String) [Stop-Service], ServiceCommandException
+    + FullyQualifiedErrorId : NoServiceFoundForGivenName,Microsoft.PowerShell.Commands.StopServiceCommand
+ 
+Set-Service : Service MSMQ was not found on computer '.'.
+At C:\Users\Administrator\Downloads\red-vs-blue-scripts\windows\DSU_GODSWORK\godswork\whoo.ps1:573 char:1
++ Set-Service -Name MSMQ -StartupType Disabled -ErrorAction SilentlyCon ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : ObjectNotFound: (.:String) [Set-Service], InvalidOperationException
+    + FullyQualifiedErrorId : InvalidOperationException,Microsoft.PowerShell.Commands.SetServiceCommand
+ 
+Stop-Service : Cannot find any service with service name 'MSMQ'.
+At C:\Users\Administrator\Downloads\red-vs-blue-scripts\windows\DSU_GODSWORK\godswork\whoo.ps1:572 char:1
++ Stop-Service -Name MSMQ -Force -ErrorAction SilentlyContinue | Out-Nu ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : ObjectNotFound: (MSMQ:String) [Stop-Service], ServiceCommandException
+    + FullyQualifiedErrorId : NoServiceFoundForGivenName,Microsoft.PowerShell.Commands.StopServiceCommand
+ 
+
+reg : ERROR: Access is denied.
+At C:\Users\Administrator\Downloads\red-vs-blue-scripts\windows\DSU_GODSWORK\godswork\whoo.ps1:554 char:1
++ reg add "HKLM\SYSTEM\CurrentControlSet\Services\CLFS\Parameters" /v E ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (ERROR: Access is denied.:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+reg : ERROR: The system was unable to find the specified registry key or value.
+At C:\Users\Administrator\Downloads\red-vs-blue-scripts\windows\DSU_GODSWORK\godswork\whoo.ps1:170 char:1
++ reg delete "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogo ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (ERROR: The syst...y key or value.:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+reg : ERROR: The system was unable to find the specified registry key or value.
+At C:\Users\Administrator\Downloads\red-vs-blue-scripts\windows\DSU_GODSWORK\godswork\whoo.ps1:165 char:1
++ reg delete "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogo ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (ERROR: The syst...y key or value.:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+reg : ERROR: The system was unable to find the specified registry key or value.
+At C:\Users\Administrator\Downloads\red-vs-blue-scripts\windows\DSU_GODSWORK\godswork\whoo.ps1:164 char:1
++ reg delete "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogo ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (ERROR: The syst...y key or value.:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+reg : ERROR: The system was unable to find the specified registry key or value.
+At C:\Users\Administrator\Downloads\red-vs-blue-scripts\windows\DSU_GODSWORK\godswork\whoo.ps1:163 char:1
++ reg delete "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogo ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (ERROR: The syst...y key or value.:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+New-GPLink : The GPO named 'domain-controller-settings' is already linked to a Scope of Management with Path 'OU=Domain 
+Controllers,DC=corp,DC=local'.
+At C:\Users\Administrator\Downloads\red-vs-blue-scripts\windows\DSU_GODSWORK\godswork\whoo.ps1:125 char:5
++     New-GPLink -Name "domain-controller-settings" -Target ("OU=Domain ...
++     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : InvalidArgument: (Microsoft.Group...ewGPLinkCommand:NewGPLinkCommand) [New-GPLink], ArgumentException
+    + FullyQualifiedErrorId : UnableToCreateNewLink,Microsoft.GroupPolicy.Commands.NewGPLinkCommand
+ 
+New-GPLink : The GPO named 'defender-settings' is already linked to a Scope of Management with Path 'DC=corp,DC=local'.
+At C:\Users\Administrator\Downloads\red-vs-blue-scripts\windows\DSU_GODSWORK\godswork\whoo.ps1:124 char:5
++     New-GPLink -Name "defender-settings" -Target $distinguishedName
++     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : InvalidArgument: (Microsoft.Group...ewGPLinkCommand:NewGPLinkCommand) [New-GPLink], ArgumentException
+    + FullyQualifiedErrorId : UnableToCreateNewLink,Microsoft.GroupPolicy.Commands.NewGPLinkCommand
+ 
+New-GPLink : The GPO named 'common-domain-settings' is already linked to a Scope of Management with Path 'DC=corp,DC=local'.
+At C:\Users\Administrator\Downloads\red-vs-blue-scripts\windows\DSU_GODSWORK\godswork\whoo.ps1:123 char:5
++     New-GPLink -Name "common-domain-settings" -Target $distinguishedN ...
++     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : InvalidArgument: (Microsoft.Group...ewGPLinkCommand:NewGPLinkCommand) [New-GPLink], ArgumentException
+    + FullyQualifiedErrorId : UnableToCreateNewLink,Microsoft.GroupPolicy.Commands.NewGPLinkCommand
+ 
+Install-WindowsFeature : No mapping between account names and security IDs was done. 
+At C:\Users\Administrator\Downloads\red-vs-blue-scripts\windows\DSU_GODSWORK\godswork\whoo.ps1:78 char:1
++ Install-WindowsFeature Windows-Defender
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : DeviceError: (Microsoft.Manag...rDetailsHandle):CimException) [Install-WindowsFeature], Exception
+    + FullyQualifiedErrorId : UnSupportedTargetDevice,Microsoft.Windows.ServerManager.Commands.AddWindowsFeatureCommand
+ 
+Uninstall-WindowsFeature : The request to list features available on the specified server failed.
+An unexpected error has occurred. Transaction support within the specified resource manager is not started or was shut down due to an error.  
+Error: 0x80071a91
+
+At C:\Users\Administrator\Downloads\red-vs-blue-scripts\windows\DSU_GODSWORK\godswork\whoo.ps1:77 char:1
++ Uninstall-WindowsFeature Windows-Defender
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : InvalidResult: (@{Vhd=; Credent...Name=localhost}:PSObject) [Uninstall-WindowsFeature], DeploymentProviderException
+    + FullyQualifiedErrorId : ProcessEnumeration_SaveRepository_Failed,Microsoft.Windows.ServerManager.Commands.RemoveWindowsFeatureCommand
+Remove-Item : Cannot find path 'WSMan:\localhost\Listener' because it does not exist.
+At C:\Users\Administrator\Downloads\red-vs-blue-scripts\windows\DSU_GODSWORK\godswork\whoo.ps1:55 char:1
++ Remove-Item -Path WSMan:\Localhost\listener\listener* -Recurse
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : ObjectNotFound: (WSMan:\localhost\Listener:String) [Remove-Item], ItemNotFoundException
+    + FullyQualifiedErrorId : PathNotFound,Microsoft.PowerShell.Commands.RemoveItemCommand
+ 
+Start-WSManServiceD15A7957836142a18627D7E1D342DD82 : The input object cannot be bound to any parameters for the command either because the command 
+does not take pipeline input or the input and its properties do not match any of the parameters that take pipeline input.
+At line:28 char:6
++ $_ | Start-WSManServiceD15A7957836142a18627D7E1D342DD82 -force $args[ ...
++      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : InvalidArgument: (:) [Start-WSManServ...627D7E1D342DD82], ParameterBindingException
+    + FullyQualifiedErrorId : InputObjectNotBound,Start-WSManServiceD15A7957836142a18627D7E1D342DD82
+ 
+Start-WSManServiceD15A7957836142a18627D7E1D342DD82 : The input object cannot be bound to any parameters for the command either because the command 
+does not take pipeline input or the input and its properties do not match any of the parameters that take pipeline input.
+At line:28 char:6
++ $_ | Start-WSManServiceD15A7957836142a18627D7E1D342DD82 -force $args[ ...
++      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : InvalidArgument: (:) [Start-WSManServ...627D7E1D342DD82], ParameterBindingException
+    + FullyQualifiedErrorId : InputObjectNotBound,Start-WSManServiceD15A7957836142a18627D7E1D342DD82
+ 
+Get-ChildItem : The client cannot connect to the destination specified in the request. Verify that the service on the destination is running and is 
+accepting requests. Consult the logs and documentation for the WS-Management service running on the destination, most commonly IIS or WinRM. If the 
+destination is the WinRM service, run the following command on the destination to analyze and configure the WinRM service: "winrm quickconfig". 
+At line:98 char:3
++   Get-ChildItem 'WSMan:\localhost\Plugin\' -Force:$force | ? { $_.nam ...
++   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (:) [Get-ChildItem], InvalidOperationException
+    + FullyQualifiedErrorId : System.InvalidOperationException,Microsoft.PowerShell.Commands.GetChildItemCommand
+ 
+Restart : The term 'Restart' is not recognized as the name of a cmdlet, function, script file, or operable program. Check the spelling of the name, 
+or if a path was included, verify that the path is correct and try again.
+At line:22 char:13
++             Restart  WinRM -Force -Confirm:$false
++             ~~~~~~~
+    + CategoryInfo          : ObjectNotFound: (Restart:String) [], CommandNotFoundException
+    + FullyQualifiedErrorId : CommandNotFoundException
+ 
+Restart : The term 'Restart' is not recognized as the name of a cmdlet, function, script file, or operable program. Check the spelling of the name, 
+or if a path was included, verify that the path is correct and try again.
+At line:22 char:13
++             Restart  WinRM -Force -Confirm:$false
++             ~~~~~~~
+    + CategoryInfo          : ObjectNotFound: (Restart:String) [], CommandNotFoundException
+    + FullyQualifiedErrorId : CommandNotFoundException
+ 
+Restart-Service : Service 'Windows Remote Management (WS-Management) (winrm)' cannot be started due to the following error: Cannot start service 
+winrm on computer '.'.
+At line:30 char:17
++                 Restart-Service winrm -force -confirm:$false
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : OpenError: (System.ServiceProcess.ServiceController:ServiceController) [Restart-Service], ServiceCommandException
+    + FullyQualifiedErrorId : CouldNotStartService,Microsoft.PowerShell.Commands.RestartServiceCommand
+ 
+Get-Service : Cannot find any service with service name 'W3SVC'.
+At C:\Users\Administrator\Downloads\red-vs-blue-scripts\windows\DSU_GODSWORK\godswork\whoo.ps1:20 char:5
++ if (Get-Service -Name W3SVC 2>$null) {
++     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : ObjectNotFound: (W3SVC:String) [Get-Service], ServiceCommandException
+    + FullyQualifiedErrorId : NoServiceFoundForGivenName,Microsoft.PowerShell.Commands.GetServiceCommand
+ 
