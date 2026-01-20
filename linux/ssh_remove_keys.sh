@@ -50,4 +50,6 @@ echo "Step 4: Removing known_hosts files..."
   done
 } 2>>"$LOG_FILE"
 
+ssh-keygen -A
+
 echo "Finished SSH cleanup."
