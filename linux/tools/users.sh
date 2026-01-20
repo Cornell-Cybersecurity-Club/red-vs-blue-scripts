@@ -36,6 +36,93 @@ cat configs/bashrc >/etc/bash/bashrc
 cat configs/etc_profile >/etc/profile
 cat configs/.bashrc >/root/.bashrc
 
+# --- 1. Helper Functions for portability ---
+
+# Check if a group exists (Support getent or /etc/group)
+group_exists() {
+  if command -v getent >/dev/null 2>&1; then
+    getent group "$1" >/dev/null 2>&1
+  else
+    grep -q "^$1:" /etc/group
+  fi
+}
+
+# Check if a GID is currently in use
+gid_is_taken() {
+  if command -v getent >/dev/null 2>&1; then
+    getent group "$1" >/dev/null 2>&1
+  else
+    # Extract 3rd field (GID) and match exact line
+    cut -d: -f3 /etc/group | grep -q "^$1$"
+  fi
+}
+
+# --- 2. Detect Creation Tool ---
+if command -v groupadd >/dev/null 2>&1; then
+  # Standard Linux (RHEL, Debian, CentOS, etc.)
+  CMD="groupadd"
+  FLAG="-g"
+elif command -v addgroup >/dev/null 2>&1; then
+  # Alpine / BusyBox
+  CMD="addgroup"
+  FLAG="-g"
+else
+  echo "Error: Could not find 'groupadd' or 'addgroup'." >&2
+  exit 1
+fi
+
+# --- 3. Main Logic ---
+
+ensure_group() {
+  GRP_NAME="$1"
+  PREFERRED_GID="$2"
+
+  if group_exists "$GRP_NAME"; then
+    echo "Group '$GRP_NAME' already exists."
+    return 0
+  fi
+
+  echo "Creating group '$GRP_NAME'..."
+
+  # Check if we should try to force the GID
+  if [ -n "$PREFERRED_GID" ]; then
+    if ! gid_is_taken "$PREFERRED_GID"; then
+      # GID is free, use it
+      $CMD $FLAG "$PREFERRED_GID" "$GRP_NAME"
+    else
+      echo "  Warning: Standard GID $PREFERRED_GID is already taken."
+      echo "  Creating '$GRP_NAME' with next available system GID."
+      $CMD "$GRP_NAME"
+    fi
+  else
+    # No specific GID requested
+    $CMD "$GRP_NAME"
+  fi
+
+  # Validation
+  if group_exists "$GRP_NAME"; then
+    echo "  Successfully created '$GRP_NAME'."
+  else
+    echo "  Error: Failed to create group." >&2
+  fi
+}
+
+echo "Checking system groups..."
+
+# 1. ADM (Standard GID 4)
+# Used for system monitoring/log reading.
+ensure_group "adm" 4
+
+# 2. WHEEL (Standard GID 10)
+# Used for Administration on RHEL/BSD/Alpine.
+ensure_group "wheel" 10
+
+# 3. SUDO (Standard GID 27)
+# Used for Administration on Debian/Ubuntu.
+ensure_group "sudo" 27
+
+echo "Finished group verification."
+
 progress "Creating standard user accounts..."
 while IFS= read -r user; do
   [ -n "$user" ] || continue
