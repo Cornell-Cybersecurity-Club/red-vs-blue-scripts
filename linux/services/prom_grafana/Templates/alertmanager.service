@@ -1,0 +1,16 @@
+# Create a systemd service file at /etc/systemd/system/alert_manager.service
+
+[Unit]
+Description=Alertmanager
+Wants=network-online.target
+After=network.target
+
+[Service]
+User=alertmanager
+Group=alertmanager
+Execstart=/usr/local/bin/alertmanager --config.file=/etc/alertmanager/alertmanager.yml --storage.path=/var/lib/alertmanager
+Restart=always
+RestartSec=3
+
+[Install]
+WantedBy=multi-user.target

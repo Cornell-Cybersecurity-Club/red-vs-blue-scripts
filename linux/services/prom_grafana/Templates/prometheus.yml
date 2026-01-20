@@ -1,0 +1,107 @@
+# validate with `promtool check config /etc/prometheus/prometheus.yml` before restarting with `sudo systemctl restart prometheus`
+
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+
+rule_files:
+  - "/etc/prometheus/rules/[file_name].yml"
+
+alerting:
+  alertmanagers:
+  - static_configs:
+    - targets: ["127.0.0.1:9093"]
+      labels:
+        host: "p01"
+        role: "monitoring"
+
+scrape_configs:
+  # Monitoring the main box
+  - job_name: 'prometheus'
+    static_configs:
+      - targets: 
+          - "localhost:9090"
+        labels:
+          host: "p01"
+          role: "prometheus"
+
+  # Monitoring for linux boxes
+  - job_name: 'linux_nodes'
+    static_configs:
+      - targets:
+          - '10.0.X.A:9100' # Falco (Rocky)
+        labels:
+          host: "falco01"
+          role: "runtime-security"
+      - targets:
+          - '10.0.X.B:9100' # Teleport (Rocky)
+        labels:
+          host: "teleport01"
+          role: "access-control"
+      - targets:
+          - '10.0.X.C:9100' # Wordpress (Ubuntu)
+        labels:
+          host: "wp01"
+          role: "wordpress"
+      - targets:
+          - '10.0.X.D:9100' # Management (Ubuntu)
+        labels:
+          host: "management"
+          role: "linux-management"
+
+  # Monitoring for windows boxes
+  - job_name: 'windows_nodes'
+    static_configs:
+      - targets:
+          - '10.0.X.F:9182' # AD
+        labels:
+          host: "ad01"
+          role: "active-directory"
+      - targets:
+          - '10.0.X.G:9182' # Federation Server
+        labels:
+          host: "fed01"
+          role: "federation-server"
+        
+
+  # Monitoring pfsense via snmp
+  - job_name: 'pfsense_snmp'
+    static_configs:
+      - targets:
+        - '10.0.X.E'  # pfSense IP
+        labels:
+          host: "pfsense"
+          role: "firewall"
+    metrics_path: /snmp
+    params:
+      auth: [public_v2]
+      module: [if_mib]
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: __param_target
+      - source_labels: [__param_target]
+        target_label: instance
+      - target_label: __address__
+        replacement: 127.0.0.1:9116  # The local SNMP exporter port (this machine)
+
+  # Monitoring the snmp_exporter itself
+  - job_name: 'snmp_exporter'
+    static_configs:
+      - targets:
+        - "127.0.0.1:9116"
+
+  # Wordpress HTTP Check (Blackbox)
+  - job_name: 'wordpress_http'
+    metrics_path: /probe
+    params:
+      module: [http_2xx]
+    static_configs:
+      - targets:
+        - 'http://10.0.X.C' # Wordpress URL/IP
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: __param_target
+      - source_labels: [__param_target]
+        target_label: instance
+      - target_label: __address__s
+        replacement: 127.0.0.1:9115  # The local Blackbox exporter port
