@@ -37,7 +37,7 @@ if [ -f /etc/os-release ]; then
     export DEBIAN_FRONTEND=noninteractive
     apt-get update -qq >/dev/null 2>>"$LOG_FILE"
 
-    DEB_PKGS="apparmor apparmor-utils apt audispd-plugins auditd bash busybox chrootkit coreutils curl dash debsums git gnupg htop iotop iptables iptables-persistent libc6 libpam-modules libpam-pwquality libpam-tmpdir lsof lynis nano needrestart net-tools nmap openssh-server openssl passwd pigz polkitd rkhunter rsyslog sudo tcpdump unhide unzip util-linux vim wget zstd"
+    DEB_PKGS="apparmor apparmor-utils apt audispd-plugins auditd bash busybox ca-certificates chrootkit coreutils curl dash debsums git gnupg htop iotop iptables iptables-persistent libc6 libpam-modules libpam-pwquality libpam-tmpdir lsof lynis nano needrestart net-tools nmap openssh-server openssl passwd pigz polkitd rkhunter rsyslog sudo sysstat tcpdump unhide unzip util-linux vim wget zstd"
 
     echo "Step 3: Installing packages..."
     # -y: Answer yes
@@ -62,7 +62,7 @@ if [ -f /etc/os-release ]; then
 
     $PKG_MGR makecache >/dev/null 2>>"$LOG_FILE"
 
-    RHEL_PKGS="audit audit-libs bash busybox chrootkit coreutils curl dash dpkg git glibc gnupg2 htop iptables iptables-services libpwquality lsof lynis nano net-tools nmap openssh-server openssl passwd pigz policycoreutils python3 rkhunter rsyslog setools-console sudo tcpdump unhide unzip util-linux vim wget yum-utils zstd"
+    RHEL_PKGS="audit audit-libs bash busybox ca-certificates chrootkit coreutils curl dash dpkg git glibc gnupg2 htop iptables iptables-services libpwquality lsof lynis nano net-tools nmap openssh-server openssl passwd pigz policycoreutils python3 rkhunter rsyslog setools-console sudo sysstat tcpdump unhide unzip util-linux vim wget yum-utils zstd"
 
     echo "Step 3: Installing packages..."
     # -y: Answer yes automatically
@@ -74,7 +74,7 @@ if [ -f /etc/os-release ]; then
     echo "Step 2: Updating package lists..."
     apk update >/dev/null 2>>"$LOG_FILE"
 
-    ALPINE_PKGS="audit bash busybox-extras coreutils curl git gnupg htop ip6tables iptables lsof lynis nano net-tools nmap openssh openssl passwd pigz python3 rkhunter rsyslog sudo tcpdump unzip vim wget zstd"
+    ALPINE_PKGS="audit bash busybox-extras ca-certificates coreutils curl git gnupg htop ip6tables iptables lsof lynis nano net-tools nmap openssh openssl passwd pigz python3 rkhunter rsyslog sudo sysstat tcpdump unzip vim wget zstd"
 
     echo "Step 3: Installing packages..."
     # apk add is generally non-interactive by default for known packages
@@ -87,7 +87,7 @@ if [ -f /etc/os-release ]; then
     # --non-interactive: Don't ask questions
     zypper --non-interactive refresh >/dev/null 2>>"$LOG_FILE"
 
-    SUSE_PKGS="audit bash busybox coreutils curl git gpg2 htop iptables lsof lynis nano net-tools nmap openssh openssl pam passwd pigz rkhunter rsyslog sudo tcpdump unzip util-linux vim wget zstd"
+    SUSE_PKGS="audit bash busybox ca-certificates coreutils curl git gpg2 htop iptables lsof lynis nano net-tools nmap openssh openssl pam passwd pigz rkhunter rsyslog sudo sysstat tcpdump unzip util-linux vim wget zstd"
 
     echo "Step 3: Installing packages..."
     # -n: Non-interactive
@@ -101,7 +101,7 @@ if [ -f /etc/os-release ]; then
     # --noconfirm: Do not ask for any confirmation
     pacman -Sy --noconfirm >/dev/null 2>>"$LOG_FILE"
 
-    ARCH_PKGS="audit bash coreutils curl git gnupg htop iptables lsof lynis nano net-tools nmap openssh openssl pam pigz python rkhunter rsyslog sudo tcpdump unzip util-linux vim wget zstd"
+    ARCH_PKGS="audit bash ca-certificates coreutils curl git gnupg htop iptables lsof lynis nano net-tools nmap openssh openssl pam pigz python rkhunter rsyslog sudo sysstat tcpdump unzip util-linux vim wget zstd"
 
     echo "Step 3: Installing packages..."
     # --noconfirm: Answer yes to all
@@ -111,7 +111,6 @@ if [ -f /etc/os-release ]; then
 
   *)
     echo "Error: Distro not supported."
-    echo "Distro not supported: $ID_MATCH" >>"$LOG_FILE"
     exit 1
     ;;
   esac
