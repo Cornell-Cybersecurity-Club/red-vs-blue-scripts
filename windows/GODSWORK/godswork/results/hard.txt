@@ -757,3 +757,504 @@ At C:\Users\Administrator\Downloads\red-vs-blue-scripts\windows\DSU_GODSWORK\god
     + CategoryInfo          : ObjectNotFound: (W3SVC:String) [Get-Service], ServiceCommandException
     + FullyQualifiedErrorId : NoServiceFoundForGivenName,Microsoft.PowerShell.Commands.GetServiceCommand
  
+Program 'vssadmin.exe' failed to run: Access is deniedAt 
+C:\Users\Administrator\Downloads\red-vs-blue-scripts\windows\GODSWORK\godswork\whoo.ps1:1687 char:5
++     vssadmin.exe delete shadows /all /quiet
++     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~.
+At C:\Users\Administrator\Downloads\red-vs-blue-scripts\windows\GODSWORK\godswork\whoo.ps1:1687 char:5
++     vssadmin.exe delete shadows /all /quiet
++     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : ResourceUnavailable: (:) [], ApplicationFailedException
+    + FullyQualifiedErrorId : NativeCommandFailed
+ 
+Set-ProcessMitigation : Failed to import.
+At C:\Users\Administrator\Downloads\red-vs-blue-scripts\windows\GODSWORK\godswork\whoo.ps1:986 char:5
++     Set-ProcessMitigation -PolicyFilePath (Join-Path -Path $ConfPath  ...
++     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : InvalidOperation: (C:\Users\Admini...eg-settings.xml:String) [Set-ProcessMitigation], In 
+   validOperationException
+    + FullyQualifiedErrorId : Error importing: -2147024893,Microsoft.Samples.PowerShell.Commands.SetProcessMitigations 
+   Command
+ 
+Remove-Item : Cannot find path 'C:\Windows\System32\Magnify.exe' because it does not exist.
+At C:\Users\Administrator\Downloads\red-vs-blue-scripts\windows\GODSWORK\godswork\whoo.ps1:936 char:1
++ Remove-Item C:\Windows\System32\Magnify.exe -Force | Out-Null
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : ObjectNotFound: (C:\Windows\System32\Magnify.exe:String) [Remove-Item], ItemNotFoundExce 
+   ption
+    + FullyQualifiedErrorId : PathNotFound,Microsoft.PowerShell.Commands.RemoveItemCommand
+ 
+Remove-Item : Cannot find path 'C:\Windows\System32\Narrator.exe' because it does not exist.
+At C:\Users\Administrator\Downloads\red-vs-blue-scripts\windows\GODSWORK\godswork\whoo.ps1:932 char:1
++ Remove-Item C:\Windows\System32\Narrator.exe -Force | Out-Null
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : ObjectNotFound: (C:\Windows\System32\Narrator.exe:String) [Remove-Item], ItemNotFoundExc 
+   eption
+    + FullyQualifiedErrorId : PathNotFound,Microsoft.PowerShell.Commands.RemoveItemCommand
+ 
+Remove-Item : Cannot find path 'C:\Windows\System32\osk.exe' because it does not exist.
+At C:\Users\Administrator\Downloads\red-vs-blue-scripts\windows\GODSWORK\godswork\whoo.ps1:928 char:1
++ Remove-Item C:\Windows\System32\osk.exe -Force | Out-Null
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : ObjectNotFound: (C:\Windows\System32\osk.exe:String) [Remove-Item], ItemNotFoundExceptio 
+   n
+    + FullyQualifiedErrorId : PathNotFound,Microsoft.PowerShell.Commands.RemoveItemCommand
+ 
+Remove-Item : Cannot find path 'C:\Windows\System32\Utilman.exe' because it does not exist.
+At C:\Users\Administrator\Downloads\red-vs-blue-scripts\windows\GODSWORK\godswork\whoo.ps1:924 char:1
++ Remove-Item C:\Windows\System32\Utilman.exe -Force | Out-Null
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : ObjectNotFound: (C:\Windows\System32\Utilman.exe:String) [Remove-Item], ItemNotFoundExce 
+   ption
+    + FullyQualifiedErrorId : PathNotFound,Microsoft.PowerShell.Commands.RemoveItemCommand
+ 
+Remove-Item : Cannot find path 'C:\Windows\System32\sethc.exe' because it does not exist.
+At C:\Users\Administrator\Downloads\red-vs-blue-scripts\windows\GODSWORK\godswork\whoo.ps1:920 char:1
++ Remove-Item C:\Windows\System32\sethc.exe -Force | Out-Null
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : ObjectNotFound: (C:\Windows\System32\sethc.exe:String) [Remove-Item], ItemNotFoundExcept 
+   ion
+    + FullyQualifiedErrorId : PathNotFound,Microsoft.PowerShell.Commands.RemoveItemCommand
+ 
+Set-Service : Service MSMQTriggers was not found on computer '.'.
+At C:\Users\Administrator\Downloads\red-vs-blue-scripts\windows\GODSWORK\godswork\whoo.ps1:577 char:1
++ Set-Service -Name MSMQTriggers -StartupType Disabled -ErrorAction Sil ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : ObjectNotFound: (.:String) [Set-Service], InvalidOperationException
+    + FullyQualifiedErrorId : InvalidOperationException,Microsoft.PowerShell.Commands.SetServiceCommand
+ 
+Stop-Service : Cannot find any service with service name 'MSMQTriggers'.
+At C:\Users\Administrator\Downloads\red-vs-blue-scripts\windows\GODSWORK\godswork\whoo.ps1:576 char:1
++ Stop-Service -Name MSMQTriggers -Force -ErrorAction SilentlyContinue  ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : ObjectNotFound: (MSMQTriggers:String) [Stop-Service], ServiceCommandException
+    + FullyQualifiedErrorId : NoServiceFoundForGivenName,Microsoft.PowerShell.Commands.StopServiceCommand
+ 
+Set-Service : Service MSMQ was not found on computer '.'.
+At C:\Users\Administrator\Downloads\red-vs-blue-scripts\windows\GODSWORK\godswork\whoo.ps1:573 char:1
++ Set-Service -Name MSMQ -StartupType Disabled -ErrorAction SilentlyCon ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : ObjectNotFound: (.:String) [Set-Service], InvalidOperationException
+    + FullyQualifiedErrorId : InvalidOperationException,Microsoft.PowerShell.Commands.SetServiceCommand
+ 
+Stop-Service : Cannot find any service with service name 'MSMQ'.
+At C:\Users\Administrator\Downloads\red-vs-blue-scripts\windows\GODSWORK\godswork\whoo.ps1:572 char:1
++ Stop-Service -Name MSMQ -Force -ErrorAction SilentlyContinue | Out-Nu ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : ObjectNotFound: (MSMQ:String) [Stop-Service], ServiceCommandException
+    + FullyQualifiedErrorId : NoServiceFoundForGivenName,Microsoft.PowerShell.Commands.StopServiceCommand
+ 
+
+reg : ERROR: Access is denied.
+At C:\Users\Administrator\Downloads\red-vs-blue-scripts\windows\GODSWORK\godswork\whoo.ps1:554 char:1
++ reg add "HKLM\SYSTEM\CurrentControlSet\Services\CLFS\Parameters" /v E ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (ERROR: Access is denied.:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+reg : ERROR: The system was unable to find the specified registry key or value.
+At C:\Users\Administrator\Downloads\red-vs-blue-scripts\windows\GODSWORK\godswork\whoo.ps1:170 char:1
++ reg delete "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogo ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (ERROR: The syst...y key or value.:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+reg : ERROR: The system was unable to find the specified registry key or value.
+At C:\Users\Administrator\Downloads\red-vs-blue-scripts\windows\GODSWORK\godswork\whoo.ps1:165 char:1
++ reg delete "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogo ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (ERROR: The syst...y key or value.:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+reg : ERROR: The system was unable to find the specified registry key or value.
+At C:\Users\Administrator\Downloads\red-vs-blue-scripts\windows\GODSWORK\godswork\whoo.ps1:164 char:1
++ reg delete "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogo ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (ERROR: The syst...y key or value.:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+reg : ERROR: The system was unable to find the specified registry key or value.
+At C:\Users\Administrator\Downloads\red-vs-blue-scripts\windows\GODSWORK\godswork\whoo.ps1:163 char:1
++ reg delete "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogo ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (ERROR: The syst...y key or value.:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+New-GPLink : The GPO named 'domain-controller-settings' is already linked to a Scope of Management with Path 
+'OU=Domain Controllers,DC=corp,DC=local'.
+At C:\Users\Administrator\Downloads\red-vs-blue-scripts\windows\GODSWORK\godswork\whoo.ps1:125 char:5
++     New-GPLink -Name "domain-controller-settings" -Target ("OU=Domain ...
++     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : InvalidArgument: (Microsoft.Group...ewGPLinkCommand:NewGPLinkCommand) [New-GPLink], Argu 
+   mentException
+    + FullyQualifiedErrorId : UnableToCreateNewLink,Microsoft.GroupPolicy.Commands.NewGPLinkCommand
+ 
+New-GPLink : The GPO named 'defender-settings' is already linked to a Scope of Management with Path 'DC=corp,DC=local'.
+At C:\Users\Administrator\Downloads\red-vs-blue-scripts\windows\GODSWORK\godswork\whoo.ps1:124 char:5
++     New-GPLink -Name "defender-settings" -Target $distinguishedName
++     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : InvalidArgument: (Microsoft.Group...ewGPLinkCommand:NewGPLinkCommand) [New-GPLink], Argu 
+   mentException
+    + FullyQualifiedErrorId : UnableToCreateNewLink,Microsoft.GroupPolicy.Commands.NewGPLinkCommand
+ 
+New-GPLink : The GPO named 'common-domain-settings' is already linked to a Scope of Management with Path 
+'DC=corp,DC=local'.
+At C:\Users\Administrator\Downloads\red-vs-blue-scripts\windows\GODSWORK\godswork\whoo.ps1:123 char:5
++     New-GPLink -Name "common-domain-settings" -Target $distinguishedN ...
++     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : InvalidArgument: (Microsoft.Group...ewGPLinkCommand:NewGPLinkCommand) [New-GPLink], Argu 
+   mentException
+    + FullyQualifiedErrorId : UnableToCreateNewLink,Microsoft.GroupPolicy.Commands.NewGPLinkCommand
+ 
+Uninstall-WindowsFeature : The request to list features available on the specified server failed.
+An unexpected error has occurred. Transaction support within the specified resource manager is not started or was shut 
+down due to an error.  Error: 0x80071a91
+
+At C:\Users\Administrator\Downloads\red-vs-blue-scripts\windows\GODSWORK\godswork\whoo.ps1:77 char:1
++ Uninstall-WindowsFeature Windows-Defender
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : InvalidResult: (@{Vhd=; Credent...Name=localhost}:PSObject) [Uninstall-WindowsFeature],  
+   DeploymentProviderException
+    + FullyQualifiedErrorId : ProcessEnumeration_SaveRepository_Failed,Microsoft.Windows.ServerManager.Commands.Remove 
+   WindowsFeatureCommand
+Get-Service : Cannot find any service with service name 'W3SVC'.
+At C:\Users\Administrator\Downloads\red-vs-blue-scripts\windows\GODSWORK\godswork\whoo.ps1:20 char:5
++ if (Get-Service -Name W3SVC 2>$null) {
++     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : ObjectNotFound: (W3SVC:String) [Get-Service], ServiceCommandException
+    + FullyQualifiedErrorId : NoServiceFoundForGivenName,Microsoft.PowerShell.Commands.GetServiceCommand
+ 
+Program 'vssadmin.exe' failed to run: Access is deniedAt 
+C:\Users\Administrator\Downloads\red-vs-blue-scripts\windows\GODSWORK\godswork\whoo.ps1:1687 char:5
++     vssadmin.exe delete shadows /all /quiet
++     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~.
+At C:\Users\Administrator\Downloads\red-vs-blue-scripts\windows\GODSWORK\godswork\whoo.ps1:1687 char:5
++     vssadmin.exe delete shadows /all /quiet
++     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : ResourceUnavailable: (:) [], ApplicationFailedException
+    + FullyQualifiedErrorId : NativeCommandFailed
+ 
+Set-ProcessMitigation : Failed to import.
+At C:\Users\Administrator\Downloads\red-vs-blue-scripts\windows\GODSWORK\godswork\whoo.ps1:986 char:5
++     Set-ProcessMitigation -PolicyFilePath (Join-Path -Path $ConfPath  ...
++     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : InvalidOperation: (C:\Users\Admini...eg-settings.xml:String) [Set-ProcessMitigation], In 
+   validOperationException
+    + FullyQualifiedErrorId : Error importing: -2147024893,Microsoft.Samples.PowerShell.Commands.SetProcessMitigations 
+   Command
+ 
+Remove-Item : Cannot find path 'C:\Windows\System32\Magnify.exe' because it does not exist.
+At C:\Users\Administrator\Downloads\red-vs-blue-scripts\windows\GODSWORK\godswork\whoo.ps1:936 char:1
++ Remove-Item C:\Windows\System32\Magnify.exe -Force | Out-Null
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : ObjectNotFound: (C:\Windows\System32\Magnify.exe:String) [Remove-Item], ItemNotFoundExce 
+   ption
+    + FullyQualifiedErrorId : PathNotFound,Microsoft.PowerShell.Commands.RemoveItemCommand
+ 
+Remove-Item : Cannot find path 'C:\Windows\System32\Narrator.exe' because it does not exist.
+At C:\Users\Administrator\Downloads\red-vs-blue-scripts\windows\GODSWORK\godswork\whoo.ps1:932 char:1
++ Remove-Item C:\Windows\System32\Narrator.exe -Force | Out-Null
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : ObjectNotFound: (C:\Windows\System32\Narrator.exe:String) [Remove-Item], ItemNotFoundExc 
+   eption
+    + FullyQualifiedErrorId : PathNotFound,Microsoft.PowerShell.Commands.RemoveItemCommand
+ 
+Remove-Item : Cannot find path 'C:\Windows\System32\osk.exe' because it does not exist.
+At C:\Users\Administrator\Downloads\red-vs-blue-scripts\windows\GODSWORK\godswork\whoo.ps1:928 char:1
++ Remove-Item C:\Windows\System32\osk.exe -Force | Out-Null
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : ObjectNotFound: (C:\Windows\System32\osk.exe:String) [Remove-Item], ItemNotFoundExceptio 
+   n
+    + FullyQualifiedErrorId : PathNotFound,Microsoft.PowerShell.Commands.RemoveItemCommand
+ 
+Remove-Item : Cannot find path 'C:\Windows\System32\Utilman.exe' because it does not exist.
+At C:\Users\Administrator\Downloads\red-vs-blue-scripts\windows\GODSWORK\godswork\whoo.ps1:924 char:1
++ Remove-Item C:\Windows\System32\Utilman.exe -Force | Out-Null
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : ObjectNotFound: (C:\Windows\System32\Utilman.exe:String) [Remove-Item], ItemNotFoundExce 
+   ption
+    + FullyQualifiedErrorId : PathNotFound,Microsoft.PowerShell.Commands.RemoveItemCommand
+ 
+Remove-Item : Cannot find path 'C:\Windows\System32\sethc.exe' because it does not exist.
+At C:\Users\Administrator\Downloads\red-vs-blue-scripts\windows\GODSWORK\godswork\whoo.ps1:920 char:1
++ Remove-Item C:\Windows\System32\sethc.exe -Force | Out-Null
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : ObjectNotFound: (C:\Windows\System32\sethc.exe:String) [Remove-Item], ItemNotFoundExcept 
+   ion
+    + FullyQualifiedErrorId : PathNotFound,Microsoft.PowerShell.Commands.RemoveItemCommand
+ 
+Set-Service : Service MSMQTriggers was not found on computer '.'.
+At C:\Users\Administrator\Downloads\red-vs-blue-scripts\windows\GODSWORK\godswork\whoo.ps1:577 char:1
++ Set-Service -Name MSMQTriggers -StartupType Disabled -ErrorAction Sil ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : ObjectNotFound: (.:String) [Set-Service], InvalidOperationException
+    + FullyQualifiedErrorId : InvalidOperationException,Microsoft.PowerShell.Commands.SetServiceCommand
+ 
+Stop-Service : Cannot find any service with service name 'MSMQTriggers'.
+At C:\Users\Administrator\Downloads\red-vs-blue-scripts\windows\GODSWORK\godswork\whoo.ps1:576 char:1
++ Stop-Service -Name MSMQTriggers -Force -ErrorAction SilentlyContinue  ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : ObjectNotFound: (MSMQTriggers:String) [Stop-Service], ServiceCommandException
+    + FullyQualifiedErrorId : NoServiceFoundForGivenName,Microsoft.PowerShell.Commands.StopServiceCommand
+ 
+Set-Service : Service MSMQ was not found on computer '.'.
+At C:\Users\Administrator\Downloads\red-vs-blue-scripts\windows\GODSWORK\godswork\whoo.ps1:573 char:1
++ Set-Service -Name MSMQ -StartupType Disabled -ErrorAction SilentlyCon ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : ObjectNotFound: (.:String) [Set-Service], InvalidOperationException
+    + FullyQualifiedErrorId : InvalidOperationException,Microsoft.PowerShell.Commands.SetServiceCommand
+ 
+Stop-Service : Cannot find any service with service name 'MSMQ'.
+At C:\Users\Administrator\Downloads\red-vs-blue-scripts\windows\GODSWORK\godswork\whoo.ps1:572 char:1
++ Stop-Service -Name MSMQ -Force -ErrorAction SilentlyContinue | Out-Nu ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : ObjectNotFound: (MSMQ:String) [Stop-Service], ServiceCommandException
+    + FullyQualifiedErrorId : NoServiceFoundForGivenName,Microsoft.PowerShell.Commands.StopServiceCommand
+ 
+
+reg : ERROR: Access is denied.
+At C:\Users\Administrator\Downloads\red-vs-blue-scripts\windows\GODSWORK\godswork\whoo.ps1:554 char:1
++ reg add "HKLM\SYSTEM\CurrentControlSet\Services\CLFS\Parameters" /v E ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (ERROR: Access is denied.:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+reg : ERROR: The system was unable to find the specified registry key or value.
+At C:\Users\Administrator\Downloads\red-vs-blue-scripts\windows\GODSWORK\godswork\whoo.ps1:170 char:1
++ reg delete "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogo ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (ERROR: The syst...y key or value.:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+reg : ERROR: The system was unable to find the specified registry key or value.
+At C:\Users\Administrator\Downloads\red-vs-blue-scripts\windows\GODSWORK\godswork\whoo.ps1:165 char:1
++ reg delete "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogo ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (ERROR: The syst...y key or value.:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+reg : ERROR: The system was unable to find the specified registry key or value.
+At C:\Users\Administrator\Downloads\red-vs-blue-scripts\windows\GODSWORK\godswork\whoo.ps1:164 char:1
++ reg delete "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogo ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (ERROR: The syst...y key or value.:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+reg : ERROR: The system was unable to find the specified registry key or value.
+At C:\Users\Administrator\Downloads\red-vs-blue-scripts\windows\GODSWORK\godswork\whoo.ps1:163 char:1
++ reg delete "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogo ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (ERROR: The syst...y key or value.:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+New-GPLink : The GPO named 'domain-controller-settings' is already linked to a Scope of Management with Path 
+'OU=Domain Controllers,DC=corp,DC=local'.
+At C:\Users\Administrator\Downloads\red-vs-blue-scripts\windows\GODSWORK\godswork\whoo.ps1:125 char:5
++     New-GPLink -Name "domain-controller-settings" -Target ("OU=Domain ...
++     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : InvalidArgument: (Microsoft.Group...ewGPLinkCommand:NewGPLinkCommand) [New-GPLink], Argu 
+   mentException
+    + FullyQualifiedErrorId : UnableToCreateNewLink,Microsoft.GroupPolicy.Commands.NewGPLinkCommand
+ 
+New-GPLink : The GPO named 'defender-settings' is already linked to a Scope of Management with Path 'DC=corp,DC=local'.
+At C:\Users\Administrator\Downloads\red-vs-blue-scripts\windows\GODSWORK\godswork\whoo.ps1:124 char:5
++     New-GPLink -Name "defender-settings" -Target $distinguishedName
++     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : InvalidArgument: (Microsoft.Group...ewGPLinkCommand:NewGPLinkCommand) [New-GPLink], Argu 
+   mentException
+    + FullyQualifiedErrorId : UnableToCreateNewLink,Microsoft.GroupPolicy.Commands.NewGPLinkCommand
+ 
+New-GPLink : The GPO named 'common-domain-settings' is already linked to a Scope of Management with Path 
+'DC=corp,DC=local'.
+At C:\Users\Administrator\Downloads\red-vs-blue-scripts\windows\GODSWORK\godswork\whoo.ps1:123 char:5
++     New-GPLink -Name "common-domain-settings" -Target $distinguishedN ...
++     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : InvalidArgument: (Microsoft.Group...ewGPLinkCommand:NewGPLinkCommand) [New-GPLink], Argu 
+   mentException
+    + FullyQualifiedErrorId : UnableToCreateNewLink,Microsoft.GroupPolicy.Commands.NewGPLinkCommand
+ 
+Uninstall-WindowsFeature : The request to list features available on the specified server failed.
+An unexpected error has occurred. Transaction support within the specified resource manager is not started or was shut 
+down due to an error.  Error: 0x80071a91
+
+At C:\Users\Administrator\Downloads\red-vs-blue-scripts\windows\GODSWORK\godswork\whoo.ps1:77 char:1
++ Uninstall-WindowsFeature Windows-Defender
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : InvalidResult: (@{Vhd=; Credent...Name=localhost}:PSObject) [Uninstall-WindowsFeature],  
+   DeploymentProviderException
+    + FullyQualifiedErrorId : ProcessEnumeration_SaveRepository_Failed,Microsoft.Windows.ServerManager.Commands.Remove 
+   WindowsFeatureCommand
+Get-Service : Cannot find any service with service name 'W3SVC'.
+At C:\Users\Administrator\Downloads\red-vs-blue-scripts\windows\GODSWORK\godswork\whoo.ps1:20 char:5
++ if (Get-Service -Name W3SVC 2>$null) {
++     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : ObjectNotFound: (W3SVC:String) [Get-Service], ServiceCommandException
+    + FullyQualifiedErrorId : NoServiceFoundForGivenName,Microsoft.PowerShell.Commands.GetServiceCommand
+ 
+Program 'vssadmin.exe' failed to run: Access is deniedAt 
+C:\Users\Administrator\Downloads\red-vs-blue-scripts\windows\GODSWORK\godswork\whoo.ps1:1687 char:5
++     vssadmin.exe delete shadows /all /quiet
++     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~.
+At C:\Users\Administrator\Downloads\red-vs-blue-scripts\windows\GODSWORK\godswork\whoo.ps1:1687 char:5
++     vssadmin.exe delete shadows /all /quiet
++     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : ResourceUnavailable: (:) [], ApplicationFailedException
+    + FullyQualifiedErrorId : NativeCommandFailed
+ 
+Set-ProcessMitigation : Failed to import.
+At C:\Users\Administrator\Downloads\red-vs-blue-scripts\windows\GODSWORK\godswork\whoo.ps1:986 char:5
++     Set-ProcessMitigation -PolicyFilePath (Join-Path -Path $ConfPath  ...
++     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : InvalidOperation: (C:\Users\Admini...eg-settings.xml:String) [Set-ProcessMitigation], In 
+   validOperationException
+    + FullyQualifiedErrorId : Error importing: -2147024893,Microsoft.Samples.PowerShell.Commands.SetProcessMitigations 
+   Command
+ 
+Remove-Item : Cannot find path 'C:\Windows\System32\Magnify.exe' because it does not exist.
+At C:\Users\Administrator\Downloads\red-vs-blue-scripts\windows\GODSWORK\godswork\whoo.ps1:936 char:1
++ Remove-Item C:\Windows\System32\Magnify.exe -Force | Out-Null
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : ObjectNotFound: (C:\Windows\System32\Magnify.exe:String) [Remove-Item], ItemNotFoundExce 
+   ption
+    + FullyQualifiedErrorId : PathNotFound,Microsoft.PowerShell.Commands.RemoveItemCommand
+ 
+Remove-Item : Cannot find path 'C:\Windows\System32\Narrator.exe' because it does not exist.
+At C:\Users\Administrator\Downloads\red-vs-blue-scripts\windows\GODSWORK\godswork\whoo.ps1:932 char:1
++ Remove-Item C:\Windows\System32\Narrator.exe -Force | Out-Null
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : ObjectNotFound: (C:\Windows\System32\Narrator.exe:String) [Remove-Item], ItemNotFoundExc 
+   eption
+    + FullyQualifiedErrorId : PathNotFound,Microsoft.PowerShell.Commands.RemoveItemCommand
+ 
+Remove-Item : Cannot find path 'C:\Windows\System32\osk.exe' because it does not exist.
+At C:\Users\Administrator\Downloads\red-vs-blue-scripts\windows\GODSWORK\godswork\whoo.ps1:928 char:1
++ Remove-Item C:\Windows\System32\osk.exe -Force | Out-Null
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : ObjectNotFound: (C:\Windows\System32\osk.exe:String) [Remove-Item], ItemNotFoundExceptio 
+   n
+    + FullyQualifiedErrorId : PathNotFound,Microsoft.PowerShell.Commands.RemoveItemCommand
+ 
+Remove-Item : Cannot find path 'C:\Windows\System32\Utilman.exe' because it does not exist.
+At C:\Users\Administrator\Downloads\red-vs-blue-scripts\windows\GODSWORK\godswork\whoo.ps1:924 char:1
++ Remove-Item C:\Windows\System32\Utilman.exe -Force | Out-Null
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : ObjectNotFound: (C:\Windows\System32\Utilman.exe:String) [Remove-Item], ItemNotFoundExce 
+   ption
+    + FullyQualifiedErrorId : PathNotFound,Microsoft.PowerShell.Commands.RemoveItemCommand
+ 
+Remove-Item : Cannot find path 'C:\Windows\System32\sethc.exe' because it does not exist.
+At C:\Users\Administrator\Downloads\red-vs-blue-scripts\windows\GODSWORK\godswork\whoo.ps1:920 char:1
++ Remove-Item C:\Windows\System32\sethc.exe -Force | Out-Null
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : ObjectNotFound: (C:\Windows\System32\sethc.exe:String) [Remove-Item], ItemNotFoundExcept 
+   ion
+    + FullyQualifiedErrorId : PathNotFound,Microsoft.PowerShell.Commands.RemoveItemCommand
+ 
+Set-Service : Service MSMQTriggers was not found on computer '.'.
+At C:\Users\Administrator\Downloads\red-vs-blue-scripts\windows\GODSWORK\godswork\whoo.ps1:577 char:1
++ Set-Service -Name MSMQTriggers -StartupType Disabled -ErrorAction Sil ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : ObjectNotFound: (.:String) [Set-Service], InvalidOperationException
+    + FullyQualifiedErrorId : InvalidOperationException,Microsoft.PowerShell.Commands.SetServiceCommand
+ 
+Stop-Service : Cannot find any service with service name 'MSMQTriggers'.
+At C:\Users\Administrator\Downloads\red-vs-blue-scripts\windows\GODSWORK\godswork\whoo.ps1:576 char:1
++ Stop-Service -Name MSMQTriggers -Force -ErrorAction SilentlyContinue  ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : ObjectNotFound: (MSMQTriggers:String) [Stop-Service], ServiceCommandException
+    + FullyQualifiedErrorId : NoServiceFoundForGivenName,Microsoft.PowerShell.Commands.StopServiceCommand
+ 
+Set-Service : Service MSMQ was not found on computer '.'.
+At C:\Users\Administrator\Downloads\red-vs-blue-scripts\windows\GODSWORK\godswork\whoo.ps1:573 char:1
++ Set-Service -Name MSMQ -StartupType Disabled -ErrorAction SilentlyCon ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : ObjectNotFound: (.:String) [Set-Service], InvalidOperationException
+    + FullyQualifiedErrorId : InvalidOperationException,Microsoft.PowerShell.Commands.SetServiceCommand
+ 
+Stop-Service : Cannot find any service with service name 'MSMQ'.
+At C:\Users\Administrator\Downloads\red-vs-blue-scripts\windows\GODSWORK\godswork\whoo.ps1:572 char:1
++ Stop-Service -Name MSMQ -Force -ErrorAction SilentlyContinue | Out-Nu ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : ObjectNotFound: (MSMQ:String) [Stop-Service], ServiceCommandException
+    + FullyQualifiedErrorId : NoServiceFoundForGivenName,Microsoft.PowerShell.Commands.StopServiceCommand
+ 
+
+reg : ERROR: Access is denied.
+At C:\Users\Administrator\Downloads\red-vs-blue-scripts\windows\GODSWORK\godswork\whoo.ps1:554 char:1
++ reg add "HKLM\SYSTEM\CurrentControlSet\Services\CLFS\Parameters" /v E ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (ERROR: Access is denied.:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+reg : ERROR: The system was unable to find the specified registry key or value.
+At C:\Users\Administrator\Downloads\red-vs-blue-scripts\windows\GODSWORK\godswork\whoo.ps1:170 char:1
++ reg delete "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogo ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (ERROR: The syst...y key or value.:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+reg : ERROR: The system was unable to find the specified registry key or value.
+At C:\Users\Administrator\Downloads\red-vs-blue-scripts\windows\GODSWORK\godswork\whoo.ps1:165 char:1
++ reg delete "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogo ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (ERROR: The syst...y key or value.:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+reg : ERROR: The system was unable to find the specified registry key or value.
+At C:\Users\Administrator\Downloads\red-vs-blue-scripts\windows\GODSWORK\godswork\whoo.ps1:164 char:1
++ reg delete "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogo ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (ERROR: The syst...y key or value.:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+reg : ERROR: The system was unable to find the specified registry key or value.
+At C:\Users\Administrator\Downloads\red-vs-blue-scripts\windows\GODSWORK\godswork\whoo.ps1:163 char:1
++ reg delete "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogo ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (ERROR: The syst...y key or value.:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+New-GPLink : The GPO named 'domain-controller-settings' is already linked to a Scope of Management with Path 
+'OU=Domain Controllers,DC=corp,DC=local'.
+At C:\Users\Administrator\Downloads\red-vs-blue-scripts\windows\GODSWORK\godswork\whoo.ps1:125 char:5
++     New-GPLink -Name "domain-controller-settings" -Target ("OU=Domain ...
++     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : InvalidArgument: (Microsoft.Group...ewGPLinkCommand:NewGPLinkCommand) [New-GPLink], Argu 
+   mentException
+    + FullyQualifiedErrorId : UnableToCreateNewLink,Microsoft.GroupPolicy.Commands.NewGPLinkCommand
+ 
+New-GPLink : The GPO named 'defender-settings' is already linked to a Scope of Management with Path 'DC=corp,DC=local'.
+At C:\Users\Administrator\Downloads\red-vs-blue-scripts\windows\GODSWORK\godswork\whoo.ps1:124 char:5
++     New-GPLink -Name "defender-settings" -Target $distinguishedName
++     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : InvalidArgument: (Microsoft.Group...ewGPLinkCommand:NewGPLinkCommand) [New-GPLink], Argu 
+   mentException
+    + FullyQualifiedErrorId : UnableToCreateNewLink,Microsoft.GroupPolicy.Commands.NewGPLinkCommand
+ 
+New-GPLink : The GPO named 'common-domain-settings' is already linked to a Scope of Management with Path 
+'DC=corp,DC=local'.
+At C:\Users\Administrator\Downloads\red-vs-blue-scripts\windows\GODSWORK\godswork\whoo.ps1:123 char:5
++     New-GPLink -Name "common-domain-settings" -Target $distinguishedN ...
++     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : InvalidArgument: (Microsoft.Group...ewGPLinkCommand:NewGPLinkCommand) [New-GPLink], Argu 
+   mentException
+    + FullyQualifiedErrorId : UnableToCreateNewLink,Microsoft.GroupPolicy.Commands.NewGPLinkCommand
+ 
+Uninstall-WindowsFeature : The request to list features available on the specified server failed.
+An unexpected error has occurred. Transaction support within the specified resource manager is not started or was shut 
+down due to an error.  Error: 0x80071a91
+
+At C:\Users\Administrator\Downloads\red-vs-blue-scripts\windows\GODSWORK\godswork\whoo.ps1:77 char:1
++ Uninstall-WindowsFeature Windows-Defender
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : InvalidResult: (@{Vhd=; Credent...Name=localhost}:PSObject) [Uninstall-WindowsFeature],  
+   DeploymentProviderException
+    + FullyQualifiedErrorId : ProcessEnumeration_SaveRepository_Failed,Microsoft.Windows.ServerManager.Commands.Remove 
+   WindowsFeatureCommand
+Get-Service : Cannot find any service with service name 'W3SVC'.
+At C:\Users\Administrator\Downloads\red-vs-blue-scripts\windows\GODSWORK\godswork\whoo.ps1:20 char:5
++ if (Get-Service -Name W3SVC 2>$null) {
++     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : ObjectNotFound: (W3SVC:String) [Get-Service], ServiceCommandException
+    + FullyQualifiedErrorId : NoServiceFoundForGivenName,Microsoft.PowerShell.Commands.GetServiceCommand
+ 

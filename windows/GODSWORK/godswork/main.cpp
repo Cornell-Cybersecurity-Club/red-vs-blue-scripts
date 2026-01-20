@@ -41,6 +41,9 @@
 
 using namespace std;
 
+// Forward declarations (needed for helpers declared early in this file)
+static std::string WStringToString(const std::wstring& w);
+
 static std::ofstream g_passFile;
 static std::mutex g_passFileMutex;
 
@@ -802,6 +805,9 @@ std::wstring ProcessMachineHarden(const std::wstring& machine, const std::wstrin
     if (wnetRet != NO_ERROR && wnetRet != ERROR_SESSION_CREDENTIAL_CONFLICT) {
         ss << L"[ERROR] WNetAddConnection2 failed for " << uncPath
             << L". Error code: " << wnetRet << std::endl;
+        ss << L"[WARNING] Skipping firewall/registry hardening on " << machine
+            << L" due to IPC$ connection failure." << std::endl;
+        return ss.str();
     }
     auto smbFuture = std::async(std::launch::async, HardenSMB, machine);
     auto regFuture = std::async(std::launch::async, ApplyRemoteRegistryHardeningSettings, machine);
@@ -833,8 +839,30 @@ MachinePasswordChangeResult ProcessMachineChangePasswords(const std::wstring& ma
     if (wnetRet != NO_ERROR && wnetRet != ERROR_SESSION_CREDENTIAL_CONFLICT) {
         ss << L"[ERROR] WNetAddConnection2 failed for " << uncPath
             << L". Error code: " << wnetRet << std::endl;
+        ss << L"[WARNING] Skipping local password changes on " << machine
+            << L" due to IPC$ connection failure." << std::endl;
+        result.log = ss.str();
+        return result;
     }
     std::wstring serverName = L"\\\\" + machine;
+
+    // Check if machine is a Domain Controller. If so, skip user modification to avoid changing domain users.
+    LPSERVER_INFO_101 pInfo = NULL;
+    NET_API_STATUS nStatusInfo = NetServerGetInfo((LPWSTR)serverName.c_str(), 101, (LPBYTE*)&pInfo);
+    if (nStatusInfo == NERR_Success && pInfo != NULL) {
+        bool isDC = (pInfo->sv101_type & SV_TYPE_DOMAIN_CTRL) || (pInfo->sv101_type & SV_TYPE_DOMAIN_BAKCTRL);
+        NetApiBufferFree(pInfo);
+        if (isDC) {
+            ss << L"[INFO] Machine " << machine << L" is a Domain Controller. Skipping local user enumeration (which would be Domain Users) to prevent domain-wide password changes." << std::endl;
+            WNetCancelConnection2W(uncPath.c_str(), 0, TRUE);
+            result.log = ss.str();
+            return result;
+        }
+    }
+    else {
+        ss << L"[WARNING] NetServerGetInfo failed (status=" << nStatusInfo << L"). Assuming not a DC." << std::endl;
+    }
+
     LPUSER_INFO_0 pUser0 = NULL;
     DWORD dwEntriesRead = 0;
     DWORD dwTotalEntries = 0;
@@ -871,10 +899,17 @@ MachinePasswordChangeResult ProcessMachineChangePasswords(const std::wstring& ma
                 LPUSER_INFO_4 pUser4 = nullptr;
                 NET_API_STATUS stInfo = NetUserGetInfo((LPWSTR)serverName.c_str(), (LPWSTR)username.c_str(), 4, (LPBYTE*)&pUser4);
                 if (stInfo == NERR_Success && pUser4) {
-                    if (pUser4->usri4_user_id == 500) {
+                    DWORD rid = 0;
+                    if (pUser4->usri4_user_sid && IsValidSid(pUser4->usri4_user_sid)) {
+                        PUCHAR pCount = GetSidSubAuthorityCount(pUser4->usri4_user_sid);
+                        if (pCount && *pCount > 0) {
+                            rid = *GetSidSubAuthority(pUser4->usri4_user_sid, (*pCount) - 1);
+                        }
+                    }
+                    if (rid == 500) {
                         isBuiltInAdmin = true;
                     }
-                    if (pUser4->usri4_user_id == 501) {
+                    if (rid == 501) {
                         NetApiBufferFree(pUser4);
                         ss << L"[INFO] Skipping password change for built-in Guest (RID 501): " << username << std::endl;
                         continue;
@@ -1166,6 +1201,9 @@ int wmain(int argc, wchar_t* argv[])
         std::wcerr << L"Usage: " << argv[0] << L" <LocalAdminPassword> <subnet>\n";
         return 1;
     }
+    std::wcout << L"[INFO] To apply firewall rules to other win boxes, enable these services: "
+               << L"Server (LanmanServer), Workstation (LanmanWorkstation), "
+               << L"Remote Registry (RemoteRegistry).\n";
     std::wstring currentLocalAdminPassword = argv[1];
     std::wstring subnet = argv[2];
 
