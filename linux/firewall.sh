@@ -9,95 +9,6 @@ fi
 
 echo "Starting firewall configuration..."
 
-# List of conflicting services to disable
-# Note: We do NOT include 'iptables', 'iptables-persistent', or 'netfilter-persistent'
-# as those are typically required to make your iptables rules survive a reboot.
-CONFLICTING_SERVICES="firewalld ufw nftables shorewall"
-
-log_info() { printf "\033[0;32m[INFO]\033[0m %s\n" "$1"; }
-log_warn() { printf "\033[0;33m[WARN]\033[0m %s\n" "$1"; }
-
-echo "Starting firewall cleanup..."
-
-# ------------------------------------------------------------------------------
-# 1. Special Handling: UFW (Uncomplicated Firewall)
-# ------------------------------------------------------------------------------
-# UFW has its own internal state management beyond just the init service.
-if command -v ufw >/dev/null 2>&1; then
-  log_info "Detected UFW command. Disabling..."
-  ufw disable >/dev/null 2>&1
-fi
-
-# ------------------------------------------------------------------------------
-# 2. Systemd Logic
-# ------------------------------------------------------------------------------
-if command -v systemctl >/dev/null 2>&1 && [ -d /run/systemd/system ]; then
-  log_info "Detected Init System: Systemd"
-
-  for service in $CONFLICTING_SERVICES; do
-    # Check if the service unit exists
-    if systemctl list-unit-files "$service.service" >/dev/null 2>&1; then
-      log_info "Processing $service..."
-
-      # Stop it
-      systemctl stop "$service" >/dev/null 2>&1
-
-      # Disable it (prevent start on boot)
-      systemctl disable "$service" >/dev/null 2>&1
-
-      # Mask it (prevent other services from starting it)
-      systemctl mask "$service" >/dev/null 2>&1
-    fi
-  done
-
-# ------------------------------------------------------------------------------
-# 3. OpenRC Logic (Alpine / Gentoo)
-# ------------------------------------------------------------------------------
-elif command -v rc-service >/dev/null 2>&1 && command -v rc-update >/dev/null 2>&1; then
-  log_info "Detected Init System: OpenRC"
-
-  for service in $CONFLICTING_SERVICES; do
-    # Check if service script exists in init.d
-    if [ -x "/etc/init.d/$service" ]; then
-      log_info "Processing $service..."
-
-      # Stop it
-      rc-service "$service" stop >/dev/null 2>&1
-
-      # Remove from runlevels (boot/default)
-      rc-update del "$service" boot >/dev/null 2>&1
-      rc-update del "$service" default >/dev/null 2>&1
-    fi
-  done
-
-# ------------------------------------------------------------------------------
-# 4. SysVinit Fallback
-# ------------------------------------------------------------------------------
-elif [ -d /etc/init.d ]; then
-  log_info "Detected Init System: SysVinit (Legacy)"
-
-  for service in $CONFLICTING_SERVICES; do
-    if [ -x "/etc/init.d/$service" ]; then
-      log_info "Processing $service..."
-
-      # Stop it
-      "/etc/init.d/$service" stop >/dev/null 2>&1
-
-      # Disable on boot (Distro dependent)
-      if command -v update-rc.d >/dev/null 2>&1; then
-        # Debian/Ubuntu legacy
-        update-rc.d -f "$service" remove >/dev/null 2>&1
-      elif command -v chkconfig >/dev/null 2>&1; then
-        # RHEL/CentOS legacy
-        chkconfig "$service" off >/dev/null 2>&1
-      fi
-    fi
-  done
-fi
-
-log_info "Finished. Conflicting firewall services have been disabled."
-log_info "You may now manage the firewall using 'iptables' commands directly."
-
 echo "Step 1: Resetting existing rules..."
 {
   # Set default policies to ACCEPT to prevent lockout during flush
@@ -321,5 +232,113 @@ echo "Step 8: Saving rules to persistence file..."
     ip6tables-save >/etc/sysconfig/iptables
   fi
 } 2>>"$LOG_FILE"
+
+CONFLICTING_SERVICES="firewalld ufw nftables shorewall"
+
+# List of services that keep iptables rules persistent across reboots.
+# We try to enable ALL of them; usually only one exists per distro.
+IPTABLES_SERVICES="iptables iptables-persistent netfilter-persistent"
+
+log_info() { printf "\033[0;32m[INFO]\033[0m %s\n" "$1"; }
+
+# ------------------------------------------------------------------------------
+# 1. Disable UFW Command
+# ------------------------------------------------------------------------------
+if command -v ufw >/dev/null 2>&1; then
+  log_info "Disabling UFW internal state..."
+  ufw disable >/dev/null 2>&1
+fi
+
+# ------------------------------------------------------------------------------
+# 2. Systemd Logic
+# ------------------------------------------------------------------------------
+if command -v systemctl >/dev/null 2>&1 && [ -d /run/systemd/system ]; then
+  log_info "Detected Init System: Systemd"
+
+  # A. Disable Conflicts
+  for service in $CONFLICTING_SERVICES; do
+    if systemctl list-unit-files "$service.service" >/dev/null 2>&1; then
+      log_info "Disabling conflicting service: $service"
+      systemctl stop "$service" >/dev/null 2>&1
+      systemctl disable "$service" >/dev/null 2>&1
+      systemctl mask "$service" >/dev/null 2>&1
+    fi
+  done
+
+  # B. Enable Iptables Persistence
+  log_info "Enabling iptables persistence services..."
+  for service in $IPTABLES_SERVICES; do
+    if systemctl list-unit-files "$service.service" >/dev/null 2>&1; then
+      log_info "  Enabling $service..."
+      # Unmask first just in case it was hidden
+      systemctl unmask "$service" >/dev/null 2>&1
+      systemctl enable "$service" >/dev/null 2>&1
+      systemctl start "$service" >/dev/null 2>&1
+    fi
+  done
+
+# ------------------------------------------------------------------------------
+# 3. OpenRC Logic (Alpine / Gentoo)
+# ------------------------------------------------------------------------------
+elif command -v rc-service >/dev/null 2>&1 && command -v rc-update >/dev/null 2>&1; then
+  log_info "Detected Init System: OpenRC"
+
+  # A. Disable Conflicts
+  for service in $CONFLICTING_SERVICES; do
+    if [ -x "/etc/init.d/$service" ]; then
+      log_info "Disabling conflicting service: $service"
+      rc-service "$service" stop >/dev/null 2>&1
+      rc-update del "$service" boot >/dev/null 2>&1
+      rc-update del "$service" default >/dev/null 2>&1
+    fi
+  done
+
+  # B. Enable Iptables
+  # Alpine typically uses 'iptables' and 'ip6tables' services to load rules on boot
+  log_info "Enabling iptables persistence services..."
+  for service in iptables ip6tables; do
+    if [ -x "/etc/init.d/$service" ]; then
+      log_info "  Enabling $service..."
+      rc-update add "$service" default >/dev/null 2>&1
+      rc-service "$service" start >/dev/null 2>&1
+    fi
+  done
+
+# ------------------------------------------------------------------------------
+# 4. SysVinit Fallback
+# ------------------------------------------------------------------------------
+elif [ -d /etc/init.d ]; then
+  log_info "Detected Init System: SysVinit (Legacy)"
+
+  # A. Disable Conflicts
+  for service in $CONFLICTING_SERVICES; do
+    if [ -x "/etc/init.d/$service" ]; then
+      log_info "Disabling conflicting service: $service"
+      "/etc/init.d/$service" stop >/dev/null 2>&1
+
+      if command -v update-rc.d >/dev/null 2>&1; then
+        update-rc.d -f "$service" remove >/dev/null 2>&1
+      elif command -v chkconfig >/dev/null 2>&1; then
+        chkconfig "$service" off >/dev/null 2>&1
+      fi
+    fi
+  done
+
+  # B. Enable Iptables
+  log_info "Enabling iptables persistence services..."
+  for service in $IPTABLES_SERVICES; do
+    if [ -x "/etc/init.d/$service" ]; then
+      log_info "  Enabling $service..."
+      if command -v update-rc.d >/dev/null 2>&1; then
+        update-rc.d "$service" defaults >/dev/null 2>&1
+      elif command -v chkconfig >/dev/null 2>&1; then
+        chkconfig "$service" on >/dev/null 2>&1
+      fi
+      "/etc/init.d/$service" start >/dev/null 2>&1
+    fi
+  done
+fi
+
+log_info "Finished. Iptables is now the primary firewall controller."
 
 echo "Finished firewall configuration."
