@@ -91,7 +91,7 @@ Write-Host "[" -ForegroundColor white -NoNewLine; Write-Host "SUCCESS" -Foregrou
 ## Resetting domain GPOs
 if ($DC) {
     ## Reset/rebuild default GPOs
-    dcgpofix /ignoreschema
+    dcgpofix /ignoreschema /Target:Both
 
     $DomainGPO = Get-GPO -All
     foreach ($GPO in $DomainGPO) {
