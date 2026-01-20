@@ -14,6 +14,11 @@
 #include <map>
 #pragma comment(lib, "Psapi.lib")
 
+// Optional SIEM endpoints (set to non-empty to enable rules)
+static std::string GRAFANA_IP = "";
+static std::string WAZUH_IP = "";
+static std::string GRAYLOG_IP = "";
+
 static std::string processNames[] = {
     "rpc.exe",
     "netlogon.exe",
@@ -33,29 +38,100 @@ static std::string processNames[] = {
     "httpd.exe",
     "krb5kdc.exe",
     "sqlservr.exe",
-    "ccsclient.exe"
+    "ccsclient.exe",
+    "mstsc.exe",
+    "rdpclip.exe",
+    "vncserver.exe",
+    "winvnc.exe",
+    "dhcp.exe",
+    "openvpn.exe",
+    "vmms.exe",
+    "smtpsvc.exe",
+    "imap4.exe",
+    "pop3svc.exe",
+    "pandora.exe",
+    "syslog.exe",
+    "nfs.exe",
+    "snmp.exe"
 };
 
-static std::string applicationPorts[] = {
-    "135",
+static std::string processServices[] = {
+    "rpc,epmap",
+    "kerberos,ldap,ldaps,ldapgc,ldapgcs,smb,rpc,epmap,w32time,dns",
+    "http,https",
+    "http,https",
+    "ssh,https",
+    "http,https",
+    "winrm",
+    "dns",
+    "kerberos,ldap,ldaps,ldapgc,ldapgcs,smb,rpc,epmap",
+    "https",
+    "ssh,sftp",
+    "ftp",
+    "smb",
+    "http,https",
+    "http,https",
+    "http,https",
+    "kerberos",
+    "mssql",
     "all",
-    "all",
-    "all",
-    "all",
-    "all",
-    "5985,5986",
-    "53",
-    "389",
-    "25,443,587",
-    "22",
-    "21",
-    "445",
-    "80,443",
-    "80,443",
-    "80,443",
-    "88",
-    "1433",
-    "all"
+    "rdp",
+    "rdp",
+    "vnc",
+    "vnc",
+    "dhcp",
+    "openvpn",
+    "hyperv",
+    "smtp,smtps",
+    "imap,imaps",
+    "pop3,pop3s",
+    "pandora",
+    "syslog",
+    "nfs",
+    "snmp"
+};
+
+struct ServiceDef {
+    std::string name;
+    std::string protocol;
+    std::string ports;
+};
+
+static ServiceDef serviceDefs[] = {
+    {"icmp", "none", "none"},
+    {"http", "tcp", "80"},
+    {"https", "tcp", "443"},
+    {"rdp", "both", "3389"},
+    {"winrm", "tcp", "5985,5986"},
+    {"ssh", "tcp", "22"},
+    {"vnc", "both", "5900"},
+    {"ldap", "both", "389"},
+    {"ldaps", "tcp", "636"},
+    {"ldapgc", "tcp", "3268"},
+    {"ldapgcs", "tcp", "3269"},
+    {"smb", "tcp", "445"},
+    {"dhcp", "udp", "67,68"},
+    {"ftp", "tcp", "20,21"},
+    {"sftp", "tcp", "22"},
+    {"openvpn", "udp", "1194"},
+    {"hyperv", "tcp", "2179"},
+    {"smtp", "tcp", "25"},
+    {"smtps", "tcp", "465,587"},
+    {"imap", "tcp", "143"},
+    {"imaps", "tcp", "993"},
+    {"pop3", "tcp", "110"},
+    {"pop3s", "tcp", "995"},
+    {"pandora", "tcp", "41121"},
+    {"syslog", "udp", "514"},
+    {"kerberos", "both", "88"},
+    {"rpc", "tcp", "49152-65535"},
+    {"epmap", "tcp", "135"},
+    {"w32time", "udp", "123"},
+    {"dns", "udp", "53"},
+    {"ntp", "udp", "123"},
+    {"nfs", "both", "2049"},
+    {"snmp", "udp", "161,162"},
+    {"mssql", "tcp", "1433"}
 };
 
 class Logger {
@@ -207,7 +283,7 @@ int main(int argc, char* argv[]) {
         logger.log("[INFO] No subnet argument provided; using 'any'.");
     }
     std::vector<ProcessInfo> runningProcesses = getRunningProcesses(logger, logMutex);
-    std::set<std::string> portsToAllow;
+    std::set<std::string> servicesToAllow;
     bool allowAllCCSClient = false;
     std::string ccsClientPath;
     {
@@ -225,10 +301,10 @@ int main(int argc, char* argv[]) {
                         " (PID: " + std::to_string(proc.pid) + ") " +
                         " Path: " + proc.executablePath);
                 }
-                std::vector<std::string> foundPorts = splitString(applicationPorts[i], ',');
-                for (auto& p : foundPorts) {
-                    p.erase(std::remove_if(p.begin(), p.end(), ::isspace), p.end());
-                    if (p == "all") {
+                std::vector<std::string> foundServices = splitString(processServices[i], ',');
+                for (auto& svc : foundServices) {
+                    svc.erase(std::remove_if(svc.begin(), svc.end(), ::isspace), svc.end());
+                    if (svc == "all") {
                         if (whitelistProc == "ccsclient.exe") {
                             allowAllCCSClient = true;
                             ccsClientPath = proc.executablePath;
@@ -239,11 +315,11 @@ int main(int argc, char* argv[]) {
                             }
                         }
                     }
-                    else {
-                        portsToAllow.insert(p);
+                    else if (!svc.empty()) {
+                        servicesToAllow.insert(svc);
                         {
                             std::lock_guard<std::mutex> lock(logMutex);
-                            logger.log("[INFO] Port added to allow list: " + p);
+                            logger.log("[INFO] Service added to allow list: " + svc);
                         }
                     }
                 }
@@ -254,32 +330,52 @@ int main(int argc, char* argv[]) {
     for (const auto& proc : runningProcesses) {
         processPathMap[proc.name] = proc.executablePath;
     }
-    for (const auto& port : portsToAllow) {
-        {
-            std::ostringstream oss;
-            oss << "netsh advfirewall firewall add rule name=\"Allow_In_TCP_" << port
-                << "\" dir=in action=allow protocol=TCP localport=" << port
-                << " remoteip=" << subnet;
-            executeNetshCommandThreadSafe(oss.str(), logger, logMutex);
+    std::map<std::string, ServiceDef> serviceMap;
+    for (const auto& svc : serviceDefs) {
+        serviceMap[svc.name] = svc;
+    }
+
+    for (const auto& serviceName : servicesToAllow) {
+        auto it = serviceMap.find(serviceName);
+        if (it == serviceMap.end()) {
+            std::lock_guard<std::mutex> lock(logMutex);
+            logger.log("[WARNING] No service definition found for: " + serviceName);
+            continue;
         }
-        {
-            std::ostringstream oss;
-            oss << "netsh advfirewall firewall add rule name=\"Allow_In_UDP_" << port
-                << "\" dir=in action=allow protocol=UDP localport=" << port
-                << " remoteip=" << subnet;
-            executeNetshCommandThreadSafe(oss.str(), logger, logMutex);
+        const ServiceDef& svc = it->second;
+        if (svc.protocol == "none") {
+            executeNetshCommandThreadSafe("netsh adv f a r n=ICMP-IN dir=in act=allow prof=any remoteip=" + subnet + " prot=icmpv4:8,any", logger, logMutex);
+            executeNetshCommandThreadSafe("netsh adv f a r n=ICMP-OUT dir=out act=allow prof=any remoteip=" + subnet + " prot=icmpv4:8,any", logger, logMutex);
+            continue;
         }
-        {
-            std::ostringstream oss;
-            oss << "netsh advfirewall firewall add rule name=\"Allow_Out_TCP_" << port
-                << "\" dir=out action=allow protocol=TCP localport=" << port;
-            executeNetshCommandThreadSafe(oss.str(), logger, logMutex);
-        }
-        {
-            std::ostringstream oss;
-            oss << "netsh advfirewall firewall add rule name=\"Allow_Out_UDP_" << port
-                << "\" dir=out action=allow protocol=UDP localport=" << port;
-            executeNetshCommandThreadSafe(oss.str(), logger, logMutex);
+
+        auto addTcpRules = [&]() {
+            std::ostringstream inCmd;
+            inCmd << "netsh advfirewall firewall add rule name=\"Allow_" << svc.name << "_TCP_IN\" dir=in action=allow protocol=TCP localport=" << svc.ports << " remoteip=" << subnet;
+            executeNetshCommandThreadSafe(inCmd.str(), logger, logMutex);
+
+            std::ostringstream outCmd;
+            outCmd << "netsh advfirewall firewall add rule name=\"Allow_" << svc.name << "_TCP_OUT\" dir=out action=allow protocol=TCP remoteport=" << svc.ports << " remoteip=" << subnet;
+            executeNetshCommandThreadSafe(outCmd.str(), logger, logMutex);
+        };
+
+        auto addUdpRules = [&]() {
+            std::ostringstream inCmd;
+            inCmd << "netsh advfirewall firewall add rule name=\"Allow_" << svc.name << "_UDP_IN\" dir=in action=allow protocol=UDP localport=" << svc.ports << " remoteip=" << subnet;
+            executeNetshCommandThreadSafe(inCmd.str(), logger, logMutex);
+
+            std::ostringstream outCmd;
+            outCmd << "netsh advfirewall firewall add rule name=\"Allow_" << svc.name << "_UDP_OUT\" dir=out action=allow protocol=UDP remoteport=" << svc.ports << " remoteip=" << subnet;
+            executeNetshCommandThreadSafe(outCmd.str(), logger, logMutex);
+        };
+
+        if (svc.protocol == "tcp") {
+            addTcpRules();
+        } else if (svc.protocol == "udp") {
+            addUdpRules();
+        } else if (svc.protocol == "both") {
+            addTcpRules();
+            addUdpRules();
         }
     }
     if (allowAllCCSClient && !ccsClientPath.empty()) {
@@ -310,6 +406,21 @@ int main(int argc, char* argv[]) {
     else if (allowAllCCSClient && ccsClientPath.empty()) {
         std::lock_guard<std::mutex> lock(logMutex);
         logger.log("[ERROR] CCSClient.exe was detected but no valid executable path was found.");
+    }
+
+    // SIEM outbound rules (if IPs provided)
+    if (!GRAFANA_IP.empty()) {
+        executeNetshCommandThreadSafe("netsh adv f a r n=Grafana-Client dir=out act=allow prof=any prot=tcp remoteip=" + GRAFANA_IP + " remoteport=3100", logger, logMutex);
+        executeNetshCommandThreadSafe("netsh adv f a r n=Grafana-HTTP-Dashboard dir=out act=allow prof=any prot=tcp remoteip=" + GRAFANA_IP + " remoteport=3000", logger, logMutex);
+    }
+    if (!GRAYLOG_IP.empty()) {
+        executeNetshCommandThreadSafe("netsh adv f a r n=Graylog-Client dir=out act=allow prof=any prot=tcp remoteip=" + GRAYLOG_IP + " remoteport=1468,5044,12201", logger, logMutex);
+        executeNetshCommandThreadSafe("netsh adv f a r n=Graylog-HTTP-Dashboard dir=out act=allow prof=any prot=tcp remoteip=" + GRAYLOG_IP + " remoteport=443,9000", logger, logMutex);
+    }
+    if (!WAZUH_IP.empty()) {
+        executeNetshCommandThreadSafe("netsh adv f a r n=Wazuh-Client dir=out act=allow prof=any prot=tcp remoteip=" + WAZUH_IP + " remoteport=1514", logger, logMutex);
+        executeNetshCommandThreadSafe("netsh adv f a r n=Wazuh-HTTP-Dashboard dir=out act=allow prof=any prot=tcp remoteip=" + WAZUH_IP + " remoteport=80,443", logger, logMutex);
+        executeNetshCommandThreadSafe("netsh adv f a r n=Wazuh-Agent-Enrollment dir=out act=allow prof=any prot=tcp remoteip=" + WAZUH_IP + " remoteport=1515", logger, logMutex);
     }
     {
         std::string wmiEnableCmd =
