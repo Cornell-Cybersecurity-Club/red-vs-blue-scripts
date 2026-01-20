@@ -1,24 +1,38 @@
 #!/bin/sh
-if [ "$(id -u || true)" -ne 0 ]; then
+
+LOG_FILE="./error_log.txt"
+
+if [ "$(id -u)" -ne 0 ]; then
   echo "This script must be run as root."
   exit 1
 fi
+
+echo "Starting system backup..."
 
 # Configuration
 BACKUP_DIR="./backups"
 TIMESTAMP=$(date +%Y%m%d_%H%M%S)
 HOSTNAME=$(hostname)
 
-mkdir -p "${BACKUP_DIR}"
+echo "Step 1: Preparing backup directory..."
+mkdir -p "${BACKUP_DIR}" >/dev/null 2>>"$LOG_FILE"
 
-command -v iptables-save >/dev/null 2>&1 &&
-  iptables-save >"${BACKUP_DIR}/fw_iptables.rules" 2>/dev/null
+echo "Step 2: Exporting firewall rules..."
+{
+  if command -v iptables-save >/dev/null 2>&1; then
+    iptables-save >"${BACKUP_DIR}/fw_iptables.rules"
+  fi
 
-command -v nft >/dev/null 2>&1 &&
-  nft list ruleset >"${BACKUP_DIR}/fw_nftables.rules" 2>/dev/null
+  if command -v nft >/dev/null 2>&1; then
+    nft list ruleset >"${BACKUP_DIR}/fw_nftables.rules"
+  fi
+} 2>>"$LOG_FILE"
 
+echo "Step 3: Generating exclusion list..."
 EXCLUDE_FILE="${BACKUP_DIR}/.exclude.tmp"
-cat <<EOF >"${EXCLUDE_FILE}"
+
+# Generate exclude file. Errors appended to log.
+cat <<EOF >"${EXCLUDE_FILE}" 2>>"$LOG_FILE"
 *.log
 *.gz
 *.tar
@@ -153,10 +167,12 @@ cp
 /var/spool/exim4/input
 EOF
 
+# Append large files to exclude list
 if command -v find >/dev/null 2>&1; then
-  find /root /opt -type f -size +100M 2>/dev/null >>"${EXCLUDE_FILE}"
+  find /root /opt -type f -size +100M 2>>"$LOG_FILE" >>"${EXCLUDE_FILE}"
 fi
 
+echo "Step 4: Identifying directories to backup..."
 DIRS_TO_BACKUP=""
 CANDIDATES="/etc /opt /var/www /var/ossec /var/named /var/lib/bind /var/spool/cron /var/spool/anacron /var/lib/mysql /var/lib/pgsql /srv /usr/local /var/lib/jenkins /var/lib/gitea /var/lib/samba /var/lib/teleport /etc/kubernetes /var/lib/docker/swarm"
 
@@ -166,6 +182,7 @@ for d in $CANDIDATES; do
   fi
 done
 
+echo "Step 5: Compressing and archiving (This may take a while)..."
 if command -v zstd >/dev/null 2>&1; then
   COMPRESSOR="zstd -T0 -1"
   EXT="tar.zst"
@@ -180,8 +197,14 @@ fi
 ARCHIVE_NAME="${HOSTNAME}-${TIMESTAMP}.${EXT}"
 
 if [ -n "$DIRS_TO_BACKUP" ]; then
-  tar -cf - -X "${EXCLUDE_FILE}" $DIRS_TO_BACKUP 2>/dev/null |
-    $COMPRESSOR >"${BACKUP_DIR}/${ARCHIVE_NAME}"
+  # tar sends errors to log.
+  # tar output (the archive stream) goes to the pipe.
+  # compressor reads the pipe, writes to file, sends errors to log.
+  tar -cf - -X "${EXCLUDE_FILE}" $DIRS_TO_BACKUP 2>>"$LOG_FILE" |
+    $COMPRESSOR >"${BACKUP_DIR}/${ARCHIVE_NAME}" 2>>"$LOG_FILE"
 fi
 
-rm -f "${EXCLUDE_FILE}"
+echo "Step 6: Cleaning up..."
+rm -f "${EXCLUDE_FILE}" 2>>"$LOG_FILE"
+
+echo "Finished system backup."

@@ -1,30 +1,49 @@
 #!/bin/sh
-if [ "$(id -u || true)" -ne 0 ]; then
+
+LOG_FILE="./error_log.txt"
+
+if [ "$(id -u)" -ne 0 ]; then
   echo "This script must be run as root."
   exit 1
 fi
 
+echo "Starting package re-installation (This will take a long time)..."
+
 if [ -f /etc/os-release ]; then
   . /etc/os-release
 
-  case "${ID_LIKE:-$ID}" in
+  # Determine distro family
+  ID_MATCH="${ID_LIKE:-$ID}"
+
+  case "$ID_MATCH" in
   *debian* | *ubuntu* | *devuan* | *kali* | *raspbian* | *linuxmint* | *pop*)
+    echo "Step 1: Detected Debian/Ubuntu family..."
     export DEBIAN_FRONTEND=noninteractive
 
-    apt-get update -qq
+    echo "Step 2: Updating package lists..."
+    apt-get update -qq >/dev/null 2>>"$LOG_FILE"
 
-    dpkg --get-selections | grep -v deinstall | awk '{print $1}' |
-      xargs apt-get install --reinstall -y -o Dpkg::Options::="--force-confmiss"
+    echo "Step 3: Reinstalling all installed packages..."
+    # We pipe the package list to xargs.
+    # dpkg errors go to log.
+    # apt-get install output goes to null, errors to log.
+    dpkg --get-selections 2>>"$LOG_FILE" | grep -v deinstall | awk '{print $1}' |
+      xargs apt-get install --reinstall -y -o Dpkg::Options::="--force-confmiss" >/dev/null 2>>"$LOG_FILE"
 
-    apt-get upgrade -y
-    apt-get dist-upgrade -y
+    echo "Step 4: Upgrading system..."
+    apt-get upgrade -y >/dev/null 2>>"$LOG_FILE"
+    apt-get dist-upgrade -y >/dev/null 2>>"$LOG_FILE"
 
-    apt-get autoremove -y
-    apt-get autoclean
+    echo "Step 5: Cleaning up..."
+    apt-get autoremove -y >/dev/null 2>>"$LOG_FILE"
+    apt-get autoclean >/dev/null 2>>"$LOG_FILE"
 
-    update-initramfs -u -k all
+    echo "Step 6: Updating initramfs..."
+    update-initramfs -u -k all >/dev/null 2>>"$LOG_FILE"
     ;;
+
   *rocky* | *rhel* | *fedora* | *centos* | *alma* | *ol* | *amzn* | *cloudlinux*)
+    echo "Step 1: Detected RHEL/CentOS family..."
 
     if command -v dnf >/dev/null 2>&1; then
       PKG_MGR="dnf"
@@ -32,38 +51,53 @@ if [ -f /etc/os-release ]; then
       PKG_MGR="yum"
     fi
 
-    $PKG_MGR clean all
-    $PKG_MGR makecache
+    echo "Step 2: Cleaning cache..."
+    $PKG_MGR clean all >/dev/null 2>>"$LOG_FILE"
+    $PKG_MGR makecache >/dev/null 2>>"$LOG_FILE"
 
-    rpm -qa --qf '%{NAME}\n' | xargs $PKG_MGR reinstall -y
+    echo "Step 3: Reinstalling all packages..."
+    rpm -qa --qf '%{NAME}\n' 2>>"$LOG_FILE" | xargs $PKG_MGR reinstall -y >/dev/null 2>>"$LOG_FILE"
 
-    $PKG_MGR upgrade -y
+    echo "Step 4: Upgrading system..."
+    $PKG_MGR upgrade -y >/dev/null 2>>"$LOG_FILE"
 
-    $PKG_MGR autoremove -y
-    $PKG_MGR clean all
+    echo "Step 5: Cleaning up..."
+    $PKG_MGR autoremove -y >/dev/null 2>>"$LOG_FILE"
+    $PKG_MGR clean all >/dev/null 2>>"$LOG_FILE"
 
-    dracut -f
+    echo "Step 6: Regenerating initramfs (dracut)..."
+    dracut -f >/dev/null 2>>"$LOG_FILE"
     ;;
 
   *alpine*)
-    apk add --force-refresh alpine-keys
+    echo "Step 1: Detected Alpine Linux..."
 
-    apk update
+    echo "Step 2: Refreshing keys and indexes..."
+    apk add --force-refresh alpine-keys >/dev/null 2>>"$LOG_FILE"
+    apk update >/dev/null 2>>"$LOG_FILE"
 
-    apk info -q | xargs apk fix --reinstall
+    echo "Step 3: Reinstalling packages (apk fix)..."
+    apk info -q 2>>"$LOG_FILE" | xargs apk fix --reinstall >/dev/null 2>>"$LOG_FILE"
 
-    apk upgrade --available
+    echo "Step 4: Upgrading system..."
+    apk upgrade --available >/dev/null 2>>"$LOG_FILE"
 
-    apk cache clean 2>/dev/null || rm -rf /var/cache/apk/*
+    echo "Step 5: Cleaning cache..."
+    apk cache clean >/dev/null 2>>"$LOG_FILE" || rm -rf /var/cache/apk/* 2>>"$LOG_FILE"
 
-    mkinitfs
+    echo "Step 6: Regenerating initfs..."
+    mkinitfs >/dev/null 2>>"$LOG_FILE"
     ;;
+
   *)
-    echo "Unsupported distro."
+    echo "Error: Unsupported distro."
+    echo "Unsupported distro: $ID_MATCH" >>"$LOG_FILE"
     exit 1
     ;;
   esac
+
   echo "Finished package reinstall."
 else
+  echo "Error: /etc/os-release not found."
   exit 1
 fi
