@@ -18,7 +18,7 @@ usermod -g www-data -d /var/cache/nginx -s /sbin/nologin www-data
 if [ "$(id -u www-data)" -eq 0 ]; then
   echo "\033[0;31mwww-data is root!\033[0m"
 fi
-sed -i '/user/cuser www-data;' /etc/nginx/nginx.conf
+sed -i -E 's/^([[:space:]]*)user.*/\1user www-data;/' /etc/nginx/nginx.conf
 
 # Lock the nginx user acccount
 passwd -l www-data > /dev/null

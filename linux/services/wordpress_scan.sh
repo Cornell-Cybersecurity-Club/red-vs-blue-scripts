@@ -6,7 +6,17 @@ if [ "$(id -u)" -eq 0 ]; then
 fi
 
 # Download and install WP-CLI
-sudo apt install curl -y
+if command -v apt > /dev/null 2>&1; then
+    sudo apt install curl -y
+elif command -v dnf > /dev/null 2>&1; then
+    sudo dnf install curl -y
+elif command -v yum > /dev/null 2>&1; then
+    sudo yum install curl -y
+else
+    echo "No recognized package manager found."
+    exit 1
+fi
+
 sudo curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
 sudo chmod +x wp-cli.phar
 sudo mv wp-cli.phar /usr/local/bin/wp
